@@ -1,18 +1,18 @@
-# Ggoop/Gmf
+# Gmf/Sys
 gmf framework
 ## Documentation
 
 ### Quick Overview:
 
-1 - 使用 Composer 依赖包管理器安装 Ggoop/Gmf:
+1 - 使用 Composer 依赖包管理器安装 Gmf/Sys:
 
 ```shell
-composer require ggoop/gmf-laravel
+composer require ggoop/gmf-sys
 ```
 
 2 - 接下来，将 Gmf 的服务提供者注册到配置文件 config/app.php 的 providers 数组中：
 ```shell
-Ggoop\Gmf\GmfServiceProvider::class,
+Gmf\Sys\ServiceProvider::class,
 ```
 
 3 - Gmf 使用服务提供者注册内部的数据库迁移脚本目录，所以上一步完成后，你需要更新你的数据库结构。Gmf的迁移脚本会自动创建应用程序需要的数据表：
@@ -21,28 +21,28 @@ Ggoop\Gmf\GmfServiceProvider::class,
 php artisan migrate
 ```
 
-4 - 在 RouteServiceProvider 的 boot 方法中调用 Gmf::routes 函数。这个函数会注册一些必要路由：
+4 - 在 RouteServiceProvider 的 boot 方法中调用 Sys::routes 函数。这个函数会注册一些必要路由：
 
 ```shell
 <?php
 
 namespace App\Providers;
 
-use Ggoop\Gmf\Gmf;
+use Gmf\Sys\Sys;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider {
   public function boot() {
-    Gmf::routes();
+    Sys::routes();
     parent::boot();
   }
 }
 ```
 
-5 - 使用 Artisan 命令 vendor:publish 来发布 Gmf 的 Vue 组件：
+5 - 使用 Artisan 命令 vendor:publish 来发布 Gmf\Sys 的 Vue 组件：
 ```shell
-php artisan vendor:publish --tag=gmf-components
+php artisan vendor:publish --tag=gmf
 ```
 
 
@@ -51,7 +51,7 @@ php artisan vendor:publish --tag=gmf-components
 ```shell
 protected $routeMiddleware = [
     ...
-    'visitor' => \Ggoop\Gmf\Http\Middleware\VisitorMiddleware::class,
+    'visitor' => \Gmf\Sys\Http\Middleware\VisitorMiddleware::class,
   ];
 protected $middlewareGroups = [
     'web' => [
