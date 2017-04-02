@@ -1,0 +1,48 @@
+.md-part-toolbar{
+  background-color: #f5f5f5;
+  .md-part-toolbar-crumb{
+    padding: 0 16px;
+    a{
+      color: #999;
+    }
+    a+a:before{
+      content: '\E5CC';
+      vertical-align: top;
+      display: inline-block;
+      font-family: 'Material Icons';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 25px;
+      margin: 0 10px 0 8px;
+      -webkit-font-smoothing: antialiased;
+    }
+  }
+  .md-part-toolbar-group{
+    .md-button{
+      margin: 0px;
+      min-width: 0px;
+    }
+    a{
+      padding: 0 16px;
+      min-height: 36px;
+      line-height: 36px;
+      display: inline-block;
+    }
+    a:hover{
+      background-color: rgba(153, 153, 153, 0.2);
+    }
+  }
+  .md-part-toolbar-group+.md-part-toolbar-group:before{
+    content: ' ';
+    position: relative;
+    height: 20px;
+    width: 1px;
+    background: rgba(0,0,0,0.12);
+    top: 8px;
+    display: inline-block;
+  }
+}
+.md-part-body{
+  overflow: auto;
+  background-color: #fff;
+}

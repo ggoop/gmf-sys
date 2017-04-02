@@ -1,0 +1,165 @@
+<template>
+  <div class="md-input-ref layout-align-space-between" @click.native="applyInputFocus">
+      <md-input-value
+        v-for="chip in selectedValues"
+        :md-deletable="!disabled"
+        :disabled="disabled"
+        @delete="deleteChip(chip)">
+        <slot :value="chip"><span>{{ chip.name }}</span></slot>
+      </md-input-value>
+      <md-input
+        v-show="canEdit"
+        v-model="currentInputValue"
+        type="text"
+        :placeholder="placeholder"
+        :id="inputId"
+        :name="name"
+        :disabled="disabled"
+        @keydown.native.delete="deleteLastChip"
+        @keydown.native.prevent.enter="addInputChip"
+        @keydown.native.prevent.186="addInputChip"
+        @dblclick.native="openRef()"
+        tabindex="0"
+        md-container=""
+        ref="input">
+      </md-input>
+      <md-button class="md-icon-button md-ref-filter" @click.native="openRef()">
+        <md-icon>filter_list</md-icon>
+      </md-button>
+      <md-ref ref="ref" :multiple="multiple" :md-ref-id="mdRefId" @open="onRefOpen" @close="onRefClose"></md-ref>
+  </div>
+</template>
+
+<script>
+  import getClosestVueParent from '../../core/utils/getClosestVueParent';
+  import common from '../../core/utils/common';
+  import commonInput from './common';
+  export default {
+    props: {
+      id: String,
+      name: String,
+      multiple: Boolean,
+      mdRefId: String,
+      maxlength:{
+        type: [Number, String],
+        default: 1
+      }
+    },
+    mixins: [commonInput],
+    data() {
+      return {
+        currentInputValue: null,
+        selectedValues:[],
+        inputId: this.id || 'refs-' + common.uniqueId(),
+        refInfo:{},
+        refData:[],
+        loading:0,
+        canEdit:true,
+      };
+    },
+    watch: {
+      value(value) {
+        if(!value){
+           this.selectedValues=[];
+        }else{
+          if(common.isArray(value)){
+            this.selectedValues=value;
+          }else{
+            this.selectedValues=[value];
+          }
+        }
+        this.setParentValue(this.selectedValues);
+      },
+      selectedValues(v){
+        if(this.multiple){
+          this.canEdit=this.selectedValues.length<this.maxlength;
+        }else{
+           this.canEdit=this.selectedValues.length<1;
+        }
+        this.setParentValue(v);
+      }
+    },
+    methods: {
+      openRef() {
+        this.$refs['ref'].open();
+      },
+      onRefOpen(type) {
+      },
+      onRefClose(data) {
+        this.selectedValues=[];
+        data&&data.forEach((row, index) =>{
+            this.addValue(row);
+        });
+      },
+      applyInputFocus() {
+        this.$nextTick(() => {
+          this.$refs.input.$el.focus();
+        });
+      },
+      addValue(value){
+        if(value&&value.id&&this.selectedValues.length< this.maxlength){
+          const index=this.getValueIndex(value);
+          if(index<0){
+            this.selectedValues.push(value);
+            const nv=this.formatValue();
+            this.$emit('input', nv);
+            this.$emit('change',nv);
+            this.applyInputFocus();
+          }
+        }
+      },
+      addInputChip() {
+        if (this.currentInputValue) {
+          const value ={name:this.currentInputValue.trim()};
+          value.id=value.name;
+          this.currentInputValue = null;
+          this.addValue(value);
+        }
+      },
+      deleteChip(chip) {
+        const index=this.getValueIndex(chip);
+        if(index>=0){
+          this.selectedValues.splice(index, 1);
+          const nv=this.formatValue();
+          this.$emit('input', nv);
+          this.$emit('change',nv);
+          this.applyInputFocus();
+        }
+      },
+      getValueIndex(value){
+        for (var i = 0; i < this.selectedValues.length; i++) {
+          if(value.id&&this.selectedValues[i].id==value.id){
+            return i;
+          }
+          if(value.code&&this.selectedValues[i].code==value.code){
+            return i;
+          }
+        }
+        return -1;
+      },
+      deleteLastChip() {
+        if (!this.currentInputValue) {
+          if(this.selectedValues.length){
+            this.selectedValues.pop();
+            const nv=this.formatValue();
+            this.$emit('input', nv);
+            this.$emit('change',nv);
+            this.applyInputFocus();
+          }
+        }
+      },
+      formatValue(){
+        if(!this.multiple||this.maxlength.toString()=='1'){
+          return this.selectedValues.length?this.selectedValues[0]:null;
+        }
+        return this.selectedValues;
+      },
+    },
+    mounted() {
+      this.$nextTick(() => {
+        this.parentContainer = getClosestVueParent(this.$parent, 'md-input-container');
+        this.updateValues(this.formatValue());
+      });
+    }
+  };
+</script>

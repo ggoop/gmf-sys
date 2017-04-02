@@ -1,0 +1,9 @@
+.md-toast{
+  .md-snackbar-container{
+    overflow: auto;
+    max-height: 400px;
+  }
+  .md-snackbar-content>span{
+    overflow: auto;
+  }
+}

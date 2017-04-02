@@ -1,0 +1,21 @@
+{
+    "name": "ggoop/gmf-sys",
+    "description": "gmf for laravel5",
+	"license": "MIT",
+	"version": "1.0.0",
+    "authors": [
+        {
+            "name": "ggoop",
+            "email": "samuel_abe@163.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.6.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gmf\\Sys\\": "src/"
+        }
+    }
+}
