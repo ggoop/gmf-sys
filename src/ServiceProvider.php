@@ -11,24 +11,24 @@ class ServiceProvider extends BaseServiceProvider {
 	 * @return void
 	 */
 	public function boot() {
-		$this->loadViewsFrom(__DIR__ . '/../resources/views', 'sys');
+		$this->loadViewsFrom(__DIR__ . '/../resources/views', 'gmf');
 		if ($this->app->runningInConsole()) {
 			$this->registerMigrations();
 
 			$this->publishes([
-				__DIR__ . '/../resources/assets/fonts' => base_path('resources/assets/fonts/vendor/sys'),
+				__DIR__ . '/../resources/assets/fonts' => base_path('resources/assets/fonts/vendor/gmfSys'),
 			], 'gmf');
 
 			$this->publishes([
-				__DIR__ . '/../resources/views' => base_path('resources/views/vendor/sys'),
+				__DIR__ . '/../resources/views' => base_path('resources/views/vendor/gmfSys'),
 			], 'gmf');
 
 			$this->publishes([
-				__DIR__ . '/../resources/assets/js' => base_path('resources/assets/js/vendor/sys'),
+				__DIR__ . '/../resources/assets/js' => base_path('resources/assets/js/vendor/gmfSys'),
 			], 'gmf');
 
 			$this->publishes([
-				__DIR__ . '/../resources/assets/sass' => base_path('resources/assets/sass/vendor/sys'),
+				__DIR__ . '/../resources/assets/sass' => base_path('resources/assets/sass/vendor/gmfSys'),
 			], 'gmf');
 
 			$this->publishes([
@@ -59,8 +59,8 @@ class ServiceProvider extends BaseServiceProvider {
 		if (Sys::$runsMigrations) {
 			return $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 		}
-		$this->publishes([
-			__DIR__ . '/../database/migrations' => database_path('migrations'),
-		], 'gmf-migrations');
+		// $this->publishes([
+		// 	__DIR__ . '/../database/migrations' => database_path('migrations'),
+		// ], 'gmf-migrations');
 	}
 }
