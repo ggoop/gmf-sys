@@ -25,7 +25,7 @@ class Sys {
 		$options = array_merge($defaultOptions, $options);
 
 		Route::group($options, function ($router) use ($callback) {
-			$callback(new ApiRouteRegistrar($router));
+			$callback(new RouteRegistrar($router));
 		});
 	}
 	/**
