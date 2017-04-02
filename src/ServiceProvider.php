@@ -16,19 +16,19 @@ class ServiceProvider extends BaseServiceProvider {
 			$this->registerMigrations();
 
 			$this->publishes([
-				__DIR__ . '/../resources/assets/fonts' => base_path('resources/assets/fonts/vendor/gmfSys'),
+				__DIR__ . '/../resources/assets/fonts' => base_path('resources/assets/fonts/vendor/gmf-sys'),
+			], 'gmf');
+
+			// $this->publishes([
+			// 	__DIR__ . '/../resources/views' => base_path('resources/views/vendor/gmf-sys'),
+			// ], 'gmf');
+
+			$this->publishes([
+				__DIR__ . '/../resources/assets/js' => base_path('resources/assets/js/vendor/gmf-sys'),
 			], 'gmf');
 
 			$this->publishes([
-				__DIR__ . '/../resources/views' => base_path('resources/views/vendor/gmfSys'),
-			], 'gmf');
-
-			$this->publishes([
-				__DIR__ . '/../resources/assets/js' => base_path('resources/assets/js/vendor/gmfSys'),
-			], 'gmf');
-
-			$this->publishes([
-				__DIR__ . '/../resources/assets/sass' => base_path('resources/assets/sass/vendor/gmfSys'),
+				__DIR__ . '/../resources/assets/sass' => base_path('resources/assets/sass/vendor/gmf-sys'),
 			], 'gmf');
 
 			$this->publishes([
