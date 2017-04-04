@@ -16,8 +16,8 @@ class CreateGmfSysQueryFieldsTable extends Migration {
 
 		$md->bigIncrements('id');
 		$md->entity('query', 'gmf.sys.query')->comment('查询');
-		$md->string('path')->nullable()->comment('字段');
-		$md->string('name')->nullable()->comment('名称');
+		$md->string('name')->nullable()->comment('字段');
+		$md->string('comment')->nullable()->comment('名称');
 		$md->boolean('hide')->default(0)->comment('隐藏');
 		$md->integer('sequence')->default(0)->comment('顺序');
 		$md->timestamps();

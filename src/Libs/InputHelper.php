@@ -1,21 +1,28 @@
 <?php
 
 namespace Gmf\Sys\Libs;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class InputHelper {
-	public static function fillEntity(Request $request, array $data, array $names = []) {
+	public static function fillEntity(array $data, $inputs, array $names = []) {
+		if ($inputs instanceof Collection) {
+			$inputs = $inputs->all();
+		}
 		foreach ($names as $key => $value) {
-			$oid = $request->input($value . '.id');
+			$oid = Arr::get($inputs, $value . '.id');
 			if ($oid) {
 				$data[$value . '_id'] = $oid;
 			}
 		}
 		return $data;
 	}
-	public static function fillEnum(Request $request, array $data, array $names = []) {
+	public static function fillEnum(array $data, $inputs, array $names = []) {
+		if ($inputs instanceof Collection) {
+			$inputs = $inputs->all();
+		}
 		foreach ($names as $key => $value) {
-			$oid = $request->input($value . '.name');
+			$oid = Arr::get($inputs, $value . '.name');
 			if ($oid) {
 				$data[$value . '_enum'] = $oid;
 			}

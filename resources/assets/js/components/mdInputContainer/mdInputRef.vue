@@ -1,9 +1,10 @@
 <template>
-  <div class="md-input-ref layout-align-space-between" @click.native="applyInputFocus">
+  <div class="md-input-ref layout-align-space-between-end" @click.native="applyInputFocus">
       <md-input-value
         v-for="chip in selectedValues"
         :md-deletable="!disabled"
         :disabled="disabled"
+        :key="chip"
         @delete="deleteChip(chip)">
         <slot :value="chip"><span>{{ chip.name }}</span></slot>
       </md-input-value>
@@ -59,16 +60,7 @@
     },
     watch: {
       value(value) {
-        if(!value){
-           this.selectedValues=[];
-        }else{
-          if(common.isArray(value)){
-            this.selectedValues=value;
-          }else{
-            this.selectedValues=[value];
-          }
-        }
-        this.setParentValue(this.selectedValues);
+        this.setValue(value);
       },
       selectedValues(v){
         if(this.multiple){
@@ -80,6 +72,18 @@
       }
     },
     methods: {
+      setValue(value){
+        if(!value){
+           this.selectedValues=[];
+        }else{
+          if(common.isArray(value)){
+            this.selectedValues=value;
+          }else{
+            this.selectedValues=[value];
+          }
+        }
+        this.setParentValue(this.selectedValues);
+      },
       openRef() {
         this.$refs['ref'].open();
       },
@@ -156,6 +160,7 @@
       },
     },
     mounted() {
+      this.value&&this.setValue(this.value);
       this.$nextTick(() => {
         this.parentContainer = getClosestVueParent(this.$parent, 'md-input-container');
         this.updateValues(this.formatValue());

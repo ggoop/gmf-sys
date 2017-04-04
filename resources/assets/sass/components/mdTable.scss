@@ -103,7 +103,7 @@
   }
 
   tbody .md-table-row {
-    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
 
     &.md-selected .md-table-cell {
       background-color: #f5f5f5;
@@ -167,8 +167,8 @@
 
   .md-table-head-text {
     height: 28px;
-    padding-right: 32px;
-    padding-left: 24px;
+    padding-right: 16px;
+    padding-left: 8px;
     display: inline-block;
     position: relative;
     overflow: hidden;
@@ -252,17 +252,10 @@
     }
 
     .md-table-cell-container {
-      padding: 6px 32px 6px 24px;
+      padding: 6px 16px 6px 8px;
     }
 
     .md-button {
-      $size: 36px;
-
-      width: $size;
-      min-width: $size;
-      height: $size;
-      min-height: $size;
-
       &:last-child {
         margin: 0 -10px 0 0;
       }
@@ -286,16 +279,9 @@
     position: relative;
     vertical-align: middle;
 
-    + {
-      .md-table-cell .md-table-cell-container,
-      .md-table-head .md-table-head-container .md-table-head-text {
-        padding-left: 8px;
-      }
-    }
-
     .md-table-cell-container {
       padding-right: 16px;
-      padding-left: 24px;
+      padding-left: 8px;
     }
 
     .md-checkbox {
@@ -406,4 +392,29 @@
 }
 .md-table-card.md-card{
   box-shadow:none
+}
+
+
+.md-table-cell-container{
+  .md-input-container{
+    margin: 0px;
+    min-height: 10px;
+    position: absolute;
+    top: 0;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    padding: 6px 16px 6px 8px;
+
+    &:after{
+      height: 0px;
+    }
+    &.md-input-focused:after{
+      height:2px;
+    }
+
+    .md-error, .md-count{
+      bottom: 0px;
+    }
+  }
 }

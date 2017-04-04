@@ -10,7 +10,9 @@ class EntityField extends Model {
 	protected $table = 'gmf_sys_entity_fields';
 	public $incrementing = false;
 	protected $keyType = 'string';
-	protected $fillable = ['id', 'name', 'comment', 'entity_id', 'type_id', 'type_type', 'collection', 'sequence', 'dValue'];
+	protected $fillable = ['id', 'name', 'comment', 'fieldName', 'entity_id', 'type_id',
+		'type_type', 'collection', 'sequence', 'dValue',
+		'foreignKey', 'localKey'];
 	protected $hidden = ['created_at', 'updated_at'];
 	public function type() {
 		return $this->belongsTo('Gmf\Sys\Models\Entity');

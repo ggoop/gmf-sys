@@ -13,8 +13,8 @@
           <md-table @select="onTableSelect">
             <md-table-header>
               <md-table-row>
-                <md-table-head v-for="(column, columnIndex) in refInfo.fields">
-                {{column.name}}
+                <md-table-head v-for="(column, columnIndex) in refInfo.fields" :key="column">
+                {{column.comment||column.name}}
                 </md-table-head>
               </md-table-row>
             </md-table-header>
@@ -26,7 +26,7 @@
                 :md-selection="!multiple"
                 @dblclick.native="dblclick(row)">
                 <md-table-cell v-for="(column, columnIndex) in refInfo.fields" :key="columnIndex">
-                  {{ row[column.path] }}
+                  {{ row[column.name] }}
                 </md-table-cell>
               </md-table-row>
             </md-table-body>

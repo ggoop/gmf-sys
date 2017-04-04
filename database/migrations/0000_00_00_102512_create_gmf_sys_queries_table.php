@@ -15,8 +15,8 @@ class CreateGmfSysQueriesTable extends Migration {
 		$md->mdEntity('gmf.sys.query')->comment('查询')->tableName('gmf_sys_queries');
 
 		$md->string('id', 100)->primary();
-		$md->string('code')->index()->comment('编码');
-		$md->string('name')->nullable()->comment('名称');
+		$md->string('name')->index()->comment('编码');
+		$md->string('comment')->nullable()->comment('名称');
 		$md->text('memo')->nullable()->comment('备注');
 		$md->entity('entity', 'gmf.sys.entity')->nullable()->comment('主实体');
 		$md->string('seg_from')->nullable()->comment('from 语句');

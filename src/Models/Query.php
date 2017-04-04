@@ -11,7 +11,7 @@ class Query extends Model {
 	protected $table = 'gmf_sys_queries';
 	public $incrementing = false;
 	protected $keyType = 'string';
-	protected $fillable = ['id', 'entity_id', 'code', 'name', 'memo'];
+	protected $fillable = ['id', 'entity_id', 'name', 'comment', 'memo'];
 	protected $hidden = ['created_at', 'updated_at'];
 	public function fields() {
 		return $this->hasMany('Gmf\Sys\Models\QueryField');
@@ -38,8 +38,8 @@ class Query extends Model {
 			if ($entity) {
 				$builder->entity_id = $entity->id;
 			}
-			if (empty($builder->name) && $entity) {
-				$builder->name = $entity->comment;
+			if (empty($builder->comment) && $entity) {
+				$builder->comment = $entity->comment;
 			}
 			$data = $builder->toArray();
 			static::create($data);
@@ -47,11 +47,11 @@ class Query extends Model {
 				foreach ($builder->fields as $key => $value) {
 					$field = ['query_id' => $builder->id];
 					if (is_string($key)) {
-						$field['path'] = $key;
-						$field['name'] = $value;
+						$field['name'] = $key;
+						$field['comment'] = $value;
 					} else {
-						$field['path'] = $value;
 						$field['name'] = $value;
+						$field['comment'] = $value;
 					}
 					QueryField::create($field);
 				}

@@ -16,8 +16,7 @@ class CreateGmfSysQueryOrdersTable extends Migration {
 
 		$md->bigIncrements('id');
 		$md->entity('query', 'gmf.sys.query')->comment('查询');
-		$md->string('path')->nullable()->comment('字段');
-		$md->string('name')->nullable()->comment('名称');
+		$md->string('name')->nullable()->comment('字段');
 		$md->boolean('isDesc')->default(0)->comment('降序');
 		$md->integer('sequence')->default(0)->comment('顺序');
 		$md->timestamps();

@@ -5,6 +5,7 @@
         v-for="chip in selectedChips"
         :md-deletable="!mdStatic"
         :disabled="disabled"
+        :key="chip"
         @delete="deleteChip(chip)">
         <slot :value="chip"></slot>
       </md-chip>

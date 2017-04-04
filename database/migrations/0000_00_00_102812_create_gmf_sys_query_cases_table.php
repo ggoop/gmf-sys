@@ -15,8 +15,8 @@ class CreateGmfSysQueryCasesTable extends Migration {
 		$md->mdEntity('gmf.sys.query.case')->comment('查询方案')->tableName('gmf_sys_query_cases');
 
 		$md->bigIncrements('id');
+		$md->entity('query', 'gmf.sys.query')->comment('查询');
 		$md->string('name')->comment('名称');
-		$md->entity('query', 'gmf.sys.query');
 		$md->entity('user', 'gmf.sys.user');
 		$md->json('data')->comment('数据');
 		$md->timestamps();
