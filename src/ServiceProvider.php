@@ -11,29 +11,32 @@ class ServiceProvider extends BaseServiceProvider {
 	 * @return void
 	 */
 	public function boot() {
+
 		$this->loadViewsFrom(__DIR__ . '/../resources/views', 'gmf');
 		if ($this->app->runningInConsole()) {
 			$this->registerMigrations();
 
+			$publishes = config('gmf.publishes', 'gmf');
+
+			$this->publishes([
+				__DIR__ . '/../config/gmf.php' => config_path('gmf.php'),
+			], $publishes);
+
 			$this->publishes([
 				__DIR__ . '/../resources/assets/fonts' => base_path('resources/assets/fonts/vendor/gmf-sys'),
-			], 'gmf');
-
-			// $this->publishes([
-			// 	__DIR__ . '/../resources/views' => base_path('resources/views/vendor/gmf-sys'),
-			// ], 'gmf');
+			], $publishes);
 
 			$this->publishes([
 				__DIR__ . '/../resources/assets/js' => base_path('resources/assets/js/vendor/gmf-sys'),
-			], 'gmf');
+			], $publishes);
 
 			$this->publishes([
 				__DIR__ . '/../resources/assets/sass' => base_path('resources/assets/sass/vendor/gmf-sys'),
-			], 'gmf');
+			], $publishes);
 
 			$this->publishes([
 				__DIR__ . '/../resources/assets/img' => base_path('public/img'),
-			], 'gmf');
+			], $publishes);
 
 			$this->commands([
 				Console\InstallCommand::class,
