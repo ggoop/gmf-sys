@@ -17,27 +17,27 @@ class CreateMenuOrgSeeder extends Migration {
 			$id = "d8540a600a0311e785189b0fc663edd9";
 			Menu::build(function (Builder $builder) use ($id) {
 				$builder->id($id)->root_id($id)->code('org')->name('组织架构')
-					->uri('org')->sequence($this->sequence . '0000');
+					->uri('org')->sequence($this->sequence . '0000')->tag('org');
 			});
 			$id = "d8540c400a0311e78a2b93658d06a5a4";
 			Menu::build(function (Builder $builder) use ($id) {
 				$builder->id($id)->code('org.org')->name('组织机构')->parent('org')
-					->uri('org.org.list')->sequence($this->sequence . '0100');
+					->uri('org.org.list')->sequence($this->sequence . '0100')->tag('org');
 			});
 			$id = "d8540ce00a0311e782168b802ae641fe";
 			Menu::build(function (Builder $builder) use ($id) {
 				$builder->id($id)->code('org.dept')->name('部门')->parent('org')
-					->uri('org.dept.list')->sequence($this->sequence . '0200');
+					->uri('org.dept.list')->sequence($this->sequence . '0200')->tag('org');
 			});
 			$id = "d8540d400a0311e7a09d111e03f0b260";
 			Menu::build(function (Builder $builder) use ($id) {
 				$builder->id($id)->code('org.work')->name('工作中心')->parent('org')
-					->uri('org.work.list')->sequence($this->sequence . '0300');
+					->uri('org.work.list')->sequence($this->sequence . '0300')->tag('org');
 			});
 			$id = "d8540da00a0311e7b66a035a9e6c2a3c";
 			Menu::build(function (Builder $builder) use ($id) {
 				$builder->id($id)->code('org.team')->name('班组')->parent('org')
-					->uri('org.team.list')->sequence($this->sequence . '0400');
+					->uri('org.team.list')->sequence($this->sequence . '0400')->tag('org');
 			});
 		});
 	}

@@ -12,15 +12,16 @@ import model from './core/mixin/model';
 window._ = window._ || lodash;
 window.axios = window.axios || axios;
 window.Vue = window.Vue || Vue;
-window.$modelMixin=model;
+window.$modelMixin = model;
 const start = {};
-start.run = function() {
+start.run = function(elID) {
+    elID = elID || '#gmfApp';
     baseConfig();
 
     Vue.use(bootstrap);
     const app = new Vue({
         router: router,
-        el: '#gmfApp'
+        el: elID
     });
 }
 start.config = function(callback) {
@@ -34,9 +35,9 @@ function baseConfig() {
         this.$root.$refs.rootToast.toast(toast);
     }
     Vue.prototype.$lang = lang;
-    Vue.prototype.$validate=function(input, rules, customMessages){
+    Vue.prototype.$validate = function(input, rules, customMessages) {
         return new validator(input, rules, customMessages);
-    } ;
+    };
 
     axios.defaults.headers.common = {
         'X-CSRF-TOKEN': '', //window.Laravel.csrfToken,

@@ -71,11 +71,17 @@ class MenuController extends Controller {
 		return $this->toJson(true);
 	}
 	public function all(Request $request, $menuID = '') {
-		$cmd = ' select r.root_id,r.parent_id,m.id,m.code,m.name,m.uri,r.sequence ';
-		$cmd .= ' from  gmf_sys_menus AS m inner join gmf_sys_menu_relations AS r on m.id=r.menu_id ';
-
-		$cmd .= ' order by r.sequence,r.root_id,r.parent_id,m.code';
-		$result = DB::select($cmd);
+		$query = DB::table('gmf_sys_menus as m')
+			->join('gmf_sys_menu_relations as r', 'm.id', '=', 'r.menu_id')
+			->select('r.root_id', 'r.parent_id', 'm.id', 'm.code', 'm.name', 'm.uri', 'r.sequence')
+			->orderBy('r.sequence')
+			->orderBy('r.root_id')
+			->orderBy('r.parent_id')
+			->orderBy('m.code');
+		if ($request->input('tag')) {
+			$query->where('m.tag', $request->input('tag'));
+		}
+		$result = $query->get();
 		$tree = TreeBuilder::create($result);
 		return $this->toJson($tree);
 	}
