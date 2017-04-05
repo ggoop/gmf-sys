@@ -1,5 +1,5 @@
 <template>
-  <md-sidenav class="md-left md-app-menu " ref="mainSidenav">
+  <md-sidenav class="md-left md-app-menu has-extend" ref="mainSidenav">
   <div class="md-app-menu-container layout-row">
     <div class="md-app-menu-content layout-column">
       <md-toolbar>
