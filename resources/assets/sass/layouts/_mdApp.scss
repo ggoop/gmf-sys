@@ -5,11 +5,14 @@
         box-shadow: 0 0 4px rgba(0, 0, 0, .28);
         width: auto;
     }
-    .md-app-menu-container{
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      max-height: 100%;
+    .md-app-menu-container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+        .md-list-item.md-inset .md-list-item-container {
+            padding-left: 36px;
+        }
     }
     .nav-body {
         overflow-y: auto;
@@ -73,8 +76,8 @@
         }
         .md-toolbar {
             cursor: pointer;
-            background-color: rgb(66,66,66);
-            color: rgba(255,255,255,0.87);
+            background-color: rgb(66, 66, 66);
+            color: rgba(255, 255, 255, 0.87);
         }
     }
     .md-app-menu-extend {
@@ -84,10 +87,10 @@
         }
         .md-subheader {
             font-size: 16px;
-            background-color: rgb(250,250,250);
-            color: rgb(66,133,244);
+            background-color: rgb(250, 250, 250);
+            color: rgb(66, 133, 244);
         }
-        li{
+        li {
             flex-wrap: wrap;
         }
         .nav-body>.wrap {
@@ -124,22 +127,25 @@
         }
     }
 }
-@include layout-xlarge{
-    .md-app-menu.has-extend .md-sidenav-content{
+
+@include layout-xlarge {
+    .md-app-menu.has-extend .md-sidenav-content {
         max-width: 66.66%;
     }
 }
+
 @include layout-small {
-    .md-app-menu.has-extend .md-sidenav-content{
+    .md-app-menu.has-extend .md-sidenav-content {
         width: 100%;
     }
-    .md-app-menu.has-extend .md-app-menu-content{
+    .md-app-menu.has-extend .md-app-menu-content {
         min-width: 180px;
     }
 }
-.md-app-menu.has-extend{
-    .md-sidenav-content{
-        width:70%;
+
+.md-app-menu.has-extend {
+    .md-sidenav-content {
+        width: 70%;
     }
     .md-app-menu-content {
         max-width: 272px;

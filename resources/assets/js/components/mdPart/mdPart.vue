@@ -1,5 +1,5 @@
 <template>
-  <div class="layout-fill flex md-part-toolbar" :class="classes">
+  <div class="layout-fill flex md-part" :class="classes">
     <slot></slot>
   </div>
 </template>
