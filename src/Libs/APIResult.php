@@ -3,38 +3,31 @@
 namespace Gmf\Sys\Libs;
 use Closure;
 use Gmf\Sys\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 
 class APIResult {
-	public static function pager($result, Closure $callback = null) {
-		$data = [];
-		$pager = [];
-		if (isset($result['data'])) {
-			$data = $result['data'];
-			//total--总记录数
-			$pager['total'] = $result['total'];
-			//per_page --每页记录数
-			$pager['per_page'] = $result['per_page'];
-			//current_page--当前页数
-			$pager['current_page'] = $result['current_page'];
-			//last_page--尾页页码
-			$pager['last_page'] = $result['last_page'];
-
-		} else if (isset($result->data)) {
-			$data = $result->data;
-			//total--总记录数
-			$pager['total'] = $result->total;
-			//per_page --每页记录数
-			$pager['per_page'] = $result->per_page;
-			//current_page--当前页数
-			$pager['current_page'] = $result->current_page;
-			//last_page--尾页页码
-			$pager['last_page'] = $result->last_page;
-		}
-		$builder = new Builder(compact('data', 'pager'));
-		return static::toResult($builder, $callback);
-	}
 	public static function json($data, Closure $callback = null) {
+		$pager = false;
+		if ($data instanceof LengthAwarePaginator) {
+			$pager = new Builder;
+			$pager->page($data->currentPage())
+				->size($data->perPage())
+				->total($data->total())
+				->lastPage($data->lastPage());
+			$data = $data->items();
+		} else if ($data instanceof Paginator) {
+			$pager = new Builder;
+			$pager->page($data->currentPage())
+				->size($data->perPage())
+				->from($data->firstItem())
+				->to($data->lastItem());
+			$data = $data->items();
+		}
 		$builder = new Builder(compact('data'));
+		if ($pager) {
+			$builder->pager($pager->toArray());
+		}
 		return static::toResult($builder, $callback);
 	}
 	public static function errorParam($paramName) {

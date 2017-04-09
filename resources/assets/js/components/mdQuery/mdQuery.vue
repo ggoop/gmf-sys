@@ -22,18 +22,15 @@
       </md-table-body>
     </md-table>
     <md-table-tool>
-      <md-layout></md-layout>
+      <span class="flex"></span>
       <md-table-pagination
-        md-size="5"
-        md-total="10"
-        md-page="1"
-        md-label="Rows"
-        md-separator="of"
+        :md-size="pageInfo.size"
+        :md-total="pageInfo.total"
+        :md-page="pageInfo.page"
         :md-page-options="[5, 10, 25, 50]"
         @pagination="onTablePagination">
       </md-table-pagination>
     </md-table-tool>
-    
     <md-loading :loading="loading"></md-loading>
   </md-table-card>
 </template>
@@ -55,20 +52,34 @@
       mdSelection:{
         type:[String,Boolean],
         default:true
+      },
+      mdPageSize:{
+        type:[Number,String],
+        default:'10'
       }
     },
     mixins: [theme],
+    watch: {
+      mdPageSize(val) {
+        this.pageInfo.size =val;
+      },
+    },
     data() {
       return {
         selectedRows:[],
+        pageInfo:{
+          size:0,
+          total:0,
+          page:1
+        },
         refInfo:{},
         refData:[],
         loading:0,
       };
     },
     methods: {
-      onTablePagination(page){
-         this.pagination(page);
+      onTablePagination(pager){
+         this.pagination(pager);
       },
       onTableSelect(items){
         this.selectedRows=[];
@@ -77,11 +88,17 @@
         });
         this.select();
       },
-      pagination(page){
+      pagination(pager){
         this.loading++;
-        this.$http.get('sys/queries/query/'+this.mdQueryId).then(response => {
+        pager=pager||this.pageInfo;
+        const params={};
+        this._.extend(params,pager);
+        this.$http.get('sys/queries/query/'+this.mdQueryId,{params:params}).then(response => {
           this.refInfo = response.data.schema;
           this.refData = response.data.data;
+          this.pageInfo.size=response.data.pager.size;
+          this.pageInfo.page=response.data.pager.page;
+          this.pageInfo.total=response.data.pager.total;
           this.loading--;
           this.$emit('page');
         }, response => {
@@ -98,6 +115,7 @@
     },
     mounted() {
       if(this.mdQueryId){
+        this.pageInfo.size=this.mdPageSize;
         this.pagination();
       }
     },

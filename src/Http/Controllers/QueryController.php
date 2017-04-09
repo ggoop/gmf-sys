@@ -65,7 +65,8 @@ class QueryController extends Controller {
 		$queryCase->fields($fields);
 		return $queryCase;
 	}
-	public function queryData(Request $request, string $queryID) {
+	public function query(Request $request, string $queryID) {
+		$pageSize = $request->input('size', 10);
 
 		$queryCase = $this->buildQueryCase($request, $queryID);
 		$data = [];
@@ -78,7 +79,7 @@ class QueryController extends Controller {
 		}
 		$query = $queryBuilder->build();
 
-		$data = $query->get();
+		$data = $query->paginate($pageSize);
 		// } catch (Exception $e) {
 		// 	$error = $e;
 		// }

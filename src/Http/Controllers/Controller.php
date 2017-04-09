@@ -10,9 +10,6 @@ use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController {
 	use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-	protected function toPager($result, Closure $callback = null) {
-		return APIResult::pager($result, $callback);
-	}
 	protected function toJson($result, Closure $callback = null) {
 		return APIResult::json($result, $callback);
 	}

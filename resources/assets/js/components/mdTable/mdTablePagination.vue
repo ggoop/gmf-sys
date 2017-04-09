@@ -6,7 +6,7 @@
       <md-option v-for="amount in mdPageOptions" :key="amount" :value="amount">{{ amount }}</md-option>
     </md-select>
 
-    <span class="md-table-pagination-info">{{ ((currentPage - 1) * currentSize) + 1 }}-{{ subTotal }} {{ mdSeparator }} {{ mdTotal }}</span>
+    <span class="md-table-pagination-info">{{pageInfo}}</span>
 
     <md-button class="md-icon-button md-table-pagination-previous" @click.native="previousPage" :disabled="currentPage === 1">
       <md-icon>keyboard_arrow_left</md-icon>
@@ -36,11 +36,11 @@
       },
       mdLabel: {
         type: String,
-        default: 'Rows per page'
+        default: '每页'
       },
       mdSeparator: {
         type: String,
-        default: 'of'
+        default: '/'
       }
     },
     data() {
@@ -68,14 +68,19 @@
       },
       shouldDisable() {
         return this.currentSize * this.currentPage >= this.totalItems;
+      },
+      pageInfo(){
+        if(!this.mdTotal){
+          return '0'+this.mdSeparator+this.mdTotal;
+        }
+        var sub = this.currentPage * this.currentSize;
+        sub = sub > this.mdTotal ? this.mdTotal : sub;
+        return (((this.currentPage - 1) * this.currentSize) + 1) +'-'+ sub +this.mdSeparator+this.mdTotal;
       }
     },
     methods: {
       emitPaginationEvent() {
         if (this.canFireEvents) {
-          const sub = this.currentPage * this.currentSize;
-
-          this.subTotal = sub > this.mdTotal ? this.mdTotal : sub;
           this.$emit('pagination', {
             size: this.currentSize,
             page: this.currentPage
@@ -104,10 +109,9 @@
       }
     },
     mounted() {
+      this.mdPageOptions = this.mdPageOptions || [5,10, 25, 50];
+      this.currentSize =this.currentSize|| this.mdPageOptions[0];
       this.$nextTick(() => {
-        this.subTotal = this.currentPage * this.currentSize;
-        this.mdPageOptions = this.mdPageOptions || [10, 25, 50, 100];
-        this.currentSize = this.mdPageOptions[0];
         this.canFireEvents = true;
       });
     }

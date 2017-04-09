@@ -90,6 +90,7 @@
       onRefOpen(type) {
       },
       onRefClose(data) {
+        if(!data||data.length==0)return;
         this.selectedValues=[];
         data&&data.forEach((row, index) =>{
             this.addValue(row);
