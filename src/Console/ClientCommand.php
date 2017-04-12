@@ -12,7 +12,7 @@ class ClientCommand extends Command {
 	 *
 	 * @var string
 	 */
-	protected $signature = 'gmf:client
+	protected $signature = 'passport:client
             {--personal : Create a personal access token client}
             {--password : Create a password grant client}
             {--name= : The name of the client}';

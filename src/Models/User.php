@@ -1,12 +1,12 @@
 <?php
 
 namespace Gmf\Sys\Models;
-
+use Gmf\Sys\Passport\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable {
-	use Notifiable;
+	use HasApiTokens, Notifiable;
 
 	protected $table = 'gmf_sys_users';
 

@@ -27,6 +27,7 @@ class Sys {
 		Route::group($options, function ($router) use ($callback) {
 			$callback(new RouteRegistrar($router));
 		});
+
 	}
 	/**
 	 * Get a Passport route registrar.

@@ -28,6 +28,11 @@ class RouteRegistrar {
 	 * @return void
 	 */
 	public function all() {
+		$this->forSys();
+		$this->forOrg();
+	}
+
+	public function forSys() {
 		$this->router->group(['prefix' => 'sys', 'middleware' => ['api']], function ($router) {
 
 			$router->resource('datas', 'DataController', ['only' => ['index', 'show']]);
@@ -44,6 +49,8 @@ class RouteRegistrar {
 			$router->resource('languages', 'LanguageController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 			$router->resource('profiles', 'ProfileController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 		});
+	}
+	public function forOrg() {
 
 		$this->router->group(['prefix' => 'org', 'middleware' => ['api']], function ($router) {
 

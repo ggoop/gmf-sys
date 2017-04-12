@@ -10,7 +10,7 @@ class InstallCommand extends Command {
 	 *
 	 * @var string
 	 */
-	protected $signature = 'gmf:install';
+	protected $signature = 'passport:install';
 
 	/**
 	 * The console command description.
@@ -25,7 +25,8 @@ class InstallCommand extends Command {
 	 * @return mixed
 	 */
 	public function handle() {
-		$this->call('gmf:client', ['--personal' => true, '--name' => config('app.name') . ' Personal Access Client']);
-		$this->call('gmf:client', ['--password' => true, '--name' => config('app.name') . ' Password Grant Client']);
+		$this->call('passport:keys');
+		$this->call('passport:client', ['--personal' => true, '--name' => config('app.name') . ' Personal Access Client']);
+		$this->call('passport:client', ['--password' => true, '--name' => config('app.name') . ' Password Grant Client']);
 	}
 }
