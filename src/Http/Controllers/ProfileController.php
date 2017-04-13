@@ -16,6 +16,9 @@ class ProfileController extends Controller {
 	public function show(Request $request, string $id) {
 		$query = Models\Profile::select('id', 'code', 'name', 'memo', 'scope_enum');
 		$data = $query->where('id', $id)->orWhere('code', $id)->first();
+		if ($data) {
+			$data->value = Models\ProfileValue::select('value')->where('profile_id', $data->id)->first();
+		}
 		return $this->toJson($data);
 	}
 
