@@ -10,7 +10,7 @@ class Dept extends Model {
 	protected $table = 'gmf_org_depts';
 	public $incrementing = false;
 	protected $keyType = 'string';
-	protected $fillable = ['id', 'code', 'name', 'memo', 'ent_id', 'org_id'];
+	protected $fillable = ['id', 'ent_id', 'code', 'name', 'memo', 'org_id'];
 
 	public function ent() {
 		return $this->belongsTo('Gmf\Sys\Models\Ent');

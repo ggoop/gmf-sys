@@ -9,7 +9,7 @@ class Team extends Model {
 	use Snapshotable, HasGuard;
 	protected $table = 'gmf_org_teams';
 	public $incrementing = false;
-	protected $fillable = ['id', 'code', 'name', 'memo', 'org_id', 'dept_id', 'work_id'];
+	protected $fillable = ['id', 'ent_id', 'code', 'name', 'memo', 'org_id', 'dept_id', 'work_id'];
 
 	public function ent() {
 		return $this->belongsTo('Gmf\Sys\Models\Ent');
