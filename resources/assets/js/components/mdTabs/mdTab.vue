@@ -16,6 +16,7 @@
       mdActive: Boolean,
       mdDisabled: Boolean,
       mdTooltip: String,
+      mdTag: String,
       mdTooltipDelay: {
         type: String,
         default: '0'
@@ -54,7 +55,10 @@
       },
       mdTooltipDirection() {
         this.updateTabData();
-      }
+      },
+      mdTag() {
+        this.updateTabData();
+      },
     },
     computed: {
       styles() {
@@ -75,6 +79,7 @@
           tooltip: this.mdTooltip,
           tooltipDelay: this.mdTooltipDelay,
           tooltipDirection: this.mdTooltipDirection,
+          tag:this.mdTag,
           ref: this
         };
       },
