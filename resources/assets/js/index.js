@@ -38,7 +38,12 @@ function baseConfig() {
     Vue.prototype.$validate = function(input, rules, customMessages) {
         return new validator(input, rules, customMessages);
     };
-
+    Vue.prototype.$goModule=function(module,options){
+        this.$router&&this.$router.push({ name: 'module', params: { module: module }});
+    };
+    Vue.prototype.$goApp=function(app,options){
+        this.$router&&this.$router.push({ name: 'app', params: { app: app }});
+    };
     axios.defaults.headers.common = {
         'X-CSRF-TOKEN': '', //window.Laravel.csrfToken,
         'X-Requested-With': 'XMLHttpRequest'
