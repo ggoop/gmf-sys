@@ -17,10 +17,17 @@ class CreateGmfSysAccountsTable extends Migration {
 		$md->string('name')->nullable()->comment('账号名');
 		$md->string('nickName')->nullable()->comment('显示名称');
 		$md->string('type')->nullable()->comment('类型');
-		$md->string('secret', 100)->nullable();
-		$md->text('redirect')->nullable();
-		$md->string('token')->nullable()->comment('token');
+		$md->string('avatar', 500)->nullable();
 
+		$md->string('mobile', 20)->nullable();
+		$md->string('email', 50)->nullable();
+		$md->string('srcId', 50)->nullable()->comment('第三方用户id');
+		$md->text('srcUrl')->nullable()->comment('账号来源地址');
+
+		$md->string('token', 100)->nullable()->comment('授权码');
+		$md->timestamp('expire_time')->nullable()->comment('失效时间');
+
+		$md->text('info')->nullable();
 		$md->timestamps();
 
 		$md->build();
