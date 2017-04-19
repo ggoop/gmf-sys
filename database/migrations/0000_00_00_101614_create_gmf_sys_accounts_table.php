@@ -25,7 +25,7 @@ class CreateGmfSysAccountsTable extends Migration {
 		$md->text('srcUrl')->nullable()->comment('账号来源地址');
 
 		$md->string('token', 100)->nullable()->comment('授权码');
-		$md->timestamp('expire_time')->nullable()->comment('失效时间');
+		$md->bigIncrements('expire_time')->nullable()->comment('失效时间');
 
 		$md->text('info')->nullable();
 		$md->timestamps();
