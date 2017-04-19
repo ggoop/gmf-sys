@@ -16,9 +16,9 @@ class CreateGmfSysProfilesTable extends Migration {
 
 		$md->string('id', 100)->primary();
 		$md->string('code')->unique()->comment('编码');
-		$md->string('name')->comment('名称');
+		$md->string('name')->nullable()->comment('名称');
 		$md->text('memo')->nullable()->comment('备注');
-		$md->enum('scope', 'gmf.sys.profile.scopeEnum')->comment('范围');
+		$md->enum('scope', 'gmf.sys.profile.scopeEnum')->nullable()->comment('范围');
 		$md->string('dValue', 100)->nullable()->comment('默认值');
 		$md->timestamps();
 
