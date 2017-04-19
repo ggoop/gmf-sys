@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Account extends Model {
 	use Snapshotable, HasGuard;
 	protected $table = 'gmf_sys_accounts';
-
+	public $incrementing = false;
 	/**
 	 * The attributes that are mass assignable.
 	 *

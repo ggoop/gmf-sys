@@ -11,6 +11,7 @@ class User extends Authenticatable {
 	use Snapshotable, HasGuard, HasApiTokens, Notifiable;
 
 	protected $table = 'gmf_sys_users';
+	public $incrementing = false;
 
 	/**
 	 * The attributes that are mass assignable.
