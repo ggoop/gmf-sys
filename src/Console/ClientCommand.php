@@ -2,9 +2,9 @@
 
 namespace Gmf\Sys\Console;
 
+use Gmf\Sys\Passport\ClientRepository;
+use Gmf\Sys\Passport\PersonalAccessClient;
 use Illuminate\Console\Command;
-use Laravel\Passport\ClientRepository;
-use Laravel\Passport\PersonalAccessClient;
 
 class ClientCommand extends Command {
 	/**

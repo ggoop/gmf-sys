@@ -1,8 +1,8 @@
 <?php
 namespace Gmf\Sys\Console;
 
+use Gmf\Sys\Passport\Passport;
 use Illuminate\Console\Command;
-use Laravel\Passport\Passport;
 use phpseclib\Crypt\RSA;
 
 class KeysCommand extends Command {
