@@ -277,11 +277,11 @@ function attach(element) {
     if (!element.classList.contains('md-waves-effect')) {
         element.classList.add('md-waves-effect');
     }
-    // if ('ontouchstart' in window) {
-    //     element.addEventListener('touchstart', showEffect, false);
-    //     element.addEventListener('touchend', Effect.hide, false);
-    //     element.addEventListener('touchcancel', Effect.hide, false);
-    // }
+    if ('ontouchstart' in window) {
+        element.addEventListener('touchstart', showEffect, false);
+        element.addEventListener('touchend', Effect.hide, false);
+        element.addEventListener('touchcancel', Effect.hide, false);
+    }
     element.addEventListener('mousedown', showEffect, false);
     element.addEventListener('mouseup', Effect.hide, false);
     element.addEventListener('mouseleave', Effect.hide, false);
