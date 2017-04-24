@@ -9,5 +9,5 @@ class ProfileValue extends Model {
 	use Snapshotable, HasGuard;
 	protected $table = 'gmf_sys_profile_values';
 	public $incrementing = false;
-	protected $fillable = ['id', 'profile_id', 'scope_id', 'scope_type', 'value'];
+	protected $fillable = ['id', 'ent_id', 'profile_id', 'scope_id', 'scope_type', 'value'];
 }

@@ -38,6 +38,7 @@ import mdContent from './mdContent';
 import mdQuery from './mdQuery';
 import mdPart from './mdPart';
 import mdTree from './mdTree';
+import mdChart from './mdChart';
 
 const options = {
     MdAvatar,
@@ -80,6 +81,7 @@ const options = {
     mdQuery,
     mdPart,
     mdTree,
+    mdChart,
 };
 
 export default function install(Vue) {

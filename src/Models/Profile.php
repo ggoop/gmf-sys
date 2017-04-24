@@ -9,13 +9,18 @@ class Profile extends Model {
 	use Snapshotable, HasGuard;
 	protected $table = 'gmf_sys_profiles';
 	public $incrementing = false;
-	protected $fillable = ['id', 'code', 'name', 'memo', 'dValue', 'scope_enum'];
+	protected $fillable = ['id', 'ent_id', 'code', 'name', 'memo', 'dValue', 'scope_enum'];
 	public function values() {
 		return $this->hasMany('Gmf\Sys\Models\ProfileValue');
 	}
 	public static function getValue($code, $opts = []) {
 		$v = '';
-		$p = Profile::with('values')->where('code', $code)->first();
+		$query = Profile::with('values')->where('code', $code);
+		if (!empty($opts['ent_id'])) {
+			$query->where('ent_id', $opts['ent_id']);
+		}
+
+		$p = $query->first();
 		if ($p && $p->values && count($p->values)) {
 			$v = $p->values[0]->value;
 		}
@@ -23,7 +28,11 @@ class Profile extends Model {
 	}
 	public static function setValue($code, $value, $opts = []) {
 		$v = '';
-		$p = Profile::where('code', $code)->first();
+		$query = Profile::where('code', $code);
+		if (!empty($opts['ent_id'])) {
+			$query->where('ent_id', $opts['ent_id']);
+		}
+		$p = $query->first();
 		if (!$p) {
 			$opts['code'] = $code;
 			$opts['dValue'] = $value;

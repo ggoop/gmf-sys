@@ -4,6 +4,9 @@ options.LANG_NOEDATA='没有数据';
 options.LANG_DELETESUCCESS='删除成功';
 options.LANG_DELETEFAIL='删除失败';
 
+options.LANG_DOSUCCESS='操作成功';
+options.LANG_DOFAIL='操作失败';
+
 options.LANG_SAVESUCCESS='保存成功';
 options.LANG_SAVEFAIL='保存失败';
 

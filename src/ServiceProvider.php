@@ -37,6 +37,10 @@ class ServiceProvider extends BaseServiceProvider {
 				__DIR__ . '/../resources/assets/img' => base_path('public/img'),
 			], $publishes);
 
+			$this->publishes([
+				__DIR__ . '/../resources/assets/css' => base_path('public/css'),
+			], $publishes);
+
 			$this->commands([
 				Console\InstallCommand::class,
 				Console\ClientCommand::class,

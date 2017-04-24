@@ -28,6 +28,7 @@ class RouteRegistrar {
 	 * @return void
 	 */
 	public function all() {
+
 		$this->forSys();
 		$this->forOrg();
 	}
