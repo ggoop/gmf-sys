@@ -22,7 +22,12 @@
     display: -webkit-flex;
     display: flex;
 }
-
+.layout-wrap{
+  flex-wrap: wrap;
+}
+.layout-nowrap{
+  flex-wrap: nowrap;
+}
 .layout-column {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;

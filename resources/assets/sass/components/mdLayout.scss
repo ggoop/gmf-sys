@@ -6,6 +6,12 @@
   flex-wrap: wrap;
 }
 
+.md-wrap{
+  flex-wrap: wrap;
+}
+.md-nowrap{
+  flex-wrap: nowrap;
+}
 @mixin layout($size: null) {
   @if $size == null {
     $size : '';
