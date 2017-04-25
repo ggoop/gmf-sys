@@ -41,7 +41,7 @@ class Menu extends Model {
 				$dataRelation['sequence'] = $builder->sequence;
 			}
 			if (!empty($builder->parent)) {
-				$parent = Menu::where('code', $builder->parent)->first();
+				$parent = Menu::where('code', $builder->parent)->where('tag', $builder->tag)->first();
 				if ($parent) {
 					$parentRelation = MenuRelation::where('menu_id', $parent->id)->first();
 					if ($parentRelation) {
