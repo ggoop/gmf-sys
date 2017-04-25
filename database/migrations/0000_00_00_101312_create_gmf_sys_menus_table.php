@@ -15,7 +15,7 @@ class CreateGmfSysMenusTable extends Migration {
 		$md->mdEntity('gmf.sys.menu')->comment('菜单')->tableName('gmf_sys_menus');
 
 		$md->string('id', 100)->primary();
-		$md->string('code')->unique()->comment('编码');
+		$md->string('code')->comment('编码');
 		$md->string('name')->comment('名称');
 		$md->text('memo')->nullable()->comment('备注');
 		$md->string('tag')->nullable()->comment('标识');
