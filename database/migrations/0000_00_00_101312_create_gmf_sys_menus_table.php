@@ -20,6 +20,8 @@ class CreateGmfSysMenusTable extends Migration {
 		$md->text('memo')->nullable()->comment('备注');
 		$md->string('tag')->nullable()->comment('标识');
 		$md->string('uri')->nullable()->comment('URI导航标识');
+		$md->string('icon')->nullable()->comment('图标');
+		$md->text('style')->nullable()->comment('样式');
 		$md->timestamps();
 
 		$md->build();

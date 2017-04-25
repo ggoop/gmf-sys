@@ -74,6 +74,8 @@ class MenuController extends Controller {
 		$query = DB::table('gmf_sys_menus as m')
 			->join('gmf_sys_menu_relations as r', 'm.id', '=', 'r.menu_id')
 			->select('r.root_id', 'r.parent_id', 'm.id', 'm.code', 'm.name', 'm.uri', 'r.sequence')
+			->addSelect('m.icon')
+			->addSelect('m.style')
 			->orderBy('r.sequence')
 			->orderBy('r.root_id')
 			->orderBy('r.parent_id')
