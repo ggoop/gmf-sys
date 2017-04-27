@@ -34,7 +34,7 @@
     },
     methods: {
       formatOption(options){
-        return Object.assign(defaultOpts,options);
+        return Object.assign({},defaultOpts,options);
       },
       addSeries(options){
         this.delegateMethod('addSeries', this.formatOption(options));
@@ -43,10 +43,10 @@
         this.delegateMethod('update', this.formatOption(options))
       },
       showLoading(txt){
-        this.chart.showLoading(txt);
+        this.chart&&this.chart.showLoading(txt);
       },
       hideLoading(){
-        this.chart.hideLoading();
+        this.chart&&this.chart.hideLoading();
       },
       delegateMethod(name, ...args){
         if (!this.chart) {
@@ -55,9 +55,14 @@
         }
         return this.chart[name](...args)
       },
+      callback(chart){
+        this.$emit('callback',chart);
+      },
       _init(){
         if (!this.chart && this.options) {
-          this.chart = new Highcharts.Chart(this.$el,this.formatOption(this.options) );
+          this.chart = new Highcharts.Chart(this.$el,this.formatOption(this.options),(c)=>{
+            this.callback(c);
+          });
         }
       }
     },
