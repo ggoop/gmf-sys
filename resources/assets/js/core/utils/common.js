@@ -74,7 +74,7 @@ const formatDecimal = function(num, options) {
     }
     cents = options.precision ? cents.substring(0, options.precision + 1) : '';
     var temp = integers.join('');
-    if (options.quantile) {
+    if (options.quantile>1) {
         var remain = integers.length % options.quantile;
         temp = integers.reduce(function(previousValue, currentValue, index) {
             if (index + 1 === remain || (index + 1 - remain) % options.quantile === 0) {
@@ -84,7 +84,12 @@ const formatDecimal = function(num, options) {
             }
         }, "").replace(/\,$/g, "");
     }
-    return sign + temp + cents;
+
+    const rtn=sign + temp + cents;
+    if (options.quantile<=1){
+        return parseFloat(rtn);
+    }
+    return rtn;
 };
 const common = {
     isArray,
