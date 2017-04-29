@@ -290,11 +290,16 @@ export default {
     bind: function(el, binding) {
         //attach(el);
     },
-    inserted: function(el, binding) {
-        attach(el);
+    inserted: function(el, binding,vnode) {
+        if(binding&&(binding.value===undefined||binding.value)){
+            attach(el);
+        }
+        
     },
-    update: function(el, binding) {
-        attach(el);
+    update: function(el, binding,vnode) {
+        if(binding&&(binding.value===undefined||binding.value)){
+            attach(el);
+        }
     },
     componentUpdated: function(el, binding) {
         //attach(el);

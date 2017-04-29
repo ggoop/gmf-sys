@@ -1,17 +1,14 @@
 <template>
   <th class="md-table-head" :class="classes" @click="changeSort">
-    <div class="md-table-head-container" v-wave="!mdSortBy">
+    <div class="md-table-head-container" v-wave="!!mdSortBy">
       <div class="md-table-head-text md-test">
         <md-icon class="md-sortable-icon" v-if="mdSortBy">arrow_downward</md-icon>
-
         <slot></slot>
-
         <md-tooltip v-if="mdTooltip">{{ mdTooltip }}</md-tooltip>
       </div>
     </div>
   </th>
 </template>
-
 <script>
   import getClosestVueParent from '../../core/utils/getClosestVueParent';
 

@@ -16,7 +16,7 @@
 
       .md-list-item-container {
         min-height: 40px;
-        font-size: 13px;
+        font-size: 1.3rem;
 
         .md-avatar,
         .md-list-action {
@@ -63,11 +63,11 @@
 
       .md-list-text-container {
         > :nth-child(1) {
-          font-size: 13px;
+          font-size: 1.3rem;
         }
 
         > :nth-child(2) {
-          font-size: 13px;
+          font-size: 1.3rem;
         }
       }
     }
@@ -103,11 +103,11 @@
 
       .md-list-text-container {
         > :nth-child(1) {
-          font-size: 13px;
+          font-size: 1.3rem;
         }
 
         > :nth-child(2) {
-          font-size: 13px;
+          font-size: 1.3rem;
         }
       }
     }
@@ -181,7 +181,7 @@
     justify-content: space-between;
     flex: 1;
     position: relative;
-    font-size: 16px;
+    font-size: 1.6rem;
     font-weight: 400;
     text-align: left;
     text-transform: none;
@@ -337,14 +337,14 @@
   }
 
   > :nth-child(1) {
-    font-size: 16px;
+    font-size: 1.6rem;
   }
 
   > :nth-child(2),
   > :nth-child(3) {
     margin: 0;
     color: rgba(#000, .54);
-    font-size: 14px;
+    font-size: 1.4rem;
   }
 
   > :nth-child(2):not(:last-child) {

@@ -1,8 +1,8 @@
 .md-input-container {
   width: 100%;
-  min-height: 48px;
-  margin: 4px 0 24px;
-  padding-top: 16px;
+  min-height: 4rem;
+  margin: 0.33333rem 0 .8rem;
+  padding-top: 1.3333rem;
   display: flex;
   position: relative;
 
@@ -19,14 +19,14 @@
 
   label {
     position: absolute;
-    top: 23px;
+    top: 1.91666rem;
     left: 0;
     pointer-events: none;
     transition: $swift-ease-out;
     transition-duration: .3s;
     color: rgba(#000, .54);
-    font-size: 16px;
-    line-height: 20px;
+    font-size: 1.6rem;
+    line-height: 1.6666rem;
   }
 
   input,
@@ -51,13 +51,13 @@
 
     &::-webkit-input-placeholder {
       color: rgba(#000, .54);
-      font-size: 16px;
+      font-size: 1.6rem;
       text-shadow: none;
       -webkit-text-fill-color: initial;
     }
 
     ~ .md-icon:not(.md-icon-delete) {
-      margin-left: 12px;
+      margin-left: 1rem;
 
       &:after {
         right: 0;
@@ -67,19 +67,19 @@
   }
 
   textarea {
-    min-height: 32px;
-    max-height: 230px;
-    padding: 5px 0;
+    min-height: 2.666rem;
+    max-height: 19.166rem;
+    padding: 0.41666rem 0;
     resize: none;
     line-height: 1.3em;
   }
 
   .md-error,
   .md-count {
-    height: 20px;
+    height: 1.66666rem;
     position: absolute;
-    bottom: -22px;
-    font-size: 12px;
+    bottom: -1.83333rem;
+    font-size: 1.2rem;
   }
 
   .md-error {
@@ -99,8 +99,8 @@
     transition: $swift-ease-out;
 
     &:after {
-      width: 36px;
-      height: 2px;
+      width: 2.6666rem;
+      height: 0.1666rem;
       position: absolute;
       left: 0;
       bottom: 0;
@@ -110,13 +110,13 @@
 
     ~ {
       label {
-        left: 36px;
+        left: 3rem;
       }
 
       .md-input,
       .md-textarea,
       .md-file {
-        margin-left: 12px;
+        margin-left: 1rem;
       }
     }
   }
@@ -126,14 +126,14 @@
   &.md-input-placeholder {
     label {
       pointer-events: auto;
-      top: 10px;
+      top: 0.83333rem;
       opacity: 0;
-      font-size: 12px;
+      font-size: 1.2rem;
     }
 
     input,
     textarea {
-      font-size: 16px;
+      font-size: 1.6rem;
     }
   }
 
@@ -143,12 +143,12 @@
       pointer-events: auto;
       top: 0;
       opacity: 1;
-      font-size: 12px;
+      font-size: 1.2rem;
     }
 
     input,
     textarea {
-      font-size: 16px;
+      font-size: 1.6rem;
     }
   }
 
@@ -166,8 +166,8 @@
 
     &.md-input-focused {
       label {
-        top: 23px;
-        font-size: 16px;
+        top: 1.9166rem;
+        font-size: 1.6rem;
       }
     }
 
@@ -201,7 +201,7 @@
       margin: 0;
       position: absolute;
       right: 0;
-      bottom: -2px;
+      bottom: -0.1666rem;
       color: rgba(#000, .38);
 
       .md-ink-ripple {
@@ -220,11 +220,11 @@
   &.md-input-required {
     label:after {
       position: absolute;
-      top: 2px;
+      top: 0.1666rem;
       right: 0;
       transform: translateX(calc(100% + 2px));
       content: "*";
-      font-size: 12px;
+      font-size: 1.2rem;
       line-height: 1em;
       vertical-align: top;
     }
@@ -240,16 +240,16 @@
 
 .md-input-value {
   height: $md-input-value-height;
-  padding: 8px 0px;
+  padding: 0.6666rem 0;
   display: inline-block;
   transition: $swift-ease-out;
-  font-size: 13px;
-  line-height: 16px;
+  font-size: 1.3rem;
+  line-height: 1.3333rem;
   white-space: nowrap;
 
   &.md-deletable {
     position: relative;
-    padding-right: 32px;
+    padding-right: 2.6666rem;
   }
 
   &:focus,
@@ -282,8 +282,8 @@
     margin: 0;
     padding: 0;
     position: absolute;
-    top: 4px;
-    right: 4px;
+    top: 0.3333rem;
+    right: 0.3333rem;
     border-radius: $md-input-value-icon-size;
     transition: $swift-ease-out;
     color: rgba(0, 0, 0, 0.14);
@@ -312,20 +312,20 @@
     flex-wrap: wrap;
     width: 100%;
   .md-ref {
-    margin-right: 8px;
+    margin-right: 0.66666rem;
   }
   .md-input {
     flex: 1;
   }
   .md-ref-filter{
-    padding: 0px;
-    margin: 0px;
-    height: 30px;
-    width: 30px;
-    min-height: 30px;
-    min-width: 30px;
+    padding: 0;
+    margin: 0;
+    height: 2.5rem;
+    width: 2.5rem;
+    min-height: 2.5rem;
+    min-width: 2.5rem;
     i{
-      margin-right: 0px;
+      margin-right: 0;
     }
   }
 }

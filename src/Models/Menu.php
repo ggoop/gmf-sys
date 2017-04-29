@@ -30,7 +30,7 @@ class Menu extends Model {
 			$callback($builder);
 
 			$data = $builder->toArray();
-			static::create($data);
+			static::create(array_only($data, ['id', 'code', 'name', 'memo', 'uri', 'icon', 'style', 'tag']));
 
 			$dataRelation['root_id'] = $builder->id;
 			$dataRelation['parent_id'] = $builder->id;

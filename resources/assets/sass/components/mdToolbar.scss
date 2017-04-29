@@ -1,5 +1,5 @@
 .md-toolbar {
-  min-height: 64px;
+  min-height: 5.333rem;
   padding: 0 8px;
   display: flex;
   align-items: center;
@@ -10,23 +10,23 @@
   transform: translate3D(0, 0, 0);
 
   &.md-dense {
-    min-height: 48px;
+    min-height: 4rem;
 
     &.md-medium {
-      min-height: 72px;
+      min-height: 6rem;
     }
 
     &.md-large {
-      min-height: 96px;
+      min-height: 8rem;
     }
 
     .md-toolbar-container {
-      height: 48px;
+      height: 4rem;
     }
   }
 
   &.md-medium {
-    min-height: 88px;
+    min-height: 7.333rem;
 
     .md-toolbar-container:nth-child(2) {
       .md-title:first-child {
@@ -36,7 +36,7 @@
   }
 
   &.md-large {
-    min-height: 128px;
+    min-height: 10.666rem;
     align-content: inherit;
 
     .md-toolbar-container:nth-child(2) {
@@ -47,7 +47,7 @@
   }
 
   &.md-account-header {
-    min-height: 164px;
+    min-height: 13.666rem;
 
     .md-ink-ripple {
       color: #fff;
@@ -74,7 +74,7 @@
 
   .md-toolbar-container {
     width: 100%;
-    height: 64px;
+    height: 5.333rem;
     display: flex;
     align-items: center;
     align-self: flex-start;
@@ -110,7 +110,7 @@
 
   .md-title {
     margin: 0;
-    font-size: 20px;
+    font-size: 2rem;
     font-weight: 400;
 
     &:first-child {

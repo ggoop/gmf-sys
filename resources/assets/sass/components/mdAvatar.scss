@@ -1,8 +1,8 @@
 .md-avatar {
-  width: $avatar-size;
-  min-width: $avatar-size;
-  height: $avatar-size;
-  min-height: $avatar-size;
+  width: $avatar-size/1.2;
+  min-width: $avatar-size/1.2;
+  height: $avatar-size/1.2;
+  min-height: $avatar-size/1.2;
   margin: auto;
   display: inline-block;
   overflow: hidden;
@@ -12,19 +12,19 @@
   vertical-align: middle;
 
   &.md-large {
-    width: $avatar-large-size;
-    min-width: $avatar-large-size;
-    height: $avatar-large-size;
-    min-height: $avatar-large-size;
-    border-radius: $avatar-large-size;
+    width: $avatar-large-size/1.2;
+    min-width: $avatar-large-size/1.2;
+    height: $avatar-large-size/1.2;
+    min-height: $avatar-large-size/1.2;
+    border-radius: $avatar-large-size/1.2;
 
     .md-icon {
-      width: $avatar-large-icon;
-      min-width: $avatar-large-icon;
-      height: $avatar-large-icon;
-      min-height: $avatar-large-icon;
+      width: $avatar-large-icon/1.2;
+      min-width: $avatar-large-icon/1.2;
+      height: $avatar-large-icon/1.2;
+      min-height: $avatar-large-icon/1.2;
       font-size: $avatar-large-icon;
-      line-height: $avatar-large-icon;
+      line-height: $avatar-large-icon/1.2;
     }
   }
 
@@ -60,18 +60,18 @@
 
 .md-avatar-tooltip {
   &.md-tooltip-top {
-    margin-top: -8px;
+    margin-top: -.666rem;
   }
 
   &.md-tooltip-right {
-    margin-left: 8px;
+    margin-left: .666rem;
   }
 
   &.md-tooltip-bottom {
-    margin-top: 8px;
+    margin-top: .666rem;
   }
 
   &.md-tooltip-left {
-    margin-left: -8px;
+    margin-left: -.666rem;
   }
 }

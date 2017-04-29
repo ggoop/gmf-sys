@@ -5,19 +5,19 @@
   > .md-button {
     margin: 0;
     overflow: hidden;
-    border-width: 1px 0 1px 1px;
+    border-width: 0.0833rem 0 0.0833rem 0.0833rem;
     border-radius: 0;
     text-align: center;
     text-overflow: ellipsis;
     white-space: nowrap;
 
     &:first-child {
-      border-radius: 2px 0 0 2px;
+      border-radius: 0.1666rem 0 0 0.1666rem;
     }
 
     &:last-child {
-      border-right-width: 1px;
-      border-radius: 0 2px 2px 0;
+      border-right-width: 0.0833rem;
+      border-radius: 0 0.1666rem 0.1666rem 0;
     }
 
     &:not([disabled]) {

@@ -42,7 +42,7 @@ class Query extends Model {
 				$builder->comment = $entity->comment;
 			}
 			$data = $builder->toArray();
-			static::create($data);
+			static::create(array_only($data, ['id', 'entity_id', 'name', 'comment', 'memo']));
 			if (!empty($builder->fields) && is_array($builder->fields)) {
 				foreach ($builder->fields as $key => $value) {
 					$field = ['query_id' => $builder->id];

@@ -1,38 +1,38 @@
 //avatar
-$avatar-size: 40px !default;
-$avatar-large-size: 64px !default;
-$avatar-large-icon: 40px !default;
+$avatar-size: 4rem !default;
+$avatar-large-size: 6.4rem !default;
+$avatar-large-icon: 4rem !default;
 
 //button
-$button-width: 88px !default;
-$button-height: 36px !default;
-$button-radius: 2px !default;
-$button-fab-size: 56px !default;
-$button-fab-size-mini: 40px !default;
-$button-fab-space: 24px !default;
-$button-dense-height: 32px !default;
-$button-icon-size: 40px !default;
+$button-width: 8.8rem !default;
+$button-height: 3.6rem !default;
+$button-radius: .2rem !default;
+$button-fab-size: 5.6rem !default;
+$button-fab-size-mini: 4rem !default;
+$button-fab-space: 2.4rem !default;
+$button-dense-height: 3.2rem !default;
+$button-icon-size: 4rem !default;
 
 //md-button-toggle
-$button-toggle-radius: 2px !default;
+$button-toggle-radius: 0.1666rem !default;
 
 //card
 $card-radius: 2px !default;
 
 //icon
-$icon-size: 24px !default;
+$icon-size: 2.4rem !default;
 
 //image
 $image-transition-duration: 2.2s !default;
 
 //input
-$input-size: 32px !default;
+$input-size: 2.6666rem !default;
 
 //md-input-value
-$md-input-value-height: 32px !default;
-$md-input-value-radius:50px !default;
-$md-input-value-icon-size: 24px !default;
-$md-input-value-icon-font: $md-input-value-icon-size - 4px !default;
+$md-input-value-height: 2.6666rem !default;
+$md-input-value-radius:4.16666rem !default;
+$md-input-value-icon-size: 2rem !default;
+$md-input-value-icon-font: $md-input-value-icon-size - 0.3333rem !default;
 
 //md-input-ref
 
@@ -48,8 +48,8 @@ $radio-ripple-size: 48px !default;
 $select-height: 32px !default;
 
 //checkbox
-$checkbox-size: 20px !default;
-$checkbox-touch-size: 48px !default;
+$checkbox-size: 2rem !default;
+$checkbox-touch-size: 4.8rem !default;
 
 //snackbar
 $snackbar-height: 48px !default;
