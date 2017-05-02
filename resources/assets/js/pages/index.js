@@ -1,50 +1,25 @@
-import sysLanguageList from './sysLanguageList.vue';
-import sysLanguageEdit from './sysLanguageEdit.vue';
+import oauth from './oauth';
+import org from './org';
+import sys from './sys';
 
-import sysProfileEdit from './sysProfileEdit.vue';
-import sysProfileList from './sysProfileList.vue';
-
-import sysPermitEdit from './sysPermitEdit.vue';
-import sysPermitList from './sysPermitList.vue';
-
-import sysRoleEdit from './sysRoleEdit.vue';
-import sysRoleList from './sysRoleList.vue';
-
-import orgOrgEdit from './orgOrgEdit.vue';
-import orgOrgList from './orgOrgList.vue';
-
-import orgDeptEdit from './orgDeptEdit.vue';
-import orgDeptList from './orgDeptList.vue';
-
-import orgWorkEdit from './orgWorkEdit.vue';
-import orgWorkList from './orgWorkList.vue';
-
-import orgTeamEdit from './orgTeamEdit.vue';
-import orgTeamList from './orgTeamList.vue';
-
+const options = {
+    oauth,
+    org,
+    sys,
+};
 
 export default function install(Vue) {
-    Vue.component('sysLanguageList', sysLanguageList);
-    Vue.component('sysLanguageEdit', sysLanguageEdit);
+    if (install.installed) {
+        console.warn('Vue components is already installed.');
+        return;
+    }
+    install.installed = true;
 
-    Vue.component('sysProfileEdit', sysProfileEdit);
-    Vue.component('sysProfileList', sysProfileList);
+    for (let component in options) {
+        const componentInstaller = options[component];
 
-    Vue.component('sysPermitEdit', sysPermitEdit);
-    Vue.component('sysPermitList', sysPermitList);
-
-    Vue.component('sysRoleEdit', sysRoleEdit);
-    Vue.component('sysRoleList', sysRoleList);
-	
-	Vue.component('orgOrgEdit', orgOrgEdit);
-    Vue.component('orgOrgList', orgOrgList);
-
-    Vue.component('orgDeptEdit', orgDeptEdit);
-    Vue.component('orgDeptList', orgDeptList);
-
-    Vue.component('orgWorkEdit', orgWorkEdit);
-    Vue.component('orgWorkList', orgWorkList);
-
-    Vue.component('orgTeamEdit', orgTeamEdit);
-    Vue.component('orgTeamList', orgTeamList);
+        if (componentInstaller && component !== 'install') {
+            Vue.use(componentInstaller);
+        }
+    }
 }

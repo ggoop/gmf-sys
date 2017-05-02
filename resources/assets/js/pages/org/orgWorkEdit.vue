@@ -17,6 +17,10 @@
           <md-input-ref md-ref-id="gmf.org.org.ref" placeholder="选择或添加组织" v-model="model.main.org"></md-input-ref>
         </md-input-container>
         <md-input-container>
+          <label>部门</label>
+          <md-input-ref md-ref-id="gmf.org.dept.ref" placeholder="选择或添加部门" v-model="model.main.dept"></md-input-ref>
+        </md-input-container>
+        <md-input-container>
           <label>编码</label>
           <md-input required maxlength="10" v-model="model.main.code"></md-input>
         </md-input-container>
@@ -34,7 +38,7 @@
   </md-part>
 </template>
 <script>
-  import model from '../core/mixin/model';
+  import model from '../../core/mixin/model';
   export default {
     data() {
       return {
@@ -60,15 +64,15 @@
       },
       initModel(){
         return {
-          main:{'code':'','name':'','memo':'','org':null}
+          main:{'code':'','name':'','memo':'','org':null,'dept':null}
         }
       },
       list() {
-        this.$router.push({ name: 'module', params: { module: 'org.dept.list' }});
+        this.$router.push({ name: 'module', params: { module: 'org.work.list' }});
       },
     },
     created() {
-      this.route='org/depts';
+      this.route='org/works';
     },
   };
 </script>

@@ -18,7 +18,7 @@ class User extends Authenticatable {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['id', 'name', 'email', 'password', 'type', 'avatar', 'mobile', 'status_enum'];
+	protected $fillable = ['id', 'account', 'password', 'secret', 'name', 'nickName', 'email', 'type', 'avatar', 'mobile', 'status_enum'];
 
 	/**
 	 * The attributes that should be hidden for arrays.
@@ -26,8 +26,16 @@ class User extends Authenticatable {
 	 * @var array
 	 */
 	protected $hidden = [
-		'password', 'remember_token',
+		'password', 'remember_token', 'secret',
 	];
+
+	public function findForPassport($username) {
+		return User::where('account', $username)->first();
+	}
+	public function validateForPassportPasswordGrant($password) {
+		//var_dump($password);
+		return true;
+	}
 	public static function registerByAccount($type, Array $opts = []) {
 		$user = false;
 		$opts['type'] = $type;
@@ -47,11 +55,14 @@ class User extends Authenticatable {
 		}
 		$userAcc = UserAccount::where('account_id', $acc->id)->first();
 		if (!$userAcc) {
-			$data = array_only($opts, ['name', 'email', 'mobile', 'type', 'avatar', 'password']);
+			$data = array_only($opts, ['name', 'nickName', 'email', 'mobile', 'type', 'avatar']);
 			if (!empty($data['password'])) {
+				$data['secret'] = base64_encode($data['password']);
 				$data['password'] = bcrypt($data['password']);
+
 			}
 			$user = User::create($data);
+			UserAccount::create(['user_id' => $user->id, 'account_id' => $acc->id]);
 		} else {
 			$user = User::find($userAcc->user_id);
 		}

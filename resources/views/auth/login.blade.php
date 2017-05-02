@@ -8,7 +8,7 @@
         <h2 class="panel-title">账号密码登录</h2>
     </div>
     <div class="panel-body">
-        <form role="form" method="POST" action="{{ route('login') }}">
+        <form role="form" method="POST" action="{{ route('login',$params) }}">
             <div class="form-group{{ $errors->has('account') ? ' has-error' : '' }}">
                 <input class="form-control" type="text" name="account" value="{{ old('account') }}" placeholder="电子邮件地址" />
                 @if ($errors->has('account'))
@@ -17,11 +17,11 @@
                     </span>
                 @endif
             </div>
-            <div class="form-group{{ $errors->has('secret') ? ' has-error' : '' }}">
-                <input class="form-control" type="password" name="secret" placeholder="密码" />
-                @if ($errors->has('secret'))
+            <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                <input class="form-control" type="password" name="password" placeholder="密码" />
+                @if ($errors->has('password'))
                     <span class="help-block">
-                        <strong>{{ $errors->first('secret') }}</strong>
+                        <strong>{{ $errors->first('password') }}</strong>
                     </span>
                 @endif
             </div>

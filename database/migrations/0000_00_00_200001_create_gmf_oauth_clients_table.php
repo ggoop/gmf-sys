@@ -15,11 +15,11 @@ class CreateGmfOauthClientsTable extends Migration {
 		$md->mdEntity('gmf.oauth.client')->comment('客户端')->tableName('gmf_oauth_clients');
 
 		$md->string('id', 100)->primary();
-		$md->entity('user', 'gmf.sys.user')->comment('用户');
+		$md->entity('user', 'gmf.sys.user')->nullable()->comment('用户');
 
 		$md->string('name');
 		$md->string('secret', 100);
-		$md->text('redirect');
+		$md->text('redirect')->nullable();
 		$md->boolean('personal_access_client');
 		$md->boolean('password_client');
 		$md->boolean('revoked');

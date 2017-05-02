@@ -8,7 +8,7 @@
         <h2 class="panel-title">重置密码</h2>
     </div>
     <div class="panel-body">
-        <form role="form" method="POST" action="{{ route('password.email') }}">
+        <form role="form" method="POST" action="{{ route('password.email',$params) }}">
             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                 <input class="form-control" type="text" name="email" value="{{ old('email') }}" placeholder="电子邮件地址" />
                 @if ($errors->has('email'))

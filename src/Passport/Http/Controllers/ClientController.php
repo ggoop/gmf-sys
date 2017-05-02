@@ -2,13 +2,14 @@
 
 namespace Gmf\Sys\Passport\Http\Controllers;
 
+use Gmf\Sys\Http\Controllers\Controller;
 use Gmf\Sys\Passport\Client;
 use Gmf\Sys\Passport\ClientRepository;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class ClientController {
+class ClientController extends Controller {
 	/**
 	 * The client repository instance.
 	 *
@@ -47,6 +48,10 @@ class ClientController {
 
 		return $this->clients->activeForUser($userId)->makeVisible('secret');
 	}
+	public function show(Request $request, $clientId) {
+		$data = Client::find($clientId)->makeVisible('secret');
+		return $this->toJson($data);
+	}
 
 	/**
 	 * Store a new client.
@@ -55,14 +60,20 @@ class ClientController {
 	 * @return Response
 	 */
 	public function store(Request $request) {
-		$this->validation->make($request->all(), [
+		$validator = $this->validation->make($request->all(), [
 			'name' => 'required|max:255',
 			'redirect' => 'required|url',
-		])->validate();
+		]);
 
-		return $this->clients->create(
+		if ($validator->fails()) {
+			return $this->toError($validator->errors());
+		}
+
+		$data = $this->clients->create(
 			$request->user()->getKey(), $request->name, $request->redirect
 		)->makeVisible('secret');
+
+		return $this->toJson($data);
 	}
 
 	/**
@@ -77,15 +88,20 @@ class ClientController {
 			return new Response('', 404);
 		}
 
-		$this->validation->make($request->all(), [
+		$validator = $this->validation->make($request->all(), [
 			'name' => 'required|max:255',
 			'redirect' => 'required|url',
-		])->validate();
+		]);
 
-		return $this->clients->update(
+		if ($validator->fails()) {
+			return $this->toError($validator->errors());
+		}
+
+		$data = $this->clients->update(
 			$request->user()->clients->find($clientId),
 			$request->name, $request->redirect
 		);
+		return $this->toJson($data);
 	}
 
 	/**
@@ -99,9 +115,9 @@ class ClientController {
 		if (!$request->user()->clients->find($clientId)) {
 			return new Response('', 404);
 		}
-
 		$this->clients->delete(
 			$request->user()->clients->find($clientId)
 		);
+		return $this->toJson(true);
 	}
 }

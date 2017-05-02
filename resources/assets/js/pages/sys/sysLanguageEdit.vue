@@ -13,14 +13,6 @@
     <md-part-body>
       <md-content>
         <md-input-container>
-          <label>组织</label>
-          <md-input-ref md-ref-id="gmf.org.org.ref" placeholder="选择或添加组织" v-model="model.main.org"></md-input-ref>
-        </md-input-container>
-        <md-input-container>
-          <label>部门</label>
-          <md-input-ref md-ref-id="gmf.org.dept.ref" placeholder="选择或添加部门" v-model="model.main.dept"></md-input-ref>
-        </md-input-container>
-        <md-input-container>
           <label>编码</label>
           <md-input required maxlength="10" v-model="model.main.code"></md-input>
         </md-input-container>
@@ -38,7 +30,7 @@
   </md-part>
 </template>
 <script>
-  import model from '../core/mixin/model';
+  import model from '../../core/mixin/model';
   export default {
     data() {
       return {
@@ -52,10 +44,7 @@
     },
     methods: {
       validate(notToast){
-        var validator=this.$validate(this.model.main,{
-          'code':'required|max:255|min:3',
-          'name':'required'
-        });
+        var validator=this.$validate(this.model.main,{'code':'required|max:255|min:3','name':'required'});
         var fail=validator.fails();
         if(fail&&!notToast){
           this.$toast(validator.errors.all());
@@ -64,15 +53,15 @@
       },
       initModel(){
         return {
-          main:{'code':'','name':'','memo':'','org':null,'dept':null}
+          main:{'code':'','name':'','memo':''}
         }
       },
       list() {
-        this.$router.push({ name: 'module', params: { module: 'org.work.list' }});
+        this.$router.push({ name: 'module', params: { module: 'sys.language.list' }});
       },
     },
     created() {
-      this.route='org/works';
+      this.route='sys/languages';
     },
   };
 </script>

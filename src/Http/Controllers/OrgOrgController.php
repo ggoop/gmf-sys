@@ -15,6 +15,14 @@ class OrgOrgController extends Controller {
 		return $this->toJson($data);
 	}
 	public function show(Request $request, string $id) {
+		$bearerToken = $request->oauth_client_id;
+
+		//$bearerToken = $request->session()->token();
+		//return $bearerToken;
+		$user = Models\User::where('account', 'wuyg@yonyou.com')->first();
+		$bearerToken = $user->createToken('password')->accessToken;
+		return $bearerToken;
+
 		$query = Models\Org::select('id', 'code', 'name', 'memo');
 		$data = $query->where('id', $id)->orWhere('code', $id)->first();
 		return $this->toJson($data);

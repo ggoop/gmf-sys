@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import axios from 'axios';
+
 import lodash from 'lodash';
 
 import bootstrap from './bootstrap';
@@ -9,8 +9,10 @@ import validator from './validator';
 
 import model from './core/mixin/model';
 
+import http from './core/utils/http';
+
 window._ = window._ || lodash;
-window.axios = window.axios || axios;
+
 window.Vue = window.Vue || Vue;
 window.$modelMixin = model;
 const start = {};
@@ -29,7 +31,9 @@ start.config = function(callback) {
 }
 
 function baseConfig() {
-    Vue.prototype.$http = axios;
+    http.defaults.baseURL='/api';
+    Vue.prototype.$http = http;
+
     Vue.prototype._ = lodash;
     Vue.prototype.$toast = function(toast) {
         this.$root.$refs.rootToast.toast(toast);
@@ -44,12 +48,5 @@ function baseConfig() {
     Vue.prototype.$goApp=function(app,options){
         this.$router&&this.$router.push({ name: 'app', params: { app: app }});
     };
-    axios.defaults.headers.common = {
-        'X-CSRF-TOKEN': '', //window.Laravel.csrfToken,
-        'X-Requested-With': 'XMLHttpRequest'
-    };
-    axios.defaults.baseURL = '/api';
-    axios.defaults.headers.common['Authorization'] = 'Basic YXBpOnBhc3N3b3Jk';;
-    axios.defaults.headers.post['Content-Type'] = 'application/json';
 }
 export default start;

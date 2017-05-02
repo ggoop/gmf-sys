@@ -30,7 +30,7 @@
   </md-part>
 </template>
 <script>
-  import model from '../core/mixin/model';
+  import model from '../../core/mixin/model';
   export default {
     data() {
       return {
@@ -57,11 +57,11 @@
         }
       },
       list() {
-        this.$router.push({ name: 'module', params: { module: 'sys.language.list' }});
+        this.$router.push({ name: 'module', params: { module: 'org.org.list' }});
       },
     },
     created() {
-      this.route='sys/languages';
+      this.route='org/orgs';
     },
   };
 </script>

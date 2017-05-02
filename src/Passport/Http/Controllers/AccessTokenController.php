@@ -41,9 +41,7 @@ class AccessTokenController {
 	 * @param  JwtParser  $jwt
 	 * @return void
 	 */
-	public function __construct(AuthorizationServer $server,
-		TokenRepository $tokens,
-		JwtParser $jwt) {
+	public function __construct(AuthorizationServer $server, TokenRepository $tokens, JwtParser $jwt) {
 		$this->jwt = $jwt;
 		$this->server = $server;
 		$this->tokens = $tokens;

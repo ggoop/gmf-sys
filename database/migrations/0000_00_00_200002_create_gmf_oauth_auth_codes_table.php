@@ -15,7 +15,7 @@ class CreateGmfOauthAuthCodesTable extends Migration {
 		$md->mdEntity('gmf.oauth.auth.code')->comment('授权码')->tableName('gmf_oauth_auth_codes');
 
 		$md->string('id', 100)->primary();
-		$md->entity('user', 'gmf.sys.user')->comment('用户');
+		$md->entity('user', 'gmf.sys.user')->nullable()->comment('用户');
 		$md->entity('client', 'gmf.oauth.client')->comment('客户端');
 		$md->text('scopes')->nullable();
 		$md->boolean('revoked');

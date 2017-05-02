@@ -105,6 +105,10 @@ class RouteRegistrar {
 				'uses' => 'ClientController@store',
 			]);
 
+			$router->get('/clients/{client_id}', [
+				'uses' => 'ClientController@show',
+			]);
+
 			$router->put('/clients/{client_id}', [
 				'uses' => 'ClientController@update',
 			]);

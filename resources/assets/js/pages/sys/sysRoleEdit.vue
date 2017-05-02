@@ -30,7 +30,7 @@
   </md-part>
 </template>
 <script>
-  import model from '../core/mixin/model';
+  import model from '../../core/mixin/model';
   export default {
     data() {
       return {
@@ -57,11 +57,11 @@
         }
       },
       list() {
-        this.$router.push({ name: 'module', params: { module: 'org.org.list' }});
+        this.$router.push({ name: 'module', params: { module: 'sys.role.list' }});
       },
     },
     created() {
-      this.route='org/orgs';
+      this.route='sys/roles';
     },
   };
 </script>

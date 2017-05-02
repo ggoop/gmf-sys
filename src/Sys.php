@@ -45,6 +45,8 @@ class Sys {
 			Route::post('login', '\Gmf\Sys\Http\Controllers\AuthController@postLogin');
 			Route::get('logout', '\Gmf\Sys\Http\Controllers\AuthController@getLogout')->name('logout');
 
+			Route::get('token', '\Gmf\Sys\Http\Controllers\AuthController@getToken')->name('token');
+
 			// Registration Routes...
 			Route::get('register', '\Gmf\Sys\Http\Controllers\AuthController@getRegister')->name('register');
 			Route::post('register', '\Gmf\Sys\Http\Controllers\AuthController@postRegister');

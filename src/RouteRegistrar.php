@@ -53,7 +53,7 @@ class RouteRegistrar {
 	}
 	public function forOrg() {
 
-		$this->router->group(['prefix' => 'org', 'middleware' => ['api']], function ($router) {
+		$this->router->group(['prefix' => 'org', 'middleware' => ['api', 'auth:api']], function ($router) {
 
 			$router->resource('orgs', 'OrgOrgController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 			$router->resource('depts', 'OrgDeptController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
