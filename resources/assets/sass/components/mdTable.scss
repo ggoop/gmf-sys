@@ -126,7 +126,7 @@
     text-align: left;
 
     &:last-child .md-table-head-container .md-table-head-text {
-      padding-right: 2rem;
+      //padding-right: 2rem;
     }
 
     &.md-numeric {
@@ -231,7 +231,7 @@
     line-height: 1.5rem;
 
     &:last-child .md-table-cell-container {
-      padding-right: 2rem;
+      //padding-right: 2rem;
     }
 
     &.md-numeric {
@@ -251,7 +251,7 @@
     }
 
     .md-table-cell-container {
-      padding: 0.5rem 1.333rem 0.5rem 0.666rem;
+      padding: 0.455rem;
     }
 
     .md-button {
