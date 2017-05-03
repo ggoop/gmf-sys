@@ -2,4 +2,14 @@
     position: relative;
     overflow: auto;
     padding: 0 16px;
+
+    >.md-subheader{
+      padding: 0;
+      font-size: 1.6rem;
+      border-bottom: 1px solid #f1f1f1;
+      margin-top: 16px;
+      line-height: 3rem;
+      min-height: 3rem;
+      font-weight: 600;
+    }
 }
