@@ -1,8 +1,8 @@
 .md-button {
-  min-width: $button-width/1.2;
-  min-height: $button-height/1.2;
-  margin: .5rem .666rem;
-  padding: 0 1.333rem;
+  min-width: $button-width;
+  min-height: $button-height;
+  margin: 0.06rem 0.08rem;
+  padding: 0 0.16rem;
   display: inline-block;
   position: relative;
   overflow: hidden;
@@ -11,16 +11,16 @@
   outline: none;
   background: none;
   border: 0;
-  border-radius: $button-radius/1.2;
+  border-radius: $button-radius;
   transition: $swift-ease-out;
   color: currentColor;
   font-family: inherit;
-  font-size: 1.4rem;
+  font-size: .14rem;
   font-style: inherit;
   font-variant: inherit;
   font-weight: 500;
   letter-spacing: inherit;
-  line-height: $button-height/1.2;
+  line-height: $button-height;
   text-align: center;
   text-transform: uppercase;
   text-decoration: none;
@@ -57,9 +57,9 @@
   }
 
   &.md-dense {
-    min-height: $button-dense-height/1.2;
-    line-height: $button-dense-height/1.2;
-    font-size: 1.3rem;
+    min-height: $button-dense-height;
+    line-height: $button-dense-height;
+    font-size: .13rem;
   }
 
   &.md-icon-button,
@@ -77,10 +77,10 @@
     width: $button-icon-size;
     min-width: $button-icon-size;
     height: $button-icon-size;
-    margin: 0 .5rem;
-    padding: .666rem;
+    margin: 0 .06rem;
+    padding: .08rem;
     border-radius: 50%;
-    line-height: 2rem;
+    line-height: .24rem;
 
     &:not([disabled]) {
       &:hover {
@@ -93,7 +93,7 @@
       min-width: $button-dense-height;
       height: $button-dense-height;
       min-height: $button-dense-height;
-      padding: .3333rem;
+      padding: .04rem;
       line-height: $button-dense-height;
     }
 
@@ -114,14 +114,14 @@
   }
 
   &.md-fab {
-    width: $button-fab-size/1.2;
-    height: $button-fab-size/1.2;
+    width: $button-fab-size;
+    height: $button-fab-size;
     padding: 0;
     min-width: 0;
     overflow: hidden;
     box-shadow: $material-shadow-2dp;
     border-radius: $button-fab-size;
-    line-height: $button-fab-size/1.2;
+    line-height: $button-fab-size;
     background-clip: padding-box;
     transition: $swift-ease-out;
     transition-property: background-color,
@@ -134,13 +134,13 @@
     }
 
     &.md-mini {
-      width: $button-fab-size-mini/1.2;
-      height: $button-fab-size-mini/1.2;
-      line-height: $button-fab-size-mini/1.2;
+      width: $button-fab-size-mini;
+      height: $button-fab-size-mini;
+      line-height: $button-fab-size-mini;
     }
 
     .md-ink-ripple {
-      border-radius: $button-fab-size/1.2;
+      border-radius: $button-fab-size;
     }
   }
 
@@ -164,7 +164,7 @@
   }
 
   .md-ink-ripple {
-    border-radius: $button-radius/1.2;
+    border-radius: $button-radius;
     background-clip: padding-box;
     overflow: hidden;
   }
@@ -191,52 +191,52 @@
   }
 
   &.md-fab-top-left {
-    top: $button-fab-space/1.2;
-    left: $button-fab-space/1.2;
+    top: $button-fab-space;
+    left: $button-fab-space;
   }
 
   &.md-fab-top-center {
-    top: $button-fab-space/1.2;
+    top: $button-fab-space;
     left: 50%;
     transform: translateX(-50%);
   }
 
   &.md-fab-top-right {
-    top: $button-fab-space/1.2;
-    right: $button-fab-space/1.2;
+    top: $button-fab-space;
+    right: $button-fab-space;
   }
 
   &.md-fab-bottom-left {
-    bottom: $button-fab-space/1.2;
-    left: $button-fab-space/1.2;
+    bottom: $button-fab-space;
+    left: $button-fab-space;
   }
 
   &.md-fab-bottom-center {
-    bottom: $button-fab-space/1.2;
+    bottom: $button-fab-space;
     left: 50%;
     transform: translateX(-50%);
   }
 
   &.md-fab-bottom-right {
-    right: $button-fab-space/1.2;
-    bottom: $button-fab-space/1.2;
+    right: $button-fab-space;
+    bottom: $button-fab-space;
   }
 }
 
 .md-button-tooltip {
   &.md-tooltip-top {
-    margin-top: -.666rem;
+    margin-top: -8px;
   }
 
   &.md-tooltip-right {
-    margin-left: .666rem;
+    margin-left: 8px;
   }
 
   &.md-tooltip-bottom {
-    margin-top: .666rem;
+    margin-top: 8px;
   }
 
   &.md-tooltip-left {
-    margin-left: -.666rem;
+    margin-left: -8px;
   }
 }

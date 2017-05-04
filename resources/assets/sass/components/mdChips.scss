@@ -1,16 +1,16 @@
 .md-chip {
   height: $chip-height;
-  padding: 8px 12px;
+  padding: .08rem .12rem;
   display: inline-block;
   border-radius: $chip-height;
   transition: $swift-ease-out;
-  font-size: 1.3rem;
-  line-height: 16px;
+  font-size: .13rem;
+  line-height: .16rem;
   white-space: nowrap;
 
   &.md-deletable {
     position: relative;
-    padding-right: 32px;
+    padding-right: .32rem;
   }
 
   &:focus,
@@ -38,8 +38,8 @@
     margin: 0;
     padding: 0;
     position: absolute;
-    top: 4px;
-    right: 4px;
+    top: .4rem;
+    right: .4rem;
     border-radius: $chip-icon-size;
     transition: $swift-ease-out;
 
@@ -64,18 +64,18 @@
 
 .md-chips {
   .md-chip {
-    margin-right: 8px;
-    margin-bottom: 4px;
+    margin-right: .08rem;
+    margin-bottom: .04rem;
   }
 
   .md-input-container {
-    min-height: 54px;
+    min-height: .54rem;
     display: flex;
     flex-wrap: wrap;
   }
 
   .md-input {
-    width: 128px;
+    width: 1.28rem;
     flex: 1;
   }
 }

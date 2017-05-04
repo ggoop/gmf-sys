@@ -1,11 +1,11 @@
 .md-table-tool{
   background-color: #fcfcfc;
-  border-top: 0.0833rem solid #e0e0e0;
+  border-top: .01rem solid #e0e0e0;
   color: rgba(0, 0, 0, 0.54);
-  min-height: 4.1rem;
+  min-height: .56rem;
 }
 .md-table-pagination {
-  height:4.1rem;
+  height:.56rem;
   display: flex;
   align-items: center;
   -ms-flex-pack: end;
@@ -14,17 +14,17 @@
   overflow: hidden;
 
   .md-table-pagination-previous {
-    margin-right: 0.1666rem;
-    margin-left: 1.5rem;
+    margin-right: 0.02rem;
+    margin-left: .18rem;
   }
   .md-table-pagination-info{
-      min-width: 6.666rem;
+      min-width: .8rem;
   }
 
   .md-select {
     width: auto;
-    min-width: 3rem;
-    margin: 0 1.333rem;
+    min-width: .36rem;
+    margin: 0 .16rem;
 
     &:after {
       margin-top: 0;
@@ -33,7 +33,7 @@
     .md-select-value {
       padding: 0;
       border: none;
-      font-size: 1.3rem;
+      font-size: .13rem;
     }
   }
 
@@ -51,11 +51,11 @@
 }
 .md-pagination-select {
   &.md-direction-bottom-right {
-    margin-top: -1.333rem;
+    margin-top: -0.16rem;
   }
 
   .md-list-item-holder {
-    font-size: 1.3rem;
+    font-size: .13rem;
   }
 }
 
@@ -77,7 +77,7 @@
   }
 
   .md-counter {
-    margin-left: 0.666rem;
+    margin-left: .08rem;
     flex: 1;
   }
 }
@@ -103,7 +103,7 @@
   }
 
   tbody .md-table-row {
-    border-bottom: 0.0833rem solid #e0e0e0;
+    border-bottom: 0.01rem solid #e0e0e0;
 
     &.md-selected .md-table-cell {
       background-color: #f5f5f5;
@@ -115,18 +115,18 @@
   }
   thead.md-table-header{
     background-color: #fcfcfc;
-    border-bottom: 0.0833rem solid #e0e0e0;
+    border-bottom: 0.01rem solid #e0e0e0;
   }
 
   .md-table-head {
     padding: 0;
     position: relative;
     color: rgba(#000, .54);
-    line-height: 1.333rem;
+    line-height: .16em;
     text-align: left;
 
     &:last-child .md-table-head-container .md-table-head-text {
-      //padding-right: 2rem;
+      //padding-right: .2rem;
     }
 
     &.md-numeric {
@@ -134,17 +134,17 @@
     }
 
     .md-icon {
-      $size: 1.6rem;
+      $size: .16rem;
 
       width: $size;
-      min-width: $size/1.2;
-      height: $size/1.2;
-      min-height: $size/1.2;
+      min-width: $size;
+      height: $size;
+      min-height: $size;
       font-size: $size;
       color: rgba(#000, .54);
 
       &:not(.md-sortable-icon) {
-        margin: 0 0.333rem;
+        margin: 0 0.04rem;
       }
 
       &:first-child {
@@ -158,20 +158,20 @@
   }
 
   .md-table-head-container {
-    height: 4.1rem;
-    padding: .8333rem 0;
+    height: .56rem;
+    padding: .14rem 0;
     width:100%;
     transition: $swift-ease-out;
   }
 
   .md-table-head-text {
-    height: 2.333rem;
-    padding-right: 1.333rem;
-    padding-left: 0.666rem;
+    height: .28rem;
+    padding-right: .16rem;
+    padding-left: 0.08rem;
     display: inline-block;
     position: relative;
     overflow: hidden;
-    line-height: 2.333rem;
+    line-height: .28rem;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -182,7 +182,7 @@
     &:first-of-type {
       .md-sortable-icon {
         left: auto;
-        right: 0.8333rem;
+        right: .1rem;
       }
     }
 
@@ -210,7 +210,7 @@
     .md-sortable-icon {
       position: absolute;
       top: 50%;
-      left: 0.1666rem;
+      left: 0.02rem;
       transition: $swift-ease-out;
       transform: translateY(-50%);
       opacity: 0;
@@ -223,15 +223,15 @@
   }
 
   .md-table-cell {
-    height: 4rem;
+    height: .48rem;
     position: relative;
     transition: $swift-ease-out;
     color: rgba(#000, .87);
-    font-size: 1.3rem;
-    line-height: 1.5rem;
+    font-size: .13rem;
+    line-height: .18rem;
 
     &:last-child .md-table-cell-container {
-      //padding-right: 2rem;
+      //padding-right: .24rem;
     }
 
     &.md-numeric {
@@ -251,21 +251,21 @@
     }
 
     .md-table-cell-container {
-      padding: 0.455rem;
+      padding: 0.06rem;
     }
 
     .md-button {
       &:last-child {
-        margin: 0 -0.8333rem 0 0;
+        margin: 0 -0.1rem 0 0;
       }
 
       .md-icon {
-        $size: 1.8rem;
+        $size: .18rem;
 
-        width: $size/1.2;
-        min-width: $size/1.2;
-        height: $size/1.2;
-        min-height: $size/1.2;
+        width: $size;
+        min-width: $size;
+        height: $size;
+        min-height: $size;
         margin: 0;
         color: rgba(#000, .54);
         font-size: $size;
@@ -274,13 +274,13 @@
   }
 
   .md-table-selection {
-    width: 5rem;
+    width: .6rem;
     position: relative;
     vertical-align: middle;
 
     .md-table-cell-container {
-      padding-right: 1.333rem;
-      padding-left: 0.666rem;
+      padding-right: .16rem;
+      padding-left: .08rem;
     }
 
     .md-checkbox {
@@ -288,24 +288,24 @@
     }
 
     .md-checkbox-container {
-      width: 1.5rem;
-      height: 1.5rem;
-      margin-top: 0.0833rem;
+      width: .18rem;
+      height: .18rem;
+      margin-top: 0.01rem;
 
       &:after {
-        top: -0.0833rem;
-        left: 0.333rem
+        top: -0.01rem;
+        left: 0.04rem
       }
     }
   }
 
   .md-select {
-    min-width: 7rem;
+    min-width: .84rem;
   }
 
   .md-select-value,
   .md-option {
-    font-size: 1.3rem;
+    font-size: .13rem;
   }
 }
 
@@ -322,25 +322,25 @@
 .md-table-dialog {
   max-height: 0;
   margin: 0;
-  padding: 0 2rem 0.1666rem;
+  padding: 0 .24rem 0.02rem;
   position: absolute;
   top: 0;
   right: 0;
-  left: 2rem;
+  left: .24rem;
   z-index: 60;
   overflow: hidden;
   pointer-events: none;
-  border-radius: 0.1666rem;
+  border-radius: 0.02rem;
   box-shadow: $material-shadow-2dp;
   background-color: #fff;
   opacity: 0;
   transition: $swift-ease-out,
               max-height 0s .5s;
   transition-duration: .3s;
-  transform: translate3D(0, -666rem, 0);
+  transform: translate3D(0, -0.8rem, 0);
 
   &.md-active {
-    max-height: 33.333rem;
+    max-height: 4rem;
     pointer-events: auto;
     transform: translate3D(#000);
     opacity: 1;
@@ -349,44 +349,44 @@
   }
 
   &.md-large {
-    padding: 1rem 2rem 0.1666rem;
+    padding: .12rem .24rem .02rem;
   }
 
   .md-input-container {
     margin-top: 0;
-    margin-bottom: 1.333rem;
+    margin-bottom: .16rem;
 
     &.md-input-placeholder input {
-      font-size: 1.3rem;
+      font-size: .13rem;
 
       &::-webkit-input-placeholder {
-        font-size: 1.3rem;
+        font-size: .13rem;
       }
     }
   }
 
   .md-char-counter {
-    font-size: 1.35rem;
+    font-size: .135rem;
     color: rgba(#000, .54);
   }
 
   .md-button {
-    min-width: 5.333rem;
+    min-width: .64rem;
   }
 }
 
 .md-table-card {
   overflow: visible;
-  border: 0.0833rem solid #e0e0e0;
+  border: 0.01rem solid #e0e0e0;
 
   .md-toolbar {
-    padding-left: 1.333rem;
+    padding-left: .16rem;
     background-color: #fff;
   }
 
   .md-title {
     flex: 1;
-    font-size: 2rem;
+    font-size: .2rem;
   }
 }
 .md-table-card.md-card{
@@ -397,7 +397,7 @@
 .md-table-cell-container{
   .md-input-container{
     margin: 0;
-    min-height: 0.8333rem;
+    min-height: 0.1rem;
     position: absolute;
     top: 0;
     left: 0;
@@ -409,7 +409,7 @@
       height: 0;
     }
     &.md-input-focused:after{
-      height:0.1666rem;
+      height:0.02rem;
     }
 
     .md-error, .md-count{

@@ -1,5 +1,5 @@
 .md-divider {
-  height: 1px;
+  height: .01rem;
   margin: 0;
   padding: 0;
   display: block;
@@ -7,6 +7,6 @@
   background-color: rgba(#000, .12);
 
   &.md-inset {
-    margin-left: 72px;
+    margin-left: .72rem;
   }
 }

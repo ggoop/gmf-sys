@@ -1,7 +1,7 @@
 .md-bottom-bar {
   width: 100%;
   min-width: 100%;
-  height: 56px;
+  height: .56rem;
   position: relative;
   display: flex;
   justify-content: center;
@@ -10,10 +10,10 @@
 }
 
 .md-bottom-bar-item {
-  max-width: 168px;
-  min-width: 80px;
+  max-width: 1.68rem;
+  min-width: .8rem;
   height: 100%;
-  padding: 8px 12px 10px;
+  padding: .08rem .12rem .10rem;
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
@@ -26,12 +26,12 @@
   transform: translate3d(0, 0, 0);
   color: currentColor;
   font-family: inherit;
-  font-size: 1.4rem;
-  line-height: 1em;
+  font-size: .14rem;
+  line-height: .14rem;
   text-decoration: none;
 
   &.md-active {
-    padding-top: 6px;
+    padding-top: .06rem;
 
     .md-text {
       transform: scale(1) translate3d(0, 0, 0);
@@ -48,26 +48,26 @@
   }
 
   .md-bottom-bar.md-shift & {
-    min-width: 56px;
-    max-width: 96px;
+    min-width: .56rem;
+    max-width: .96rem;
     position: static;
-    flex: 1 1 32px;
+    flex: 1 1 .32rem;
     transition: $swift-ease-out-duration $swift-ease-out-timing-function;
     transition-property: flex, min-width, max-width;
 
     .md-icon {
-      transform: translate3d(0, 8px, 0);
+      transform: translate3d(0, .08rem, 0);
     }
 
     .md-text {
       opacity: 0;
-      transform: scale(1) translate3d(0, 6px, 0);
+      transform: scale(1) translate3d(0, .06rem, 0);
     }
 
     &.md-active {
-      min-width: 96px;
-      max-width: 168px;
-      flex: 1 1 72px;
+      min-width: .96rem;
+      max-width: 1.68rem;
+      flex: 1 1 .72rem;
 
       .md-icon,
       .md-text {
@@ -79,13 +79,13 @@
       }
 
       .md-text {
-        transform: scale(1) translate3d(0, 2px, 0);
+        transform: scale(1) translate3d(0, .02rem, 0);
       }
     }
   }
 
   .md-text {
-    transform: scale(.8571) translateY(2px);
+    transform: scale(.8571) translateY(.02rem);
     transition: $swift-ease-out,
                 color $swift-linear-duration $swift-linear-timing-function,
                 opacity $swift-linear-duration $swift-linear-timing-function;

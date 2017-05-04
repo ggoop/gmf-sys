@@ -1,6 +1,6 @@
 .md-refs-dialog{
   .md-dialog-actions{
-    border-top: 1px solid #e0e0e0;
+    border-top: 0.01rem solid #e0e0e0;
     .md-table-pagination{
       border-top:none;
     }
@@ -15,10 +15,10 @@
     display: none;
   }
   .md-table-pagination .md-select{
-    margin: 0 10px;
+    margin: 0 .1rem;
   }
   .md-table-pagination .md-button{
-    min-width: 30px;
+    min-width: .3rem;
   }
 }
 @include layout-small{

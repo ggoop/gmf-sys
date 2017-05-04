@@ -6,14 +6,14 @@
   width: $menu-base-width * 3;
   min-width: $menu-base-width * 1.5;
   max-width: $menu-base-width * 7;
-  min-height: 64px;
-  max-height: calc(100vh - 32px);
+  min-height: .64rem;
+  max-height: calc(100vh - .32rem);
   overflow-x: hidden;
   overflow-y: auto;
   position: absolute;
   z-index: 131;
   transform: scale(.9, .85) translateZ(0);
-  border-radius: 2px;
+  border-radius: .02rem;
   box-shadow: $material-shadow-2dp;
   opacity: 0;
   transition: width $swift-ease-out-duration $swift-ease-out-timing-function,
@@ -23,42 +23,42 @@
   will-change: transform, opacity, width;
 
   &.md-direction-bottom-right {
-    margin-top: -20px;
-    margin-left: -8px;
+    margin-top: -.20rem;
+    margin-left: -0.08rem;
     transform-origin: top left;
 
     &.md-active {
-      margin-top: -11px;
+      margin-top: -0.11rem;
     }
   }
 
   &.md-direction-bottom-left {
-    margin-top: -20px;
-    margin-left: 8px;
+    margin-top: -.2rem;
+    margin-left: .08rem;
     transform-origin: top right;
 
     &.md-active {
-      margin-top: -11px;
+      margin-top: -.11rem;
     }
   }
 
   &.md-direction-top-right {
-    margin-top: 20px;
-    margin-left: -8px;
+    margin-top: .2rem;
+    margin-left: -.08rem;
     transform-origin: bottom left;
 
     &.md-active {
-      margin-top: 11px;
+      margin-top: .11rem;
     }
   }
 
   &.md-direction-top-left {
-    margin-top: 20px;
-    margin-left: 8px;
+    margin-top: .2rem;
+    margin-left: .08rem;
     transform-origin: bottom right;
 
     &.md-active {
-      margin-top: 11px;
+      margin-top: .11rem;
     }
   }
 
@@ -98,8 +98,8 @@
 
 .md-menu-item {
   cursor: pointer;
-  font-size: 1.6rem;
-  line-height: 1.2em;
+  font-size: .16rem;
+  line-height: .16em;
 
   &[disabled] {
     cursor: default;

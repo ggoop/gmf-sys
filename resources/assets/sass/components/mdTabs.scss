@@ -15,18 +15,18 @@
   }
 
   .md-tabs-navigation {
-    height: 48px;
-    min-height: 48px;
+    height: .48rem;
+    min-height: .48rem;
     position: relative;
     z-index: 1;
     display: flex;
     transition: $swift-ease-out;
 
     &.md-has-icon.md-has-label {
-      min-height: 72px;
+      min-height: .72rem;
 
       .md-icon {
-        margin-bottom: 10px;
+        margin-bottom: .10rem;
       }
     }
 
@@ -49,7 +49,7 @@
     min-width: $tab-width;
     max-width: $tab-max-width;
     margin: 0;
-    padding: 0 12px;
+    padding: 0 .12rem;
     display: inline-block;
     position: relative;
     cursor: pointer;
@@ -57,7 +57,7 @@
     background: none;
     transition: $swift-ease-out;
     font-family: inherit;
-    font-size: 1.4rem;
+    font-size: .14rem;
     font-weight: 500;
     text-transform: uppercase;
 
@@ -81,7 +81,7 @@
   }
 
   .md-tab-indicator {
-    height: 2px;
+    height: .02rem;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -123,7 +123,7 @@
   }
 
   .md-tab {
-    padding: 16px;
+    padding: .16rem;
     position: absolute;
     top: 0;
     left: 0;

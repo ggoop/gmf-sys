@@ -15,11 +15,11 @@
   position: relative;
   left: 50%;
   top: 50%;
-  width: 150px;
-  height: 150px;
-  margin: -75px 0 0 -75px;
+  width: 1.5rem;
+  height: 1.50rem;
+  margin: -0.75rem 0 0 -0.75rem;
   border-radius: 50%;
-  border: 3px solid transparent;
+  border: 0.03rem solid transparent;
   border-top-color: #3498db;
   -webkit-animation: spin 2s linear infinite;
   /* Chrome, Opera 15+, Safari 5+ */
@@ -33,12 +33,12 @@
 #loader:before {
   content: "";
   position: absolute;
-  top: 5px;
-  left: 5px;
-  right: 5px;
-  bottom: 5px;
+  top: 0.05rem;
+  left: 0.05rem;
+  right: 0.05rem;
+  bottom: 0.05rem;
   border-radius: 50%;
-  border: 3px solid transparent;
+  border: 0.03rem solid transparent;
   border-top-color: #e74c3c;
   -webkit-animation: spin 3s linear infinite;
   /* Chrome, Opera 15+, Safari 5+ */
@@ -49,12 +49,12 @@
 #loader:after {
   content: "";
   position: absolute;
-  top: 15px;
-  left: 15px;
-  right: 15px;
-  bottom: 15px;
+  top: 0.15rem;
+  left: 0.15rem;
+  right: 0.15rem;
+  bottom: 0.15rem;
   border-radius: 50%;
-  border: 3px solid transparent;
+  border: 0.03rem solid transparent;
   border-top-color: #f9c922;
   -webkit-animation: spin 1.5s linear infinite;
   /* Chrome, Opera 15+, Safari 5+ */

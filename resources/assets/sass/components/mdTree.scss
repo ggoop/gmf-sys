@@ -3,20 +3,20 @@
   ul{
    list-style-type: none;
    li{
-      margin: 0px;
+      margin: 0;
       +li{
-        margin: 0px;
+        margin: 0;
       }
     }
   }
   >ul{
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
   }
   .md-tree-node{
     cursor: context-menu;
-    line-height: 38px;
-    padding: 0 16px;
+    line-height: .38rem;
+    padding: 0 .16rem;
 
     &:hover{
       background-color: rgba(0,0,0,0.05);
@@ -27,6 +27,6 @@
     }
   }
   .md-checkbox{
-      margin: 4px 8px 4px 0;
+      margin: .04rem .08rem .04rem 0;
   }
 }

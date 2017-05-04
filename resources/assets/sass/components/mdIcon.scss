@@ -1,8 +1,8 @@
 @mixin icon-size($size: $icon-size) {
-  width: $size/1.2;
-  min-width: $size/1.2;
-  height: $size/1.2;
-  min-height: $size/1.2;
+  width: $size;
+  min-width: $size;
+  height: $size;
+  min-height: $size;
   font-size: $size;
 }
 

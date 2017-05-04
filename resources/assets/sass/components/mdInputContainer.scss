@@ -1,8 +1,8 @@
 .md-input-container {
   width: 100%;
-  min-height: 4rem;
-  margin: 0.33333rem 0 2rem;
-  padding-top: 1.3333rem;
+  min-height: .48rem;
+  margin: .04rem 0 .24rem;
+  padding-top: .16rem;
   display: flex;
   position: relative;
 
@@ -19,14 +19,14 @@
 
   label {
     position: absolute;
-    top: 1.91666rem;
+    top: .23rem;
     left: 0;
     pointer-events: none;
     transition: $swift-ease-out;
     transition-duration: .3s;
     color: rgba(#000, .54);
-    font-size: 1.6rem;
-    line-height: 1.6666rem;
+    font-size: .16rem;
+    line-height: .2rem;
   }
 
   input,
@@ -51,13 +51,13 @@
 
     &::-webkit-input-placeholder {
       color: rgba(#000, .54);
-      font-size: 1.6rem;
+      font-size: .16rem;
       text-shadow: none;
       -webkit-text-fill-color: initial;
     }
 
     ~ .md-icon:not(.md-icon-delete) {
-      margin-left: 1rem;
+      margin-left: .12rem;
 
       &:after {
         right: 0;
@@ -67,26 +67,26 @@
   }
 
   textarea {
-    min-height: 2.666rem;
-    max-height: 19.166rem;
-    padding: 0.41666rem 0;
+    min-height: .32rem;
+    max-height: 2.3rem;
+    padding: .05rem 0;
     resize: none;
     line-height: 1.3em;
   }
 
   .md-error,
   .md-count {
-    height: 1.66666rem;
+    height: .2rem;
     position: absolute;
-    bottom: -1.83333rem;
-    font-size: 1.2rem;
+    bottom: -0.22rem;
+    font-size: 0.12rem;
   }
 
   .md-error {
     display: block !important;
     left: 0;
     opacity: 0;
-    transform: translate3d(0, -8px, 0);
+    transform: translate3d(0, -0.08rem, 0);
     transition: $swift-ease-in;
   }
 
@@ -99,8 +99,8 @@
     transition: $swift-ease-out;
 
     &:after {
-      width: 2.6666rem;
-      height: 0.1666rem;
+      width: 0.36rem;
+      height: 0.02rem;
       position: absolute;
       left: 0;
       bottom: 0;
@@ -110,13 +110,13 @@
 
     ~ {
       label {
-        left: 3rem;
+        left: .36rem;
       }
 
       .md-input,
       .md-textarea,
       .md-file {
-        margin-left: 1rem;
+        margin-left: .12rem;
       }
     }
   }
@@ -126,14 +126,14 @@
   &.md-input-placeholder {
     label {
       pointer-events: auto;
-      top: 0.83333rem;
+      top: .10rem;
       opacity: 0;
-      font-size: 1.2rem;
+      font-size: .12rem;
     }
 
     input,
     textarea {
-      font-size: 1.6rem;
+      font-size: .16rem;
     }
   }
 
@@ -143,12 +143,12 @@
       pointer-events: auto;
       top: 0;
       opacity: 1;
-      font-size: 1.2rem;
+      font-size: .12rem;
     }
 
     input,
     textarea {
-      font-size: 1.6rem;
+      font-size: .16rem;
     }
   }
 
@@ -166,8 +166,8 @@
 
     &.md-input-focused {
       label {
-        top: 1.9166rem;
-        font-size: 1.6rem;
+        top: .23rem;
+        font-size: .16rem;
       }
     }
 
@@ -182,7 +182,7 @@
     &:after {
       background: bottom left repeat-x;
       background-image: linear-gradient(to right, rgba(#000, .38) 0%, rgba(#000, .38) 33%, transparent 0%);
-      background-size: 4px 1px;
+      background-size: .04rem .01rem;
     }
 
     label,
@@ -201,7 +201,7 @@
       margin: 0;
       position: absolute;
       right: 0;
-      bottom: -0.1666rem;
+      bottom: -.02rem;
       color: rgba(#000, .38);
 
       .md-ink-ripple {
@@ -220,11 +220,11 @@
   &.md-input-required {
     label:after {
       position: absolute;
-      top: 0.1666rem;
+      top: .02rem;
       right: 0;
       transform: translateX(calc(100% + 2px));
       content: "*";
-      font-size: 1.2rem;
+      font-size: .12rem;
       line-height: 1em;
       vertical-align: top;
     }
@@ -240,16 +240,16 @@
 
 .md-input-value {
   height: $md-input-value-height;
-  padding: 0.6666rem 0;
+  padding: .08rem 0;
   display: inline-block;
   transition: $swift-ease-out;
-  font-size: 1.3rem;
-  line-height: 1.3333rem;
+  font-size: .13rem;
+  line-height: .16rem;
   white-space: nowrap;
 
   &.md-deletable {
     position: relative;
-    padding-right: 2.6666rem;
+    padding-right: .32rem;
   }
 
   &:focus,
@@ -282,8 +282,8 @@
     margin: 0;
     padding: 0;
     position: absolute;
-    top: 0.3333rem;
-    right: 0.3333rem;
+    top: .04rem;
+    right: .04rem;
     border-radius: $md-input-value-icon-size;
     transition: $swift-ease-out;
     color: rgba(0, 0, 0, 0.14);
@@ -312,7 +312,7 @@
     flex-wrap: wrap;
     width: 100%;
   .md-ref {
-    margin-right: 0.66666rem;
+    margin-right: .08rem;
   }
   .md-input {
     flex: 1;
@@ -320,10 +320,10 @@
   .md-ref-filter{
     padding: 0;
     margin: 0;
-    height: 2.5rem;
-    width: 2.5rem;
-    min-height: 2.5rem;
-    min-width: 2.5rem;
+    height: .3rem;
+    width: .3rem;
+    min-height: .3rem;
+    min-width: .3rem;
     i{
       margin-right: 0;
     }

@@ -1,6 +1,6 @@
 .md-select {
   width: 100%;
-  min-width: 128px;
+  min-width: 1.28rem;
   height: $select-height;
   position: relative;
 
@@ -9,7 +9,7 @@
   }
 
   &:after {
-    margin-top: 2px;
+    margin-top: .02rem;
     position: absolute;
     top: 50%;
     right: 0;
@@ -20,10 +20,10 @@
 
   &.md-active {
     .md-select-menu {
-      top: -8px;
+      top: -0.08rem;
       pointer-events: auto;
       opacity: 1;
-      transform: translateY(-8px) scale3D(1, 1, 1);
+      transform: translateY(-0.08rem) scale3D(1, 1, 1);
       transform-origin: center top;
       transition: $swift-ease-out;
       transition-duration: .25s;
@@ -59,14 +59,14 @@
   .md-select-value {
     width: 100%;
     height: $select-height;
-    padding-right: 24px;
+    padding-right: .24rem;
     display: block;
     cursor: pointer;
     overflow: hidden;
     position: relative;
     z-index: 2;
-    font-size: 1.6rem;
-    line-height: $select-height + 1px;
+    font-size: .16rem;
+    line-height: $select-height + 0.01rem;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -76,18 +76,18 @@
     text-transform: uppercase;
 
     &:first-child {
-      margin-top: -8px;
+      margin-top: -0.08rem;
     }
   }
 }
 
 .md-select-content {
   width: auto;
-  max-height: 256px;
+  max-height: 2.56rem;
 
   &.md-direction-bottom-right {
-    margin-top: -15px;
-    margin-left: -16px;
+    margin-top: -0.15rem;
+    margin-left: -0.16rem;
   }
 
   .md-menu-item .md-list-item-holder {
@@ -101,7 +101,7 @@
     }
 
     .md-checkbox-label {
-      padding-left: 16px;
+      padding-left: .16rem;
       cursor: pointer;
     }
   }

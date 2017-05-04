@@ -81,8 +81,8 @@
   }
 
   .md-button {
-    min-width: 64px;
-    margin: -8px -16px;
+    min-width: 0.64rem;
+    margin: -0.08rem -0.16rem;
 
     &:last-child {
       margin-left: $snackbar-height;
@@ -92,13 +92,13 @@
 
 .md-snackbar-container {
   width: auto;
-  min-width: 288px;
-  max-width: 568px;
+  min-width: 2.88rem;
+  max-width: 5.68rem;
   min-height: $snackbar-height;
-  padding: $snackbar-padding 24px;
+  padding: $snackbar-padding 0.24rem;
   overflow: hidden;
   pointer-events: auto;
-  border-radius: 2px;
+  border-radius: 0.02rem;
   background-color: #323232;
   transition: $swift-ease-out;
   color: #fff;
@@ -113,7 +113,7 @@
 
 .md-has-toast-top-right {
   .md-fab.md-fab-top-right {
-    transform: translate3D(0, $snackbar-height + $snackbar-padding + 6px, 0);
+    transform: translate3D(0, $snackbar-height + $snackbar-padding + 0.06rem, 0);
 
     @include layout-xsmall {
       transform: translate3D(0, $snackbar-height, 0);
@@ -123,7 +123,7 @@
 
 .md-has-toast-top-center {
   .md-fab.md-fab-top-center {
-    transform: translate3D(-50%, $snackbar-height + $snackbar-padding + 6px, 0);
+    transform: translate3D(-50%, $snackbar-height + $snackbar-padding + 0.06rem, 0);
 
     @include layout-xsmall {
       transform: translate3D(-50%, $snackbar-height, 0);
@@ -133,7 +133,7 @@
 
 .md-has-toast-top-left {
   .md-fab.md-fab-top-left {
-    transform: translate3D(0, $snackbar-height + $snackbar-padding + 6px, 0);
+    transform: translate3D(0, $snackbar-height + $snackbar-padding + 0.06rem, 0);
 
     @include layout-xsmall {
       transform: translate3D(0, $snackbar-height, 0);
@@ -143,7 +143,7 @@
 
 .md-has-toast-bottom-right {
   .md-fab.md-fab-bottom-right {
-    transform: translate3D(0, -$snackbar-height - $snackbar-padding - 6px, 0);
+    transform: translate3D(0, -$snackbar-height - $snackbar-padding - 0.06rem, 0);
 
     @include layout-xsmall {
       transform: translate3D(0, -$snackbar-height, 0);
@@ -153,7 +153,7 @@
 
 .md-has-toast-bottom-center {
   .md-fab.md-fab-bottom-center {
-    transform: translate3D(-50%, -$snackbar-height - $snackbar-padding - 6px, 0);
+    transform: translate3D(-50%, -$snackbar-height - $snackbar-padding - 0.06rem, 0);
 
     @include layout-xsmall {
       transform: translate3D(-50%, -$snackbar-height, 0);
@@ -163,7 +163,7 @@
 
 .md-has-toast-bottom-left {
   .md-fab.md-fab-bottom-left {
-    transform: translate3D(0, -$snackbar-height - $snackbar-padding - 6px, 0);
+    transform: translate3D(0, -$snackbar-height - $snackbar-padding - 0.06rem, 0);
 
     @include layout-xsmall {
       transform: translate3D(0, -$snackbar-height, 0);
@@ -176,7 +176,7 @@
   .md-fab.md-fab-top-center,
   .md-fab.md-fab-top-left {
     @include layout-xsmall {
-      transform: translate3D(0, $snackbar-height - 4px, 0);
+      transform: translate3D(0, $snackbar-height - 0.04rem, 0);
     }
   }
 
@@ -184,7 +184,7 @@
   .md-fab.md-fab-bottom-center,
   .md-fab.md-fab-bottom-left {
     @include layout-xsmall {
-      transform: translate3D(0, -$snackbar-height + 4px, 0);
+      transform: translate3D(0, -$snackbar-height + 0.04rem, 0);
     }
   }
 }

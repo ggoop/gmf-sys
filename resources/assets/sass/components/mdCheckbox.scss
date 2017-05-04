@@ -1,15 +1,15 @@
 .md-checkbox {
   width: auto;
-  margin: 1.333rem 0.666rem 1.333rem 0;
+  margin: .16rem .08rem .16rem 0;
   display: inline-flex;
   position: relative;
 
   .md-checkbox-container {
-    width: $checkbox-size/1.2;
-    height: $checkbox-size/1.2;
+    width: $checkbox-size;
+    height: $checkbox-size;
     position: relative;
-    border-radius: .1666rem;
-    border: .1666rem solid rgba(#000, .54);
+    border-radius: .02rem;
+    border: .02rem solid rgba(#000, .54);
     transition: $swift-ease-out;
 
     &:focus {
@@ -17,8 +17,8 @@
     }
 
     &:before {
-      width: $checkbox-touch-size/1.2;
-      height: $checkbox-touch-size/1.2;
+      width: $checkbox-touch-size;
+      height: $checkbox-touch-size;
       position: absolute;
       top: 50%;
       left: 50%;
@@ -29,12 +29,12 @@
     }
 
     &:after {
-      width: .5rem;
-      height: 1.08rem;
+      width: .06rem;
+      height: .13rem;
       position: absolute;
       top: 0;
-      left: .4111rem;
-      border: .1666rem solid #fff;
+      left: .05rem;
+      border: .02rem solid #fff;
       border-top: 0;
       border-left: 0;
       opacity: 0;
@@ -49,10 +49,10 @@
     }
 
     .md-ink-ripple {
-      top: -1.333rem;
-      right: -1.333rem;
-      bottom: -1.333rem;
-      left: -1.333rem;
+      top: -0.16rem;
+      right: -0.16rem;
+      bottom: -0.16rem;
+      left: -0.16rem;
       border-radius: 50%;
       color: rgba(#000, .54);
 
@@ -68,9 +68,9 @@
   }
 
   .md-checkbox-label {
-    height: $checkbox-size/1.2;
-    padding-left: .6666rem;
-    line-height: $checkbox-size/1.2;
+    height: $checkbox-size;
+    padding-left: 0.08rem;
+    line-height: $checkbox-size;
   }
 }
 

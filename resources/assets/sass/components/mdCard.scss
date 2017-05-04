@@ -34,11 +34,11 @@
     }
 
     + .md-card-header {
-      padding-top: 24px;
+      padding-top: .24rem;
     }
 
     + .md-card-content:last-child {
-      padding-bottom: 16px;
+      padding-bottom: .16rem;
     }
 
     img {
@@ -47,17 +47,17 @@
   }
 
   .md-card-header {
-    padding: 16px;
+    padding: .16rem;
 
     &:first-child {
       > .md-title:first-child,
       > .md-card-header-text > .md-title:first-child {
-        margin-top: 8px;
+        margin-top: 0.08rem;
       }
     }
 
     &:last-child {
-      margin-bottom: 8px;
+      margin-bottom: 0.08rem;
     }
 
     &.md-card-header-flex {
@@ -70,21 +70,21 @@
     }
 
     + .md-card-actions:not(:last-child) {
-      padding: 0 8px;
+      padding: 0 0.08rem;
     }
 
     .md-avatar {
-      margin-right: 16px;
+      margin-right: .16rem;
       float: left;
 
       ~ .md-title {
-        font-size: 1.4rem;
+        font-size: .14rem;
       }
 
       ~ .md-title,
       ~ .md-subhead {
         font-weight: 500;
-        line-height: 20px;
+        line-height: .2rem;
       }
     }
 
@@ -92,11 +92,11 @@
       margin: 0;
 
       &:last-child {
-        margin-right: -4px;
+        margin-right: -0.04rem;
       }
 
       + .md-button {
-        margin-left: 8px;
+        margin-left: 0.08rem;
       }
     }
 
@@ -105,15 +105,15 @@
     }
 
     .md-card-media {
-      $size: 80px;
+      $size: .8rem;
 
       width: $size;
       flex: 0 0 $size;
       height: $size;
-      margin-left: 16px;
+      margin-left: .16rem;
 
       &.md-medium {
-        $size: 120px;
+        $size: 1.2rem;
 
         width: $size;
         flex: 0 0 $size;
@@ -121,7 +121,7 @@
       }
 
       &.md-big {
-        $size: 160px;
+        $size: 1.6rem;
 
         width: $size;
         flex: 0 0 $size;
@@ -139,28 +139,28 @@
 
   .md-subhead {
     opacity: .54;
-    font-size: 1.4rem;
+    font-size: .14rem;
     letter-spacing: .01em;
-    line-height: 20px;
+    line-height: .2rem;
 
     + .md-title {
-      margin-top: 4px;
+      margin-top: .04rem;
     }
   }
 
   .md-title {
-    font-size: 2.4rem;
+    font-size: .24rem;
     letter-spacing: 0;
-    line-height: 32px;
+    line-height: .32rem;
   }
 
   .md-card-media-actions {
-    padding: 16px;
+    padding: .16rem;
     display: flex;
     justify-content: space-between;
 
     .md-card-media {
-      $size: 240px;
+      $size: 2.40rem;
 
       max-width: $size;
       max-height: $size;
@@ -168,29 +168,29 @@
     }
 
     .md-card-actions {
-      margin-left: 16px;
+      margin-left: .16rem;
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
 
       .md-button + .md-button {
-        margin: 8px 0 0;
+        margin: 0.08rem 0 0;
       }
     }
   }
 
   .md-card-content {
-    padding: 16px;
-    font-size: 1.4rem;
-    line-height: 22px;
+    padding: .16rem;
+    font-size: .14rem;
+    line-height: .22rem;
 
     &:last-child {
-      padding-bottom: 24px;
+      padding-bottom: .24rem;
     }
   }
 
   .md-card-actions {
-    padding: 8px;
+    padding: .08rem;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -207,7 +207,7 @@
       }
 
       + .md-button {
-        margin-left: 4px;
+        margin-left: .04rem;
       }
     }
   }
@@ -232,8 +232,8 @@
     }
 
     &.md-inset:after {
-      right: 16px;
-      left: 16px;
+      right: .16rem;
+      left: .16rem;
     }
   }
 
@@ -295,7 +295,7 @@
     }
 
     .md-card-content {
-      padding-top: 4px;
+      padding-top: .04rem;
       position: relative;
       z-index: 1;
       opacity: 0;
