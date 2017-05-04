@@ -4,7 +4,7 @@
   </li>
 
   <div class="md-subheader" :class="[themeClass]" v-else>
-    <slot></slot>
+   <span><slot></slot></span>
   </div>
 </template>
 
