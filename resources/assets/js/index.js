@@ -20,10 +20,13 @@ start.run = function(elID) {
     elID = elID || '#gmfApp';
     baseConfig();
 
+    var rootData={title:''};
+
     Vue.use(bootstrap);
     const app = new Vue({
         router: router,
-        el: elID
+        el: elID,
+        data:rootData
     });
 }
 start.config = function(callback) {
@@ -47,6 +50,10 @@ function baseConfig() {
     };
     Vue.prototype.$goApp=function(app,options){
         this.$router&&this.$router.push({ name: 'app', params: { app: app }});
+    };
+    Vue.prototype.$documentTitle=function(title) {
+      document.title=title;
+      this.$root.title=title;
     };
 }
 export default start;

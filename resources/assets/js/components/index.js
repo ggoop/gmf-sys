@@ -37,6 +37,7 @@ import mdToast from './mdToast';
 import mdContent from './mdContent';
 import mdQuery from './mdQuery';
 import mdPart from './mdPart';
+import mdView from './mdView';
 import mdTree from './mdTree';
 import mdChart from './mdChart';
 
@@ -80,6 +81,7 @@ const options = {
     mdContent,
     mdQuery,
     mdPart,
+    mdView,
     mdTree,
     mdChart,
 };

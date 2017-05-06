@@ -1,12 +1,10 @@
 
 import wave from './wave';
 import colors from './colors';
-import title from './title';
 
 const options = {
     wave,
     colors,
-    title,
 };
 
 export default function install(Vue) {
