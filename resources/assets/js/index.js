@@ -47,15 +47,17 @@ function baseConfig() {
     Vue.prototype.$validate = function(input, rules, customMessages) {
         return new validator(input, rules, customMessages);
     };
-    Vue.prototype.$goModule=function(module,options){
+    Vue.prototype.$goModule=function(module,options,isReplace){
         var localtion={name: 'module', params: { module: module }};
+        isReplace=!!isReplace;
         localtion=common.merge(localtion,options);
-        this.$router&&this.$router.push(localtion);
+        this.$router&&this.$router[isReplace?'replace':'push'](localtion);
     };
-    Vue.prototype.$goApp=function(app,options){
+    Vue.prototype.$goApp=function(app,options,isReplace){
         var localtion={name: 'app'};
+        isReplace=!!isReplace;
         localtion=common.merge(localtion,options,{params: { app: app }});
-        this.$router&&this.$router.push(localtion);
+        this.$router&&this.$router[isReplace?'replace':'push'](localtion);
     };
     Vue.prototype.$documentTitle=function(title) {
       document.title=title;
