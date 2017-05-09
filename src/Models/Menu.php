@@ -11,7 +11,7 @@ class Menu extends Model {
 	use Snapshotable, HasGuard;
 	protected $table = 'gmf_sys_menus';
 	public $incrementing = false;
-	protected $fillable = ['id', 'code', 'name', 'memo', 'uri', 'icon', 'style', 'tag'];
+	protected $fillable = ['id', 'code', 'name', 'memo', 'uri', 'icon', 'style', 'tag', 'params'];
 	public function menus() {
 		//方法的第一个参数为我们希望最终访问的模型名称，而第二个参数为中间模型的名称。
 		//第三个参数为中间模型的外键名称，
@@ -30,7 +30,7 @@ class Menu extends Model {
 			$callback($builder);
 
 			$data = $builder->toArray();
-			static::create(array_only($data, ['id', 'code', 'name', 'memo', 'uri', 'icon', 'style', 'tag']));
+			static::create(array_only($data, ['id', 'code', 'name', 'memo', 'uri', 'icon', 'style', 'tag', 'params']));
 
 			$dataRelation['root_id'] = $builder->id;
 			$dataRelation['parent_id'] = $builder->id;

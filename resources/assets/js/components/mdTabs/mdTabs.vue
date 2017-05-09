@@ -188,14 +188,20 @@
         this.transitionOff = true;
         this.calculateOnWatch();
       },
-      setActiveTab(tabData) {
-        this.hasIcons = !!tabData.icon;
-        this.hasLabel = !!tabData.label;
-        this.activeTab = tabData.id;
-        this.activeTabNumber = this.getTabIndex(this.activeTab);
-        this.calculatePosition();
-        this.$emit('click', tabData);
-        this.$emit('change', this.activeTabNumber);
+      setActiveTab(tag) {
+        var tabData=tag;
+        if(typeof tag==='string'){
+          tabData=this.tabList[tag];
+        }
+        if(tabData&&typeof tabData==='object'){
+          this.hasIcons = !!tabData.icon;
+          this.hasLabel = !!tabData.label;
+          this.activeTab = tabData.id;
+          this.activeTabNumber = this.getTabIndex(this.activeTab);
+          this.calculatePosition();
+          this.$emit('click', tabData);
+          this.$emit('change', this.activeTabNumber);
+        }
       }
     },
     mounted() {

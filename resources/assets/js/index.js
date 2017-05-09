@@ -11,6 +11,8 @@ import model from './core/mixin/model';
 
 import http from './core/utils/http';
 
+import common from './core/utils/common';
+
 window._ = window._ || lodash;
 
 window.Vue = window.Vue || Vue;
@@ -46,10 +48,14 @@ function baseConfig() {
         return new validator(input, rules, customMessages);
     };
     Vue.prototype.$goModule=function(module,options){
-        this.$router&&this.$router.push({ name: 'module', params: { module: module }});
+        var localtion={name: 'module', params: { module: module }};
+        localtion=common.merge(localtion,options);
+        this.$router&&this.$router.push(localtion);
     };
     Vue.prototype.$goApp=function(app,options){
-        this.$router&&this.$router.push({ name: 'app', params: { app: app }});
+        var localtion={name: 'app'};
+        localtion=common.merge(localtion,options,{params: { app: app }});
+        this.$router&&this.$router.push(localtion);
     };
     Vue.prototype.$documentTitle=function(title) {
       document.title=title;

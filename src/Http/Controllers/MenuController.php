@@ -76,6 +76,7 @@ class MenuController extends Controller {
 			->select('r.root_id', 'r.parent_id', 'm.id', 'm.code', 'm.name', 'm.uri', 'r.sequence')
 			->addSelect('m.icon')
 			->addSelect('m.style')
+			->addSelect('m.params')
 			->orderBy('r.sequence')
 			->orderBy('r.root_id')
 			->orderBy('r.parent_id')
