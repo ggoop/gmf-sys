@@ -97,6 +97,7 @@ class TokenGuard {
 	 * @return mixed
 	 */
 	protected function authenticateViaBearerToken($request) {
+
 		// First, we will convert the Symfony request to a PSR-7 implementation which will
 		// be compatible with the base OAuth2 library. The Symfony bridge can perform a
 		// conversion for us to a Zend Diactoros implementation of the PSR-7 request.
@@ -105,13 +106,18 @@ class TokenGuard {
 		try {
 			$psr = $this->server->validateAuthenticatedRequest($psr);
 
+			$clientId = $psr->getAttribute('oauth_client_id');
+
+			$request->oauth_client_id = $clientId;
+			$request->oauth_user_id = $psr->getAttribute('oauth_user_id');
+			$request->oauth_access_token_id = $psr->getAttribute('oauth_access_token_id');
+			if (!$request->oauth_user_id) {
+				$request->oauth_user_id = $this->clients->find($clientId)->user_id;
+			}
 			// If the access token is valid we will retrieve the user according to the user ID
 			// associated with the token. We will use the provider implementation which may
 			// be used to retrieve users from Eloquent. Next, we'll be ready to continue.
-			$user = $this->provider->retrieveById(
-				$psr->getAttribute('oauth_user_id')
-			);
-
+			$user = $this->provider->retrieveById($request->oauth_user_id);
 			if (!$user) {
 				return;
 			}
@@ -122,12 +128,6 @@ class TokenGuard {
 			$token = $this->tokens->find(
 				$psr->getAttribute('oauth_access_token_id')
 			);
-
-			$clientId = $psr->getAttribute('oauth_client_id');
-
-			$request->oauth_client_id = $clientId;
-			$request->oauth_user_id = $clientId;
-			$request->oauth_access_token_id = $psr->getAttribute('oauth_access_token_id');
 
 			// Finally, we will verify if the client that issued this token is still valid and
 			// its tokens may still be used. If not, we will bail out since we don't want a

@@ -40,6 +40,23 @@ class ProfileController extends Controller {
 		$data = Models\Profile::create($input);
 		return $this->toJson($data);
 	}
+	public function batchStore(Request $request) {
+		$input = $request->all();
+		$validator = Validator::make($input, [
+			'datas' => 'required',
+		]);
+		if ($validator->fails()) {
+			return $this->toError($validator->errors());
+		}
+		//增加
+		$datas = $request->input('datas');
+		if ($datas && is_array($datas)) {
+			foreach ($datas as $k => $v) {
+				Models\ThemeScope::create($v);
+			}
+		}
+		return $this->toJson(true);
+	}
 	/**
 	 * PUT/PATCH
 	 * @param  Request $request [description]

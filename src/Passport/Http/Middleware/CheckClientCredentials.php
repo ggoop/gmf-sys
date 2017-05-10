@@ -40,6 +40,9 @@ class CheckClientCredentials {
 
 		try {
 			$psr = $this->server->validateAuthenticatedRequest($psr);
+			$request->oauth_client_id = $psr->getAttribute('oauth_client_id');
+			$request->oauth_access_token_id = $psr->getAttribute('oauth_access_token_id');
+
 		} catch (OAuthServerException $e) {
 			throw new AuthenticationException;
 		}

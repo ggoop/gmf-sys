@@ -52,7 +52,8 @@ class RouteRegistrar {
 		});
 	}
 	public function forOrg() {
-
+		//auth:api
+		//client_credentials
 		$this->router->group(['prefix' => 'org', 'middleware' => ['api', 'auth:api']], function ($router) {
 
 			$router->resource('orgs', 'OrgOrgController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
