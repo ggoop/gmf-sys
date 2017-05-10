@@ -7,4 +7,5 @@ return [
 	'oauth_client_id' => env('GMF_OAUTH_CLIENT_ID', ''),
 	'oauth_client_name' => env('APP_TITLE', ''),
 	'oauth_client_secret' => env('GMF_OAUTH_CLIENT_SECRET', ''),
+	'oauth_client_user' => env('GMF_OAUTH_CLIENT_USER', ''),
 ];
