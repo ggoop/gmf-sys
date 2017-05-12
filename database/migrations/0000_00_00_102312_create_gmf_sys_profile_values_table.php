@@ -18,7 +18,9 @@ class CreateGmfSysProfileValuesTable extends Migration {
 		$md->entity('profile', 'gmf.sys.profile')->comment('参数');
 		$md->string('scope_id', 100)->nullable()->comment('类型ID');
 		$md->string('scope_type', 200)->nullable()->comment('类型全名');
-		$md->text('value')->nullable()->comment('默认值');
+
+		$md->text('value')->nullable()->comment('值');
+		$md->text('valueName')->nullable()->comment('值');
 		$md->timestamps();
 
 		$md->foreign('profile_id')->references('id')->on('gmf_sys_profiles')->onDelete('cascade');

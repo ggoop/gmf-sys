@@ -135,7 +135,7 @@ const snakeCase = function(name, separator) {
 
 const formatDecimal = function(num, options) {
     //precision:精度，保留的小数位数
-    //unit:单位，0,1个，2十，3百，4千
+    //unit:单位，0个，1十，2百，3千
     //quantile:分位数，默认3，表示千分位
     options = Object.assign({}, { precision: 2, unit: 0, quantile: 3 }, options);
 
@@ -170,7 +170,7 @@ const formatDecimal = function(num, options) {
     }
 
     const rtn = sign + temp + cents;
-    if (options.quantile <= 1) {
+    if (options.quantile < 1) {
         return parseFloat(rtn);
     }
     return rtn;
