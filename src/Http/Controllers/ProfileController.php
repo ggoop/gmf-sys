@@ -43,17 +43,19 @@ class ProfileController extends Controller {
 	public function batchStore(Request $request) {
 		$input = $request->all();
 		$validator = Validator::make($input, [
-			'datas' => 'required',
+			'datas' => 'required|array|min:1',
+			'datas.*.code' => 'required',
 		]);
 		if ($validator->fails()) {
 			return $this->toError($validator->errors());
 		}
+		$entId = $request->oauth_client_id;
 		//增加
 		$datas = $request->input('datas');
-		if ($datas && is_array($datas)) {
-			foreach ($datas as $k => $v) {
-				Models\ThemeScope::create($v);
-			}
+
+		foreach ($datas as $k => $v) {
+			$v = array_only($v, ['code', 'name', 'memo', 'dValue', 'scope_enum']);
+			Models\Profile::updateOrCreate(['ent_id' => $entId, 'code' => $v['code']], $v);
 		}
 		return $this->toJson(true);
 	}

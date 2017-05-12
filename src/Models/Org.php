@@ -9,7 +9,7 @@ class Org extends Model {
 	use Snapshotable, HasGuard;
 	protected $table = 'gmf_org_orgs';
 	public $incrementing = false;
-	protected $fillable = ['id', 'ent_id', 'code', 'name', 'memo'];
+	protected $fillable = ['id', 'ent_id', 'code', 'name', 'memo', 'shortName', 'avatar'];
 	public function ent() {
 		return $this->belongsTo('Gmf\Sys\Models\Ent');
 	}

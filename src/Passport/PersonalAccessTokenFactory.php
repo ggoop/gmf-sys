@@ -63,9 +63,9 @@ class PersonalAccessTokenFactory {
 	 * @param  array  $scopes
 	 * @return PersonalAccessTokenResult
 	 */
-	public function make($userId, $name, array $scopes = []) {
+	public function make($userId, $name, array $scopes = [], $clientId = false) {
 		$response = $this->dispatchRequestToAuthorizationServer(
-			$this->createRequest($this->clients->personalAccessClient(), $userId, $scopes)
+			$this->createRequest($this->clients->personalAccessClient($clientId), $userId, $scopes)
 		);
 
 		$token = tap($this->findAccessToken($response), function ($token) use ($userId, $name) {

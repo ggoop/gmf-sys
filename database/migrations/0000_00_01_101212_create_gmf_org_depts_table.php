@@ -24,9 +24,6 @@ class CreateGmfOrgDeptsTable extends Migration {
 		$md->integer('sequence')->default(0)->comment('顺序号');
 		$md->timestamps();
 
-		$md->foreign('ent_id')->references('id')->on('gmf_sys_ents')->onDelete('cascade');
-		$md->foreign('org_id')->references('id')->on('gmf_org_orgs')->onDelete('cascade');
-
 		$md->build();
 
 	}

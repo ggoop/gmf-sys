@@ -35,19 +35,22 @@ class RouteRegistrar {
 
 	public function forSys() {
 		$this->router->group(['prefix' => 'sys', 'middleware' => ['api']], function ($router) {
-
 			$router->resource('datas', 'DataController', ['only' => ['index', 'show']]);
+		});
+		$this->router->group(['prefix' => 'sys', 'middleware' => ['api', 'auth:api']], function ($router) {
 
 			$router->get('/enums/{enum}', ['uses' => 'EntityController@getEnum']);
 			$router->resource('entities', 'EntityController', ['only' => ['index', 'show']]);
 
 			$router->get('/queries/query/{query}', ['uses' => 'QueryController@query']);
-			$router->resource('queries', 'QueryController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
+			$router->resource('queries', 'QueryController', ['only' => ['index', 'show']]);
 
 			$router->get('/menus/all', ['uses' => 'MenuController@all']);
-			$router->resource('menus', 'MenuController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
+			$router->resource('menus', 'MenuController', ['only' => ['index', 'show']]);
 
-			$router->resource('languages', 'LanguageController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
+			$router->resource('languages', 'LanguageController', ['only' => ['index', 'show']]);
+
+			$router->post('/profiles/batch', ['uses' => 'ProfileController@batchStore']);
 			$router->resource('profiles', 'ProfileController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 		});
 	}

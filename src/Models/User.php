@@ -46,22 +46,24 @@ class User extends Authenticatable {
 		if (isset($opts['email'])) {
 			$query->where('email', $opts['email']);
 		}
-		if (isset($opts['srcId'])) {
-			$query->where('srcId', $opts['srcId']);
-		}
+
 		$acc = $query->first();
 		if (!$acc) {
 			$acc = Account::create($opts);
 		}
 		$userAcc = UserAccount::where('account_id', $acc->id)->first();
 		if (!$userAcc) {
-			$data = array_only($opts, ['name', 'nickName', 'email', 'mobile', 'type', 'avatar']);
-			if (!empty($data['password'])) {
-				$data['secret'] = base64_encode($data['password']);
-				$data['password'] = bcrypt($data['password']);
-
+			if (!empty($opts['srcId'])) {
+				$user = User::where('type', $type)->where('id', $opts['srcId'])->first();
 			}
-			$user = User::create($data);
+			if (!$user) {
+				$data = array_only($opts, ['name', 'nickName', 'email', 'mobile', 'type', 'avatar']);
+				if (!empty($data['password'])) {
+					$data['secret'] = base64_encode($data['password']);
+					$data['password'] = bcrypt($data['password']);
+				}
+				$user = User::create($data);
+			}
 			UserAccount::create(['user_id' => $user->id, 'account_id' => $acc->id]);
 		} else {
 			$user = User::find($userAcc->user_id);

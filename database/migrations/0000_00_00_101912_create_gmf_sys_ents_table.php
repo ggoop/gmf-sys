@@ -14,9 +14,10 @@ class CreateGmfSysEntsTable extends Migration {
 		$md = Metadata::create($this->mdID);
 		$md->mdEntity('gmf.sys.ent')->comment('企业')->tableName('gmf_sys_ents');
 		$md->string('id', 100)->primary();
-		$md->string('code')->unique()->comment('编码');
-		$md->string('name')->comment('名称');
+		$md->string('code')->nullable()->comment('编码');
+		$md->string('name')->nullable()->comment('名称');
 		$md->text('memo')->nullable()->comment('备注');
+		$md->string('shortName')->nullable()->comment('简称');
 		$md->string('avatar')->nullable()->comment('图标');
 		$md->timestamps();
 

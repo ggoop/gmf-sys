@@ -120,6 +120,7 @@ class AuthController extends Controller {
 				$credentials['email'] = $credentials['account'];
 			}
 		}
+		$credentials['type'] = 'web';
 		$user = Models\User::create($credentials);
 		return $user;
 	}

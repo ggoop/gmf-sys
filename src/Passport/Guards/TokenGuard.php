@@ -2,6 +2,7 @@
 
 namespace Gmf\Sys\Passport\Guards;
 
+use Auth;
 use Exception;
 use Firebase\JWT\JWT;
 use Gmf\Sys\Passport\ClientRepository;
@@ -156,10 +157,11 @@ class TokenGuard {
 		// database. If we can't decrypt the value we'll bail out with a null return.
 		try {
 			$token = $this->decodeJwtTokenCookie($request);
+
 		} catch (Exception $e) {
 			return;
 		}
-
+		//var_dump();
 		//$request->oauth_client_id = $this->encrypter->getKey();
 		//$request->token = '123';
 

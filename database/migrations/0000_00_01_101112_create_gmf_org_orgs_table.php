@@ -18,10 +18,10 @@ class CreateGmfOrgOrgsTable extends Migration {
 		$md->entity('ent', 'gmf.sys.ent')->nullable()->comment('企业');
 		$md->string('code')->nullable()->comment('编码');
 		$md->string('name')->comment('名称');
+		$md->string('shortName')->nullable()->comment('简称');
 		$md->text('memo')->nullable()->comment('备注');
+		$md->string('avatar')->nullable()->comment('图标');
 		$md->timestamps();
-
-		$md->foreign('ent_id')->references('id')->on('gmf_sys_ents')->onDelete('cascade');
 
 		$md->build();
 

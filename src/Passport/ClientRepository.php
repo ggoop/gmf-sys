@@ -53,9 +53,12 @@ class ClientRepository {
 	 *
 	 * @return Client
 	 */
-	public function personalAccessClient() {
-		if (Passport::$personalAccessClient) {
-			return Client::find(Passport::$personalAccessClient);
+	public function personalAccessClient($clientId = false) {
+		if (!$clientId) {
+			$clientId = Passport::$personalAccessClient;
+		}
+		if ($clientId) {
+			return Client::find($clientId);
 		} else {
 			return PersonalAccessClient::orderBy('id', 'desc')->first()->client;
 		}
