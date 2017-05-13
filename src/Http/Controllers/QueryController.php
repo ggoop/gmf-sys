@@ -40,11 +40,12 @@ class QueryController extends Controller {
 			return $this->toError('not find query');
 		}
 		$queryInfo = new Builder;
-		$queryInfo->id($model->id)->name($model->name)->memo($model->memo)->comment($model->comment)
-			->entity_id($model->entity->id)
-			->entity_name($model->entity->name)
-			->entity_comment($model->entity->comment);
-
+		$queryInfo->id($model->id)->name($model->name)->memo($model->memo)->comment($model->comment);
+		if ($model->entity) {
+			$queryInfo->entity_id($model->entity->id)
+				->entity_name($model->entity->name)
+				->entity_comment($model->entity->comment);
+		}
 		$queryCase->query($queryInfo);
 
 		$fields = [];
@@ -54,7 +55,7 @@ class QueryController extends Controller {
 				$field->name($f->name);
 				$fields[] = $field;
 			}
-		} else {
+		} else if ($model->entity) {
 			$entityFields = Models\EntityField::where('entity_id', $model->entity->id)->where('collection', '0')->get();
 			foreach ($entityFields as $f) {
 				$field = new Builder;
@@ -69,6 +70,7 @@ class QueryController extends Controller {
 		$pageSize = $request->input('size', 10);
 
 		$queryCase = $this->buildQueryCase($request, $queryID);
+
 		$data = [];
 		$error = false;
 		// try {

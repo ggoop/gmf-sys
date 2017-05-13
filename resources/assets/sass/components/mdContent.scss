@@ -12,11 +12,12 @@
       min-height: .2rem;
       font-weight: 600;
       >span{
-        padding: 0 .02rem;
+        padding: 0 .05rem;
         background: #f1f1f1;
         font-weight: 500;
         font-size: .14rem;
-        letter-spacing: .1rem;
+        letter-spacing: .03rem;
+        line-height: .28rem;
       }
     }
     .md-layout+.md-layout>.md-input-container{

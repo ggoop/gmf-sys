@@ -16,7 +16,7 @@
           :md-selection="mdSelection" 
           @dblclick.native="dblclick(row)">
           <md-table-cell v-for="(column, columnIndex) in refInfo.fields" :key="columnIndex" v-if="!column.hide">
-            {{ row[column.name] }}
+            {{ row[column.alias||column.name] }}
           </md-table-cell>
         </md-table-row>
       </md-table-body>
@@ -44,6 +44,10 @@
       mdKey:{
         type:String,
         default:'id'
+      },
+      mdMax: {
+        type: Number,
+        default: Infinity
       },
       mdAutoSelect:{
         type:[String,Boolean],

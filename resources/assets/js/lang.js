@@ -10,5 +10,9 @@ options.LANG_DOFAIL='操作失败';
 options.LANG_SAVESUCCESS='保存成功';
 options.LANG_SAVEFAIL='保存失败';
 
-options.LANG_LOADFAIL='加载数据失败'
+options.LANG_LOADFAIL='加载数据失败';
+
+options.LANG_JOBSUCCESS='提交请求成功';
+options.LANG_JOBFAIL='提交请求失败';
+
 export default options;
