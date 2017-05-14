@@ -6,6 +6,7 @@ use Gmf\Sys\Traits\HasGuard;
 use Gmf\Sys\Traits\Snapshotable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Validator;
 
 class User extends Authenticatable {
 	use Snapshotable, HasGuard, HasApiTokens, Notifiable;
@@ -39,28 +40,68 @@ class User extends Authenticatable {
 	public static function registerByAccount($type, Array $opts = []) {
 		$user = false;
 		$opts['type'] = $type;
-		$query = Account::where('type', $type);
-		if (isset($opts['mobile'])) {
-			$query->where('mobile', $opts['mobile']);
+
+		if (empty($opts['account'])) {
+			if (Validator::make($opts, ['email' => 'required|email'])->passes()) {
+				$opts['account'] = $opts['email'];
+			}
 		}
-		if (isset($opts['email'])) {
+		if (empty($opts['account'])) {
+			if (Validator::make($opts, ['mobile' => 'required|digits:11'])->passes()) {
+				$opts['account'] = $opts['mobile'];
+			}
+		}
+
+		$query = Account::where('type', $type);
+		if (!empty($opts['account'])) {
+			$query->where(function ($query) use ($opts) {
+				$query->where('mobile', $opts['account'])->orWhere('email', $opts['account']);
+			});
+		} else if (!empty($opts['mobile'])) {
+			$query->where('mobile', $opts['mobile']);
+		} else if (!empty($opts['email'])) {
 			$query->where('email', $opts['email']);
+		} else if (!empty($opts['srcId'])) {
+			$query->where('srcId', $opts['srcId']);
 		}
 
 		$acc = $query->first();
 		if (!$acc) {
-			$acc = Account::create($opts);
+			$acc = Account::create(array_only($opts, ['name', 'nickName', 'type', 'avatar', 'mobile', 'email', 'srcId', 'srcUrl', 'token', 'expire_time', 'info']));
 		}
 		$userAcc = UserAccount::where('account_id', $acc->id)->first();
 		if (!$userAcc) {
-			if (!empty($opts['srcId'])) {
-				$user = User::where('type', $type)->where('id', $opts['srcId'])->first();
+			$query = User::where('type', $type);
+			if (!empty($opts['user_id'])) {
+				$query->where('id', $opts['user_id']);
+			} else if (!empty($opts['account'])) {
+				$query->where(function ($query) use ($opts) {
+					$query->where('mobile', $opts['account'])->orWhere('email', $opts['account'])->orWhere('account', $opts['account']);
+				});
+			} else if (!empty($opts['mobile'])) {
+				$query->where('mobile', $opts['mobile']);
+			} else if (!empty($opts['email'])) {
+				$query->where('email', $opts['email']);
+			} else if (!empty($opts['srcId'])) {
+				$query->where('id', $opts['srcId']);
 			}
+			$user = $query->first();
 			if (!$user) {
-				$data = array_only($opts, ['name', 'nickName', 'email', 'mobile', 'type', 'avatar']);
+				$data = array_only($opts, ['account', 'password', 'name', 'nickName', 'email', 'mobile', 'type', 'avatar']);
+				if (!empty($opts['user_id'])) {
+					$data['id'] = $opts['user_id'];
+				}
 				if (!empty($data['password'])) {
 					$data['secret'] = base64_encode($data['password']);
 					$data['password'] = bcrypt($data['password']);
+				}
+				if (empty($credentials['nickName'])) {
+					if (Validator::make($data, ['account' => 'required|email'])->passes()) {
+						$data['nickName'] = $data['account'];
+					}
+				}
+				if (empty($data['avatar'])) {
+					$data['avatar'] = '/img/avatar/' . mt_rand(1, 50) . '.jpg';
 				}
 				$user = User::create($data);
 			}

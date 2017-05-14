@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 class DataController extends Controller {
 	public function index(Request $request) {
-
 		$datas = [];
 		for ($i = 0; $i < 20; $i++) {
 			$datas[] = Uuid::generate(1, 'gmf', Uuid::NS_DNS, "");

@@ -19,6 +19,7 @@ class CreateGmfSysEntsTable extends Migration {
 		$md->text('memo')->nullable()->comment('备注');
 		$md->string('shortName')->nullable()->comment('简称');
 		$md->string('avatar')->nullable()->comment('图标');
+		$md->boolean('revoked')->default(0)->comment('注销');
 		$md->timestamps();
 
 		$md->build();

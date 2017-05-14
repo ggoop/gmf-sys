@@ -4,9 +4,9 @@ namespace Gmf\Sys\Http\Controllers;
 
 use Auth;
 use Gmf\Sys\Models;
+use Gmf\Sys\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
-use Validator;
 
 class AuthController extends Controller {
 	protected $redirectTo = '/';
@@ -64,7 +64,10 @@ class AuthController extends Controller {
 				->withInput($request->only('account', 'callback'))
 				->withErrors(['account' => '当前账号已经被注册了!']);
 		}
-		$u = $this->createUser($request, $credentials);
+		$this->validate($request, ['account' => 'required|min:4|max:50']);
+
+		$u = User::registerByAccount('web', $credentials);
+
 		return $this->login($request, $u->id);
 	}
 	public function getEmail(Request $request) {
@@ -93,36 +96,6 @@ class AuthController extends Controller {
 	}
 	public function broker() {
 		return Password::broker();
-	}
-	private function createUser(Request $request, $credentials) {
-		$this->validate($request, ['account' => 'required|min:4|max:50']);
-
-		if (!isset($credentials['avatar']) || !$credentials['avatar']) {
-			$credentials['avatar'] = '/img/avatar/' . mt_rand(1, 50) . '.jpg';
-		}
-		if (!isset($credentials['nickName'])) {
-			$credentials['nickName'] = $credentials['account'];
-		}
-		if (!isset($credentials['password'])) {
-			$credentials['secret'] = base64_encode('123987');
-			$credentials['password'] = bcrypt('123987');
-		} else {
-			$credentials['secret'] = base64_encode($credentials['password']);
-			$credentials['password'] = bcrypt($credentials['password']);
-		}
-		if (!isset($credentials['mobile'])) {
-			if (Validator::make($credentials, ['account' => 'required|digits:11'])->passes()) {
-				$credentials['mobile'] = $credentials['account'];
-			}
-		}
-		if (!isset($credentials['email'])) {
-			if (Validator::make($credentials, ['account' => 'required|email'])->passes()) {
-				$credentials['email'] = $credentials['account'];
-			}
-		}
-		$credentials['type'] = 'web';
-		$user = Models\User::create($credentials);
-		return $user;
 	}
 	private function login(Request $request, $user_id) {
 		$user = Models\User::find($user_id);

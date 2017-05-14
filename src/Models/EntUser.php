@@ -9,4 +9,7 @@ class EntUser extends Model {
 	use Snapshotable, HasGuard;
 	protected $table = 'gmf_sys_ent_users';
 	public $incrementing = false;
+
+	protected $keyType = 'string';
+	protected $fillable = ['id', 'user_id', 'ent_id', 'revoked'];
 }

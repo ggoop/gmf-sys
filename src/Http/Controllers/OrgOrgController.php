@@ -17,7 +17,6 @@ class OrgOrgController extends Controller {
 		return $this->toJson($data);
 	}
 	public function show(Request $request, string $id) {
-		return $request->oauth_client_id . ':' . $request->oauth_user_id;
 		$query = Models\Org::select('id', 'code', 'name', 'memo');
 		$data = $query->where('id', $id)->orWhere('code', $id)->first();
 		return $this->toJson($data);
@@ -49,7 +48,7 @@ class OrgOrgController extends Controller {
 		if ($validator->fails()) {
 			return $this->toError($validator->errors());
 		}
-		$entId = $request->oauth_client_id;
+		$entId = $request->oauth_ent_id;
 		//增加
 		$datas = $request->input('datas');
 

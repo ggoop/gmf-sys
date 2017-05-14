@@ -3,8 +3,6 @@
 namespace Gmf\Sys\Models;
 use Closure;
 use Gmf\Sys\Builder;
-use Gmf\Sys\Passport\Client;
-use Gmf\Sys\Passport\PersonalAccessClient;
 use Gmf\Sys\Traits\HasGuard;
 use Gmf\Sys\Traits\Snapshotable;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +12,15 @@ class Ent extends Model {
 	protected $table = 'gmf_sys_ents';
 	public $incrementing = false;
 	protected $keyType = 'string';
-	protected $fillable = ['id', 'code', 'name', 'memo', 'shortName', 'avatar'];
+	protected $fillable = ['id', 'code', 'name', 'memo', 'shortName', 'avatar', 'revoked'];
+
+	public static function addUser($entId, $userId, $type = 'member') {
+		$m = EntUser::where('ent_id', $entId)->where('user_id', $userId)->first();
+		if (!$m) {
+			$m = EntUser::create(['ent_id' => $entId, 'user_id' => $userId, 'type_enum' => $type]);
+		}
+		return $m;
+	}
 
 	public static function build(Closure $callback) {
 		//id,root,parent,code,name,memo,uri,sequence
@@ -45,26 +51,7 @@ class Ent extends Model {
 			if (!$ent) {
 				$ent = static::create(array_only($builder->toArray(), ['id', 'code', 'name', 'memo']));
 			}
-
-			$id = $ent->id;
-			//客户端
-			if (!Client::find($id)) {
-
-				$b = new Builder(array_only($builder->toArray(), ['name', 'secret', 'user_id', 'personal_access_client', 'password_client']));
-				$b->id($id)->revoked(0);
-
-				Client::create($b->toArray());
-			}
-			//私有端
-			if (!empty($builder->personal_access_client)) {
-
-				if (!PersonalAccessClient::find($id)) {
-					$b = new Builder();
-					$b->id($id)->client_id($id);
-					PersonalAccessClient::create($b->toArray());
-				}
-			}
-
+			return $ent;
 		});
 	}
 }

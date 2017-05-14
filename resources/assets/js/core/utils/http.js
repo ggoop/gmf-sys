@@ -16,18 +16,18 @@ const defaults = {
 
 function Http(instanceConfig) {
     this.defaults = instanceConfig;
-    this.Cancel =axios.Cancel ;
-    this.CancelToken =axios.CancelToken ;
-    this.isCancel =axios.isCancel;
-    this.spread =axios.spread;
+    this.Cancel = axios.Cancel;
+    this.CancelToken = axios.CancelToken;
+    this.isCancel = axios.isCancel;
+    this.spread = axios.spread;
 }
 Http.prototype.request = function request(config) {
     if (typeof config === 'string') {
         config = utils.merge({ url: arguments[0] }, arguments[1]);
     }
     config = utils.merge(defaults, this.defaults, { method: 'get' }, config);
-    if(utils.isAbsoluteURL(config.url)||/^\//g.test(config.url)){
-        config.baseURL='';
+    if (utils.isAbsoluteURL(config.url) || /^\//g.test(config.url)) {
+        config.baseURL = '';
     }
     return axios.request(config);
 };
@@ -55,15 +55,15 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 });
 
 function createInstance(defaultConfig) {
-  var instance = new Http(defaultConfig);
-  return instance;
+    var instance = new Http(defaultConfig);
+    return instance;
 }
 
-var instancedefaults={}
-const instance =createInstance(instancedefaults);
+var instancedefaults = {}
+const instance = createInstance(instancedefaults);
 
-instance.create =function create(instanceConfig) {
-  return createInstance(instanceConfig);
+instance.create = function create(instanceConfig) {
+    return createInstance(instanceConfig);
 };
 
 export default instance;

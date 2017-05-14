@@ -49,7 +49,7 @@ class ProfileController extends Controller {
 		if ($validator->fails()) {
 			return $this->toError($validator->errors());
 		}
-		$entId = $request->oauth_client_id;
+		$entId = $request->oauth_ent_id;
 		//增加
 		$datas = $request->input('datas');
 

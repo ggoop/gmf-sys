@@ -2,7 +2,7 @@
   <div class="md-chart"></div>
 </template>
 <script>
-  import Highcharts from 'highcharts'
+  import Highcharts from 'highcharts';
   require('highcharts/highcharts-3d')(Highcharts);
   var defaultOpts= {
     credits: {enabled: false},
@@ -24,12 +24,8 @@
     data () {
       return {
         msg: 1,
-        chart: null
-      }
-    },
-    mounted(){
-      if (!this.chart && this.options) {
-        this._init();
+        chart: null,
+        resizeEvt:''
       }
     },
     methods: {
@@ -63,6 +59,15 @@
           this.chart = new Highcharts.Chart(this.$el,this.formatOption(this.options),(c)=>{
             this.callback(c);
           });
+
+          this.resizeEvt='orientationchange' in window ? 'orientationchange' : 'resize';
+          this.resizeHanlder =this._.debounce(() => {
+              this.chart&&this.chart.reflow();
+            }, 100, { leading: true });
+
+          if (document.addEventListener){
+            window.addEventListener(this.resizeEvt, this.resizeHanlder, false);
+          }
         }
       }
     },
@@ -75,7 +80,15 @@
         }
       }
     },
+    mounted(){
+      if (!this.chart && this.options) {
+        this._init();
+      }
+    },
     beforeDestroy(){
+      if (document.removeEventListener){
+        window.removeEventListener(this.resizeEvt,  this.resizeHanlder, false);
+      }
       if (this.chart) {
         this.chart.destroy();
       }

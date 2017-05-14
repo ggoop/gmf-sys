@@ -37,7 +37,7 @@ class RouteRegistrar {
 		$this->router->group(['prefix' => 'sys', 'middleware' => ['api']], function ($router) {
 			$router->resource('datas', 'DataController', ['only' => ['index', 'show']]);
 		});
-		$this->router->group(['prefix' => 'sys', 'middleware' => ['api', 'auth:api']], function ($router) {
+		$this->router->group(['prefix' => 'sys', 'middleware' => ['api', 'auth:api', 'ent_check']], function ($router) {
 
 			$router->get('/enums/{enum}', ['uses' => 'EntityController@getEnum']);
 			$router->resource('entities', 'EntityController', ['only' => ['index', 'show']]);
@@ -57,7 +57,7 @@ class RouteRegistrar {
 	public function forOrg() {
 		//auth:api
 		//client_credentials
-		$this->router->group(['prefix' => 'org', 'middleware' => ['api', 'auth:api']], function ($router) {
+		$this->router->group(['prefix' => 'org', 'middleware' => ['api', 'auth:api', 'ent_check']], function ($router) {
 
 			$router->resource('orgs', 'OrgOrgController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 			$router->resource('depts', 'OrgDeptController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
