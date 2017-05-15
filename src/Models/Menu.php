@@ -11,13 +11,11 @@ class Menu extends Model {
 	use Snapshotable, HasGuard;
 	protected $table = 'gmf_sys_menus';
 	public $incrementing = false;
-	protected $fillable = ['id', 'code', 'name', 'memo', 'uri', 'icon', 'style', 'tag', 'params'];
+	protected $fillable = ['id', 'root_id', 'parent_id',
+		'code', 'name', 'memo', 'uri', 'icon', 'style', 'tag', 'params',
+		'sequence'];
 	public function menus() {
-		//方法的第一个参数为我们希望最终访问的模型名称，而第二个参数为中间模型的名称。
-		//第三个参数为中间模型的外键名称，
-		//而第四个参数为最终模型的外键名称，
-		//第五个参数则为本地键。
-		return $this->hasManyThrough('Gmf\Sys\Models\Menu', 'Gmf\Sys\Models\MenuRelation', 'parent_id', 'id', 'id');
+		return $this->hasMany('Gmf\Sys\Models\Menu', 'parent_id', 'id');
 	}
 	/**
 	 * add new model data
@@ -29,29 +27,19 @@ class Menu extends Model {
 		tap(new Builder, function ($builder) use ($callback) {
 			$callback($builder);
 
-			$data = $builder->toArray();
-			static::create(array_only($data, ['id', 'code', 'name', 'memo', 'uri', 'icon', 'style', 'tag', 'params']));
-
-			$dataRelation['root_id'] = $builder->id;
-			$dataRelation['parent_id'] = $builder->id;
-			$dataRelation['menu_id'] = $builder->id;
-			$dataRelation['path'] = $builder->id;
-
-			if (!empty($builder->sequence)) {
-				$dataRelation['sequence'] = $builder->sequence;
-			}
+			$data = array_only($builder->toArray(), ['id', 'code', 'name', 'memo', 'uri', 'icon', 'style', 'tag', 'params', 'sequence']);
+			$parent = false;
 			if (!empty($builder->parent)) {
 				$parent = Menu::where('code', $builder->parent)->where('tag', $builder->tag)->first();
-				if ($parent) {
-					$parentRelation = MenuRelation::where('menu_id', $parent->id)->first();
-					if ($parentRelation) {
-						$dataRelation['root_id'] = $parentRelation->root_id;
-						$dataRelation['parent_id'] = $parentRelation->menu_id;
-						$dataRelation['path'] = $parentRelation->path . '.' . $dataRelation['path'];
-					}
-				}
 			}
-			MenuRelation::create($dataRelation);
+			if ($parent) {
+				$data['root_id'] = $parent->root_id;
+				$data['parent_id'] = $parent->id;
+			} else {
+				$data['root_id'] = $builder->id;
+				$data['parent_id'] = null;
+			}
+			static::create($data);
 		});
 	}
 }

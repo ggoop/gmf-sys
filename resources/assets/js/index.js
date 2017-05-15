@@ -22,7 +22,7 @@ const start = {
 };
 start.run = function(elID) {
     elID = elID || '#gmfApp';
-    var rootData = { title: '' };
+    var rootData = { title: '',userData:{} };
 
     baseConfig();
 
