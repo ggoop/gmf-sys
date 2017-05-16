@@ -22,8 +22,7 @@
         this.$children.forEach((child) => {
           child.active = child === item;
         });
-
-        this.$emit('change', this.$children.findIndex((i) => i === item));
+        this.$emit('change', this._.findIndex(this.$children,(i) => i === item));
       }
     }
   };
