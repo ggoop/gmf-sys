@@ -36,9 +36,9 @@ function liquidFillGaugeDefaultSettings() {
 function loadLiquidFillGauge(element, value, config) {
 
     var eid = common.uniqueId();
-    if (config) {config =Object.assign({}, liquidFillGaugeDefaultSettings(),config);}
+    if (config) {config =_.extend({}, liquidFillGaugeDefaultSettings(),config);}
     else{
-         config =Object.assign({}, liquidFillGaugeDefaultSettings());
+         config =_.extend({}, liquidFillGaugeDefaultSettings());
     }
 
     var gauge = d3.select(element);

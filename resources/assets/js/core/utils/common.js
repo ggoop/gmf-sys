@@ -137,7 +137,7 @@ const formatDecimal = function(num, options) {
     //precision:精度，保留的小数位数
     //unit:单位，0个，1十，2百，3千
     //quantile:分位数，默认3，表示千分位
-    options = Object.assign({}, { precision: 2, unit: 0, quantile: 3 }, options);
+    options = extend({}, { precision: 2, unit: 0, quantile: 3 }, options);
 
     num = parseFloat(num);
     if (options.unit) {

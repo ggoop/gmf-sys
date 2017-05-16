@@ -30,7 +30,7 @@
     },
     methods: {
       formatOption(options){
-        return Object.assign({},defaultOpts,options);
+        return this._.extend({},defaultOpts,options);
       },
       addSeries(options){
         this.delegateMethod('addSeries', this.formatOption(options));
