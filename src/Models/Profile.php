@@ -21,6 +21,9 @@ class Profile extends Model {
 		}
 
 		$p = $query->first();
+		if ($p) {
+			$v = $p->dValue;
+		}
 		if ($p && $p->values && count($p->values)) {
 			$v = $p->values[0]->value;
 		}
