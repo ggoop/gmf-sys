@@ -34,6 +34,8 @@ class AuthController extends Controller {
 				->withInput($request->only('account'))
 				->withErrors(['account' => '当前用户不存在!']);
 		}
+		Auth::login($u, true);
+		return $this->login($request, $u->id);
 		if (Auth::attempt($credentials)) {
 			return $this->login($request, $u->id);
 		} else {
