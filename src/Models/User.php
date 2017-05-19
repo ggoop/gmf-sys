@@ -101,7 +101,7 @@ class User extends Authenticatable {
 					}
 				}
 				if (empty($data['avatar'])) {
-					$data['avatar'] = '/img/avatar/' . mt_rand(1, 50) . '.jpg';
+					$data['avatar'] = '/img/vendor/gmf-sys/avatar/' . mt_rand(1, 50) . '.jpg';
 				}
 				$user = User::create($data);
 			}
