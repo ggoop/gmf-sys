@@ -28,8 +28,8 @@ class VisitorMiddleware {
 		$response = $next($request);
 
 		$endTime = microtime(true);
-		$inData['times'] = $endTime - $server->get('REQUEST_TIME_FLOAT');
-		$inData['actimes'] = $endTime - $fromTime;
+		$inData['times'] = ($endTime - $server->get('REQUEST_TIME_FLOAT')) * 1000;
+		$inData['actimes'] = ($endTime - $fromTime) * 1000;
 		Visitor::create($inData);
 		return $response;
 	}
