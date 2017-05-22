@@ -22,7 +22,7 @@ const start = {
 };
 start.run = function(elID) {
     elID = elID || '#gmfApp';
-    var rootData = { title: '',userData:{entId:''} };
+    var rootData = { title: '', userData: { entId: window.gmfEntID }};
 
     baseConfig();
 
@@ -36,7 +36,12 @@ start.run = function(elID) {
     const app = new Vue({
         router: router,
         el: elID,
-        data: rootData
+        data: rootData,
+        watch: {
+          "userData.entId":function(v,o){
+            this.$http.defaults.headers.common.Ent=v;
+          },
+        },
     });
 }
 start.config = function(callback) {
@@ -45,7 +50,7 @@ start.config = function(callback) {
 
 function baseConfig() {
     http.defaults.baseURL = '/api';
-    http.defaults.headers = { common: { Ent: window.gmfEntID } };
+    http.defaults.headers = { common: { Ent:window.gmfEntID} };
     Vue.prototype.$http = http;
 
     Vue.prototype._ = lodash;

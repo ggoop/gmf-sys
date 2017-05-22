@@ -25,7 +25,7 @@ Http.prototype.request = function request(config) {
     if (typeof config === 'string') {
         config = utils.merge({ url: arguments[0] }, arguments[1]);
     }
-    config = utils.merge(defaults, this.defaults, { method: 'get' }, config);
+    config = utils.merge({}, defaults, this.defaults, { method: 'get' }, config);
     if (utils.isAbsoluteURL(config.url) || /^\//g.test(config.url)) {
         config.baseURL = '';
     }
