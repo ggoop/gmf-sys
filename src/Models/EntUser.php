@@ -11,5 +11,5 @@ class EntUser extends Model {
 	public $incrementing = false;
 
 	protected $keyType = 'string';
-	protected $fillable = ['id', 'user_id', 'ent_id', 'revoked'];
+	protected $fillable = ['id', 'user_id', 'ent_id', 'type_enum', 'revoked'];
 }
