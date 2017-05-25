@@ -46,6 +46,7 @@ class RouteRegistrar {
 			$router->resource('queries', 'QueryController', ['only' => ['index', 'show']]);
 
 			$router->get('/menus/all', ['uses' => 'MenuController@all']);
+			$router->get('/menus/path/{id}', ['uses' => 'MenuController@getPath']);
 			$router->resource('menus', 'MenuController', ['only' => ['index', 'show']]);
 
 			$router->resource('languages', 'LanguageController', ['only' => ['index', 'show']]);

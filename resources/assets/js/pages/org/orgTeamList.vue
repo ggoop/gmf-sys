@@ -5,6 +5,8 @@
         <md-button @click.native="create">新增</md-button>
         <md-button @click.native="remove" :disabled="!(selectRows&&selectRows.length)">删除</md-button>
       </md-part-toolbar-group>
+      <div class="flex"></div>
+      <md-part-toolbar-crumb></md-part-toolbar-crumb>
     </md-part-toolbar>
     <md-part-body>
       <md-query @select="select" @dblclick="edit" ref="list" md-query-id="gmf.org.team.list"></md-query>

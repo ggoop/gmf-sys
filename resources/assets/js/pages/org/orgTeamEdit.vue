@@ -9,6 +9,8 @@
       <md-part-toolbar-group>
         <md-button @click.native="list">列表</md-button>
       </md-part-toolbar-group>
+      <div class="flex"></div>
+      <md-part-toolbar-crumb></md-part-toolbar-crumb>
     </md-part-toolbar>
     <md-part-body>
       <md-content>
