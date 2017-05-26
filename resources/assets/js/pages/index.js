@@ -1,10 +1,8 @@
 import oauth from './oauth';
-import org from './org';
 import sys from './sys';
 
 const options = {
     oauth,
-    org,
     sys,
 };
 

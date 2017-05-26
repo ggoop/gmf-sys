@@ -30,7 +30,6 @@ class RouteRegistrar {
 	public function all() {
 
 		$this->forSys();
-		$this->forOrg();
 	}
 
 	public function forSys() {
@@ -53,17 +52,6 @@ class RouteRegistrar {
 
 			$router->post('/profiles/batch', ['uses' => 'ProfileController@batchStore']);
 			$router->resource('profiles', 'ProfileController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
-		});
-	}
-	public function forOrg() {
-		//auth:api
-		//client_credentials
-		$this->router->group(['prefix' => 'org', 'middleware' => ['api', 'auth:api', 'ent_check']], function ($router) {
-
-			$router->resource('orgs', 'OrgOrgController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
-			$router->resource('depts', 'OrgDeptController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
-			$router->resource('works', 'OrgWorkController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
-			$router->resource('teams', 'OrgTeamController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 		});
 	}
 }
