@@ -25,7 +25,7 @@
         ref="input">
       </md-input>
       <md-button class="md-icon-button md-ref-filter" @click.native="openRef()">
-        <md-icon>filter_list</md-icon>
+        <md-icon>search</md-icon>
       </md-button>
       <md-ref ref="ref" :multiple="multiple" :md-ref-id="mdRefId" @open="onRefOpen" @close="onRefClose"></md-ref>
   </div>
