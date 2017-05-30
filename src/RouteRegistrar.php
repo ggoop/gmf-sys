@@ -52,6 +52,8 @@ class RouteRegistrar {
 
 			$router->post('/profiles/batch', ['uses' => 'ProfileController@batchStore']);
 			$router->resource('profiles', 'ProfileController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
+
+			$router->get('/ents/my', ['uses' => 'EntController@getMyEnts']);
 		});
 	}
 }
