@@ -259,18 +259,6 @@
       &:last-child {
         margin: 0 -0.1rem 0 0;
       }
-
-      .md-icon {
-        $size: .18rem;
-
-        width: $size;
-        min-width: $size;
-        height: $size;
-        min-height: $size;
-        margin: 0;
-        color: rgba(#000, .54);
-        font-size: $size;
-      }
     }
   }
 
@@ -412,9 +400,18 @@
     &.md-input-focused:after{
       height:0.02rem;
     }
-
     .md-error, .md-count{
       bottom: 0;
+    }
+
+    .md-ref-filter{
+      display: none;
+    }
+    &:hover,
+    &.md-input-focused{
+      .md-ref-filter{
+        display: block;
+      }
     }
   }
 }

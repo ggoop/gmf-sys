@@ -255,7 +255,6 @@
   &:focus,
   &:active {
     outline: none;
-
     &:not(.md-disabled) {
       cursor: pointer;
       box-shadow: $material-shadow-2dp;
@@ -271,6 +270,7 @@
   &:hover{
     .md-button.md-delete{
       color: rgba(0, 0, 0, 0.74);
+      display: block;
     }
   }
 
@@ -287,6 +287,7 @@
     border-radius: $md-input-value-icon-size;
     transition: $swift-ease-out;
     color: rgba(0, 0, 0, 0.14);
+    display: none;
 
     .md-icon {
       width: $md-input-value-icon-font;
