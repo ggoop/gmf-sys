@@ -13,6 +13,7 @@ class InputHelper {
 			$oid = Arr::get($inputs, $value . '.id');
 			if ($oid) {
 				$data[$value . '_id'] = $oid;
+				unset($data[$value]);
 			}
 		}
 		return $data;
