@@ -1,48 +1,55 @@
-.md-part-toolbar{
-  background-color: #f5f5f5;
-  .md-part-toolbar-crumb{
-    padding: 0 .16rem;
-    a{
-      color: #999;
+.md-part-toolbar {
+    background-color: #f5f5f5;
+    .md-part-toolbar-crumb {
+        padding: 0 .16rem;
+        a {
+            color: #999;
+        }
+        a+a:before {
+            content: '\E5CC';
+            vertical-align: top;
+            display: inline-block;
+            font-family: 'Material Icons';
+            font-weight: normal;
+            font-style: normal;
+            font-size: .25rem;
+            margin: 0 .10rem 0 .08rem;
+            -webkit-font-smoothing: antialiased;
+        }
     }
-    a+a:before{
-      content: '\E5CC';
-      vertical-align: top;
-      display: inline-block;
-      font-family: 'Material Icons';
-      font-weight: normal;
-      font-style: normal;
-      font-size: .25rem;
-      margin: 0 .10rem 0 .08rem;
-      -webkit-font-smoothing: antialiased;
+    .md-part-toolbar-group {
+        .md-button {
+            margin: 0;
+            min-width: 0;
+        }
+        a {
+            padding: 0 .16rem;
+            min-height: .36rem;
+            line-height: .36rem;
+            display: inline-block;
+        }
+        a:hover {
+            background-color: rgba(153, 153, 153, 0.2);
+        }
     }
-  }
-  .md-part-toolbar-group{
-    .md-button{
-      margin: 0;
-      min-width: 0;
+    .md-part-toolbar-group+.md-part-toolbar-group:before {
+        content: ' ';
+        position: relative;
+        height: .20rem;
+        width: .01rem;
+        background: rgba(0, 0, 0, 0.12);
+        top: .08rem;
+        display: inline-block;
     }
-    a{
-      padding: 0 .16rem;
-      min-height: .36rem;
-      line-height: .36rem;
-      display: inline-block;
-    }
-    a:hover{
-      background-color: rgba(153, 153, 153, 0.2);
-    }
-  }
-  .md-part-toolbar-group+.md-part-toolbar-group:before{
-    content: ' ';
-    position: relative;
-    height: .20rem;
-    width: .01rem;
-    background: rgba(0,0,0,0.12);
-    top: .08rem;
-    display: inline-block;
-  }
 }
-.md-part-body{
-  overflow: auto;
-  background-color: #fff;
+
+.md-part-body {
+    overflow: auto;
+    background-color: #fff;
+}
+
+.md-part {
+    >.md-content {
+        background: #fff;
+    }
 }

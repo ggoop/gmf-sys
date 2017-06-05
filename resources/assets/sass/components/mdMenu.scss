@@ -92,6 +92,7 @@
 
   .md-list {
     opacity: 0;
+    padding:0;
     transition: opacity .3s $swift-ease-out-timing-function;
   }
 }

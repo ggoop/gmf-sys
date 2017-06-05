@@ -10,6 +10,7 @@ import sysPermitList from './sysPermitList.vue';
 import sysRoleEdit from './sysRoleEdit.vue';
 import sysRoleList from './sysRoleList.vue';
 
+import sysEntList from './sysEntList.vue';
 
 export default function install(Vue) {
     Vue.component('sysLanguageList', sysLanguageList);
@@ -23,5 +24,7 @@ export default function install(Vue) {
 
     Vue.component('sysRoleEdit', sysRoleEdit);
     Vue.component('sysRoleList', sysRoleList);
+
+    Vue.component('sysEntList', sysEntList);
 	
 }
