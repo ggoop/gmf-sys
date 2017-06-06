@@ -1,16 +1,15 @@
-
-const isArray=_.isArray;
-const bind=_.bind;
-const spread=_.spread;
-const merge=_.merge;
-const extend=_.extend;
-const forEach=_.forEach;
-const isString=_.isString;
-const isNumber=_.isNumber;
-const isUndefined=_.isUndefined;
-const isObject=_.isObject;
-const isDate=_.isDate;
-const debounce =_.debounce;
+const isArray = _.isArray;
+const bind = _.bind;
+const spread = _.spread;
+const merge = _.merge;
+const extend = _.extend;
+const forEach = _.forEach;
+const isString = _.isString;
+const isNumber = _.isNumber;
+const isUndefined = _.isUndefined;
+const isObject = _.isObject;
+const isDate = _.isDate;
+const debounce = _.debounce;
 
 function isFile(val) {
     return toString.call(val) === '[object File]';
@@ -77,6 +76,34 @@ const snakeCase = function(name, separator) {
     return name.replace(/\./g, '');
 };
 
+function fTime(time) {
+    if (!time) return '未知..';
+    //获取time距离当前的秒 
+    var ct = parseInt(((new Date()).getTime() - (new Date((typeof(time) === "string" ? time : time.date))).getTime()) / 1000);
+    var lb = "前";
+    if (ct < 0) {
+        lb = "后";
+        ct = Math.abs(ct);
+    }
+    if (ct == 0) {
+        return "刚刚";
+    }
+    if (ct > 0 && ct < 60) {
+        return ct + "秒" + lb;
+    }
+    if (ct >= 60 && ct < 3600) {
+        return parseInt(ct / 60) + "分钟" + lb;
+    }
+    if (ct >= 3600 && ct < 86400)
+        return parseInt(ct / 3600) + "小时" + lb;
+    if (ct >= 86400 && ct < 2592000) { //86400 * 30  
+        return parseInt(ct / 86400) + "天" + lb;
+    }
+    if (ct >= 2592000 && ct < 31104000) { //86400 * 30  
+        return parseInt(ct / 2592000) + "月" + lb;
+    }
+    return parseInt(ct / 31104000) + "年" + lb;
+}
 const formatDecimal = function(num, options) {
     //precision:精度，保留的小数位数
     //unit:单位，0个，1十，2百，3千
@@ -145,6 +172,7 @@ const common = {
     isStream,
     extend,
     trim,
-    spread
+    spread,
+    fTime
 };
 export default common;
