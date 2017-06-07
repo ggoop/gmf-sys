@@ -79,7 +79,14 @@ const snakeCase = function(name, separator) {
 function fTime(time) {
     if (!time) return '未知..';
     //获取time距离当前的秒 
-    var ct = parseInt(((new Date()).getTime() - (new Date((typeof(time) === "string" ? time : time.date))).getTime()) / 1000);
+    var ct =0,tu=(new Date()).getTime()/1000,fu=tu;
+    if(isNumber(time)){
+     fu= time;
+    }
+    else if(isString(time)){
+     fu= (new Date(time.replace(/-/g, '/'))).getTime()/1000;
+    }
+    ct=parseInt(tu-fu);
     var lb = "前";
     if (ct < 0) {
         lb = "后";
