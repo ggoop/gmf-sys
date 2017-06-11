@@ -9,10 +9,10 @@
         @mouseleave="resumeTimeout(item)">
         <div class="md-snackbar-content">
           <span v-html="item.text"></span>
-          <md-button class="md-icon-button" @click="closeItem(item)">
-            <md-icon>clear</md-icon>
-          </md-button>
         </div>
+        <md-button class="md-icon-button md-toast-close" @click.native="closeItem(item)">
+          <md-icon>clear</md-icon>
+        </md-button>
       </div>
     </transition-group>
   </div>

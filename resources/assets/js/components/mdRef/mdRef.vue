@@ -8,6 +8,9 @@
         <md-button class="md-icon-button">
           <md-icon>filter_list</md-icon>
         </md-button>
+        <md-button class="md-icon-button"  @click.native="cancel()">
+          <md-icon>close</md-icon>
+        </md-button>
       </md-toolbar>
       <md-dialog-content class="no-padding">
         <md-table @select="onTableSelect">
@@ -22,8 +25,8 @@
             <md-table-row v-for="(row, rowIndex) in refData" 
               :key="rowIndex" 
               :md-item="row" 
-              :md-auto-select="!multiple" 
-              :md-selection="!multiple"
+              :md-auto-select="!!multiple" 
+              :md-selection="!!multiple"
               @dblclick.native="dblclick(row)">
               <md-table-cell v-for="(column, columnIndex) in refInfo.fields" :key="columnIndex">
                 {{ row[column.name] }}
@@ -57,7 +60,10 @@
       value: {
         type: Object,
       },
-      multiple: Boolean,
+      multiple: {
+        type: Boolean,
+        default: true
+      },
       mdMax: {
         type: Number,
         default: Infinity
