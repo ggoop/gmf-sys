@@ -26,6 +26,7 @@ class InputHelper {
 			$oid = Arr::get($inputs, $value . '.name');
 			if ($oid) {
 				$data[$value . '_enum'] = $oid;
+				unset($data[$value]);
 			}
 		}
 		return $data;
