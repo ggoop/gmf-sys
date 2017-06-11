@@ -15,7 +15,7 @@
   export default {
     props: {
       name: String,
-      value: [String, Boolean],
+      value: [String, Boolean,Number],
       id: String,
       disabled: Boolean
     },
