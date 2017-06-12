@@ -16,6 +16,7 @@
         :id="inputId"
         :name="name"
         :disabled="disabled"
+        :required="required"
         @keydown.native.delete="deleteLastChip"
         @keydown.native.prevent.enter="addInputChip"
         @keydown.native.prevent.186="addInputChip"
@@ -168,6 +169,8 @@
       this.$nextTick(() => {
         this.parentContainer = getClosestVueParent(this.$parent, 'md-input-container');
         this.updateValues(this.formatValue());
+        this.setParentDisabled();
+        this.setParentRequired();
       });
     }
   };
