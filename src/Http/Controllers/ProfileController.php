@@ -54,7 +54,7 @@ class ProfileController extends Controller {
 		$datas = $request->input('datas');
 
 		foreach ($datas as $k => $v) {
-			$v = array_only($v, ['code', 'name', 'memo', 'dValue', 'scope_enum']);
+			$v = array_only($v, ['code', 'name', 'memo', 'default_value', 'scope_enum']);
 			Models\Profile::updateOrCreate(['ent_id' => $entId, 'code' => $v['code']], $v);
 		}
 		return $this->toJson(true);

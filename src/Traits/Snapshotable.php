@@ -15,7 +15,7 @@ trait Snapshotable {
 	public function snapshot() {
 		$d = new DbHis;
 		$d->row_id = $this->id;
-		$d->tableName = $this->table;
+		$d->table_name = $this->table;
 		$d->row_type = static::class;
 		$d->data = $this->toJson();
 		$d->save();

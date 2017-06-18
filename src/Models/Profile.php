@@ -9,7 +9,7 @@ class Profile extends Model {
 	use Snapshotable, HasGuard;
 	protected $table = 'gmf_sys_profiles';
 	public $incrementing = false;
-	protected $fillable = ['id', 'ent_id', 'code', 'name', 'memo', 'dValue', 'scope_enum'];
+	protected $fillable = ['id', 'ent_id', 'code', 'name', 'memo', 'default_value', 'scope_enum'];
 	public function values() {
 		return $this->hasMany('Gmf\Sys\Models\ProfileValue');
 	}
@@ -22,7 +22,7 @@ class Profile extends Model {
 
 		$p = $query->first();
 		if ($p) {
-			$v = $p->dValue;
+			$v = $p->default_value;
 		}
 		if ($p && $p->values && count($p->values)) {
 			$v = $p->values[0]->value;
@@ -38,7 +38,7 @@ class Profile extends Model {
 		$p = $query->first();
 		if (!$p) {
 			$opts['code'] = $code;
-			$opts['dValue'] = $value;
+			$opts['default_value'] = $value;
 			$p = Profile::create($opts);
 		}
 		$pv = ProfileValue::where('profile_id', $p->id)->first();

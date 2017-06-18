@@ -51,7 +51,7 @@ class DataQuery {
 	}
 	private function buildMainEntity() {
 		$this->mainEntity = $this->getEntity($this->mainEntity->name);
-		$this->query = DB::table($this->mainEntity->tableName . ' as ' . $this->mainEntity->alias);
+		$this->query = DB::table($this->mainEntity->table_name . ' as ' . $this->mainEntity->alias);
 	}
 	private function buildJoins() {
 		foreach ($this->selects as $key => $value) {
@@ -71,7 +71,7 @@ class DataQuery {
 				continue;
 			}
 			$this->query->join(
-				$value->tableName . ' as ' . $value->alias,
+				$value->table_name . ' as ' . $value->alias,
 				$value->join->first,
 				$value->join->operator,
 				$value->join->second,
@@ -88,7 +88,7 @@ class DataQuery {
 		}
 		$b = new Builder;
 		$b->id($ent->id)
-			->tableName($ent->tableName)
+			->table_name($ent->table_name)
 			->name($ent->name)
 			->comment($ent->comment)
 			->type($ent->type);
@@ -99,7 +99,7 @@ class DataQuery {
 		foreach ($ent->fields as $key => $value) {
 			$f = new Builder($value->toArray());
 			$f->tableAlias($b->alias);
-			$f->dbFieldName($f->tableAlias . '.' . $f->fieldName);
+			$f->dbFieldName($f->tableAlias . '.' . $f->field_name);
 			$parts[$value->name] = $f;
 		}
 		$b->fields($parts);

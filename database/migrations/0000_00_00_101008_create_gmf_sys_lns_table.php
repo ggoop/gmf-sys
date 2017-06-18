@@ -17,9 +17,9 @@ class CreateGmfSysLnsTable extends Migration {
 		$md->string('id')->primary();
 		$md->string('owner_id', 100)->comment('拥有者ID');
 		$md->string('owner_type')->comment('拥有者类型');
-		$md->string('serialNumber')->nullable()->comment('序列号');
-		$md->string('requestCode')->nullable()->comment('申请码');
-		$md->string('answerCode')->nullable()->comment('答应码');
+		$md->string('serial_number')->nullable()->comment('序列号');
+		$md->string('request_code')->nullable()->comment('申请码');
+		$md->string('answer_code')->nullable()->comment('答应码');
 		$md->build();
 	}
 

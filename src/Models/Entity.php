@@ -11,7 +11,7 @@ class Entity extends Model {
 	protected $table = 'gmf_sys_entities';
 	public $incrementing = false;
 	protected $keyType = 'string';
-	protected $fillable = ['id', 'name', 'comment', 'tableName', 'type'];
+	protected $fillable = ['id', 'name', 'comment', 'table_name', 'type'];
 	protected $hidden = ['created_at', 'updated_at'];
 	public function fields() {
 		return $this->hasMany('Gmf\Sys\Models\EntityField');
@@ -20,10 +20,10 @@ class Entity extends Model {
 
 		$query = DB::table('gmf_sys_entities as e')
 			->join('gmf_sys_entity_fields as el', 'e.id', '=', 'el.entity_id')
-			->select('el.name', 'el.comment', 'el.dValue')
+			->select('el.name', 'el.comment', 'el.default_value')
 			->where('e.name', $type)
 			->where(function ($query) use ($name) {
-				$query->where('el.name', $name)->orWhere('el.dValue', $name);
+				$query->where('el.name', $name)->orWhere('el.default_value', $name);
 			});
 		$p = $query->first();
 		return $p;

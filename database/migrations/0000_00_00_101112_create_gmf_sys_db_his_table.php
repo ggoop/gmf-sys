@@ -15,7 +15,7 @@ class CreateGmfSysDbHisTable extends Migration {
 		$md->mdEntity('gmf.sys.dbhis')->comment('数据备份')->tableName('gmf_sys_dbhis');
 
 		$md->bigIncrements('id');
-		$md->string('tableName')->nullable()->comment('表名称');
+		$md->string('table_name')->nullable()->comment('表名称');
 		$md->string('row_id', 100)->comment('原始数据Id');
 		$md->string('row_type')->comment('名称');
 		$md->json('data')->comment('原始数据');

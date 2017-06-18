@@ -224,6 +224,9 @@ class Metadata {
 		$s = 0;
 
 		$data = $this->mainEntity->toArray();
+		if (!empty($data['tableName'])) {
+			$data['table_name'] = $data['tableName'];
+		}
 		Models\Entity::where('id', $id)->delete();
 		Models\Entity::create($data);
 
@@ -266,6 +269,9 @@ class Metadata {
 			}
 
 			$data = $column->toArray();
+			if (!empty($data['fieldName'])) {
+				$data['field_name'] = $data['fieldName'];
+			}
 			Models\EntityField::create($data);
 		}
 	}
@@ -298,7 +304,7 @@ class Metadata {
 				$table->string('id', 100)->primary();
 				$table->string('name')->unique()->comment('名称');
 				$table->string('comment')->nullable()->comment('描述');
-				$table->string('tableName')->nullable()->comment('集合名称');
+				$table->string('table_name')->nullable()->comment('集合名称');
 				$table->string('type')->comment('类型');
 				$table->timestamps();
 			});
@@ -307,15 +313,15 @@ class Metadata {
 				$table->string('id', 100)->primary();
 				$table->string('entity_id', 100);
 				$table->string('name')->index()->comment('名称');
-				$table->string('fieldName', 100)->nullable()->comment('字段名称');
+				$table->string('field_name', 100)->nullable()->comment('字段名称');
 				$table->string('comment')->nullable()->comment('描述');
 				$table->string('type_id', 100)->nullable()->comment('数据类型');
 				$table->string('type_type', 200)->nullable()->comment('数据类型');
 				$table->boolean('collection')->default('0')->comment('是否集合');
 				$table->integer('sequence')->default('0')->comment('顺序');
-				$table->string('dValue')->nullable()->comment('默认值');
-				$table->string('foreignKey')->nullable()->comment('外键');
-				$table->string('localKey')->nullable()->comment('本方建');
+				$table->string('default_value')->nullable()->comment('默认值');
+				$table->string('foreign_key')->nullable()->comment('外键');
+				$table->string('local_ky')->nullable()->comment('本方建');
 
 				$table->timestamps();
 
@@ -327,9 +333,7 @@ class Metadata {
 	}
 	private function seedEntity() {
 
-		$id = ['string', 'number', 'integer', 'bigInteger',
-			'float', 'boolean', 'date', 'object', 'entity', 'enum',
-			'timestamp', 'text', 'decimal'];
+		$id = ['string', 'number', 'integer', 'bigInteger', 'float', 'boolean', 'date', 'object', 'entity', 'enum', 'timestamp', 'text', 'decimal'];
 		Models\Entity::whereIn('id', $id)->delete();
 		Models\Entity::create(['id' => '4ed0e57009b611e7b2bbbfa514fdeb8d', 'name' => 'string', 'comment' => '字符', 'type' => 'string']);
 		Models\Entity::create(['id' => '4ed0e76009b611e7825fcd17c27385aa', 'name' => 'number', 'comment' => '数值', 'type' => 'number']);
@@ -369,14 +373,14 @@ class Metadata {
 		$id = 'f532f4a009b611e78197f91f9f35de3a';
 		$s = 0;
 		Models\Entity::where('id', $id)->delete();
-		Models\Entity::create(['id' => $id, 'name' => 'gmf.sys.entity', 'comment' => '实体', 'tableName' => 'gmf_sys_entities', 'type' => 'entity']);
+		Models\Entity::create(['id' => $id, 'name' => 'gmf.sys.entity', 'comment' => '实体', 'table_name' => 'gmf_sys_entities', 'type' => 'entity']);
 
 		Models\EntityField::where('entity_id', $id)->delete();
 		Models\EntityField::create(['entity_id' => $id, 'id' => '2bb9a8f009b711e79da5a3c6c31086ee', 'name' => 'id', 'comment' => 'ID', 'type_type' => 'string', 'type_id' => '4ed0e57009b611e7b2bbbfa514fdeb8d', 'sequence' => $s++]);
 		Models\EntityField::create(['entity_id' => $id, 'id' => '2bb9aac009b711e7b4fdcf693059f60a', 'name' => 'code', 'comment' => '编码', 'type_type' => 'string', 'type_id' => '4ed0e57009b611e7b2bbbfa514fdeb8d', 'sequence' => $s++]);
 		Models\EntityField::create(['entity_id' => $id, 'id' => '2bb9ab4009b711e78586895885fcac14', 'name' => 'name', 'comment' => '名称', 'type_type' => 'string', 'type_id' => '4ed0e57009b611e7b2bbbfa514fdeb8d', 'sequence' => $s++]);
 		Models\EntityField::create(['entity_id' => $id, 'id' => '2bb9aba009b711e7b848e54ec581b1ca', 'name' => 'memo', 'comment' => '备注', 'type_type' => 'string', 'type_id' => '4ed0e57009b611e7b2bbbfa514fdeb8d', 'sequence' => $s++]);
-		Models\EntityField::create(['entity_id' => $id, 'id' => '2bb9abf009b711e78a0799e6922803b9', 'name' => 'tableName', 'comment' => '集合名称', 'type_type' => 'string', 'type_id' => '4ed0e57009b611e7b2bbbfa514fdeb8d', 'sequence' => $s++]);
+		Models\EntityField::create(['entity_id' => $id, 'id' => '2bb9abf009b711e78a0799e6922803b9', 'name' => 'table_name', 'comment' => '集合名称', 'type_type' => 'string', 'type_id' => '4ed0e57009b611e7b2bbbfa514fdeb8d', 'sequence' => $s++]);
 		Models\EntityField::create(['entity_id' => $id, 'id' => '2bb9ac4009b711e7bfb959b13d8e317f', 'name' => 'type', 'comment' => '类型', 'type_type' => 'gmf.sys.type.enum', 'type_id' => '024f542009b711e78d418395e17293c8', 'sequence' => $s++]);
 		Models\EntityField::create(['entity_id' => $id, 'id' => '2bb9ac9009b711e79bc2179587e6a8b1', 'name' => 'attrs', 'comment' => '类型', 'type_type' => 'gmf.sys.entity.field', 'type_id' => '6d28bb8009b711e78e9151efd7044098', 'collection' => '1', 'sequence' => $s++]);
 
@@ -384,7 +388,7 @@ class Metadata {
 		$id = '6d28bb8009b711e78e9151efd7044098';
 		$s = 0;
 		Models\Entity::where('id', $id)->delete();
-		Models\Entity::create(['id' => $id, 'name' => 'gmf.sys.entity.field', 'comment' => '属性', 'tableName' => 'gmf_sys_entity_field', 'type' => 'entity']);
+		Models\Entity::create(['id' => $id, 'name' => 'gmf.sys.entity.field', 'comment' => '属性', 'table_name' => 'gmf_sys_entity_field', 'type' => 'entity']);
 
 		Models\EntityField::where('entity_id', $id)->delete();
 		Models\EntityField::create(['entity_id' => $id, 'id' => '75c0351009b811e7904909c360b924c2', 'name' => 'id', 'comment' => 'ID', 'type_type' => 'string', 'type_id' => '4ed0e57009b611e7b2bbbfa514fdeb8d', 'sequence' => $s++]);
@@ -394,8 +398,8 @@ class Metadata {
 		Models\EntityField::create(['entity_id' => $id, 'id' => '75c038c009b811e78ad6ddb73667aa37', 'name' => 'collection', 'comment' => '是否集合', 'type_type' => 'boolean', 'type_id' => '4ed0e8f009b611e78ef127fdddb27dab', 'sequence' => $s++]);
 		Models\EntityField::create(['entity_id' => $id, 'id' => '75c0392009b811e785243722cd1e3a2f', 'name' => 'sequence', 'comment' => '顺序', 'type_type' => '4ed0e7e009b611e7aa8a6ded049c186f', 'type_id' => '4ed0e7e009b611e7aa8a6ded049c186f', 'sequence' => $s++]);
 		Models\EntityField::create(['entity_id' => $id, 'id' => '75c0398009b811e79c68ad16faa490a3', 'name' => 'type', 'comment' => '数据类型', 'type_type' => 'gmf.sys.entity', 'type_id' => 'f532f4a009b611e78197f91f9f35de3a', 'sequence' => $s++]);
-		Models\EntityField::create(['entity_id' => $id, 'id' => '75c03a4009b811e783c531f16200cbde', 'name' => 'dValue', 'comment' => '默认值', 'type_type' => 'string', 'type_id' => '4ed0e57009b611e7b2bbbfa514fdeb8d', 'sequence' => $s++]);
-		Models\EntityField::create(['entity_id' => $id, 'id' => 'bb892cd018b711e79dab6d698d9598c3', 'name' => 'fieldName', 'comment' => '字段', 'type_type' => 'string', 'type_id' => '4ed0e57009b611e7b2bbbfa514fdeb8d', 'sequence' => $s++]);
+		Models\EntityField::create(['entity_id' => $id, 'id' => '75c03a4009b811e783c531f16200cbde', 'name' => 'default_value', 'comment' => '默认值', 'type_type' => 'string', 'type_id' => '4ed0e57009b611e7b2bbbfa514fdeb8d', 'sequence' => $s++]);
+		Models\EntityField::create(['entity_id' => $id, 'id' => 'bb892cd018b711e79dab6d698d9598c3', 'name' => 'field_name', 'comment' => '字段', 'type_type' => 'string', 'type_id' => '4ed0e57009b611e7b2bbbfa514fdeb8d', 'sequence' => $s++]);
 
 	}
 

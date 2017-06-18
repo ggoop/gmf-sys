@@ -22,7 +22,7 @@ class CreateGmfSysUsersTable extends Migration {
 		$md->string('secret')->nullable();
 
 		$md->string('name')->nullable();
-		$md->string('nickName')->nullable();
+		$md->string('nick_name')->nullable();
 
 		$md->string('type')->nullable()->comment('类型');
 		$md->string('avatar', 500)->nullable();

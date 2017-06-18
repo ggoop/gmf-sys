@@ -19,7 +19,7 @@ class User extends Authenticatable {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['id', 'account', 'password', 'secret', 'name', 'nickName', 'email', 'type', 'avatar', 'mobile', 'status_enum'];
+	protected $fillable = ['id', 'account', 'password', 'secret', 'name', 'nick_name', 'email', 'type', 'avatar', 'mobile', 'status_enum'];
 
 	/**
 	 * The attributes that should be hidden for arrays.
@@ -61,13 +61,13 @@ class User extends Authenticatable {
 			$query->where('mobile', $opts['mobile']);
 		} else if (!empty($opts['email'])) {
 			$query->where('email', $opts['email']);
-		} else if (!empty($opts['srcId'])) {
-			$query->where('srcId', $opts['srcId']);
+		} else if (!empty($opts['src_id'])) {
+			$query->where('src_id', $opts['src_id']);
 		}
 
 		$acc = $query->first();
 		if (!$acc) {
-			$acc = Account::create(array_only($opts, ['name', 'nickName', 'type', 'avatar', 'mobile', 'email', 'srcId', 'srcUrl', 'token', 'expire_time', 'info']));
+			$acc = Account::create(array_only($opts, ['name', 'nick_name', 'type', 'avatar', 'mobile', 'email', 'src_id', 'src_url', 'token', 'expire_time', 'info']));
 		}
 		$userAcc = UserAccount::where('account_id', $acc->id)->first();
 		if (!$userAcc) {
@@ -82,12 +82,12 @@ class User extends Authenticatable {
 				$query->where('mobile', $opts['mobile']);
 			} else if (!empty($opts['email'])) {
 				$query->where('email', $opts['email']);
-			} else if (!empty($opts['srcId'])) {
-				$query->where('id', $opts['srcId']);
+			} else if (!empty($opts['src_id'])) {
+				$query->where('id', $opts['src_id']);
 			}
 			$user = $query->first();
 			if (!$user) {
-				$data = array_only($opts, ['account', 'password', 'name', 'nickName', 'email', 'mobile', 'type', 'avatar']);
+				$data = array_only($opts, ['account', 'password', 'name', 'nick_name', 'email', 'mobile', 'type', 'avatar']);
 				if (!empty($opts['user_id'])) {
 					$data['id'] = $opts['user_id'];
 				}
@@ -95,9 +95,9 @@ class User extends Authenticatable {
 					$data['secret'] = base64_encode($data['password']);
 					$data['password'] = bcrypt($data['password']);
 				}
-				if (empty($credentials['nickName'])) {
+				if (empty($credentials['nick_name'])) {
 					if (Validator::make($data, ['account' => 'required|email'])->passes()) {
-						$data['nickName'] = $data['account'];
+						$data['nick_name'] = $data['account'];
 					}
 				}
 				if (empty($data['avatar'])) {
