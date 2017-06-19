@@ -20,7 +20,7 @@ class CreateGmfSysVisitorsTable extends Migration {
 		$md->string('url', 500)->nullable();
 		$md->string('ip')->nullable();
 		$md->string('method')->nullable();
-		$md->text('params')->nullable();
+		$md->longText('params')->nullable();
 		$md->string('agent', 500)->nullable();
 		$md->string('referer', 500)->nullable();
 		//请求总时间.秒
