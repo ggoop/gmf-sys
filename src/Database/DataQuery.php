@@ -129,7 +129,7 @@ class DataQuery {
 			if ($value->name === $name) {
 				return $value;
 			}
-			if ($value->fieldName === $name) {
+			if ($value->field_name === $name) {
 				return $value;
 			}
 		}
@@ -165,9 +165,10 @@ class DataQuery {
 		}
 		$part = array_shift($parts);
 		$mdField = $this->getField($mdEntity, $part);
+
 		$comments[] = $mdField->comment;
 
-		$field->tableAlias($mdEntity->alias)->fieldName($mdField->fieldName);
+		$field->tableAlias($mdEntity->alias)->field_name($mdField->field_name);
 
 		if (empty($field->alias)) {
 			$field->alias(str_replace('.', '_', $field->name));
@@ -178,6 +179,6 @@ class DataQuery {
 		$field->path($field->name);
 		$field->name($mdField->name);
 		$field->type_id($mdField->type_id)->type_type($mdField->type_type);
-		$field->dbFieldName($field->tableAlias . '.' . $field->fieldName);
+		$field->dbFieldName($field->tableAlias . '.' . $field->field_name);
 	}
 }
