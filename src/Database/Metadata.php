@@ -250,18 +250,18 @@ class Metadata {
 			$ct = $this->getColumnType($column);
 			$column->type_id = $ct->id;
 			$column->type_type = $ct->type;
-			if (empty($column->localKey) && $column->type === 'entity') {
+			if (empty($column->local_key) && $column->type === 'entity') {
 				if (!empty($column->collection) && $column->collection) {
-					$column->localKey = 'id';
+					$column->local_key = 'id';
 				} else {
-					$column->localKey = $column->name . '_id';
+					$column->local_key = $column->name . '_id';
 				}
 			}
-			if (empty($column->foreignKey) && $column->type === 'entity') {
+			if (empty($column->foreign_key) && $column->type === 'entity') {
 				if (!empty($column->collection) && $column->collection) {
-					$column->foreignKey = $this->getShortName($this->mainEntity->name) . '_id';
+					$column->foreign_key = $this->getShortName($this->mainEntity->name) . '_id';
 				} else {
-					$column->foreignKey = 'id';
+					$column->foreign_key = 'id';
 				}
 			}
 			if (empty($column->comment)) {
@@ -321,7 +321,7 @@ class Metadata {
 				$table->integer('sequence')->default('0')->comment('顺序');
 				$table->string('default_value')->nullable()->comment('默认值');
 				$table->string('foreign_key')->nullable()->comment('外键');
-				$table->string('local_ky')->nullable()->comment('本方建');
+				$table->string('local_key')->nullable()->comment('本方建');
 
 				$table->timestamps();
 

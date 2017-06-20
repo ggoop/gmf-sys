@@ -114,8 +114,8 @@ class DataQuery {
 
 			$join = new Builder();
 			$join->type('left')->operator('=');
-			$join->first($joinField->tableAlias . '.' . $joinField->localKey);
-			$join->second($b->alias . '.' . $joinField->foreignKey);
+			$join->first($joinField->tableAlias . '.' . $joinField->local_key);
+			$join->second($b->alias . '.' . $joinField->foreign_key);
 			$b->join($join);
 		}
 		$this->entities[$path] = $b;
