@@ -44,12 +44,20 @@
         this.selectedValue=modelValue;
       },
       loadData(enumID){
+        if(!window.gmfEnums){
+          window.gmfEnums={};
+        }
         if(enumID){
-          this.$http.get('sys/enums/'+enumID).then(response => {
-            this.enumInfo = response.data.data;
-          }, response => {
-            console.log(response);
-          });
+          if(window.gmfEnums&&window.gmfEnums[enumID]){
+            this.enumInfo=window.gmfEnums&&window.gmfEnums[enumID];
+          }else{
+            this.$http.get('sys/enums/'+enumID).then(response => {
+              this.enumInfo = response.data.data;
+              window.gmfEnums[enumID]=response.data.data;
+            }, response => {
+              console.log(response);
+            });
+          }
         }else{
           this.enumInfo={};
         }
