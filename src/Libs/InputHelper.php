@@ -18,6 +18,16 @@ class InputHelper {
 		}
 		return $data;
 	}
+	public static function fillBoolean(array $data, $inputs, array $names = []) {
+		if ($inputs instanceof Collection) {
+			$inputs = $inputs->all();
+		}
+		foreach ($names as $key => $value) {
+			$oid = Arr::get($inputs, $value);
+			$data[$value] = !!$oid;
+		}
+		return $data;
+	}
 	public static function fillEnum(array $data, $inputs, array $names = []) {
 		if ($inputs instanceof Collection) {
 			$inputs = $inputs->all();
