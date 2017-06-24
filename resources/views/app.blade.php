@@ -10,6 +10,7 @@
   <link rel="stylesheet" type="text/css" href="{{ mix('/css/app.css') }}" />
   <script>
     gmfEntID='{{ session(config('gmf.ent_session_name')) }}';
+    gmfConfig={!! json_encode($config) !!};
   </script>
 </head>
 
