@@ -58,6 +58,10 @@ class QueryController extends Controller {
 		} else if ($model->entity) {
 			$entityFields = Models\EntityField::where('entity_id', $model->entity->id)->where('collection', '0')->get();
 			foreach ($entityFields as $f) {
+				if ($f->name == 'created_at' || $f->name == 'updated_at' || $f->name == 'deleted_at') {
+					continue;
+				}
+
 				$field = new Builder;
 				$field->name($f->name);
 				$fields[] = $field;
