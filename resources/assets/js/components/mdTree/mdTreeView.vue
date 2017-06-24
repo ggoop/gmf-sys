@@ -12,11 +12,11 @@ import theme from '../../core/components/mdTheme/mixin';
         default:[]
       },
       mdAutoSelect:{
-        type:[String,Boolean],
+        type:Boolean,
         default:true
       },
       mdSelection:{
-        type:[String,Boolean],
+        type:Boolean,
         default:true
       }
     },

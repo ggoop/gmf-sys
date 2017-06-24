@@ -15,8 +15,8 @@
         type:Array,
         default:[]
       },
-      mdAutoSelect:[String,Boolean],
-      mdSelection:[String,Boolean]
+      mdAutoSelect:Boolean,
+      mdSelection:Boolean
     },
     methods: {
     },

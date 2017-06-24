@@ -1,6 +1,6 @@
 <template>
 <div class="md-tree-node layout-row layout-align-start-center" :class="[classes]" v-wave @click="click">
-  <md-checkbox v-model="checkbox" v-if="mdSelection" @change="select"></md-checkbox>
+  <md-checkbox v-model="checkbox" v-if="!!mdSelection" @change="select"></md-checkbox>
   <div class="md-tree-node-name">
     <slot :value="node">{{node.name}}</slot>
   </div>
@@ -14,8 +14,8 @@
         type:Object,
         default:{}
       },
-      mdAutoSelect:[String,Boolean],
-      mdSelection:[String,Boolean]
+      mdAutoSelect:Boolean,
+      mdSelection:Boolean
     },
     data() {
       return {
