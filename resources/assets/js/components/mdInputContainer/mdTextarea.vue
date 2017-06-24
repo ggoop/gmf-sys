@@ -1,6 +1,7 @@
 <template>
   <textarea
     class="md-input"
+    ref="input"
     :value="value"
     :disabled="disabled"
     :required="required"

@@ -37,7 +37,8 @@ export default {
     },
     setParentValue(value) {
       if(this.mdContainer&&this.parentContainer){
-        this.parentContainer.setValue(value || this.$el.value);
+        var elValue=this.$refs.input?this.$refs.input.value:this.$el.value;
+        this.parentContainer.setValue(value || elValue);
       }
     },
     setParentDisabled() {
@@ -56,7 +57,8 @@ export default {
       }
     },
     updateValues(value) {
-      const newValue = value || this.$el.value || this.value;
+      var elValue=this.$refs.input?this.$refs.input.value:this.$el.value;
+      const newValue = value || elValue || this.value;
       this.setParentValue(newValue);
       if(this.mdContainer&&this.parentContainer){
         this.parentContainer.inputLength = newValue ? newValue.length : 0;
@@ -74,9 +76,10 @@ export default {
       this.setParentValue();
     },
     onInput() {
+      var elValue=this.$refs.input?this.$refs.input.value:this.$el.value;
       this.updateValues();
-      this.$emit('change', this.$el.value);
-      this.$emit('input', this.$el.value);
+      this.$emit('change', elValue);
+      this.$emit('input', elValue);
     }
   }
 };
