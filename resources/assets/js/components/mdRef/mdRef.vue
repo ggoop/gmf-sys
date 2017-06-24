@@ -16,7 +16,7 @@
         <md-table @select="onTableSelect">
           <md-table-header>
             <md-table-row>
-              <md-table-head v-for="(column, columnIndex) in refInfo.fields" :key="column">
+              <md-table-head v-for="(column, columnIndex) in refInfo.fields" v-if="!column.hide&&column.name!='id'" :key="column">
               {{column.comment||column.name}}
               </md-table-head>
             </md-table-row>
@@ -28,7 +28,7 @@
               :md-auto-select="!!multiple" 
               :md-selection="!!multiple"
               @dblclick.native="dblclick(row)">
-              <md-table-cell v-for="(column, columnIndex) in refInfo.fields" :key="columnIndex">
+              <md-table-cell v-for="(column, columnIndex) in refInfo.fields" v-if="!column.hide&&column.name!='id'" :key="columnIndex">
                 {{ row[column.name] }}
               </md-table-cell>
             </md-table-row>
