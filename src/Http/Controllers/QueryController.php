@@ -139,6 +139,9 @@ class QueryController extends Controller {
 		}
 		$query = $queryBuilder->build();
 
+		if ($request->custFilter) {
+			$query->whereRaw($request->custFilter);
+		}
 		$data = $query->paginate($pageSize);
 		// } catch (Exception $e) {
 		// 	$error = $e;
