@@ -73,6 +73,15 @@
         default:'5'
       },
       mdRefId: String,
+      options:{
+        type:Object,
+        default(){
+          return {
+            wheres:{},
+            orders:{}
+          }
+        }
+      }
     },
     mixins: [theme],
     data() {
@@ -115,8 +124,8 @@
         this.loading++;
         const params={};
         pager=pager||this.pageInfo;
-        this._.extend(params,pager);
-        this.$http.get('sys/queries/query/'+this.mdRefId,{params:params}).then(response => {
+        this._.extend(params,this.options,pager);
+        this.$http.post('sys/queries/query/'+this.mdRefId,params).then(response => {
           this.refInfo = response.data.schema;
           this.refData = response.data.data;
           this.pageInfo.size=response.data.pager.size;
@@ -140,6 +149,7 @@
         this.close(item);
       },
       open() {
+        this.$emit('init', this.options);
         this.selectedRows=[];
         this.$refs['table'].$data.selectedRows={};
         this.$refs['dialog'].open();

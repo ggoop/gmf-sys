@@ -28,7 +28,7 @@
       <md-button class="md-icon-button md-ref-filter" @click.native="openRef()">
         <md-icon>search</md-icon>
       </md-button>
-      <md-ref ref="ref" :multiple="!!multiple" :md-ref-id="mdRefId" @open="onRefOpen" @close="onRefClose"></md-ref>
+      <md-ref ref="ref" :options="refOptions" :multiple="!!multiple" :md-ref-id="mdRefId" @open="onRefOpen" @close="onRefClose"></md-ref>
   </div>
 </template>
 
@@ -60,6 +60,7 @@
         refData:[],
         loading:0,
         canEdit:true,
+        refOptions:{wheres:{},orders:{}}
       };
     },
     watch: {
@@ -89,6 +90,7 @@
         this.setParentValue(this.selectedValues);
       },
       openRef() {
+        this.$emit('init', this.refOptions);
         this.$refs['ref'].open();
       },
       onRefOpen(type) {

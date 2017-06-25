@@ -68,6 +68,45 @@ class QueryController extends Controller {
 			}
 		}
 		$queryCase->fields($fields);
+		//条件
+		$wheres = [];
+		if ($request->has('wheres')) {
+			$indatas = $request->wheres;
+			foreach ($indatas as $key => $value) {
+				if (!$value || empty($value['name']) || empty($value['value'])) {
+					continue;
+				}
+
+				$field = new Builder;
+				$field->name($value['name']);
+				if (!empty($value['value'])) {
+					$field->value($value['value']);
+				}
+				if (!empty($value['operator'])) {
+					$field->operator($value['operator']);
+				}
+				$wheres[] = $field;
+			}
+		}
+		$queryCase->wheres($wheres);
+
+		//排序
+		$orders = [];
+		if ($request->has('orders')) {
+			$indatas = $request->orders;
+			foreach ($indatas as $key => $value) {
+				if (!$value || empty($value['name'])) {
+					continue;
+				}
+				$field = new Builder;
+				$field->name($value['name']);
+				if (!empty($value['direction'])) {
+					$field->direction($value['direction']);
+				}
+				$orders[] = $field;
+			}
+		}
+		$queryCase->orders($orders);
 		return $queryCase;
 	}
 	public function query(Request $request, string $queryID) {
@@ -82,6 +121,21 @@ class QueryController extends Controller {
 
 		foreach ($queryCase->fields as $f) {
 			$queryBuilder->addSelect($f->name);
+		}
+		foreach ($queryCase->wheres as $f) {
+			if (!empty($f->operator)) {
+				$queryBuilder->addWhere($f->name, $f->operator, $f->value);
+			} else {
+				$queryBuilder->addWhere($f->name, $f->value);
+			}
+		}
+		foreach ($queryCase->orders as $f) {
+			if (!empty($f->direction)) {
+				$queryBuilder->addOrder($f->name, $f->direction);
+			} else {
+				$queryBuilder->addOrder($f->name);
+			}
+
 		}
 		$query = $queryBuilder->build();
 

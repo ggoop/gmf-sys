@@ -60,6 +60,15 @@
       mdPageSize:{
         type:[Number,String],
         default:'10'
+      },
+      options:{
+        type:Object,
+        default(){
+          return {
+            wheres:{},
+            orders:{}
+          }
+        }
       }
     },
     mixins: [theme],
@@ -96,8 +105,8 @@
         this.loading++;
         pager=pager||this.pageInfo;
         const params={};
-        this._.extend(params,pager);
-        this.$http.get('sys/queries/query/'+this.mdQueryId,{params:params}).then(response => {
+        this._.extend(params,this.options,pager);
+        this.$http.post('sys/queries/query/'+this.mdQueryId,params).then(response => {
           this.refInfo = response.data.schema;
           this.refData = response.data.data;
           this.pageInfo.size=response.data.pager.size;

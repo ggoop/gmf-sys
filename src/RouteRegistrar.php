@@ -41,7 +41,7 @@ class RouteRegistrar {
 			$router->get('/enums/{enum}', ['uses' => 'EntityController@getEnum']);
 			$router->resource('entities', 'EntityController', ['only' => ['index', 'show']]);
 
-			$router->get('/queries/query/{query}', ['uses' => 'QueryController@query']);
+			$router->post('/queries/query/{query}', ['uses' => 'QueryController@query']);
 			$router->resource('queries', 'QueryController', ['only' => ['index', 'show']]);
 
 			$router->get('/menus/all', ['uses' => 'MenuController@all']);
