@@ -53,6 +53,7 @@ class QueryController extends Controller {
 			foreach ($model->fields as $f) {
 				$field = new Builder;
 				$field->name($f->name);
+				$field->hide($f->hide);
 				$fields[] = $field;
 			}
 		} else if ($model->entity) {
@@ -120,7 +121,7 @@ class QueryController extends Controller {
 		$queryBuilder = DataQuery::create($queryCase->query->entity_name);
 
 		foreach ($queryCase->fields as $f) {
-			$queryBuilder->addSelect($f->name);
+			$queryBuilder->addSelect($f->name, '', '', $f->toArray());
 		}
 		foreach ($queryCase->wheres as $f) {
 			if (!empty($f->operator)) {

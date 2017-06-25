@@ -48,7 +48,21 @@ class Query extends Model {
 					$field = ['query_id' => $builder->id];
 					if (is_string($key)) {
 						$field['name'] = $key;
-						$field['comment'] = $value;
+						if (is_array($value)) {
+							if (!empty($value['comment'])) {
+								$field['comment'] = $value['comment'];
+							} else {
+								$field['comment'] = $key;
+							}
+							if (!empty($value['sequence'])) {
+								$field['sequence'] = $value['sequence'];
+							}
+							if (!empty($value['hide'])) {
+								$field['hide'] = $value['hide'];
+							}
+						} else if (is_string($value)) {
+							$field['comment'] = $value;
+						}
 					} else {
 						$field['name'] = $value;
 						$field['comment'] = $value;

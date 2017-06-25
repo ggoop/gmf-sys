@@ -24,6 +24,7 @@ class DataQuery {
 		$this->mainEntity = new Builder(array_merge(compact('name'), $parameters));
 	}
 	public function addSelect(string $name, string $alias = '', string $comment = '', array $parameters = []) {
+		$parameters = array_except($parameters, ['name', 'alias', 'comment', 'type_id', 'type_type', 'path']);
 		$this->selects[] = $select = new Builder(array_merge(compact('name', 'alias', 'comment'), $parameters));
 		return $select;
 	}
@@ -44,7 +45,7 @@ class DataQuery {
 		$schema = new Builder();
 		$fields = [];
 		foreach ($this->selects as $key => $value) {
-			$fields[] = array_only($value->toArray(), ['name', 'alias', 'comment', 'type_id', 'type_type', 'path']);
+			$fields[] = array_only($value->toArray(), ['name', 'alias', 'comment', 'type_id', 'type_type', 'path', 'hide']);
 		}
 		$schema->fields($fields);
 		return $schema;
