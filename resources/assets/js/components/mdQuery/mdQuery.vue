@@ -102,6 +102,7 @@
         this.select();
       },
       pagination(pager){
+        this.$emit('init',this.options);
         this.loading++;
         pager=pager||this.pageInfo;
         const params={};
