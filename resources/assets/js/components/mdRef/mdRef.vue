@@ -13,7 +13,7 @@
         </md-button>
       </md-toolbar>
       <md-dialog-content class="no-padding">
-        <md-table @select="onTableSelect">
+        <md-table @select="onTableSelect" ref="table">
           <md-table-header>
             <md-table-row>
               <md-table-head v-for="(column, columnIndex) in refInfo.fields" v-if="!column.hide&&column.name!='id'" :key="column">
@@ -23,7 +23,7 @@
           </md-table-header>
           <md-table-body>
             <md-table-row v-for="(row, rowIndex) in refData" 
-              :key="rowIndex" 
+              :key="row" 
               :md-item="row" 
               :md-auto-select="!!multiple" 
               :md-selection="!!multiple"
@@ -141,6 +141,7 @@
       },
       open() {
         this.selectedRows=[];
+        this.$refs['table'].$data.selectedRows={};
         this.$refs['dialog'].open();
         this.$emit('open');
       },
