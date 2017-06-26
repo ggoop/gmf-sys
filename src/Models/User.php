@@ -51,6 +51,26 @@ class User extends Authenticatable {
 				$opts['account'] = $opts['mobile'];
 			}
 		}
+		if (empty($opts['mobile']) && !empty($opts['account'])) {
+			if (Validator::make($opts, ['account' => 'required|digits:11'])->passes()) {
+				$opts['mobile'] = $opts['account'];
+			}
+		}
+		if (empty($opts['email']) && !empty($opts['account'])) {
+			if (Validator::make($opts, ['account' => 'required|email'])->passes()) {
+				$opts['email'] = $opts['account'];
+			}
+		}
+
+		if (empty($opts['name']) && !empty($opts['account'])) {
+			$opts['name'] = $opts['account'];
+		}
+		if (empty($opts['nick_name']) && !empty($opts['name'])) {
+			$opts['nick_name'] = $opts['name'];
+		}
+		if (empty($opts['avatar'])) {
+			$opts['avatar'] = '/img/vendor/gmf-sys/avatar/' . mt_rand(1, 50) . '.jpg';
+		}
 
 		$query = Account::where('type', $type);
 		if (!empty($opts['account'])) {
@@ -70,7 +90,12 @@ class User extends Authenticatable {
 			$acc = Account::create(array_only($opts, ['name', 'nick_name', 'type', 'avatar', 'mobile', 'email', 'src_id', 'src_url', 'token', 'expire_time', 'info']));
 		}
 		$userAcc = UserAccount::where('account_id', $acc->id)->first();
+
+		$user = false;
 		if (!$userAcc) {
+			$user = User::find($userAcc->user_id);
+		}
+		if (!$user) {
 			$query = User::where('type', $type);
 			if (!empty($opts['user_id'])) {
 				$query->where('id', $opts['user_id']);
@@ -95,19 +120,9 @@ class User extends Authenticatable {
 					$data['secret'] = base64_encode($data['password']);
 					$data['password'] = bcrypt($data['password']);
 				}
-				if (empty($credentials['nick_name'])) {
-					if (Validator::make($data, ['account' => 'required|email'])->passes()) {
-						$data['nick_name'] = $data['account'];
-					}
-				}
-				if (empty($data['avatar'])) {
-					$data['avatar'] = '/img/vendor/gmf-sys/avatar/' . mt_rand(1, 50) . '.jpg';
-				}
 				$user = User::create($data);
 			}
 			UserAccount::create(['user_id' => $user->id, 'account_id' => $acc->id]);
-		} else {
-			$user = User::find($userAcc->user_id);
 		}
 		return $user;
 	}
