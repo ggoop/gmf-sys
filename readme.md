@@ -4,8 +4,6 @@ gmf framework
 
 ### Quick Overview:
 
-0 - 使用 git clone https://github.com/ggoop/gmf-laravel.git ,下载框架，或者使用下列方式安装。
-
 1 - 使用 Composer 依赖包管理器安装 Gmf/Sys:
 
 ```shell
