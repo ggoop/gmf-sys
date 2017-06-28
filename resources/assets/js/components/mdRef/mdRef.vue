@@ -121,9 +121,13 @@
         }
       },
       onTablePagination(pager){
+        this.selectedRows=[];
+        this.$refs['table'].$data.selectedRows={};
+
         this.loading++;
         const params={};
         pager=pager||this.pageInfo;
+
         this._.extend(params,this.options,pager);
         this.$http.post('sys/queries/query/'+this.mdRefId,params).then(response => {
           this.refInfo = response.data.schema;

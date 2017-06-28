@@ -103,6 +103,10 @@
       },
       pagination(pager){
         this.$emit('init',this.options);
+
+        this.selectedRows=[];
+        this.$refs['table'].$data.selectedRows={};
+        
         this.loading++;
         pager=pager||this.pageInfo;
         const params={};
