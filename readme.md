@@ -4,6 +4,8 @@ gmf framework
 
 ### Quick Overview:
 
+0 - 使用 git clone https://github.com/ggoop/gmf-laravel.git ,下载框架，或者使用下列方式安装。
+
 1 - 使用 Composer 依赖包管理器安装 Gmf/Sys:
 
 ```shell
@@ -71,6 +73,19 @@ class RouteServiceProvider extends ServiceProvider {
         'provider' => 'users',
     ],
 ],
+'providers' => [
+    'users' => [
+      'driver' => 'eloquent',
+      'model' => Gmf\Sys\Models\User::class,
+    ],
+  ],
+'passwords' => [
+    'users' => [
+      'provider' => 'users',
+      'table' => 'gmf_sys_password_resets',
+      'expire' => 60,
+    ],
+  ],
 ```
 
 5 - 使用 Artisan 命令 vendor:publish 来发布 Gmf\Sys 的 Vue 组件：
@@ -85,10 +100,13 @@ php artisan vendor:publish --tag=gmf
 protected $routeMiddleware = [
     ...
     'visitor' => \Gmf\Sys\Http\Middleware\VisitorMiddleware::class,
+    'client_credentials' => \Gmf\Sys\Passport\Http\Middleware\CheckClientCredentials::class,
+    'ent_check' => \Gmf\Sys\Http\Middleware\EntCheck::class,
   ];
 protected $middlewareGroups = [
     'web' => [
       ...
+      \Gmf\Sys\Passport\Http\Middleware\CreateFreshApiToken::class
       'visitor',
     ],
 
@@ -99,13 +117,40 @@ protected $middlewareGroups = [
   ];
 ```
 
-7.1 - 你需要运行 passport:install 命令来创建生成安全访问令牌时用到的加密密钥，同时，这条命令也会创建「私人访问」客户端和「密码授权」客户端
+7.1 - 你需要运行 passport:keys 命令来创建生成安全访问令牌时用到的加密密钥
 
 ```shell
-php artisan passport:install
+php artisan passport:keys
 ```
-7.2 - 发放访问令牌-管理客户端
+
+8.1 - 设置入口路由routes/web.php 
 
 ```shell
-php artisan passport:client
+Route::get('/', ['uses' => 'HomeController@home']);
+...
+Route::get('/{page?}', ['uses' => 'HomeController@index'])->where('page', '^(?!js\/|gapi\/|css\/|dist\/).*$');
+```
+
+增加控制器HomeController，内容如下
+```shell
+<?php
+
+namespace App\Http\Controllers;
+use Auth;
+use Gmf\Sys\Builder;
+use Gmf\Sys\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
+class HomeController extends Controller {
+  public function __construct() {
+    $this->middleware('auth');
+  }
+  public function home() {
+    return redirect('mana.app/mana.app.home');
+  }
+  public function index(Request $request) {   
+    $config = new Builder;
+    ...
+    return view('mana::app', ['config' => $config]);
+  }
 ```
