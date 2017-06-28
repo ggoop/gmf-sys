@@ -92,7 +92,7 @@ class User extends Authenticatable {
 		$userAcc = UserAccount::where('account_id', $acc->id)->first();
 
 		$user = false;
-		if (!$userAcc) {
+		if ($userAcc && $userAcc->user_id) {
 			$user = User::find($userAcc->user_id);
 		}
 		if (!$user) {
