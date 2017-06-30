@@ -116,8 +116,15 @@
     &:first-child {
       margin-left: .8rem;
     }
-
     + .md-input-container {
+      margin-left: .24rem;
+    }
+  }
+  .md-logo{
+    margin-left: .12rem;
+    +.md-title{
+      border-left: 0.01rem solid rgba(0,0,0,0.12);
+      padding-left: .24rem;
       margin-left: .24rem;
     }
   }
