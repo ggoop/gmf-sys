@@ -122,7 +122,9 @@
       },
       onTablePagination(pager){
         this.selectedRows=[];
-        this.$refs['table'].$data.selectedRows={};
+        if(this.$refs['table']&&this.$refs['table'].$data){
+          this.$refs['table'].$data.selectedRows={};
+        }
 
         this.loading++;
         const params={};

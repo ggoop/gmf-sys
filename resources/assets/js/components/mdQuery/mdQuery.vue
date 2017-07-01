@@ -105,7 +105,9 @@
         this.$emit('init',this.options);
 
         this.selectedRows=[];
-        this.$refs['table'].$data.selectedRows={};
+        if(this.$refs['table']&&this.$refs['table'].$data){
+          this.$refs['table'].$data.selectedRows={};
+        }
         
         this.loading++;
         pager=pager||this.pageInfo;
