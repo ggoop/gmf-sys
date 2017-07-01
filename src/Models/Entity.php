@@ -17,13 +17,23 @@ class Entity extends Model {
 		return $this->hasMany('Gmf\Sys\Models\EntityField');
 	}
 	public static function getEnumValue($type, $name, $opts = []) {
-
 		$query = DB::table('gmf_sys_entities as e')
 			->join('gmf_sys_entity_fields as el', 'e.id', '=', 'el.entity_id')
 			->select('el.name', 'el.comment', 'el.default_value')
 			->where('e.name', $type)
 			->where(function ($query) use ($name) {
 				$query->where('el.name', $name)->orWhere('el.default_value', $name);
+			});
+		$p = $query->first();
+		return $p;
+	}
+	public static function getEnumItem($type, $name, $opts = []) {
+		$query = DB::table('gmf_sys_entities as e')
+			->join('gmf_sys_entity_fields as el', 'e.id', '=', 'el.entity_id')
+			->select('el.name', 'el.comment', 'el.default_value')
+			->where('e.name', $type)
+			->where(function ($query) use ($name) {
+				$query->where('el.comment', $name)->orWhere('el.name', $name)->orWhere('el.default_value', $name);
 			});
 		$p = $query->first();
 		return $p;
