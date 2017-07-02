@@ -3,7 +3,7 @@
 namespace Gmf\Sys\Http\Controllers;
 
 use Gmf\Sys\Builder;
-use Gmf\Sys\DataBase\DataQuery;
+use Gmf\Sys\Database\DataQuery;
 use Gmf\Sys\Models;
 use Illuminate\Http\Request;
 
@@ -53,7 +53,7 @@ class QueryController extends Controller {
 			foreach ($model->fields as $f) {
 				$field = new Builder;
 				$field->name($f->name);
-				$field->hide($f->hide);
+				$field->hide(intval($f->hide));
 				$fields[] = $field;
 			}
 		} else if ($model->entity) {
