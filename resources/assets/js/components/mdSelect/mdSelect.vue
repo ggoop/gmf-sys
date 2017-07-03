@@ -26,7 +26,7 @@
       id: String,
       required: Boolean,
       multiple: Boolean,
-      value: [String, Number, Array],
+      value: [String, Number, Array,Object],
       disabled: Boolean,
       placeholder: String,
       mdMenuClass: String,
