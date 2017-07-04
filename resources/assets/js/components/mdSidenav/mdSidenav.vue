@@ -1,9 +1,8 @@
 <template>
   <div class="md-sidenav" :class="[themeClass, classes]" @keyup.esc="close" tabindex="0">
-    <div class="md-sidenav-content">
+    <div class="md-sidenav-content layout-column layout-fill flex">
       <slot></slot>
     </div>
-
     <md-backdrop class="md-sidenav-backdrop" @close="close" ref="backdrop"></md-backdrop>
   </div>
 </template>
