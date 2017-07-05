@@ -20,6 +20,9 @@ export default {
   },
   computed: {
     themeClass() {
+      if(this.mdTheme==='false'){
+        return '';
+      }
       if (this.mdTheme) {
         return 'md-theme-' + this.mdTheme;
       }
