@@ -27,3 +27,8 @@
       padding: .16rem;
     }
 }
+@include layout-xxsmall {
+  .md-content{
+    padding: 0;
+  }
+}

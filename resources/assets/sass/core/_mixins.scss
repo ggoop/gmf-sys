@@ -22,6 +22,12 @@
 
 /* Responsive breakpoints */
 
+@mixin layout-xxsmall {
+  @media (max-width: #{$breakpoint-xxsmall}) {
+    @content;
+  }
+}
+
 @mixin layout-xsmall {
   @media (max-width: #{$breakpoint-xsmall}) {
     @content;
