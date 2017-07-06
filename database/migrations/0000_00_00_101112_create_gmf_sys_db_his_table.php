@@ -18,7 +18,7 @@ class CreateGmfSysDbHisTable extends Migration {
 		$md->string('table_name')->nullable()->comment('表名称');
 		$md->string('row_id', 100)->comment('原始数据Id');
 		$md->string('row_type')->comment('名称');
-		$md->json('data')->comment('原始数据');
+		$md->longText('data')->comment('原始数据');
 
 		$md->timestamps();
 		$md->build();
