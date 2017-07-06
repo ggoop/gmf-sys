@@ -1,4 +1,4 @@
-  .md-card {
+.md-card {
   overflow: auto;
   display: flex;
   flex-direction: column;
@@ -363,10 +363,12 @@
       }
     }
   }
-  .md-cards {
-    .md-card {
-      max-width: 320px;
-      margin: 0 4px 16px;
-      display: inline-block;
-    }
+}
+
+.md-cards {
+  .md-card {
+    max-width: 320px;
+    margin: 0 4px 16px;
+    display: inline-block;
   }
+}
