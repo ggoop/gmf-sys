@@ -59,14 +59,15 @@
           this.chart = new Highcharts.Chart(this.$el,this.formatOption(this.options),(c)=>{
             this.callback(c);
           });
+          if(this.autoResize){
+            this.resizeEvt='orientationchange' in window ? 'orientationchange' : 'resize';
+            this.resizeHanlder =this._.debounce(() => {
+                this.chart&&this.chart.reflow();
+              }, 100, { leading: true });
 
-          this.resizeEvt='orientationchange' in window ? 'orientationchange' : 'resize';
-          this.resizeHanlder =this._.debounce(() => {
-              this.chart&&this.chart.reflow();
-            }, 100, { leading: true });
-
-          if (document.addEventListener){
-            window.addEventListener(this.resizeEvt, this.resizeHanlder, false);
+            if (document.addEventListener){
+              window.addEventListener(this.resizeEvt, this.resizeHanlder, false);
+            }
           }
         }
       }
@@ -86,8 +87,10 @@
       }
     },
     beforeDestroy(){
-      if (document.removeEventListener){
-        window.removeEventListener(this.resizeEvt,  this.resizeHanlder, false);
+      if(this.autoResize){
+        if (document.removeEventListener){
+          window.removeEventListener(this.resizeEvt,  this.resizeHanlder, false);
+        }
       }
       if (this.chart) {
         this.chart.destroy();
