@@ -136,7 +136,10 @@ class DataQuery {
 		}
 		return null;
 	}
-	private function parseField($field) {
+	public function parseField($field) {
+		if (is_string($field)) {
+			$field = new Builder(['name' => $field]);
+		}
 		$path = '';
 		$part = '';
 		$mdField = null;
@@ -181,5 +184,6 @@ class DataQuery {
 		$field->name($mdField->name);
 		$field->type_id($mdField->type_id)->type_type($mdField->type_type);
 		$field->dbFieldName($field->tableAlias . '.' . $field->field_name);
+		return $field;
 	}
 }

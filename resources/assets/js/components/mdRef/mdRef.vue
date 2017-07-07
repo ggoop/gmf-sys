@@ -1,9 +1,9 @@
 <template>
   <md-dialog ref="dialog" @open="onRefOpen" class="md-refs-dialog">
       <md-toolbar>
-        <h1 class="md-title">{{refInfo.name}}</h1>
+        <h1 class="md-title">{{refInfo.comment}}</h1>
         <md-input-container class="md-flex md-header-search">
-          <md-input class="md-header-search-input" placeholder="search"></md-input>
+          <md-input class="md-header-search-input" :fetch="doFetch" placeholder="search"></md-input>
         </md-input-container>
         <md-button class="md-icon-button">
           <md-icon>filter_list</md-icon>
@@ -87,6 +87,7 @@
     data() {
       return {
         currentChip: null,
+        currentQ:'',
         selectedRows:[],
         refInfo:{},
         refData:[],
@@ -120,17 +121,23 @@
           }
         }
       },
+      doFetch(q){
+        if((q===''||q.length>1)&&this.currentQ!=q){
+          this.currentQ=q;
+          this.doQuery({q:q});
+        }
+      },
       onTablePagination(pager){
         this.selectedRows=[];
         if(this.$refs['table']&&this.$refs['table'].$data){
           this.$refs['table'].$data.selectedRows={};
         }
-
-        this.loading++;
-        const params={};
         pager=pager||this.pageInfo;
-
-        this._.extend(params,this.options,pager);
+        this.doQuery(pager);
+      },
+      doQuery(params){
+        params=this._.extend({},this.options,params);
+        this.loading++;
         this.$http.post('sys/queries/query/'+this.mdRefId,params).then(response => {
           this.refInfo = response.data.schema;
           this.refData = response.data.data;

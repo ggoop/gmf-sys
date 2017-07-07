@@ -8,7 +8,20 @@ export default {
     mdContainer:{
       type: String,
       default: 'parent'
-    }
+    },
+    fetch: {
+      type: Function
+    },
+    debounce: {
+      type: Number,
+      default: 1E2
+    },
+  },
+  data() {
+    return {
+      timeout: 0,
+      loading:false
+    };
   },
   watch: {
     value(value) {
@@ -37,7 +50,7 @@ export default {
     },
     setParentValue(value) {
       if(this.mdContainer&&this.parentContainer){
-        var elValue=this.$refs.input?this.$refs.input.value:this.$el.value;
+        var elValue=this.getElementValue();
         this.parentContainer.setValue(value || elValue);
       }
     },
@@ -57,7 +70,7 @@ export default {
       }
     },
     updateValues(value) {
-      var elValue=this.$refs.input?this.$refs.input.value:this.$el.value;
+      var elValue=this.getElementValue();
       const newValue = value || elValue || this.value;
       this.setParentValue(newValue);
       if(this.mdContainer&&this.parentContainer){
@@ -75,11 +88,32 @@ export default {
       }
       this.setParentValue();
     },
+    debounceUpdate() {
+      if(!this.fetch||typeof this.fetch!=='function'){
+        return;
+      }
+      if (this.timeout) {
+        window.clearTimeout(this.timeout);
+      }
+      this.timeout = window.setTimeout(() => {
+        this.loading = true;
+        const queryObject = this.getElementValue();
+        return this.makeFetchRequest(queryObject);
+      }, this.debounce);
+    },
+    makeFetchRequest(queryObject) {
+      this.fetch(queryObject);
+      this.loading = false;
+    },
+    getElementValue(){
+      return this.$refs.input?this.$refs.input.value:this.$el.value;
+    },
     onInput() {
-      var elValue=this.$refs.input?this.$refs.input.value:this.$el.value;
+      var elValue=this.getElementValue();
       this.updateValues();
       this.$emit('change', elValue);
       this.$emit('input', elValue);
+      this.debounceUpdate();
     }
   }
 };

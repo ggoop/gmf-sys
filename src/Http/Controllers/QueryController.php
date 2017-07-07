@@ -39,6 +39,7 @@ class QueryController extends Controller {
 		if (!$model) {
 			return $this->toError('not find query');
 		}
+
 		$queryInfo = new Builder;
 		$queryInfo->id($model->id)->name($model->name)->memo($model->memo)->comment($model->comment);
 		if ($model->entity) {
@@ -69,6 +70,11 @@ class QueryController extends Controller {
 			}
 		}
 		$queryCase->fields($fields);
+		//匹配项
+		$matchItems = explode(";", $model->matchs);
+		$queryCase->matchs($matchItems);
+
+		$queryCase->filter($model->filter);
 		//条件
 		$wheres = [];
 		if ($request->has('wheres')) {
@@ -90,7 +96,6 @@ class QueryController extends Controller {
 			}
 		}
 		$queryCase->wheres($wheres);
-
 		//排序
 		$orders = [];
 		if ($request->has('orders')) {
@@ -136,24 +141,40 @@ class QueryController extends Controller {
 			} else {
 				$queryBuilder->addOrder($f->name);
 			}
-
 		}
 		$query = $queryBuilder->build();
 
 		if ($request->custFilter) {
 			$query->whereRaw($request->custFilter);
 		}
+		if (!empty($request->q)) {
+			$query->where(function ($query) use ($request, $queryCase, $queryBuilder) {
+				foreach ($queryCase->matchs as $f) {
+					if (empty($f)) {
+						continue;
+					}
+
+					$field = $queryBuilder->parseField($f);
+					if ($field) {
+						$query->orWhere($field->dbFieldName, 'like', '%' . $request->q . '%');
+					}
+				}
+			});
+		}
+
 		$data = $query->paginate($pageSize);
 		// } catch (Exception $e) {
 		// 	$error = $e;
 		// }
+		$schema = $queryBuilder->getSchema();
+		$schema->setAttributes($queryCase->query->toArray());
 		if ($error) {
-			return $this->toError($error, function ($data) use ($queryBuilder) {
-				$data->schema($queryBuilder->getSchema());
+			return $this->toError($error, function ($data) use ($schema) {
+				$data->schema($schema);
 			});
 		} else {
-			return $this->toJson($data, function ($data) use ($queryBuilder) {
-				$data->schema($queryBuilder->getSchema());
+			return $this->toJson($data, function ($data) use ($schema) {
+				$data->schema($schema);
 			});
 		}
 

@@ -19,10 +19,8 @@ class CreateGmfSysQueriesTable extends Migration {
 		$md->string('comment')->nullable()->comment('名称');
 		$md->text('memo')->nullable()->comment('备注');
 		$md->entity('entity', 'gmf.sys.entity')->nullable()->comment('主实体');
-		$md->string('seg_from')->nullable()->comment('from 语句');
-		$md->string('seg_select')->nullable()->comment('select 语句');
-		$md->string('seg_order')->nullable()->comment('order 语句');
-		$md->string('seg_where')->nullable()->comment('where 语句');
+		$md->string('matchs')->nullable()->comment('查询匹配字段');
+		$md->string('filter')->nullable()->comment('过滤器');
 		$md->timestamps();
 
 		$md->build();
