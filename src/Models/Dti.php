@@ -1,6 +1,8 @@
 <?php
 
 namespace Gmf\Sys\Models;
+use Closure;
+use Gmf\Sys\Builder;
 use Gmf\Sys\Traits\HasGuard;
 use Gmf\Sys\Traits\Snapshotable;
 use Illuminate\Database\Eloquent\Model;
