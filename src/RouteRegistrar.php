@@ -54,6 +54,8 @@ class RouteRegistrar {
 			$router->resource('profiles', 'ProfileController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 
 			$router->get('/ents/my', ['uses' => 'EntController@getMyEnts']);
+
+			$router->resource('dtis', 'DtiController', ['only' => ['index', 'show']]);
 		});
 	}
 }
