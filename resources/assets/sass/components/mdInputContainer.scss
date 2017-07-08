@@ -28,7 +28,12 @@
     font-size: .16rem;
     line-height: .2rem;
   }
-
+  >.md-icon-button.md-inset{
+    margin: 0;
+    position: absolute;
+    right: 0;
+    bottom: 4%;
+  }
   input,
   textarea {
     width: 100%;

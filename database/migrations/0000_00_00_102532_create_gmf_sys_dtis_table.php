@@ -18,7 +18,7 @@ class CreateGmfSysDtisTable extends Migration {
 		$md->entity('ent', 'gmf.sys.ent')->nullable()->comment('企业');
 		$md->string('code')->comment('编码');
 		$md->string('name')->nullable()->comment('名称');
-		$md->string('tag')->nullable()->comment('标签');
+		$md->entity('category', 'gmf.sys.dti.category')->nullable()->comment('分类');
 		$md->string('host')->nullable()->comment('主机');
 		$md->string('path')->nullable()->comment('路径');
 		$md->string('method')->default('post')->comment('方法');

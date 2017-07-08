@@ -11,7 +11,14 @@ class Dti extends Model {
 	use Snapshotable, HasGuard;
 	protected $table = 'gmf_sys_dtis';
 	public $incrementing = false;
-	protected $fillable = ['id', 'ent_id', 'code', 'name', 'tag', 'host', 'path', 'method', 'sequence', 'params', 'is_running'];
+	protected $fillable = ['id', 'ent_id', 'code', 'name', 'category_id', 'host', 'path', 'method', 'sequence', 'params', 'is_running'];
+	protected $casts = [
+		'is_running' => 'boolean',
+	];
+
+	public function category() {
+		return $this->belongsTo('Gmf\Sys\Models\DtiCategory');
+	}
 
 	public static function run($code, $opts = []) {
 		$v = '';
@@ -27,8 +34,17 @@ class Dti extends Model {
 		//id,root,parent,code,name,memo,uri,sequence
 		tap(new Builder, function ($builder) use ($callback) {
 			$callback($builder);
-			$data = $builder->toArray();
-			static::create(array_only($data, ['id', 'ent_id', 'code', 'name', 'tag', 'host', 'path', 'method', 'sequence', 'params', 'is_running']));
+
+			$data = array_only($builder->toArray(), ['id', 'ent_id', 'code', 'name', 'category_id', 'host', 'path', 'method', 'sequence', 'params', 'is_running']);
+
+			$category = false;
+			if (!empty($builder->category)) {
+				$category = DtiCategory::where('code', $builder->category)->where('ent_id', $builder->ent_id)->first();
+			}
+			if ($category) {
+				$data['category_id'] = $category->id;
+			}
+			static::create($data);
 
 		});
 	}

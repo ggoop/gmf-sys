@@ -3,11 +3,12 @@
       <md-toolbar>
         <h1 class="md-title">{{refInfo.comment}}</h1>
         <md-input-container class="md-flex md-header-search">
-          <md-input class="md-header-search-input" :fetch="doFetch" placeholder="search"></md-input>
+          <md-input class="md-header-search-input" :fetch="doFetch" placeholder="search" @keyup.enter.native="doSearch(false)"></md-input>
+          <md-button class="md-icon-button md-inset" @click.native="doSearch(true)">
+            <md-icon v-if="autoquery">filter_list</md-icon>
+            <md-icon v-else>search</md-icon>
+          </md-button>
         </md-input-container>
-        <md-button class="md-icon-button">
-          <md-icon>filter_list</md-icon>
-        </md-button>
         <md-button class="md-icon-button"  @click.native="cancel()">
           <md-icon>close</md-icon>
         </md-button>
@@ -88,6 +89,7 @@
       return {
         currentChip: null,
         currentQ:'',
+        autoquery:true,
         selectedRows:[],
         refInfo:{},
         refData:[],
@@ -122,10 +124,16 @@
         }
       },
       doFetch(q){
-        if((q===''||q.length>1)&&this.currentQ!=q){
-          this.currentQ=q;
+        if(this.currentQ!=q&&this.autoquery){
           this.doQuery({q:q});
         }
+        this.currentQ=q;
+      },
+      doSearch(isMana){
+        if(this.autoquery&&isMana){
+          this.autoquery=false;
+        }
+        this.doQuery({q:this.currentQ});
       },
       onTablePagination(pager){
         this.selectedRows=[];
@@ -137,16 +145,13 @@
       },
       doQuery(params){
         params=this._.extend({},this.options,params);
-        this.loading++;
         this.$http.post('sys/queries/query/'+this.mdRefId,params).then(response => {
           this.refInfo = response.data.schema;
           this.refData = response.data.data;
           this.pageInfo.size=response.data.pager.size;
           this.pageInfo.page=response.data.pager.page;
           this.pageInfo.total=response.data.pager.total;
-          this.loading--;
         }, response => {
-          this.loading--;
         });
       },
       onTableSelect(items){

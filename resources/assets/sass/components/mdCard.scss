@@ -17,8 +17,14 @@
       box-shadow: $material-shadow-8dp;
     }
   }
+  &.md-margin-top{
+    margin-top: .16rem;
+  }
   &.md-small {
     max-width: 8rem;
+  }
+  &.md-xsmall {
+    max-width: 4rem;
   }
   .md-card-media {
     position: relative;
