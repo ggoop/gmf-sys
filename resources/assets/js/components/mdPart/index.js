@@ -4,6 +4,7 @@ import mdPartToolbar from './mdPartToolbar.vue';
 import mdPartToolbarCrumbs from './mdPartToolbarCrumbs.vue';
 import mdPartToolbarCrumb from './mdPartToolbarCrumb.vue';
 import mdPartToolbarGroup from './mdPartToolbarGroup.vue';
+import mdPartToolbarPager from './mdPartToolbarPager.vue';
 
 export default function install(Vue) {
     Vue.component('mdPart', mdPart);
@@ -12,4 +13,5 @@ export default function install(Vue) {
     Vue.component('mdPartToolbarCrumbs', mdPartToolbarCrumbs);
     Vue.component('mdPartToolbarCrumb', mdPartToolbarCrumb);
     Vue.component('mdPartToolbarGroup', mdPartToolbarGroup);
+    Vue.component('mdPartToolbarPager', mdPartToolbarPager);
 }
