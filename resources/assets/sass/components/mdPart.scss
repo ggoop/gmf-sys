@@ -1,11 +1,11 @@
 .md-part-toolbar {
     background-color: #f5f5f5;
-    .md-part-toolbar-crumb {
+    .md-part-toolbar-crumbs {
         padding: 0 .16rem;
-        a {
+        .md-part-toolbar-crumb {
             color: #999;
         }
-        a+a:before {
+        .md-part-toolbar-crumb+.md-part-toolbar-crumb:before {
             content: '\E5CC';
             vertical-align: top;
             display: inline-block;
