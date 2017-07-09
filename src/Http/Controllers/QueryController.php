@@ -63,7 +63,6 @@ class QueryController extends Controller {
 				if ($f->name == 'created_at' || $f->name == 'updated_at' || $f->name == 'deleted_at') {
 					continue;
 				}
-
 				$field = new Builder;
 				$field->name($f->name);
 				$fields[] = $field;

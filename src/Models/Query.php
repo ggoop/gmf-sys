@@ -41,8 +41,10 @@ class Query extends Model {
 			if (empty($builder->comment) && $entity) {
 				$builder->comment = $entity->comment;
 			}
-			$data = $builder->toArray();
-			static::create(array_only($data, ['id', 'entity_id', 'name', 'comment', 'memo', 'matchs', 'filter']));
+			$data = array_only($builder->toArray(), ['id', 'entity_id', 'name', 'comment', 'memo', 'matchs', 'filter']);
+			$main = static::create($data);
+			QueryField::where('query_id', $main->id)->delete();
+
 			if (!empty($builder->fields) && is_array($builder->fields)) {
 				foreach ($builder->fields as $key => $value) {
 					$field = ['query_id' => $builder->id];
@@ -68,6 +70,18 @@ class Query extends Model {
 						$field['comment'] = $value;
 					}
 					QueryField::create($field);
+				}
+			}
+			if (!empty($builder->orders) && is_array($builder->orders)) {
+				foreach ($builder->orders as $key => $value) {
+					$field = ['query_id' => $builder->id];
+					if (is_string($key)) {
+						$field['name'] = $key;
+						$field['direction'] = $value;
+					} else {
+						$field['name'] = $value;
+					}
+					QueryOrder::create($field);
 				}
 			}
 		});
