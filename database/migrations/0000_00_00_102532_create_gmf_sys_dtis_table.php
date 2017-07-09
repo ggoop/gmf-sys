@@ -19,10 +19,17 @@ class CreateGmfSysDtisTable extends Migration {
 		$md->string('code')->comment('编码');
 		$md->string('name')->nullable()->comment('名称');
 		$md->entity('category', 'gmf.sys.dti.category')->nullable()->comment('分类');
-		$md->string('host')->nullable()->comment('主机');
-		$md->string('path')->nullable()->comment('路径');
-		$md->string('method')->default('post')->comment('方法');
+
+		$md->string('host')->nullable()->comment('接口主机');
+		$md->string('path')->nullable()->comment('接口路径');
+		$md->string('method')->default('post')->comment('接口方法');
+
+		$md->string('local_host')->nullable()->comment('本地主机');
+		$md->string('local_path')->nullable()->comment('本地路径');
+		$md->string('local_method')->default('post')->comment('本地方法');
+
 		$md->integer('sequence')->default(0)->comment('顺序');
+
 		$md->text('params')->nullable()->comment('参数');
 
 		$md->timestamp('begin_date')->nullable()->comment('开始时间');
@@ -30,6 +37,9 @@ class CreateGmfSysDtisTable extends Migration {
 		$md->boolean('is_running')->default(0)->comment('正在执行');
 		$md->boolean('is_revoked')->default(0)->comment('注销');
 		$md->string('memo')->nullable()->comment('备注');
+
+		$md->integer('total_runs')->default(0)->comment('执行次数');
+
 		$md->timestamps();
 
 		$md->build();

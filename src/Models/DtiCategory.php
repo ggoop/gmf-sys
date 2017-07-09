@@ -11,7 +11,7 @@ class DtiCategory extends Model {
 	use Snapshotable, HasGuard;
 	protected $table = 'gmf_sys_dti_categories';
 	public $incrementing = false;
-	protected $fillable = ['id', 'ent_id', 'code', 'name', 'host', 'is_revoked'];
+	protected $fillable = ['id', 'ent_id', 'code', 'name', 'host', 'params', 'is_revoked'];
 	protected $casts = [
 		'is_revoked' => 'boolean',
 	];
@@ -20,7 +20,7 @@ class DtiCategory extends Model {
 		tap(new Builder, function ($builder) use ($callback) {
 			$callback($builder);
 
-			$data = array_only($builder->toArray(), ['id', 'ent_id', 'code', 'name', 'host', 'is_revoked']);
+			$data = array_only($builder->toArray(), ['id', 'ent_id', 'code', 'name', 'host', 'params', 'is_revoked']);
 
 			static::create($data);
 
