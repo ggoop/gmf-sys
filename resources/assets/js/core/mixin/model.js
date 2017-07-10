@@ -1,7 +1,19 @@
 export default {
   data() {
       return {
-        model: { main: {} },
+        model: {
+          main: {},
+          entity: '',
+          pager: {
+            firstId: '',
+            lastId: '',
+            prevId: '',
+            nextId: '',
+            total_items: 0
+          },
+          order: 'created_at',
+          wheres: {}
+        },
         loading: 0,
         route: ''
       };
@@ -9,6 +21,11 @@ export default {
     computed: {
       canCopy() {
         return !!this.model.main.id;
+      }
+    },
+    watch: {
+      'model.main.id': function(value, oldValue) {
+        this.loadPagerInfo(value);
       }
     },
     methods: {
@@ -57,14 +74,14 @@ export default {
       copy() {
         if (this.model.main && this.model.main.id) {
           this.model.main.id = null;
-          if(this.model.main.code){
-            this.model.main.code='';
+          if (this.model.main.code) {
+            this.model.main.code = '';
           }
           this.$toast('复制成功，请保存!');
         }
       },
       load(id) {
-        if (this.model.main && this.model.main.id) {
+        if (!id && this.model.main && this.model.main.id) {
           id = this.model.main.id;
         }
         if (id) {
@@ -81,6 +98,21 @@ export default {
           this.create();
         }
       },
+      paging(id) {
+        this.load(id);
+      },
+      loadPagerInfo(id) {
+        this.$http.get('sys/entities/pager', {
+          params: {
+            entity: this.model.entity,
+            id: id,
+            order: this.model.order,
+            wheres: this.model.wheres
+          }
+        }).then(response => {
+          this.$set(this.model, 'pager', response.data.data);
+        }, response => {});
+      },
     },
     created() {
       if (this.$route && this.$route.params && this.$route.params.id) {
@@ -88,6 +120,7 @@ export default {
       }
     },
     mounted() {
-      this.load();
+      this.load(this.$route.params.id);
+      this.loadPagerInfo(this.$route.params.id);
     },
 };
