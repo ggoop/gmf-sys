@@ -60,6 +60,7 @@
         refData:[],
         loading:0,
         canEdit:true,
+        refIsOpened:false,
         refOptions:{wheres:{},orders:{}}
       };
     },
@@ -90,12 +91,14 @@
         this.setParentValue(this.selectedValues);
       },
       openRef() {
+        this.refIsOpened=true;
         this.$emit('init', this.refOptions);
         this.$refs['ref'].open();
       },
       onRefOpen(type) {
       },
       onRefClose(data) {
+        this.refIsOpened=false;
         if(!data||data.length==0)return;
         this.selectedValues=[];
         data&&data.forEach((row, index) =>{
@@ -173,7 +176,10 @@
         this.updateValues(this.formatValue());
         this.setParentDisabled();
         this.setParentRequired();
+
+
       });
+      this.$refs['ref'].cancel();
     }
   };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <md-dialog ref="dialog" @open="onRefOpen" class="md-refs-dialog">
+  <md-dialog ref="dialog" @open="onRefOpen" @close="onRefClose" class="md-refs-dialog">
       <md-toolbar>
         <h1 class="md-title">{{refInfo.comment}}</h1>
         <md-input-container class="md-flex md-header-search">
@@ -123,6 +123,9 @@
           }
         }
       },
+      onRefClose(){
+
+      },
       doFetch(q){
         if(this.currentQ!=q&&this.autoquery){
           this.doQuery({q:q});
@@ -145,14 +148,16 @@
       },
       doQuery(params){
         params=this._.extend({},this.options,params);
-        this.$http.post('sys/queries/query/'+this.mdRefId,params).then(response => {
-          this.refInfo = response.data.schema;
-          this.refData = response.data.data;
-          this.pageInfo.size=response.data.pager.size;
-          this.pageInfo.page=response.data.pager.page;
-          this.pageInfo.total=response.data.pager.total;
-        }, response => {
-        });
+        if(this.mdRefId){
+          this.$http.post('sys/queries/query/'+this.mdRefId,params).then(response => {
+            this.refInfo = response.data.schema;
+            this.refData = response.data.data;
+            this.pageInfo.size=response.data.pager.size;
+            this.pageInfo.page=response.data.pager.page;
+            this.pageInfo.total=response.data.pager.total;
+          }, response => {
+          });
+        }
       },
       onTableSelect(items){
         this.selectedRows=[];

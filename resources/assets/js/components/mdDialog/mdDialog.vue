@@ -137,11 +137,15 @@
       }
     },
     mounted() {
-      this.$nextTick(() => {
-        this.dialogElement = this.$el;
+      this.dialogElement = this.$el;
         this.dialogInnerElement = this.$refs.dialog;
         this.removeDialog();
-      });
+        
+      // this.$nextTick(() => {
+      //   this.dialogElement = this.$el;
+      //   this.dialogInnerElement = this.$refs.dialog;
+      //   this.removeDialog();
+      // });
     },
     beforeDestroy() {
       this.removeDialog();
