@@ -6,8 +6,7 @@
       .md-board-header {
         color: #{'BACKGROUND-CONTRAST-0.54'};
 
-        &.md-active,
-        &:focus {
+        &.md-active{
           color: #{'PRIMARY-COLOR'};
         }
 
@@ -28,8 +27,7 @@
         .md-board-header {
           color: #{'PRIMARY-CONTRAST-0.54'};
 
-          &.md-active,
-          &:focus {
+          &.md-active{
             color: #{'PRIMARY-CONTRAST'};
           }
 
@@ -51,8 +49,7 @@
         .md-board-header {
           color: #{'PRIMARY-CONTRAST-0.54'};
 
-          &.md-active,
-          &:focus {
+          &.md-active{
             color: #{'PRIMARY-CONTRAST'};
           }
 
@@ -74,8 +71,7 @@
         .md-board-header {
           color: #{'ACCENT-CONTRAST-0.54'};
 
-          &.md-active,
-          &:focus {
+          &.md-active{
             color: #{'ACCENT-CONTRAST'};
           }
 
@@ -97,8 +93,7 @@
         .md-board-header {
           color: #{'WARN-CONTRAST-0.54'};
 
-          &.md-active,
-          &:focus {
+          &.md-active{
             color: #{'WARN-CONTRAST'};
           }
 

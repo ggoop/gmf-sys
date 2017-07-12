@@ -1,7 +1,7 @@
 <template>
   <div class="md-boards" :class="[themeClass, boardClasses]">
 
-    <div class="md-boards-content" ref="boardsContent" :style="{ height: contentHeight }">
+    <div class="md-boards-content flex" ref="boardsContent">
       <div class="md-boards-wrapper" :style="{ transform: `translate3D(-${contentWidth}, 0, 0)` }">
         <slot></slot>
       </div>
@@ -52,9 +52,6 @@
 
   </div>
 </template>
-
-<style lang="scss" src="./mdBoards.scss"></style>
-
 <script>
   import theme from '../../core/components/mdTheme/mixin';
   import throttle from '../../core/utils/throttle';
