@@ -8,14 +8,18 @@
             <md-layout md-gutter>
               <md-layout md-flex="100" v-for="item in options.wheres" :key="item">
                 <md-input-container class="md-inset">
-                  <md-avatar>
-                    <md-icon>attach_file</md-icon>
-                  </md-avatar>
-                  <label>{{item.name}}</label>
-                  <md-input v-if="item.type=='input'"></md-input>
-                  <md-input-ref v-else-if="item.type=='ref'"></md-input-ref>
-                  <md-date v-else-if="item.type=='date'"></md-date>
-                  <md-input v-else></md-input>
+                  <div class="label">
+                    <md-avatar>
+                      <md-icon>attach_file</md-icon>
+                    </md-avatar>
+                    <label>{{item.name}}</label>
+                  </div>
+                  <div class="input">
+                    <md-input v-if="item.type=='input'" v-model="item.value"></md-input>
+                    <md-input-ref v-else-if="item.type=='ref'" v-model="item.value" :multiple="item.multiple" :md-ref-id="item.refs.id"></md-input-ref>
+                    <md-date v-else-if="item.type=='date'" v-model="item.value"></md-date>
+                    <md-input v-else v-model="item.value"></md-input>
+                  </div>
                 </md-input-container>
               </md-layout>
             </md-layout>
@@ -81,14 +85,19 @@
         this.$emit('close',this.options);
       },
     },
-    mounted() {
+    created() {
       this.options.wheres={};
-      this.options.wheres['w1']={name:'组织',type:'input'};
-      this.options.wheres['w2']={name:'日期',type:'date'};
+      this.options.wheres['w1']={name:'组织',type:'ref',value:12,multiple:true,refs:{id:'gmf.cbo.org.ref'}};
+
+      this.options.wheres['w2']={name:'日期',type:'date',value:''};
       this.options.wheres['w3']={name:'期间',type:'input'};
       this.options.wheres['w4']={name:'企业',type:'input'};
-      this.options.wheres['w5']={name:'核算目的',type:'ref'};
-      this.options.wheres['w6']={name:'阿米巴单位',type:'input'};
+      this.options.wheres['w5']={name:'核算目的',type:'ref',multiple:true,refs:{id:'gmf.amiba.purpose.ref'}};
+      this.options.wheres['w6']={name:'阿米巴单位',type:'ref',multiple:true,refs:{id:'gmf.amiba.group.ref'}};
+      this.options.wheres['w7']={name:'组织',type:'enum',value:'aa',multiple:true};
+    },
+    mounted() {
+      
     },
   };
 </script>

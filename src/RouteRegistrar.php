@@ -34,6 +34,7 @@ class RouteRegistrar {
 
 	public function forSys() {
 		$this->router->group(['prefix' => 'sys', 'middleware' => ['api']], function ($router) {
+			$router->post('datas', ['uses' => 'DataController@index']);
 			$router->resource('datas', 'DataController', ['only' => ['index', 'show']]);
 		});
 		$this->router->group(['prefix' => 'sys', 'middleware' => ['api', 'auth:api', 'ent_check']], function ($router) {

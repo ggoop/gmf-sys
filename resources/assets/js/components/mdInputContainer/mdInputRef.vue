@@ -70,7 +70,7 @@
       },
       selectedValues(v){
         if(this.multiple){
-          this.canEdit=this.selectedValues.length<this.maxlength;
+          this.canEdit=this.maxlength>1?this.selectedValues.length<this.maxlength:true;
         }else{
            this.canEdit=this.selectedValues.length<1;
         }
@@ -111,15 +111,22 @@
         });
       },
       addValue(value){
-        if(value&&value.id&&this.selectedValues.length< this.maxlength){
-          const index=this.getValueIndex(value);
-          if(index<0){
-            this.selectedValues.push(value);
-            const nv=this.formatValue();
-            this.$emit('input', nv);
-            this.$emit('change',nv);
-            this.applyInputFocus();
-          }
+        if(!value||!value.id){
+          return;
+        }
+        if(this.multiple&&this.maxlength>1&&this.selectedValues.length>= this.maxlength){
+          return;
+        }
+        if(!this.multiple&&this.selectedValues.length>1){
+          return;
+        }
+        const index=this.getValueIndex(value);
+        if(index<0){
+          this.selectedValues.push(value);
+          const nv=this.formatValue();
+          this.$emit('input', nv);
+          this.$emit('change',nv);
+          this.applyInputFocus();
         }
       },
       addInputChip() {
@@ -163,7 +170,7 @@
         }
       },
       formatValue(){
-        if(!this.multiple||this.maxlength.toString()=='1'){
+        if(!this.multiple){
           return this.selectedValues.length?this.selectedValues[0]:null;
         }
         return this.selectedValues;
