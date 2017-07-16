@@ -10,7 +10,17 @@
 
   &.md-dynamic-height {
     .md-tabs-content {
+      height: 0;
       transition: height $swift-ease-out-duration $swift-ease-out-timing-function;
+    }
+    .md-tab {
+      bottom: initial;
+      overflow: initial;
+    }
+  }
+  &.no-padding{
+    .md-tab{
+      padding: 0;
     }
   }
 
@@ -106,7 +116,6 @@
 
   .md-tabs-content {
     width: 100%;
-    height: 0;
     position: relative;
     overflow: hidden;
   }
@@ -128,5 +137,7 @@
     top: 0;
     left: 0;
     right: 0;
+    bottom: 0px;
+    overflow: auto;
   }
 }

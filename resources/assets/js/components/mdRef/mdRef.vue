@@ -117,6 +117,8 @@
     },
     methods: {
       onRefOpen() {
+        this.selectedRows=[];
+        this.$refs['table'].$data.selectedRows={};
         if(!this.refInfo||!this.refInfo.id||this.refInfo.id!==this.mdRefId){
           if(!this.refCache[this.mdRefId]){
             this.onTablePagination();
@@ -139,10 +141,6 @@
         this.doQuery({q:this.currentQ});
       },
       onTablePagination(pager){
-        this.selectedRows=[];
-        if(this.$refs['table']&&this.$refs['table'].$data){
-          this.$refs['table'].$data.selectedRows={};
-        }
         pager=pager||this.pageInfo;
         this.doQuery(pager);
       },
@@ -160,7 +158,6 @@
         }
       },
       onTableSelect(items){
-        this.selectedRows=[];
         Object.keys(items).forEach((row, index) =>{
           this.selectedRows[index]=items[row];
         });
@@ -173,8 +170,6 @@
       },
       open() {
         this.$emit('init', this.options);
-        this.selectedRows=[];
-        this.$refs['table'].$data.selectedRows={};
         this.$refs['dialog'].open();
         this.$emit('open');
       },

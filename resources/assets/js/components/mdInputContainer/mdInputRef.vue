@@ -66,6 +66,9 @@
     },
     watch: {
       value(value) {
+        if(!common.isObject(value)){
+          value=null;
+        }
         this.setValue(value);
       },
       selectedValues(v){
@@ -79,6 +82,9 @@
     },
     methods: {
       setValue(value){
+        if(!common.isObject(value)){
+          value=null;
+        }
         if(!value){
            this.selectedValues=[];
         }else{
@@ -100,7 +106,7 @@
       onRefClose(data) {
         this.refIsOpened=false;
         if(!data||data.length==0)return;
-        this.selectedValues=[];
+        if(!this.multiple)this.selectedValues=[];
         data&&data.forEach((row, index) =>{
             this.addValue(row);
         });
@@ -177,7 +183,7 @@
       },
     },
     mounted() {
-      this.value&&this.setValue(this.value);
+      this.setValue(this.value);
       this.$nextTick(() => {
         this.parentContainer = getClosestVueParent(this.$parent, 'md-input-container');
         this.updateValues(this.formatValue());

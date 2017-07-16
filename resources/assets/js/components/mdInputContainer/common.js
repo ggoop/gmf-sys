@@ -1,6 +1,6 @@
 export default {
   props: {
-    value: [String, Number,Object],
+    value: [String, Number,Object,Array],
     disabled: Boolean,
     required: Boolean,
     maxlength: [Number, String],

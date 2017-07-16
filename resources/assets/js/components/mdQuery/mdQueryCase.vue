@@ -2,8 +2,8 @@
   <div class="md-query-case">
     <slot></slot>
     <md-dialog ref="caseDialog" @open="onOpen"  @close="onClose" class="md-query-case-dialog">
-      <md-dialog-content class="no-padding">
-        <md-tabs class="md-accent" md-right>
+      <md-dialog-content class="no-padding layout-column layout-fill">
+        <md-tabs class="md-accent layout-column layout-fill flex" :md-swipeable="true" md-right :md-dynamic-height="false">
           <md-tab md-label="条件" md-icon="filter_list">
             <md-layout md-gutter>
               <md-layout md-flex="100" v-for="item in options.wheres" :key="item">
@@ -52,30 +52,39 @@
   };
   export default {
     props: {
-      options:{
-        type:Object,
-        default(){
-          return {
-            wheres:{},
-            columns:{},
-            orders:{}
-          }
-        }
-      }
     },
     data(){
       return {
-        loading:0
+        inited:false,
+        loading:0,
+        options:{
+            wheres:[],
+            columns:[],
+            orders:[]
+          }
       }
     },
     methods: {
+      init(){
+        const promise =new  Promise((resolve, reject)=>{
+          this.$emit('init',this.options,{resolve,reject});
+        });
+        promise.then((value)=>{
+          this.inited=true;
+        },(reason)=>{
+          this.inited=false;
+        });
+      },
       query(){
         this.$emit('query',this.options);
+        this.$refs.caseDialog.close();
       },
       open(){
+        this.init();
         this.$refs.caseDialog.open();
       },
       cancel(){
+        this.$emit('cancel',this.options);
         this.$refs.caseDialog.close();
       },
       onOpen(){
@@ -86,18 +95,9 @@
       },
     },
     created() {
-      this.options.wheres={};
-      this.options.wheres['w1']={name:'组织',type:'ref',value:12,multiple:true,refs:{id:'gmf.cbo.org.ref'}};
-
-      this.options.wheres['w2']={name:'日期',type:'date',value:''};
-      this.options.wheres['w3']={name:'期间',type:'input'};
-      this.options.wheres['w4']={name:'企业',type:'input'};
-      this.options.wheres['w5']={name:'核算目的',type:'ref',multiple:true,refs:{id:'gmf.amiba.purpose.ref'}};
-      this.options.wheres['w6']={name:'阿米巴单位',type:'ref',multiple:true,refs:{id:'gmf.amiba.group.ref'}};
-      this.options.wheres['w7']={name:'组织',type:'enum',value:'aa',multiple:true};
+      
     },
     mounted() {
-      
     },
   };
 </script>

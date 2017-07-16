@@ -17,12 +17,11 @@
           <md-tooltip v-if="header.tooltip" :md-direction="header.tooltipDirection" :md-delay="header.tooltipDelay">{{ header.tooltip }}</md-tooltip>
         </div>
       </button>
-
       <span class="md-tab-indicator" :class="indicatorClasses" ref="indicator"></span>
     </md-whiteframe>
 
-    <div class="md-tabs-content" ref="tabContent" :style="{ height: contentHeight }">
-      <div class="md-tabs-wrapper" :style="{ transform: `translate3D(-${contentWidth}, 0, 0)` }">
+    <div class="md-tabs-content flex" ref="tabContent">
+      <div class="md-tabs-wrapper" :style="{transform: `translate3D(-${contentWidth}, 0, 0)` }">
         <slot></slot>
       </div>
     </div>
@@ -38,6 +37,11 @@
       mdFixed: Boolean,
       mdCentered: Boolean,
       mdRight: Boolean,
+      mdSwipeable: Boolean,
+      mdSwipeDistance: {
+        type: Number,
+        default: 100
+      },
       mdDynamicHeight: {
         type: Boolean,
         default: true
@@ -119,6 +123,32 @@
           }
         }
       },
+      nextTab(){
+        const idList = Object.keys(this.tabList);
+        var tabId='';
+        if(this.activeTabNumber>=idList.length-1){
+          tabId=idList[0];
+        }else{
+          tabId=idList[this.activeTabNumber+1];
+        }
+        if(tabId){
+          return this.tabList[tabId];
+        }
+        return false;
+      },
+      prevTab(){
+        const idList = Object.keys(this.tabList);
+        var tabId='';
+        if(this.activeTabNumber<=0){
+          tabId=idList[idList.length-1];
+        }else{
+          tabId=idList[this.activeTabNumber-1];
+        }
+        if(tabId){
+          return this.tabList[tabId];
+        }
+        return false;
+      },
       observeElementChanges() {
         this.parentObserver = new MutationObserver(throttle(this.calculateOnWatch, 50));
         this.parentObserver.observe(this.$refs.tabContent, {
@@ -163,6 +193,10 @@
             let height = this.tabList[this.activeTab].ref.$el.offsetHeight;
 
             this.contentHeight = height + 'px';
+            if(this.mdDynamicHeight){
+              
+              this.$refs.tabContent.style.height=this.contentHeight;
+            }
           }
         });
       },
@@ -202,6 +236,46 @@
           this.$emit('click', tabData);
           this.$emit('change', this.activeTabNumber);
         }
+      },
+      movePrevTab(){
+        this.setActiveTab(this.prevTab());
+      },
+      moveNextTab(){
+        this.setActiveTab(this.nextTab());
+      },
+      isHorizontallyInside(positionX) {
+        return positionX > this.mountedRect.left && positionX < this.mountedRect.left + this.mountedRect.width;
+      },
+      isVerticallyInside(positionY) {
+        return positionY > this.mountedRect.top && positionY < this.mountedRect.top + this.mountedRect.height;
+      },
+      handleTouchStart(event) {
+        this.mountedRect = this.$refs.tabContent.getBoundingClientRect();
+        const positionX = event.changedTouches[0].clientX;
+        const positionY = event.changedTouches[0].clientY;
+
+        if (this.isHorizontallyInside(positionX) && this.isVerticallyInside(positionY)) {
+          this.initialTouchPosition = positionX;
+          this.canMove = true;
+        }
+      },
+      handleTouchEnd(event) {
+        if (this.canMove) {
+          const positionX = event.changedTouches[0].clientX;
+
+          const difference = this.initialTouchPosition - positionX;
+
+          const action = difference > 0
+            ? 'moveNextTab'
+            : 'movePrevTab';
+
+          if (Math.abs(difference) > this.mdSwipeDistance) {
+            this[action]();
+          }
+
+          this.canMove = false;
+          this.initialTouchPosition = null;
+        }
       }
     },
     mounted() {
@@ -214,6 +288,16 @@
 
           this.setActiveTab(this.tabList[firstTab]);
         }
+
+        if (this.mdSwipeable) {
+          this.mountedRect = this.$refs.tabContent.getBoundingClientRect();
+          this.initialTouchPosition = null;
+          this.canMove = false;
+
+          document.addEventListener('touchstart', this.handleTouchStart);
+          document.addEventListener('touchend', this.handleTouchEnd);
+        }
+
       });
     },
     beforeDestroy() {
@@ -222,6 +306,10 @@
       }
 
       window.removeEventListener('resize', this.calculateOnResize);
+      if (this.mdSwipeable) {
+        document.removeEventListener('touchstart', this.handleTouchStart);
+        document.removeEventListener('touchend', this.handleTouchEnd);
+      }
     }
   };
 </script>
