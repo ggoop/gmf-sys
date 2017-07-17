@@ -2,7 +2,7 @@ import MdAvatar from './mdAvatar';
 import MdBackdrop from './mdBackdrop';
 import MdBottomBar from './mdBottomBar';
 import MdOnboarding from './mdOnboarding';
-
+import mdBackground from './mdBackground';
 import MdButton from './mdButton';
 import MdButtonToggle from './mdButtonToggle';
 import MdCard from './mdCard';
@@ -47,6 +47,7 @@ const options = {
     MdAvatar,
     MdBackdrop,
     MdBottomBar,
+    mdBackground,
     MdOnboarding,
     MdButton,
     MdButtonToggle,

@@ -18,6 +18,7 @@
         </div>
       </button>
       <span class="md-tab-indicator" :class="indicatorClasses" ref="indicator"></span>
+      <md-background v-if="mdBackground"></md-background>
     </md-whiteframe>
 
     <div class="md-tabs-content flex" ref="tabContent">
@@ -37,6 +38,7 @@
       mdFixed: Boolean,
       mdCentered: Boolean,
       mdRight: Boolean,
+      mdBackground:Boolean,
       mdSwipeable: Boolean,
       mdSwipeDistance: {
         type: Number,
