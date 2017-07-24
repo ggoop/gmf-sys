@@ -4,7 +4,7 @@
     <md-dialog ref="caseDialog" @open="onOpen"  @close="onClose" class="md-query-case-dialog">
       <md-dialog-content class="no-padding layout-column layout-fill">
         <md-tabs class="md-accent layout-column layout-fill flex" :md-swipeable="true" md-right :md-dynamic-height="false">
-          <md-tab md-label="条件" md-icon="filter_list">
+          <md-tab md-label="条件" md-icon="filter_list" v-if="options.wheres&&options.wheres.length">
             <md-layout md-gutter>
               <md-layout md-flex="100" v-for="item in options.wheres" :key="item">
                 <md-input-container class="md-inset">
@@ -12,7 +12,7 @@
                     <md-avatar>
                       <md-icon>attach_file</md-icon>
                     </md-avatar>
-                    <label>{{item.name}}</label>
+                    <label>{{item.comment}}</label>
                   </div>
                   <div class="input">
                     <md-input v-if="item.type=='input'" v-model="item.value"></md-input>
@@ -25,12 +25,12 @@
             </md-layout>
           </md-tab>
 
-          <md-tab md-label="栏目" md-icon="more_horiz">
+          <md-tab md-label="栏目" md-icon="more_horiz" v-if="options.columns&&options.columns.length">
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt dolorum quas amet cum vitae, omnis! Illum quas voluptatem, expedita iste, dicta ipsum ea veniam dolore in, quod saepe reiciendis nihil.</p>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt dolorum quas amet cum vitae, omnis! Illum quas voluptatem, expedita iste, dicta ipsum ea veniam dolore in, quod saepe reiciendis nihil.</p>
           </md-tab>
 
-          <md-tab md-label="排序" md-icon="sort">
+          <md-tab md-label="排序" md-icon="sort" v-if="options.orders&&options.orders.length">
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt dolorum quas.</p>
           </md-tab>
         </md-tabs>
@@ -45,11 +45,6 @@
   </div>
 </template>
 <script>
-  const defaultOpts={
-    wheres:{},
-    columns:{},
-    orders:{}
-  };
   export default {
     props: {
     },
@@ -58,6 +53,7 @@
         inited:false,
         loading:0,
         options:{
+            query:{},
             wheres:[],
             columns:[],
             orders:[]
@@ -66,13 +62,17 @@
     },
     methods: {
       init(){
+        if(this.inited){
+          return;
+        }
+        this.inited=true;
         const promise =new  Promise((resolve, reject)=>{
           this.$emit('init',this.options,{resolve,reject});
         });
         promise.then((value)=>{
           this.inited=true;
         },(reason)=>{
-          this.inited=false;
+          this.inited=true;
         });
       },
       query(){
@@ -93,9 +93,34 @@
       onClose(){
         this.$emit('close',this.options);
       },
+      getQueryCase(){
+        var qc = { wheres: [], orders: [], columns: [] };
+        this._.each(this.options.wheres, (v) => {
+          if(v.value){
+            var item=this.formatCaseWhereItem(v);
+            if(item)qc.wheres.push(item);
+          }
+        });
+        return qc;
+      },
+      formatCaseWhereItem(where){
+        var has=false;
+        var whereItem={name:where.name,comment:where.comment};
+        if(where.type=='ref'&&where.value){
+          if(where.multiple&&where.value&&where.value.length>0){
+            whereItem.value=[];
+          }else if(where.value&&where.value.id){
+            whereItem.value=where.value.id;
+            has=true;
+          }
+        }
+        return has?whereItem:false;
+      },
     },
     created() {
-      
+      this.options.getQueryCase =()=>{
+        return this.getQueryCase();
+      }
     },
     mounted() {
     },

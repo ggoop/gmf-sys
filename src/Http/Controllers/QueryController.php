@@ -41,7 +41,20 @@ class QueryController extends Controller {
 		}
 
 		$queryInfo = new Builder;
-		$queryInfo->id($model->id)->name($model->name)->memo($model->memo)->comment($model->comment);
+		$queryInfo->id($model->id)->name($model->name)->memo($model->memo)->comment($model->comment)
+			->wheres([])->orders([])->columns([]);
+		if ($model->data) {
+			$qm = json_decode($model->data);
+			if ($qm && !empty($qm->wheres)) {
+				$queryInfo->wheres($qm->wheres);
+			}
+			if ($qm && !empty($qm->orders)) {
+				$queryInfo->orders($qm->orders);
+			}
+			if ($qm && !empty($qm->columns)) {
+				$queryInfo->columns($qm->columns);
+			}
+		}
 		if ($model->entity) {
 			$queryInfo->entity_id($model->entity->id)
 				->entity_name($model->entity->name)
@@ -82,7 +95,6 @@ class QueryController extends Controller {
 				if (!$value || empty($value['name']) || empty($value['value'])) {
 					continue;
 				}
-
 				$field = new Builder;
 				$field->name($value['name']);
 				if (!empty($value['value'])) {

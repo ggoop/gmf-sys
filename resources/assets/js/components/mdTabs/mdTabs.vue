@@ -191,12 +191,11 @@
       },
       calculateContentHeight() {
         this.$nextTick(() => {
-          if (Object.keys(this.tabList).length) {
+          if (Object.keys(this.tabList).length&&this.activeTab) {
             let height = this.tabList[this.activeTab].ref.$el.offsetHeight;
 
             this.contentHeight = height + 'px';
             if(this.mdDynamicHeight){
-              
               this.$refs.tabContent.style.height=this.contentHeight;
             }
           }
