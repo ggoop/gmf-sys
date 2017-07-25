@@ -45,6 +45,8 @@
         default: false
       },
       mdRefId: String,
+      mdKeyField:String,
+      mdNameField:String,
       maxlength:{
         type: [Number, String],
         default: 1

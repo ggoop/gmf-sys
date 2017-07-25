@@ -106,15 +106,32 @@
       formatCaseWhereItem(where){
         var has=false;
         var whereItem={name:where.name,comment:where.comment};
+        if(where.operator){
+          whereItem.operator=where.operator;
+        }
         if(where.type=='ref'&&where.value){
-          if(where.multiple&&where.value&&where.value.length>0){
-            whereItem.value=[];
-          }else if(where.value&&where.value.id){
-            whereItem.value=where.value.id;
-            has=true;
-          }
+          whereItem.value=this.getRefWhereItemValue(where);
+          if(whereItem.value!==false){has=true;}
         }
         return has?whereItem:false;
+      },
+      getRefWhereItemValue(where){
+        var valueField='id',temp=false,value=false;
+        if(where.refs&&where.refs.valueField){
+          valueField=where.refs.valueField;
+        }
+        if(where.multiple&&where.value&&where.value.length>0){
+          value=[];
+          for (var i = 0; i < where.value.length; i++) {
+            temp=where.value[i][valueField];
+            if(temp!==''&&temp!==undefined&&temp!==false){
+              value.push(temp);
+            }
+          }
+        }else if(where.value&&where.value[valueField]){
+          value= where.value[valueField];
+        }
+        return value;
       },
     },
     created() {
