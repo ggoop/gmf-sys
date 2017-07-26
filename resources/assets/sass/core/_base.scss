@@ -64,12 +64,14 @@ body {
 }
 
 
+
 /*  Fluid Media
    ========================================================================== */
 
-ul:not(.md-list) > li + li {
+ul:not(.md-list)>li+li {
   margin-top: 8px;
 }
+
 
 
 /*  Fluid Media
@@ -96,6 +98,7 @@ a {
     text-decoration: none;
   }
 }
+
 
 
 /*  Suppress the focus outline on links that cannot be accessed via keyboard.
@@ -128,6 +131,7 @@ video.responsive-video {
   max-width: 100%;
   height: auto;
 }
+
 
 
 /*******************
@@ -190,3 +194,20 @@ video.responsive-video {
 .no-padding {
   padding: 0 !important;
 }
+
+@mixin md-indent-mixin($ind) {
+  .md-indent-#{$ind} {
+    padding-left: (0.25*$ind)-0rem;
+  }
+}
+
+@include md-indent-mixin(0);
+@include md-indent-mixin(1);
+@include md-indent-mixin(2);
+@include md-indent-mixin(3);
+@include md-indent-mixin(4);
+@include md-indent-mixin(5);
+@include md-indent-mixin(6);
+@include md-indent-mixin(7);
+@include md-indent-mixin(8);
+@include md-indent-mixin(9);
