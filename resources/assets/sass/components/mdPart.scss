@@ -37,6 +37,15 @@
     .md-input-container {
       padding: 0px;
       min-height: .36rem;
+
+      &.md-inset {
+        label {
+          font-size: inherit;
+        }
+        >.label {
+          min-width: inherit;
+        }
+      }
     }
   }
   .md-part-toolbar-group+.md-part-toolbar-group:before {
