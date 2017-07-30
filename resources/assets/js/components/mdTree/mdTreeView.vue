@@ -51,6 +51,9 @@ import theme from '../../core/components/mdTheme/mixin';
 
       },
       focus(){
+        if(!this.current){
+          
+        }
         if(this.current){
           this.$emit('focus',this.current.node);
         }
