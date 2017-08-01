@@ -58,6 +58,14 @@
         }
       },
       handleSingleSelection(value) {
+        if(!this.multiple){
+          this.parentTable.$children.forEach((row, index) => {
+            if (!row.headRow&&row.index!=this.index) {
+              row.checkbox=false;
+              row.setSelectedRow(row.checkbox, row.index - 1);
+            }
+          });
+        }
         this.setSelectedRow(value, this.index - 1);
         this.parentTable.$children[0].checkbox = this.parentTable.numberOfSelected === this.parentTable.numberOfRows;
       },
@@ -89,12 +97,11 @@
           } else {
             this.handleSingleSelection(value);
           }
-
           this.parentTable.emitSelection();
         }
       },
       autoSelect() {
-        if (this.mdAutoSelect && this.hasSelection) {
+        if (this.mdAutoSelect && !this.headRow) {
           this.checkbox = !this.checkbox;
           this.handleSingleSelection(this.checkbox);
           this.parentTable.emitSelection();
@@ -103,7 +110,7 @@
     },
     mounted() {
       this.parentTable = getClosestVueParent(this.$parent, 'md-table');
-      this.multiple=this.parentTable.multiple;
+      this.multiple=this.parentTable.multiple&&this.mdSelection;
       if (this.$el.parentNode.tagName.toLowerCase() === 'thead') {
         this.headRow = true;
       } else {

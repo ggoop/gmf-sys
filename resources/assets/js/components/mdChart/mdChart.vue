@@ -35,8 +35,14 @@
       addSeries(options){
         this.delegateMethod('addSeries', this.formatOption(options));
       },
+      removeSeries(){
+        this.chart.series.splice(0,this.chart.series.length);
+      },
       mergeOption(options){
         this.delegateMethod('update', this.formatOption(options))
+      },
+      redraw(){
+        this.delegateMethod('redraw');
       },
       showLoading(txt){
         this.chart&&this.chart.showLoading(txt);

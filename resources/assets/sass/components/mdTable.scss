@@ -15,7 +15,7 @@
 
   .md-table-pagination-previous {
     margin-right: 0.02rem;
-    margin-left: .18rem;
+    margin-left: 0.02rem;
   }
   .md-table-pagination-info{
       min-width: .8rem;
@@ -412,6 +412,19 @@
       .md-ref-filter{
         display: block;
       }
+    }
+  }
+}
+@include layout-small {
+  .md-table-pagination{
+    .md-table-pagination-label{
+      display: none;
+    }
+    .md-select{
+      display: none;
+    }
+    .md-table-pagination-info{
+      display: none;
     }
   }
 }

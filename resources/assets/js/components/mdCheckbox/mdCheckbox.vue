@@ -1,9 +1,8 @@
 <template>
   <div class="md-checkbox" :class="[themeClass, classes]">
-    <div class="md-checkbox-container" v-wave="!disabled" @click.stop="toggleCheck" tabindex="0">
+    <div class="md-checkbox-container" @click.stop="toggleCheck" tabindex="0">
       <input type="checkbox" :name="name" :id="id" :disabled="disabled" :value="value" :checked="checked" tabindex="-1">
     </div>
-
     <label :for="id || name" class="md-checkbox-label" v-if="$slots.default">
       <slot></slot>
     </label>

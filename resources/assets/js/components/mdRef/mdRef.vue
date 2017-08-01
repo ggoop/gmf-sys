@@ -26,7 +26,7 @@
             <md-table-row v-for="(row, rowIndex) in refData" 
               :key="row" 
               :md-item="row" 
-              :md-auto-select="!!multiple" 
+              :md-auto-select="true" 
               :md-selection="!!multiple"
               @dblclick.native="dblclick(row)">
               <md-table-cell v-for="(column, columnIndex) in refInfo.fields" v-if="!column.hide&&column.alias!='id'" :key="columnIndex">
