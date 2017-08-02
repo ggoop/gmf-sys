@@ -1,6 +1,6 @@
 <template>
   <div class="md-view" ref="scrollView" :class="wrapperClass" :style="wrapperStyle">
-    <div :style="scrollerStyle" :class="scrollerClass">
+    <div ref="scroller" :style="scrollerStyle" :class="scrollerClass">
       <slot></slot>
     </div>
   </div>
@@ -13,7 +13,12 @@ export default {
     options: {
       type: Object,
       default () {
-        return {mouseWheel: true,scrollbars: true};
+        return {
+          mouseWheel: true,
+          scrollbars: true,
+          fadeScrollbars: true,
+          click: true
+        }
       }
     },
     wrapperClass: {
@@ -42,8 +47,8 @@ export default {
     }
   },
   methods: {
-    _registPullEvents () {
-      const {iscroll} = this;
+     _registPullEvents () {
+      const {iscroll} = this
       iscroll.on('scrollEnd', e => {
         if (iscroll.y <= iscroll.maxScrollY) {
           this.$emit('pullUp', iscroll)
@@ -78,8 +83,8 @@ export default {
     }
   },
   beforeDestroy () {
-    this.iscroll && this.iscroll.destroy()
-    this.iscroll = null
+    this.iscroll && this.iscroll.destroy();
+    this.iscroll = null;
   },
   mounted () {
     const events = [
@@ -93,19 +98,27 @@ export default {
       'zoomEnd'
     ]
     setTimeout(() => {
-      this.$refs.scrollView.scrollTop = 0;
+      let key
+      let value
+      let attributes = this.$refs.scrollView.attributes
+      this.$refs.scrollView.scrollTop = 0
+      for (key in attributes) {
+        value = attributes[key]
+        if (value instanceof global.Attr && value.name.indexOf('data-v-') > -1) {
+          this.$refs.scroller.attributes.setNamedItem(document.createAttribute(value.name))
+        }
+      }
       try {
-        location.hash && this.iscroll.scrollToElement(location.hash, 0)
+        global.location.hash && this.iscroll.scrollToElement(global.location.hash, 0)
+      } catch (e) {
       }
-      catch(e) {
-      }
-    }, 100);
+    }, 0)
     this.$nextTick(() => {
-      this.iscroll = new IScroll(this.$refs.scrollView, this.options);
+      this.iscroll = new IScroll(this.$refs.scrollView, this.options)
       events.forEach(event => {
-        this.iscroll.on(event, () => this.$emit(event, this.iscroll));
-      });
-      this._registPullEvents();
+        this.iscroll.on(event, () => this.$emit(event, this.iscroll))
+      })
+      this._registPullEvents()
     })
   }
 }
