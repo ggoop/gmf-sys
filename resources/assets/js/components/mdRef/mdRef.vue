@@ -41,7 +41,7 @@
           :md-size="pageInfo.size"
           :md-total="pageInfo.total"
           :md-page="pageInfo.page"
-          :md-page-options="[5, 10,20]"
+          :md-page-options="[10,20]"
           @pagination="onTablePagination">
         </md-table-pagination>
         <span class="flex"></span>
@@ -71,7 +71,7 @@
       },
       mdPageSize:{
         type:[Number,String],
-        default:'5'
+        default:'10'
       },
       mdRefId: String,
       options:{
