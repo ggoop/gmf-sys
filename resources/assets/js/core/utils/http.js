@@ -6,7 +6,7 @@ const defaults = {
         common: {
             //'X-CSRF-TOKEN': '', //window.Laravel.csrfToken,
             'X-Requested-With': 'XMLHttpRequest',
-            //'Authorization': 'Basic YXBpOnBhc3N3b3Jk',
+            //'Authorization': 'Bearer YXBpOnBhc3N3b3Jk',
         },
         post: {
             'Content-Type': 'application/json'

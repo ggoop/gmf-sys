@@ -116,6 +116,8 @@
   thead.md-table-header{
     background-color: #fcfcfc;
     border-bottom: 0.01rem solid #e0e0e0;
+
+
   }
 
   .md-table-head {
@@ -162,6 +164,12 @@
     padding: .14rem 0;
     width:100%;
     transition: $swift-ease-out;
+  }
+  &.md-header-multiple{
+    .md-table-head-container{
+      height: inherit;
+      padding: 0;
+    }
   }
 
   .md-table-head-text {

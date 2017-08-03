@@ -12,28 +12,30 @@ class QueryCase {
 		$temps = json_decode(json_encode($temps));
 		$wheres = [];
 		//Log::error($temps);
-		foreach ($temps as $key => $value) {
-			$item = new Builder;
-			$item->name($value->name);
-			if (empty($value->operator)) {
-				if (!empty($value->value) && is_array($value->value)) {
-					$item->operator('in');
-				} else if (!empty($value->value)) {
-					$item->operator('equal');
+		if ($temps) {
+			foreach ($temps as $key => $value) {
+				$item = new Builder;
+				$item->name($value->name);
+				if (empty($value->operator)) {
+					if (!empty($value->value) && is_array($value->value)) {
+						$item->operator('in');
+					} else if (!empty($value->value)) {
+						$item->operator('equal');
+					} else {
+						continue;
+					}
 				} else {
+					$item->operator($value->operator);
+				}
+				if (!empty($value->value)) {
+					$item->value($value->value);
+				}
+				//值为空，条件无效
+				if (!($item->operator == 'null' || $item->operator == 'not_null') && empty($value->value)) {
 					continue;
 				}
-			} else {
-				$item->operator($value->operator);
+				array_push($wheres, $item);
 			}
-			if (!empty($value->value)) {
-				$item->value($value->value);
-			}
-			//值为空，条件无效
-			if (!($item->operator == 'null' || $item->operator == 'not_null') && empty($value->value)) {
-				continue;
-			}
-			array_push($wheres, $item);
 		}
 		$qc->wheres($wheres);
 		Log::error($qc);

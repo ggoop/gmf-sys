@@ -155,7 +155,9 @@ class ServiceProvider extends BaseServiceProvider {
 			'file://' . Passport::keyPath('oauth-private.key'),
 			'file://' . Passport::keyPath('oauth-public.key')
 		);
-		$server->setEncryptionKey(app('encrypter')->getKey());
+		if (!empty($server->setEncryptionKey)) {
+			$server->setEncryptionKey(app('encrypter')->getKey());
+		}
 
 		return $server;
 	}
