@@ -36,7 +36,10 @@
         this.delegateMethod('addSeries', this.formatOption(options));
       },
       removeSeries(){
-        this.chart.series.splice(0,this.chart.series.length);
+        while( this.chart.series.length > 0 ) {
+          this.chart.series[0].remove(false);
+        }
+        this.chart.redraw();
       },
       mergeOption(options){
         this.delegateMethod('update', this.formatOption(options))
