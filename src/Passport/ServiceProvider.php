@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use League\OAuth2\Server\AuthorizationServer;
+use League\OAuth2\Server\CryptKey;
 use League\OAuth2\Server\Grant\AuthCodeGrant;
 use League\OAuth2\Server\Grant\ClientCredentialsGrant;
 use League\OAuth2\Server\Grant\ImplicitGrant;
@@ -148,6 +149,15 @@ class ServiceProvider extends BaseServiceProvider {
 	 * @return AuthorizationServer
 	 */
 	public function makeAuthorizationServer() {
+
+		// return new AuthorizationServer(
+		// 	$this->app->make(Bridge\ClientRepository::class),
+		// 	$this->app->make(Bridge\AccessTokenRepository::class),
+		// 	$this->app->make(Bridge\ScopeRepository::class),
+		// 	$this->makeCryptKey('oauth-private.key'),
+		// 	app('encrypter')->getKey()
+		// );
+
 		$server = new AuthorizationServer(
 			$this->app->make(Bridge\ClientRepository::class),
 			$this->app->make(Bridge\AccessTokenRepository::class),
@@ -155,11 +165,18 @@ class ServiceProvider extends BaseServiceProvider {
 			'file://' . Passport::keyPath('oauth-private.key'),
 			'file://' . Passport::keyPath('oauth-public.key')
 		);
-		if (!empty($server->setEncryptionKey)) {
-			$server->setEncryptionKey(app('encrypter')->getKey());
-		}
+		//if (!empty($server->setEncryptionKey)) {
+		$server->setEncryptionKey(app('encrypter')->getKey());
+		//}
 
 		return $server;
+	}
+	protected function makeCryptKey($key) {
+		return new CryptKey(
+			'file://' . Passport::keyPath($key),
+			null,
+			false
+		);
 	}
 
 	/**
