@@ -13,7 +13,7 @@ class Dti extends Model {
 	public $incrementing = false;
 	protected $fillable = ['id', 'ent_id', 'code', 'name', 'category_id', 'host', 'path', 'method',
 		'local_host', 'local_path', 'local_method',
-		'sequence', 'params', 'is_running'];
+		'sequence', 'header', 'body', 'is_running'];
 	protected $casts = [
 		'is_running' => 'boolean',
 	];
@@ -21,7 +21,9 @@ class Dti extends Model {
 	public function category() {
 		return $this->belongsTo('Gmf\Sys\Models\DtiCategory');
 	}
-
+	public function params() {
+		return $this->hasMany('Gmf\Sys\Models\DtiParam', 'dti_id');
+	}
 	public static function run($code, $opts = []) {
 		$v = '';
 		$query = Dti::where('code', $code);
@@ -37,7 +39,7 @@ class Dti extends Model {
 		tap(new Builder, function ($builder) use ($callback) {
 			$callback($builder);
 
-			$data = array_only($builder->toArray(), ['id', 'ent_id', 'code', 'name', 'category_id', 'host', 'path', 'method', 'local_host', 'local_path', 'local_method', 'sequence', 'params', 'is_running']);
+			$data = array_only($builder->toArray(), ['id', 'ent_id', 'code', 'name', 'category_id', 'host', 'path', 'method', 'local_host', 'local_path', 'local_method', 'sequence', 'header', 'body', 'is_running']);
 
 			$category = false;
 			if (!empty($builder->category)) {

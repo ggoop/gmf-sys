@@ -6,19 +6,21 @@
   flex-wrap: wrap;
 }
 
-.md-wrap{
+.md-wrap {
   flex-wrap: wrap;
 }
-.md-nowrap{
+
+.md-nowrap {
   flex-wrap: nowrap;
 }
+
 @mixin layout($size: null) {
-  @if $size == null {
-    $size : '';
+  @if $size==null {
+    $size: '';
   }
 
-  @if $size != '' {
-    $size : '-#{$size}';
+  @if $size !='' {
+    $size: '-#{$size}';
   }
 
   .md-row#{$size} {
@@ -33,6 +35,7 @@
 @include layout();
 
 
+
 /* Container */
 
 .md-layout.md-container {
@@ -45,15 +48,16 @@
 }
 
 
+
 /* Alignments */
 
 @mixin layout-align($size: null) {
-  @if $size == null {
-    $size : '';
+  @if $size==null {
+    $size: '';
   }
 
-  @if $size != '' {
-    $size : '-#{$size}';
+  @if $size !='' {
+    $size: '-#{$size}';
   }
 
   .md-align#{$size}-start {
@@ -72,6 +76,7 @@
 @include layout-align();
 
 
+
 /* Gutter Size */
 
 @mixin layout-gutter($margin: -12px, $padding: 12px) {
@@ -79,7 +84,7 @@
     margin-right: $margin;
     margin-left: $margin;
 
-    > .md-layout {
+    >.md-layout {
       padding-right: $padding;
       padding-left: $padding;
     }
@@ -89,7 +94,7 @@
     margin-top: $margin;
     margin-bottom: $margin;
 
-    > .md-layout {
+    >.md-layout {
       padding-top: $padding;
       padding-bottom: $padding;
     }
@@ -102,7 +107,18 @@
   @include layout-small {
     @include layout-gutter(-8px, 8px);
   }
+  &.md-padding {
+    margin-right:0;
+    margin-left: 0;
+    >.md-layout {
+      margin-bottom: .08rem;
+      margin-top: .08rem;
+      padding-right:.08rem;
+      padding-left: .08rem;
+    }
+  }
 }
+
 
 $sizes: (8, 16, 24, 40);
 
@@ -116,15 +132,16 @@ $sizes: (8, 16, 24, 40);
 }
 
 
+
 /* Flex Size */
 
 @mixin layout-flex($size: null) {
-  @if $size == null {
-    $size : '';
+  @if $size==null {
+    $size: '';
   }
 
-  @if $size != '' {
-    $size : '-#{$size}';
+  @if $size !='' {
+    $size: '-#{$size}';
   }
 
   .md-flex#{$size} {
@@ -164,6 +181,7 @@ $sizes: (8, 16, 24, 40);
 }
 
 @include layout-flex();
+
 
 
 /* Responsive Breakpoints */

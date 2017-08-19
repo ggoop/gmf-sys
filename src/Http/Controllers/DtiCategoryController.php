@@ -7,7 +7,7 @@ use Validator;
 
 class DtiCategoryController extends Controller {
 	public function index(Request $request) {
-		$query = Models\DtiCategory::where('ent_id', $request->oauth_ent_id);
+		$query = Models\DtiCategory::with('params')->where('ent_id', $request->oauth_ent_id);
 		if ($request->has('is_revoked')) {
 			$query->where('is_revoked', $request->is_revoked);
 		}
@@ -16,7 +16,7 @@ class DtiCategoryController extends Controller {
 		return $this->toJson($data);
 	}
 	public function show(Request $request, string $id) {
-		$query = Models\DtiCategory::where('ent_id', $request->oauth_ent_id);
+		$query = Models\DtiCategory::with('params')->where('ent_id', $request->oauth_ent_id);
 		$data = $query->where('id', $id)->first();
 		return $this->toJson($data);
 	}

@@ -18,7 +18,6 @@ class CreateGmfSysDtiCategoriesTable extends Migration {
 		$md->string('code')->nullable()->comment('编码');
 		$md->string('name')->nullable()->comment('名称');
 		$md->string('host')->nullable()->comment('主机');
-		$md->text('params')->nullable()->comment('参数');
 		$md->boolean('is_revoked')->default(0)->comment('注销');
 		$md->timestamps();
 
