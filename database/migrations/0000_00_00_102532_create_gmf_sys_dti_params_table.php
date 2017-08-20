@@ -24,6 +24,8 @@ class CreateGmfSysDtiParamsTable extends Migration {
 		$md->enum('type', 'gmf.sys.dti.param.type.enum')->nullable()->comment('参数类型');
 		$md->string('value', 500)->nullable()->comment('参数值');
 		$md->boolean('is_revoked')->default(0)->comment('注销');
+
+		$md->string('data_src_identity')->nullable()->comment('数据来源身份');
 		$md->timestamps();
 
 		$md->build();

@@ -41,6 +41,8 @@ class CreateGmfSysDtisTable extends Migration {
 
 		$md->integer('total_runs')->default(0)->comment('执行次数');
 
+		$md->string('data_src_identity')->nullable()->comment('数据来源身份');
+
 		$md->timestamps();
 
 		$md->build();

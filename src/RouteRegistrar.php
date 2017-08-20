@@ -56,8 +56,9 @@ class RouteRegistrar {
 
 			$router->get('/ents/my', ['uses' => 'EntController@getMyEnts']);
 
-			$router->resource('dtis', 'DtiController', ['only' => ['index', 'show']]);
-			$router->resource('dti-categories', 'DtiCategoryController', ['only' => ['index', 'show', 'store']]);
+			$router->resource('dtis', 'DtiController', ['only' => ['index', 'show', 'store', 'destroy']]);
+			$router->resource('dti-categories', 'DtiCategoryController', ['only' => ['index', 'show', 'store', 'destroy']]);
+			$router->resource('dti-params', 'DtiParamController', ['only' => ['index', 'show', 'store', 'destroy']]);
 		});
 	}
 }
