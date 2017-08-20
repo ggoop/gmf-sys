@@ -1,8 +1,8 @@
 <template>
-  <button class="md-button" v-wave="!disabled" :class="[themeClass]" :type="type" :disabled="disabled" v-if="!href">
+  <button class="md-button" v-wave="!disabled" :class="[themeClass]" :type="type" :disabled="disabled" @click="$emit('click', $event)" v-if="!href">
     <slot></slot>
   </button>
-  <a class="md-button" v-wave="!disabled" :class="[themeClass]" :href="href" :disabled="disabled" :target="target" :rel="newRel" v-else>
+  <a class="md-button" v-wave="!disabled" :class="[themeClass]" :href="href" :disabled="disabled" :target="target" :rel="newRel" @click="$emit('click', $event)" v-else>
     <slot></slot>
   </a>
 </template>
