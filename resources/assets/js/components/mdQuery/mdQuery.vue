@@ -3,14 +3,14 @@
     <md-table @select="onTableSelect" class="flex">
       <md-table-header>
         <md-table-row>
-          <md-table-head v-for="(column, columnIndex) in refInfo.fields" v-if="!column.hide&&column.alias!='id'" :key="column">
+          <md-table-head v-for="(column, columnIndex) in refInfo.fields" v-if="!column.hide&&column.alias!='id'" :key="columnIndex">
           {{column.comment||column.name}}
           </md-table-head>
         </md-table-row>
       </md-table-header>
       <md-table-body>
         <md-table-row v-for="(row, rowIndex) in refData" 
-          :key="row" 
+          :key="rowIndex" 
           :md-item="row" 
           :md-auto-select="mdAutoSelect" 
           :md-selection="mdSelection" 

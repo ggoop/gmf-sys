@@ -2,9 +2,9 @@
   <div class="md-snackbar md-toast" :class="[themeClass, classes]" :id="snackbarId" >
     <transition-group name="list" tag="p">
       <div 
-        v-for="item in toastList" 
+        v-for="(item,itemInd) in toastList" 
         class="md-snackbar-container" 
-        :key="item"
+        :key="item.id"
         @mouseenter="pauseTimeout(item)" 
         @mouseleave="resumeTimeout(item)">
         <div class="md-snackbar-content">

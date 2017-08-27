@@ -7,7 +7,7 @@
     :placeholder="placeholder"
     :multiple="multiple"
     v-model="selectedValue" >
-      <md-option v-for="item in enumInfo.fields" :key="item" :value="item.name">{{item.comment}}</md-option>
+      <md-option v-for="item in enumInfo.fields" :key="item.id" :value="item.name">{{item.comment}}</md-option>
     </md-select>
 </template>
 

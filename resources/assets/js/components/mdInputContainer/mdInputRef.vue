@@ -1,10 +1,10 @@
 <template>
   <div class="md-input-ref layout-align-space-between-end" @click.native="applyInputFocus">
       <md-input-value
-        v-for="chip in selectedValues"
+        v-for="(chip ,columnIndex) in selectedValues"
         :md-deletable="!disabled"
         :disabled="disabled"
-        :key="chip"
+        :key="columnIndex"
         @delete="deleteChip(chip)">
         <slot :value="chip"><span>{{ chip.name }}</span></slot>
       </md-input-value>
