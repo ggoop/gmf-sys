@@ -19,12 +19,16 @@
     position: absolute;
     top: .23rem;
     left: 0;
+    white-space: nowrap;
     pointer-events: none;
     transition: $swift-ease-out;
     transition-duration: .3s;
     color: rgba(#000, .54);
     font-size: .16rem;
     line-height: .2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   >.md-icon-button.md-inset {
     margin: 0;
@@ -40,7 +44,6 @@
   input,
   textarea {
     width: 100%;
-    height: $input-size;
     padding: 0;
     display: block;
     flex: 1;
@@ -51,7 +54,6 @@
     color: rgba(#000, .54);
     font-family: inherit;
     font-size: 1px;
-    line-height: $input-size;
     &:focus {
       outline: none;
     }
@@ -202,7 +204,7 @@
   &.md-input-required {
     label:after {
       position: absolute;
-      top: .02rem;
+      top: 33%;
       right: 0;
       transform: translateX(calc(100% + 2px));
       content: "*";
@@ -219,12 +221,13 @@
 }
 
 .md-input-value {
-  height: $md-input-value-height;
-  padding: .08rem 0;
+  padding: .02rem 0;
+  margin: .01rem 0rem;
   display: inline-block;
   transition: $swift-ease-out;
-  font-size: .13rem;
-  line-height: .16rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   white-space: nowrap;
   &.md-deletable {
     position: relative;
@@ -235,7 +238,6 @@
     outline: none;
     &:not(.md-disabled) {
       cursor: pointer;
-      box-shadow: $material-shadow-2dp;
     }
   }
   &.md-disabled {
@@ -310,17 +312,18 @@
 
 .md-input-container.md-inset {
   margin: 0px;
-  >.label {
-    min-width: 1.5rem;
-    margin-right: .06rem;
-    padding: 0 .1rem 0 .1rem;
-    background: rgba(0, 0, 0, 0.1);
+  &.md-input-required {
+    label:after {
+      right: 0.1rem;
+    }
   }
   label {
     position: relative;
     top: inherit;
-    line-height: 0.32rem;
     flex-wrap: nowrap;
+    margin-right: .06rem;
+    padding: 0 .1rem 0 .1rem;
+    background: rgba(0, 0, 0, 0.1);
   }
   &.md-input-focused label,
   &.md-has-value label {

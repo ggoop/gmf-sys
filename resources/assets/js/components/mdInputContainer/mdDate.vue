@@ -1,5 +1,5 @@
 <template>
-  <div class="md-date md-input-ref layout-row layout-align-space-between-end">
+  <div class="md-date md-input-ref layout-row">
     <input type="text" 
       ref="input"
       class="md-input" 

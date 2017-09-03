@@ -11,6 +11,9 @@
   border-radius: $avatar-size;
   vertical-align: middle;
 
+  .md-checkbox {
+    margin: .06rem;
+  }
   &.md-large {
     width: $avatar-large-size;
     min-width: $avatar-large-size;

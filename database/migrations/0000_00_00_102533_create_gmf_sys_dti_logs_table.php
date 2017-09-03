@@ -18,7 +18,10 @@ class CreateGmfSysDtiLogsTable extends Migration {
 		$md->entity('dti', 'gmf.sys.dti')->nullable()->comment('接口');
 		$md->string('session')->nullable()->comment('回话');
 		$md->timestamp('date')->nullable()->comment('日期');
-		$md->string('memo')->nullable()->comment('备注');
+		$md->timestamp('begin_date')->nullable()->comment('开始时间');
+		$md->timestamp('end_date')->nullable()->comment('结果时间');
+		$md->text('memo')->nullable()->comment('备注');
+		$md->text('msg')->nullable()->comment('消息');
 		$md->longText('content')->nullable()->comment('内容');
 		$md->enum('state', 'gmf.sys.dti.state.enum')->nullable()->comment('状态');
 		$md->timestamps();

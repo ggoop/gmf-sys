@@ -11,6 +11,8 @@ const isObject = _.isObject;
 const isDate = _.isDate;
 const debounce = _.debounce;
 
+import moment from 'moment';
+
 function isFile(val) {
     return toString.call(val) === '[object File]';
 }
@@ -75,7 +77,10 @@ const snakeCase = function(name, separator) {
     });
     return name.replace(/\./g, '');
 };
-
+const now=function(format){
+    format=format||'YYYY-MM-DD HH:mm:ss';
+    return moment().format(format);
+}
 function fTime(time) {
     if (!time) return '未知..';
     //获取time距离当前的秒 
@@ -180,6 +185,7 @@ const common = {
     extend,
     trim,
     spread,
-    fTime
+    fTime,
+    now
 };
 export default common;

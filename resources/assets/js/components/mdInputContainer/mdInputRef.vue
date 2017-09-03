@@ -1,5 +1,5 @@
 <template>
-  <div class="md-input-ref layout-align-space-between-end" @click.native="applyInputFocus">
+  <div class="md-input-ref layout layout-row" @click.native="applyInputFocus">
       <md-input-value
         v-for="(chip ,columnIndex) in selectedValues"
         :md-deletable="!disabled"
