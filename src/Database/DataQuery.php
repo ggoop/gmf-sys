@@ -65,7 +65,7 @@ class DataQuery {
 		}
 		foreach ($this->wheres as $key => $value) {
 			$this->parseField($value);
-			$this->query->where($value->dbFieldName, $value->operator, $value->value);
+			QueryCase::attachWhere($this->query, $value, $value->dbFieldName);
 		}
 		foreach ($this->entities as $key => $value) {
 			if (empty($value->path) || empty($value->join)) {

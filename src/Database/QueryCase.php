@@ -61,22 +61,22 @@ class QueryCase {
 			$column = $caseWhere->name;
 		}
 		$value = $caseWhere->value;
-		if ($caseWhere->operator == 'equal' && !empty($value)) {
+		if (($caseWhere->operator == 'equal' || $caseWhere->operator == '=') && !empty($value)) {
 			$query->where($column, $value);
 		}
-		if ($caseWhere->operator == 'not_equal' && !empty($value)) {
+		if (($caseWhere->operator == 'not_equal' || $caseWhere->operator == '!=' || $caseWhere->operator == '<>') && !empty($value)) {
 			$query->where($column, '!=', $value);
 		}
-		if ($caseWhere->operator == 'greater_than' && !empty($value)) {
+		if (($caseWhere->operator == 'greater_than' || $caseWhere->operator == '>') && !empty($value)) {
 			$query->where($column, '>', $value);
 		}
-		if ($caseWhere->operator == 'less_than' && !empty($value)) {
+		if (($caseWhere->operator == 'less_than' || $caseWhere->operator == '<') && !empty($value)) {
 			$query->where($column, '<', $value);
 		}
-		if ($caseWhere->operator == 'greater_than_equal' && !empty($value)) {
+		if (($caseWhere->operator == 'greater_than_equal' || $caseWhere->operator == '>=') && !empty($value)) {
 			$query->where($column, '>=', $value);
 		}
-		if ($caseWhere->operator == 'less_than_equal' && !empty($value)) {
+		if (($caseWhere->operator == 'less_than_equal' || $caseWhere->operator == '<=') && !empty($value)) {
 			$query->where($column, '<=', $value);
 		}
 		if ($caseWhere->operator == 'between' && !empty($value) && is_array($value)) {
