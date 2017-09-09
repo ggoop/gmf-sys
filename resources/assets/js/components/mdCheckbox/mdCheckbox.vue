@@ -9,42 +9,42 @@
   </div>
 </template>
 <script>
-  import theme from '../../core/components/mdTheme/mixin';
+import theme from '../../core/components/mdTheme/mixin';
 
-  export default {
-    props: {
-      name: String,
-      value: [String, Boolean,Number],
-      id: String,
-      disabled: Boolean
-    },
-    mixins: [theme],
-    data() {
+export default {
+  props: {
+    name: String,
+    value: [String, Boolean, Number],
+    id: String,
+    disabled: Boolean
+  },
+  mixins: [theme],
+  data() {
+    return {
+      checked: this.value
+    };
+  },
+  computed: {
+    classes() {
       return {
-        checked: this.value
+        'md-checked': this.checked,
+        'md-disabled': this.disabled
       };
-    },
-    computed: {
-      classes() {
-        return {
-          'md-checked': this.checked,
-          'md-disabled': this.disabled
-        };
-      }
-    },
-    watch: {
-      value() {
-        this.checked = !!this.value;
-      }
-    },
-    methods: {
-      toggleCheck($event) {
-        if (!this.disabled) {
-          this.checked = !this.checked;
-          this.$emit('change', this.checked, $event);
-          this.$emit('input', this.checked, $event);
-        }
+    }
+  },
+  watch: {
+    value() {
+      this.checked = this.value ? 1 : 0;
+    }
+  },
+  methods: {
+    toggleCheck($event) {
+      if (!this.disabled) {
+        this.checked = this.checked ? 0 : 1;
+        this.$emit('change', this.checked, $event);
+        this.$emit('input', this.checked, $event);
       }
     }
-  };
+  }
+};
 </script>
