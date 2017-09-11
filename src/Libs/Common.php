@@ -41,6 +41,16 @@ class Common {
 		return $topData;
 	}
 	public static function EncryptDES($data, $key) {
+		$cipher = "DES-ECB";
+		$key_size = 8;
+		if (in_array($cipher, openssl_get_cipher_methods())) {
+			$ivlen = openssl_cipher_iv_length($cipher);
+
+			$iv = openssl_random_pseudo_bytes($ivlen);
+			$key = substr(strtoupper(md5($key)), 0, $key_size);
+			$data = openssl_encrypt($data, $cipher, $key, $options = 0, $iv);
+		}
+		return $data;
 		// $cipher_list = mcrypt_list_algorithms();//mcrypt支持的加密算法列表
 		// $mode_list = mcrypt_list_modes(); //mcrypt支持的加密模式列表
 
@@ -60,7 +70,18 @@ class Common {
 		return $rtn;
 	}
 	public static function DecryptDES($data, $key) {
+		$cipher = "DES-ECB";
+		$key_size = 8;
 		try {
+			if (in_array($cipher, openssl_get_cipher_methods())) {
+				$ivlen = openssl_cipher_iv_length($cipher);
+				$iv = openssl_random_pseudo_bytes($ivlen);
+				$key = substr(strtoupper(md5($key)), 0, $key_size);
+				$data = openssl_decrypt($data, $cipher, $key, $options = 0, $iv);
+				return $data;
+			}
+			return $data;
+
 			$rtn = base64_decode($data);
 			$td = mcrypt_module_open(MCRYPT_DES, "", MCRYPT_MODE_ECB, ""); //使用MCRYPT_DES算法,ecb模式
 			$size = mcrypt_enc_get_iv_size($td); //设置初始向量的大小
