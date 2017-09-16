@@ -2,13 +2,11 @@
 import core from './core';
 import components from './components';
 import directives from './directives';
-import pages from './pages';
 
 const options = {
     core,
     components,
     directives,
-    pages,
 };
 
 options.install = (Vue) => {

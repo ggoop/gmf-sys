@@ -37,7 +37,7 @@ class RouteRegistrar {
 			$router->post('datas', ['uses' => 'DataController@index']);
 			$router->resource('datas', 'DataController', ['only' => ['index', 'show']]);
 		});
-		$this->router->group(['prefix' => 'sys', 'middleware' => ['api', 'auth:api', 'ent_check']], function ($router) {
+		$this->router->group(['prefix' => 'sys', 'middleware' => ['api', 'visitor', 'auth:api', 'ent_check']], function ($router) {
 			$router->get('/entities/pager', ['uses' => 'EntityController@pager']);
 			$router->get('/enums/{enum}', ['uses' => 'EntityController@getEnum']);
 			$router->resource('entities', 'EntityController', ['only' => ['index', 'show']]);
@@ -56,9 +56,9 @@ class RouteRegistrar {
 
 			$router->get('/ents/my', ['uses' => 'EntController@getMyEnts']);
 
-			$router->resource('dtis', 'DtiController', ['only' => ['index', 'show', 'store', 'destroy']]);
-			$router->resource('dti-categories', 'DtiCategoryController', ['only' => ['index', 'show', 'store', 'destroy']]);
-			$router->resource('dti-params', 'DtiParamController', ['only' => ['index', 'show', 'store', 'destroy']]);
+			$router->resource('dtis', 'DtiController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
+			$router->resource('dti-categories', 'DtiCategoryController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
+			$router->resource('dti-params', 'DtiParamController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 		});
 	}
 }

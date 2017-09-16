@@ -25,15 +25,16 @@ class CreateGmfSysDtisTable extends Migration {
 		$md->string('host')->nullable()->comment('接口主机');
 		$md->string('path')->nullable()->comment('接口路径');
 		$md->string('method')->default('post')->comment('接口方法');
+		$md->text('header')->nullable()->comment('请求头');
+		$md->text('body')->nullable()->comment('请求体');
 
 		$md->string('local_host')->nullable()->comment('本地主机');
 		$md->string('local_path')->nullable()->comment('本地路径');
 		$md->string('local_method')->default('post')->comment('本地方法');
+		$md->text('local_header')->nullable()->comment('本地请求头');
+		$md->text('local_body')->nullable()->comment('本地请求体');
 
 		$md->integer('sequence')->default(0)->comment('顺序');
-
-		$md->text('header')->nullable()->comment('请求头');
-		$md->text('body')->nullable()->comment('请求体');
 
 		$md->timestamp('begin_date')->nullable()->comment('开始时间');
 		$md->timestamp('end_date')->nullable()->comment('结果时间');

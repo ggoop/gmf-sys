@@ -21,11 +21,14 @@ class DtiCategoryController extends Controller {
 		return $this->toJson($data);
 	}
 	public function store(Request $request) {
-		$input = $request->all();
 		$input = array_only($request->all(), ['id', 'code', 'name', 'host', 'is_revoked']);
 		$validator = Validator::make($input, [
-			'code' => 'required',
-			'name' => 'required',
+			'code' => [
+				'required',
+			],
+			'name' => [
+				'required',
+			],
 		]);
 		if ($validator->fails()) {
 			return $this->toError($validator->errors());
@@ -33,5 +36,32 @@ class DtiCategoryController extends Controller {
 		$entId = $request->oauth_ent_id;
 		$data = Models\DtiCategory::updateOrCreate(['ent_id' => $entId, 'code' => $input['code']], $input);
 		return $this->show($request, $data->id);
+	}
+	/**
+	 * PUT/PATCH
+	 * @param  Request $request [description]
+	 * @param  [type]  $id      [description]
+	 * @return [type]           [description]
+	 */
+	public function update(Request $request, $id) {
+		$input = $request->only(['code', 'name', 'host', 'is_revoked']);
+		$validator = Validator::make($input, [
+			'code' => [
+				'required',
+			],
+			'name' => [
+				'required',
+			],
+		]);
+		if ($validator->fails()) {
+			return $this->toError($validator->errors());
+		}
+		Models\DtiCategory::where('id', $id)->update($input);
+		return $this->show($request, $id);
+	}
+	public function destroy(Request $request, $id) {
+		$ids = explode(",", $id);
+		Models\DtiCategory::destroy($ids);
+		return $this->toJson(true);
 	}
 }

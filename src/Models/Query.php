@@ -16,6 +16,9 @@ class Query extends Model {
 	public function fields() {
 		return $this->hasMany('Gmf\Sys\Models\QueryField');
 	}
+	public function orders() {
+		return $this->hasMany('Gmf\Sys\Models\QueryOrder');
+	}
 	public function entity() {
 		return $this->belongsTo('Gmf\Sys\Models\Entity');
 	}

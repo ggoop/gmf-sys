@@ -31,7 +31,7 @@
       },
       mdDuration: {
         type: [String, Number],
-        default: 40000
+        default: 10000
       }
     },
     mixins: [theme],

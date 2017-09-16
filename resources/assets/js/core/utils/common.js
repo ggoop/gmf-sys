@@ -186,6 +186,7 @@ const common = {
     trim,
     spread,
     fTime,
-    now
+    now,
+    uid:uniqueId
 };
 export default common;

@@ -15,6 +15,12 @@ class DtiParam extends Model {
 	protected $casts = [
 		'is_revoked' => 'boolean',
 	];
+	public function category() {
+		return $this->belongsTo('Gmf\Sys\Models\DtiCategory');
+	}
+	public function dti() {
+		return $this->belongsTo('Gmf\Sys\Models\Dti');
+	}
 	public static function build(Closure $callback) {
 		tap(new Builder, function ($builder) use ($callback) {
 			$callback($builder);

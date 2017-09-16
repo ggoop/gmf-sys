@@ -10,7 +10,7 @@
       </md-table-header>
       <md-table-body>
         <md-table-row v-for="(row, rowIndex) in refData" 
-          :key="rowIndex" 
+          :key="row.id" 
           :md-item="row" 
           :md-auto-select="mdAutoSelect" 
           :md-selection="mdSelection" 
@@ -59,7 +59,7 @@
       },
       mdPageSize:{
         type:[Number,String],
-        default:'10'
+        default:'25'
       },
       options:{
         type:Object,

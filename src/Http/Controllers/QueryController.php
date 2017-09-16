@@ -33,7 +33,7 @@ class QueryController extends Controller {
 	}
 	private function buildQueryCase(Request $request, string $queryID) {
 		$queryCase = new Builder;
-		$query = Models\Query::with('fields', 'entity');
+		$query = Models\Query::with('fields', 'entity', 'orders');
 		$query->where('id', $queryID)->orWhere('name', $queryID);
 		$model = $query->first();
 		if (!$model) {
@@ -109,7 +109,7 @@ class QueryController extends Controller {
 		$queryCase->wheres($wheres);
 		//排序
 		$orders = [];
-		if ($request->has('orders')) {
+		if ($request->has('orders') && count($request->orders)) {
 			$indatas = $request->orders;
 			foreach ($indatas as $key => $value) {
 				if (!$value || empty($value['name'])) {
@@ -119,6 +119,15 @@ class QueryController extends Controller {
 				$field->name($value['name']);
 				if (!empty($value['direction'])) {
 					$field->direction($value['direction']);
+				}
+				$orders[] = $field;
+			}
+		} else if (count($model->orders) > 0) {
+			foreach ($model->orders as $f) {
+				$field = new Builder;
+				$field->name($f['name']);
+				if (!empty($f['direction'])) {
+					$field->direction($f['direction']);
 				}
 				$orders[] = $field;
 			}

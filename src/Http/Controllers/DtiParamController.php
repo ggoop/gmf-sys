@@ -8,7 +8,7 @@ use Validator;
 
 class DtiParamController extends Controller {
 	public function index(Request $request) {
-		$query = Models\DtiParam::where('ent_id', $request->oauth_ent_id);
+		$query = Models\DtiParam::with('category', 'dti')->where('ent_id', $request->oauth_ent_id);
 		if ($request->has('is_revoked')) {
 			$query->where('is_revoked', $request->is_revoked);
 		}
@@ -17,12 +17,11 @@ class DtiParamController extends Controller {
 		return $this->toJson($data);
 	}
 	public function show(Request $request, string $id) {
-		$query = Models\DtiParam::where('ent_id', $request->oauth_ent_id);
+		$query = Models\DtiParam::with('category', 'dti')->where('ent_id', $request->oauth_ent_id);
 		$data = $query->where('id', $id)->first();
 		return $this->toJson($data);
 	}
 	public function store(Request $request) {
-		$input = $request->all();
 		$input = array_only($request->all(), ['id', 'code', 'name', 'category_id', 'dti_id', 'type_enum', 'value', 'is_revoked']);
 
 		$input = InputHelper::fillEntity($input, $request, ['category', 'dti']);
@@ -48,6 +47,22 @@ class DtiParamController extends Controller {
 
 		$data = Models\DtiParam::updateOrCreate($find, $input);
 		return $this->show($request, $data->id);
+	}
+	public function update(Request $request, $id) {
+		$input = array_only($request->all(), ['id', 'code', 'name', 'category_id', 'dti_id', 'type_enum', 'value', 'is_revoked']);
+
+		$input = InputHelper::fillEntity($input, $request, ['category', 'dti']);
+		$validator = Validator::make($input, [
+			'code' => 'required',
+			'name' => 'required',
+			'category_id' => 'required',
+		]);
+		if ($validator->fails()) {
+			return $this->toError($validator->errors());
+		}
+		$entId = $request->oauth_ent_id;
+		Models\DtiParam::where('id', $id)->update($input);
+		return $this->show($request, $id);
 	}
 	public function destroy(Request $request, $id) {
 		$ids = explode(",", $id);
