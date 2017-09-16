@@ -91,6 +91,7 @@ class QueryController extends Controller {
 		$wheres = [];
 		if ($request->has('wheres')) {
 			$indatas = $request->wheres;
+
 			foreach ($indatas as $key => $value) {
 				if (!$value || empty($value['name']) || empty($value['value'])) {
 					continue;
@@ -152,7 +153,7 @@ class QueryController extends Controller {
 			if (!empty($f->operator)) {
 				$queryBuilder->addWhere($f->name, $f->operator, $f->value);
 			} else {
-				$queryBuilder->addWhere($f->name, $f->value);
+				$queryBuilder->addWhere($f->name, '=', $f->value);
 			}
 		}
 		foreach ($queryCase->orders as $f) {
