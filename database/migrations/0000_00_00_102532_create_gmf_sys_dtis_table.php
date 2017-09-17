@@ -19,20 +19,17 @@ class CreateGmfSysDtisTable extends Migration {
 		$md->string('code')->comment('编码');
 		$md->string('name')->nullable()->comment('名称');
 		$md->entity('category', 'gmf.sys.dti.category')->nullable()->comment('分类');
+		$md->entity('local', 'gmf.sys.dti.local')->nullable()->comment('本地接口');
+
 		$md->text('memo')->nullable()->comment('备注');
 		$md->boolean('is_revoked')->default(0)->comment('注销');
 
 		$md->string('host')->nullable()->comment('接口主机');
+		$md->enum('method', 'gmf.sys.dti.method.enum')->default('post')->nullable()->comment('接口方法');
 		$md->string('path')->nullable()->comment('接口路径');
-		$md->string('method')->default('post')->comment('接口方法');
+
 		$md->text('header')->nullable()->comment('请求头');
 		$md->text('body')->nullable()->comment('请求体');
-
-		$md->string('local_host')->nullable()->comment('本地主机');
-		$md->string('local_path')->nullable()->comment('本地路径');
-		$md->string('local_method')->default('post')->comment('本地方法');
-		$md->text('local_header')->nullable()->comment('本地请求头');
-		$md->text('local_body')->nullable()->comment('本地请求体');
 
 		$md->integer('sequence')->default(0)->comment('顺序');
 

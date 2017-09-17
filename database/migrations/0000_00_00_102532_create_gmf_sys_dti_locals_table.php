@@ -3,7 +3,7 @@
 use Gmf\Sys\Database\Metadata;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGmfSysDtiLocalTable extends Migration {
+class CreateGmfSysDtiLocalsTable extends Migration {
 	private $mdID = "0599a7f09ac211e7a8046d95888581cc";
 	/**
 	 * Run the migrations.
@@ -22,8 +22,8 @@ class CreateGmfSysDtiLocalTable extends Migration {
 		$md->boolean('is_revoked')->default(0)->comment('注销');
 
 		$md->string('host')->nullable()->comment('接口主机');
+		$md->enum('method', 'gmf.sys.dti.method.enum')->default('post')->nullable()->comment('接口方法');
 		$md->string('path')->nullable()->comment('接口路径');
-		$md->string('method')->default('post')->comment('接口方法');
 		$md->text('header')->nullable()->comment('请求头');
 		$md->text('body')->nullable()->comment('请求体');
 
