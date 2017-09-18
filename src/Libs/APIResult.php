@@ -45,6 +45,9 @@ class APIResult {
 		if (empty($builder->code)) {
 			$builder->code = 0;
 		}
+		if ($builder->code) {
+			$builder->errors($builder->msg);
+		}
 		if (!is_null($callback)) {
 			$callback($builder);
 		}

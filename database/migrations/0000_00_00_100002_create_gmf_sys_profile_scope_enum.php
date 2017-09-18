@@ -12,7 +12,7 @@ class CreateGmfSysProfileScopeEnum extends Migration {
 	 */
 	public function up() {
 		$md = Metadata::create($this->mdID);
-		$md->mdEnum('gmf.sys.profile.scopeEnum')->comment('参数范围');
+		$md->mdEnum('gmf.sys.profile.scope.enum')->comment('参数范围');
 		$md->string('sys')->comment('系统')->default(0);
 		$md->string('app')->comment('应用')->default(1);
 		$md->string('ent')->comment('企业')->default(1);

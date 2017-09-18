@@ -3,8 +3,8 @@
 use Gmf\Sys\Database\Metadata;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGmfSysUsersStatusEnum extends Migration {
-	private $mdID = "7008122009cd11e7a7fc810e66b5fb3c";
+class CreateGmfSysEntUserTypeEnum extends Migration {
+	private $mdID = "7008142009cd11e78b8eb71714fb910d";
 	/**
 	 * Run the migrations.
 	 *
@@ -12,9 +12,10 @@ class CreateGmfSysUsersStatusEnum extends Migration {
 	 */
 	public function up() {
 		$md = Metadata::create($this->mdID);
-		$md->mdEnum('gmf.sys.user.statusEnum')->comment('用户状态');
-		$md->string('normal')->comment('正常')->default(0);
-		$md->string('locked')->comment('锁定')->default(1);
+		$md->mdEnum('gmf.sys.ent.user.type.enum')->comment('用户类型');
+		$md->string('create')->comment('创建者')->default(0);
+		$md->string('owner')->comment('拥有者')->default(1);
+		$md->string('member')->comment('成员')->default(1);
 		$md->build();
 
 	}

@@ -36,10 +36,6 @@ class ServiceProvider extends BaseServiceProvider {
 			$this->publishes([
 				__DIR__ . '/../resources/assets/img' => base_path('public/img/vendor/gmf-sys'),
 			], $publishes);
-
-			$this->publishes([
-				__DIR__ . '/../resources/assets/css' => base_path('public/css'),
-			], $publishes);
 		}
 	}
 

@@ -1,6 +1,7 @@
 <?php
 namespace Gmf\Sys\Http\Middleware;
 
+use Auth;
 use Carbon\Carbon;
 use Closure;
 use Gmf\Sys\Models\Visitor;
@@ -10,19 +11,46 @@ class VisitorMiddleware {
 	public function handle($request, Closure $next) {
 		$headers = $request->headers;
 		$server = $request->server;
+		$query = $request->query();
+		$params = $request->all();
 		$inData = [];
 		$inData['ip'] = $request->ip();
 		$inData['path'] = $request->path();
 		$inData['url'] = $request->url();
 		$inData['method'] = $request->method();
-		$inData['params'] = json_encode($request->input());
-		if ($headers) {
-			$inData['agent'] = $headers->get('user-agent');
+
+		$inData['user_id'] = Auth::id();
+
+		if ($request->hasHeader('Ent')) {
+			$inData['ent_id'] = $request->header('Ent');
 		}
+
+		$inData['query'] = json_decode($query);
+		$inData['header'] = json_decode($headers);
+		$inData['body'] = json_decode($params);
+
+		$inData['params'] = json_encode($request->input());
+
+		$inData['agent'] = $request->userAgent();
+
 		if ($server) {
 			$inData['referer'] = $server->get('HTTP_REFERER');
 		}
 		$inData['created_at'] = Carbon::now();
+
+		if (!empty($params['client_name'])) {
+			$inData['client_name'] = $params['client_name'];
+		}
+		if (!empty($params['client_sn'])) {
+			$inData['client_sn'] = $params['client_sn'];
+		}
+		if (!empty($params['client_account'])) {
+			$inData['client_account'] = $params['client_account'];
+		}
+		if (!empty($params['client_id'])) {
+			$inData['client_id'] = $params['client_id'];
+		}
+
 		$fromTime = microtime(true);
 
 		$response = $next($request);

@@ -19,7 +19,7 @@ class CreateGmfSysProfilesTable extends Migration {
 		$md->string('code')->comment('编码');
 		$md->string('name')->nullable()->comment('名称');
 		$md->text('memo')->nullable()->comment('备注');
-		$md->enum('scope', 'gmf.sys.profile.scopeEnum')->nullable()->comment('范围');
+		$md->enum('scope', 'gmf.sys.profile.scope.enum')->nullable()->comment('范围');
 		$md->text('default_value')->nullable()->comment('默认值');
 		$md->text('default_value_name')->nullable()->comment('默认值');
 
