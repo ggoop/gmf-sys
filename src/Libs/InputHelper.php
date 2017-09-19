@@ -39,6 +39,9 @@ class InputHelper {
 			}
 
 			$vFieldName = 'id';
+			if (array_has($inputs, $field)) {
+				$data[$field . '_id'] = '';
+			}
 
 			$vObj = Arr::get($inputs, $field);
 
@@ -73,8 +76,8 @@ class InputHelper {
 			}
 			if ($vValue) {
 				$data[$field . '_id'] = $vValue;
-				unset($data[$field]);
 			}
+			unset($data[$field]);
 		}
 		return $data;
 	}
