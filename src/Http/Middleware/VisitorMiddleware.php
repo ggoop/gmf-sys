@@ -25,11 +25,12 @@ class VisitorMiddleware {
 			$inData['ent_id'] = $request->header('Ent');
 		}
 
-		$inData['query'] = json_decode($query);
-		$inData['header'] = json_decode($headers);
-		$inData['body'] = json_decode($params);
+		$inData['query'] = json_encode($query);
+		$inData['header'] = json_encode($headers->all());
+		$inData['body'] = $request->getContent();
+		$inData['content_type'] = $request->getContentType();
 
-		$inData['params'] = json_encode($request->input());
+		$inData['input'] = json_encode($request->input());
 
 		$inData['agent'] = $request->userAgent();
 

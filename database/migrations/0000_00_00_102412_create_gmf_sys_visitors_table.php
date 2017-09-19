@@ -21,12 +21,13 @@ class CreateGmfSysVisitorsTable extends Migration {
 		$md->string('url', 500)->nullable();
 		$md->string('ip')->nullable();
 		$md->string('method')->nullable();
-		$md->longText('params')->nullable();
+		$md->longText('input')->nullable();
 		$md->longText('query')->nullable();
 		$md->longText('body')->nullable();
 		$md->longText('header')->nullable();
 		$md->string('agent', 500)->nullable();
 		$md->string('referer', 500)->nullable();
+		$md->string('content_type', 500)->nullable();
 
 		//客户名称
 		$md->string('client_name', 500)->nullable();
