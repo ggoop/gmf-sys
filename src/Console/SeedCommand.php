@@ -16,6 +16,7 @@ class SeedCommand extends Command {
 	 */
 	protected $signature = 'gmf:seed
             {--force : Overwrite data}
+            {--path= : The path of seed files to be executed.}
             {--tag : seed by tag}';
 
 	/**
@@ -36,7 +37,7 @@ class SeedCommand extends Command {
 	 */
 	public function handle() {
 
-		$path = __DIR__ . '/../../database/seeds';
+		$path = $this->getCommandPath();
 
 		$files = $this->getMigrationFiles($path);
 		$this->requireFiles($migrations = $this->pendingMigrations($files));
@@ -46,7 +47,9 @@ class SeedCommand extends Command {
 		}
 		$this->info('seed all complete');
 	}
-
+	protected function getCommandPath() {
+		return $this->laravel->databasePath() . DIRECTORY_SEPARATOR . 'seeds';
+	}
 	protected function runUp($file) {
 		$migration = $this->resolve(
 			$name = $this->getMigrationName($file)

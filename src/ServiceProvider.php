@@ -41,6 +41,22 @@ class ServiceProvider extends BaseServiceProvider {
 			$this->publishes([
 				__DIR__ . '/../resources/assets/img' => base_path('public/img/vendor/gmf-sys'),
 			], $publishes);
+
+			$this->publishes([
+				__DIR__ . '/../database/seeds' => base_path('database/seeds'),
+			], $publishes);
+
+			$this->publishes([
+				__DIR__ . '/../database/sql' => base_path('database/sql'),
+			], $publishes);
+
+			$this->publishes([
+				__DIR__ . '/../database/presql' => base_path('database/presql'),
+			], $publishes);
+
+			$this->publishes([
+				__DIR__ . '/../database/postsql' => base_path('database/postsql'),
+			], $publishes);
 		}
 	}
 
