@@ -14,6 +14,11 @@ class ServiceProvider extends BaseServiceProvider {
 		$this->loadViewsFrom(__DIR__ . '/../resources/views', 'gmf');
 		if ($this->app->runningInConsole()) {
 			$this->registerMigrations();
+			$this->commands([
+				Console\InstallCommand::class,
+				Console\SeedCommand::class,
+				Console\SqlCommand::class,
+			]);
 
 			$publishes = config('gmf.publishes', 'gmf');
 
