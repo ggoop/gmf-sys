@@ -7,7 +7,7 @@ gmf framework
 1 - 使用 Composer 依赖包管理器安装 Gmf/Sys:
 
 ```shell
-composer require ggoop/gmf-md
+composer require ggoop/gmf-sys
 ```
 
 2 - 接下来，将 Gmf 的服务提供者注册到配置文件 config/app.php 的 providers 数组中：
@@ -53,11 +53,19 @@ protected $middlewareGroups = [
       ...
       \Gmf\Sys\Passport\Http\Middleware\CreateFreshApiToken::class
       'visitor',
+      'ent_check',
     ],
 
     'api' => [
       ...
       'visitor',
+      'ent_check',
     ],
   ];
+```
+
+6 - 项目安装,在项目目录下，执行下列命令
+
+```shell
+ php artisan gmf:install --seed --force
 ```
