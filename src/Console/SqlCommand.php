@@ -68,7 +68,7 @@ class SqlCommand extends Command {
 	}
 	public function getMigrationFiles($paths) {
 		return Collection::make($paths)->flatMap(function ($path) {
-			return $this->files->glob($path . '/*.sql');
+			return $this->files->glob($path . '/*_*_*_*.sql');
 		})->filter()->sortBy(function ($file) {
 			return $this->getMigrationName($file);
 		})->values()->keyBy(function ($file) {

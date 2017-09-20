@@ -9,12 +9,22 @@ return [
 		//用户实体编码
 		'entity' => env('GMF_USER_ENTITY', 'gmf.ac.user'),
 	],
-	'oauth_client_id' => env('GMF_OAUTH_CLIENT_ID', ''),
-	'oauth_client_name' => env('APP_TITLE', ''),
-	'oauth_client_secret' => env('GMF_OAUTH_CLIENT_SECRET', ''),
-	'oauth_client_user' => env('GMF_OAUTH_CLIENT_USER', ''),
 
-	'admin_user_id' => env('GMF_ADMIN_USER_ID', ''),
-	'admin_user_email' => env('GMF_ADMIN_USER_EMAIL', ''),
-	'admin_user_pwd' => env('GMF_ADMIN_USER_PWD', ''),
+	'client' => [
+		'id' => env('GMF_OAUTH_CLIENT_ID', ''),
+		'name' => env('APP_TITLE', ''),
+		'secret' => env('GMF_OAUTH_CLIENT_SECRET', ''),
+		'user' => env('GMF_OAUTH_CLIENT_USER', ''),
+	],
+
+	'admin' => [
+		'id' => env('GMF_ADMIN_USER_ID', ''),
+		'email' => env('GMF_ADMIN_USER_EMAIL', ''),
+		'pwd' => env('GMF_ADMIN_USER_PWD', ''),
+	],
+
+	'ent' => [
+		'id' => env('GMF_ENT_ID'),
+		'name' => env('GMF_ENT_NAME'),
+	],
 ];

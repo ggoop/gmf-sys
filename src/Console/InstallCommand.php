@@ -3,6 +3,7 @@
 namespace Gmf\Sys\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Filesystem\Filesystem;
 
 class InstallCommand extends Command {
 	/**
@@ -21,32 +22,45 @@ class InstallCommand extends Command {
 	 * @var string
 	 */
 	protected $description = 'install gmf sys laravel for use, migrate,seed,install proc ';
-
+	protected $files;
+	public function __construct(Filesystem $files) {
+		parent::__construct();
+		$this->files = $files;
+	}
 	/**
 	 * Execute the console command.
 	 *
 	 * @return mixed
 	 */
 	public function handle() {
-		$this->call('migrate');
-
+		//gmf:publish
 		$opt = [];
 		$opt['--tag'] = 'gmf';
 		if ($this->option('force')) {
 			$opt['--force'] = true;
 		}
-		$this->call('vendor:publish', $opt);
+		$this->call('gmf:publish', $opt);
 
-		$this->call('gmf:sql', ['--tag' => 'presql']);
+		//migrate
+		$opt = [];
+		$this->call('migrate', $opt);
 
+		//gmf:sql presql
+		$opt = ['--tag' => 'presql'];
+		$this->call('gmf:sql', $opt);
+
+		//gmf:seed
 		$opt = [];
 		if ($this->option('seed')) {
 			$this->call('gmf:seed');
 		}
 
-		$this->call('gmf:sql');
+		//gmf:sql sql
+		$opt = ['--tag' => 'sql'];
+		$this->call('gmf:sql', $opt);
 
-		$this->call('gmf:sql', ['--tag' => 'postsql']);
-
+		//gmf:sql postsql
+		$opt = ['--tag' => 'postsql'];
+		$this->call('gmf:sql', $opt);
 	}
 }

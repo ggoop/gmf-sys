@@ -15,6 +15,7 @@ class ServiceProvider extends BaseServiceProvider {
 		if ($this->app->runningInConsole()) {
 			$this->registerMigrations();
 			$this->commands([
+				Console\PublishlCommand::class,
 				Console\InstallCommand::class,
 				Console\SeedCommand::class,
 				Console\SqlCommand::class,

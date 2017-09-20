@@ -40,7 +40,7 @@ class SeedCommand extends Command {
 		$path = $this->getCommandPath();
 
 		$files = $this->getMigrationFiles($path);
-		$this->requireFiles($migrations = $this->pendingMigrations($files));
+		$this->requireFiles($migrations = $this->pendingMigrations($files, ['DatabaseSeeder']));
 
 		foreach ($migrations as $file) {
 			$this->runUp($file);
@@ -75,12 +75,11 @@ class SeedCommand extends Command {
 		} else {
 			$class = Str::studly(implode('_', $sp));
 		}
-
 		return new $class;
 	}
 	public function getMigrationFiles($paths) {
 		return Collection::make($paths)->flatMap(function ($path) {
-			return $this->files->glob($path . '/*.php');
+			return $this->files->glob($path . '/*_*_*_*.php');
 		})->filter()->sortBy(function ($file) {
 			return $this->getMigrationName($file);
 		})->values()->keyBy(function ($file) {
