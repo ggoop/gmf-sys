@@ -43,6 +43,10 @@ class ServiceProvider extends BaseServiceProvider {
 			], $publishes);
 
 			$this->publishes([
+				__DIR__ . '/../resources/git/database.gitignore' => base_path('database/.gitignore'),
+			], $publishes);
+
+			$this->publishes([
 				__DIR__ . '/../database/seeds' => base_path('database/seeds'),
 			], $publishes);
 
