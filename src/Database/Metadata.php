@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Fluent;
 
 class Metadata {
-	public static $defaultStringLength = 255;
+	public static $defaultStringLength = 250;
 
 	protected $columns = [];
 	protected $commands = [];
@@ -302,7 +302,7 @@ class Metadata {
 		if (!Schema::hasTable(static::$mdEntityName)) {
 			Schema::create('gmf_sys_entities', function (Blueprint $table) {
 				$table->string('id', 100)->primary();
-				$table->string('name')->unique()->comment('名称');
+				$table->string('name', 250)->index()->comment('名称');
 				$table->string('comment')->nullable()->comment('描述');
 				$table->string('table_name')->nullable()->comment('集合名称');
 				$table->string('type')->comment('类型');
@@ -312,7 +312,7 @@ class Metadata {
 			Schema::create('gmf_sys_entity_fields', function (Blueprint $table) {
 				$table->string('id', 100)->primary();
 				$table->string('entity_id', 100);
-				$table->string('name')->index()->comment('名称');
+				$table->string('name', 250)->index()->comment('名称');
 				$table->string('field_name', 100)->nullable()->comment('字段名称');
 				$table->string('comment')->nullable()->comment('描述');
 				$table->string('type_id', 100)->nullable()->comment('数据类型');
