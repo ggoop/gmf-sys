@@ -35,18 +35,18 @@ class VisitorMiddleware {
 		$inData['agent'] = $request->userAgent();
 
 		if ($server) {
-			$inData['referer'] = $server->get('HTTP_REFERER');
+			$inData['referer'] = str_limit($server->get('HTTP_REFERER'), 250);
 		}
 		$inData['created_at'] = Carbon::now();
 
 		if (!empty($params['client_name'])) {
-			$inData['client_name'] = $params['client_name'];
+			$inData['client_name'] = str_limit($params['client_name'], 250);
 		}
 		if (!empty($params['client_sn'])) {
-			$inData['client_sn'] = $params['client_sn'];
+			$inData['client_sn'] = str_limit($params['client_sn'], 250);
 		}
 		if (!empty($params['client_account'])) {
-			$inData['client_account'] = $params['client_account'];
+			$inData['client_account'] = str_limit($params['client_account'], 250);
 		}
 		if (!empty($params['client_id'])) {
 			$inData['client_id'] = $params['client_id'];
