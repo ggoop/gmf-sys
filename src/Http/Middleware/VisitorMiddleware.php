@@ -55,9 +55,9 @@ class VisitorMiddleware {
 
 		$fromTime = microtime(true);
 
-		$response = null;
 		try {
 			$response = $next($request);
+			return $response;
 		} catch (\Exception $e) {
 			throw $e;
 		} finally {
@@ -66,6 +66,6 @@ class VisitorMiddleware {
 			$inData['actimes'] = ($endTime - $fromTime) * 1000;
 			Visitor::create($inData);
 		}
-		return $response;
+
 	}
 }

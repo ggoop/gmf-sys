@@ -17,7 +17,7 @@ class SqlCommand extends Command {
 	protected $signature = 'gmf:sql
             {--force : Overwrite data}
             {--path= : The path of sql files to be executed.}
-            {--tag : seed by tag}';
+            {--tag= : seed by tag}';
 
 	/**
 	 * The console command description.
@@ -39,7 +39,7 @@ class SqlCommand extends Command {
 
 		$path = $this->getCommandPath();
 
-		$tag = $this->option('tag') ?: 'sql';
+		$tag = $this->getTags();
 
 		$path .= $tag;
 		$this->info('******************' . $tag . ' sql executing*************');
@@ -54,17 +54,22 @@ class SqlCommand extends Command {
 		$this->info('******************' . $tag . ' sql execute complete******');
 
 	}
+	protected function getTags() {
+		return $this->option('tag') . 'sqls';
+	}
 	protected function getCommandPath() {
 		return $this->laravel->databasePath() . DIRECTORY_SEPARATOR;
 	}
 	protected function runUp($file) {
+		$tag = $this->getTags();
+
 		$name = $this->getMigrationName($file);
-		$this->line("sql begin:     {$name}");
+		$this->line($tag . "  execute begin:    {$name}");
 
 		$content = $this->files->get($file);
 		DB::statement($content);
 
-		$this->line("sql completed: {$name}");
+		$this->line($tag . " execute completed: {$name}");
 	}
 	public function getMigrationFiles($paths) {
 		return Collection::make($paths)->flatMap(function ($path) {

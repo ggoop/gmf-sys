@@ -28,17 +28,23 @@ class PublishlCommand extends Command {
 	}
 	private function reNewRun() {
 		$files = [];
-		//seeds,sql等文件
+		//seeds,sqls等文件
+		$path = $this->laravel->databasePath() . DIRECTORY_SEPARATOR . 'preseeds';
+		$files = array_unique(array_merge($files, $this->files->glob($path . '/*_*_*_*.php')));
+
 		$path = $this->laravel->databasePath() . DIRECTORY_SEPARATOR . 'seeds';
 		$files = array_unique(array_merge($files, $this->files->glob($path . '/*_*_*_*.php')));
 
-		$path = $this->laravel->databasePath() . DIRECTORY_SEPARATOR . 'presql';
+		$path = $this->laravel->databasePath() . DIRECTORY_SEPARATOR . 'postseeds';
+		$files = array_unique(array_merge($files, $this->files->glob($path . '/*_*_*_*.php')));
+
+		$path = $this->laravel->databasePath() . DIRECTORY_SEPARATOR . 'presqls';
 		$files = array_unique(array_merge($files, $this->files->glob($path . '/*_*_*_*.sql')));
 
-		$path = $this->laravel->databasePath() . DIRECTORY_SEPARATOR . 'sql';
+		$path = $this->laravel->databasePath() . DIRECTORY_SEPARATOR . 'sqls';
 		$files = array_unique(array_merge($files, $this->files->glob($path . '/*_*_*_*.sql')));
 
-		$path = $this->laravel->databasePath() . DIRECTORY_SEPARATOR . 'postsql';
+		$path = $this->laravel->databasePath() . DIRECTORY_SEPARATOR . 'postsqls';
 		$files = array_unique(array_merge($files, $this->files->glob($path . '/*_*_*_*.sql')));
 
 		foreach ($files as $file) {

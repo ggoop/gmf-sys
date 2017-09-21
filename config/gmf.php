@@ -3,6 +3,7 @@
 return [
 	'publishes' => env('GMF_PUBLISHES', 'gmf'),
 	'ent_session_name' => env('GMF_ENT_SESSION_NAME', 'GMFENTSESSIONNAME'),
+	'auth_redirect' => env('GMF_AUTH_REDIRECT', '/'),
 	'user' => [
 		//用户模型
 		'model' => env('GMF_USER_MODEL', Gmf\Ac\Models\User::class),

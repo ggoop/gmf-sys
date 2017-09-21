@@ -17,7 +17,7 @@ class SeedCommand extends Command {
 	protected $signature = 'gmf:seed
             {--force : Overwrite data}
             {--path= : The path of seed files to be executed.}
-            {--tag : seed by tag}';
+            {--tag= : seed by tag}';
 
 	/**
 	 * The console command description.
@@ -38,6 +38,8 @@ class SeedCommand extends Command {
 	public function handle() {
 
 		$path = $this->getCommandPath();
+		$tag = $this->getTags();
+		$path .= $tag;
 
 		$files = $this->getMigrationFiles($path);
 		$this->requireFiles($migrations = $this->pendingMigrations($files, ['DatabaseSeeder']));
@@ -45,23 +47,27 @@ class SeedCommand extends Command {
 		foreach ($migrations as $file) {
 			$this->runUp($file);
 		}
-		$this->info('seed all complete');
+		$this->info($tag . ' seeding all complete');
+	}
+	protected function getTags() {
+		return $this->option('tag') . 'seeds';
 	}
 	protected function getCommandPath() {
-		return $this->laravel->databasePath() . DIRECTORY_SEPARATOR . 'seeds';
+		return $this->laravel->databasePath() . DIRECTORY_SEPARATOR;
 	}
 	protected function runUp($file) {
+		$tag = $this->getTags();
 		$migration = $this->resolve(
 			$name = $this->getMigrationName($file)
 		);
-		$this->line("seed begin:    {$name}");
+		$this->line($tag . " seeding begin:    {$name}");
 
 		Model::unguarded(function () use ($migration) {
 			if (method_exists($migration, 'run')) {
 				$migration->run();
 			}
 		});
-		$this->line("seed complete: {$name}");
+		$this->line($tag . " seeding complete: {$name}");
 	}
 	protected function getSeeder($seeder) {
 		$class = $this->laravel->make($seeder);

@@ -14,7 +14,8 @@ class InstallCommand extends Command {
 	protected $signature = 'gmf:install
             {--force : Overwrite data}
             {--tag : by tag}
-            {--seed : seed data}';
+            {--seed : seed data}
+            {--sql : sql data}';
 
 	/**
 	 * The console command description.
@@ -33,7 +34,7 @@ class InstallCommand extends Command {
 	 * @return mixed
 	 */
 	public function handle() {
-		//gmf:publish
+
 		$opt = [];
 		$opt['--tag'] = 'gmf';
 		if ($this->option('force')) {
@@ -45,22 +46,27 @@ class InstallCommand extends Command {
 		$opt = [];
 		$this->call('migrate', $opt);
 
-		//gmf:sql presql
-		$opt = ['--tag' => 'presql'];
+		//gmf:sql --tag=pre
+		$opt = ['--tag' => 'pre'];
 		$this->call('gmf:sql', $opt);
 
-		//gmf:seed
-		$opt = [];
+		//gmf:seed --tag=pre
+		$opt = ['--tag' => 'pre'];
+		$this->call('gmf:seed', $opt);
+
+		if ($this->option('sql')) {
+			$this->call('gmf:sql', []);
+		}
 		if ($this->option('seed')) {
-			$this->call('gmf:seed');
+			$this->call('gmf:seed', []);
 		}
 
-		//gmf:sql sql
-		$opt = ['--tag' => 'sql'];
+		//gmf:sql --tag=post
+		$opt = ['--tag' => 'post'];
 		$this->call('gmf:sql', $opt);
 
-		//gmf:sql postsql
-		$opt = ['--tag' => 'postsql'];
-		$this->call('gmf:sql', $opt);
+		//gmf:seed --tag=post
+		$opt = ['--tag' => 'post'];
+		$this->call('gmf:seed', $opt);
 	}
 }
