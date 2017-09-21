@@ -4,6 +4,7 @@ namespace Gmf\Sys\Http\Middleware;
 use Auth;
 use Carbon\Carbon;
 use Closure;
+use Exception;
 use Gmf\Sys\Models\Visitor;
 
 class VisitorMiddleware {
@@ -54,14 +55,17 @@ class VisitorMiddleware {
 
 		$fromTime = microtime(true);
 
-		Visitor::create($inData);
-
-		$response = $next($request);
-
-		$endTime = microtime(true);
-		$inData['times'] = ($endTime - $server->get('REQUEST_TIME_FLOAT')) * 1000;
-		$inData['actimes'] = ($endTime - $fromTime) * 1000;
-		Visitor::create($inData);
+		$response = null;
+		try {
+			$response = $next($request);
+		} catch (\Exception $e) {
+			throw $e;
+		} finally {
+			$endTime = microtime(true);
+			$inData['times'] = ($endTime - $server->get('REQUEST_TIME_FLOAT')) * 1000;
+			$inData['actimes'] = ($endTime - $fromTime) * 1000;
+			Visitor::create($inData);
+		}
 		return $response;
 	}
 }
