@@ -54,6 +54,8 @@ class VisitorMiddleware {
 
 		$fromTime = microtime(true);
 
+		Visitor::create($inData);
+
 		$response = $next($request);
 
 		$endTime = microtime(true);
