@@ -1,12 +1,12 @@
 <?php
 
-namespace Gmf\Sys\Database;
+namespace Gmf\Sys\Query;
 use Exception;
 use Gmf\Sys\Builder;
 use Gmf\Sys\Models;
 use Illuminate\Support\Facades\DB;
 
-class DataQuery {
+class EntityQuery {
 	public static $defaultMainAlias = 'a';
 
 	protected $selects = [];
@@ -14,11 +14,12 @@ class DataQuery {
 	protected $wheres = [];
 
 	protected $entities = [];
+
 	protected $mainEntity;
 	protected $query;
 
 	public static function create($name, array $parameters = []) {
-		return new DataQuery($name, $parameters);
+		return new EntityQuery($name, $parameters);
 	}
 	public function __construct($name, array $parameters = []) {
 		$this->mainEntity = new Builder(array_merge(compact('name'), $parameters));
@@ -32,8 +33,13 @@ class DataQuery {
 		$this->orders[] = $order = new Builder(compact('name', 'direction'));
 		return $order;
 	}
+	public function addWheres($filters) {
+		$this->wheres[] = $filters;
+	}
 	public function addWhere(string $name, $operator = null, $value = null) {
-		$this->wheres[] = $where = new Builder(compact('name', 'operator', 'value'));
+		$where = new Builder(compact('name', 'operator', 'value'));
+		$where->type('item');
+		$this->wheres[] = $where;
 		return $where;
 	}
 	public function build() {
@@ -41,6 +47,25 @@ class DataQuery {
 		$this->buildJoins();
 		return $this->query;
 	}
+	public function getQuery() {
+		if (empty($this->query)) {
+			$this->build();
+		}
+		return $this->query;
+	}
+	public function toSql() {
+		if (empty($this->query)) {
+			$this->build();
+		}
+		return $this->query->toSql();
+	}
+	public function getBindings() {
+		if (empty($this->query)) {
+			$this->build();
+		}
+		return $this->query->getBindings();
+	}
+
 	public function getSchema() {
 		$schema = new Builder();
 		$fields = [];
@@ -54,6 +79,48 @@ class DataQuery {
 		$this->mainEntity = $this->getEntity($this->mainEntity->name);
 		$this->query = DB::table($this->mainEntity->table_name . ' as ' . $this->mainEntity->alias);
 	}
+	private function buildWheres($items, $query, $boolean = 'and') {
+
+		if (is_array($items)) {
+			foreach ($items as $key => $value) {
+				if (is_array($value)) {
+					$this->buildWheres($value, $query, $boolean);
+					continue;
+				}
+				if (empty($value->type)) {
+					continue;
+				}
+				if ($value->type === 'item') {
+					$this->buildWhereItem($value, $query, $boolean);
+				} else if ($value->type === 'boolean') {
+					$this->buildWhereBoolean($value, $query, $boolean);
+				}
+			}
+		} else if (is_object($items)) {
+			if (empty($items->type)) {
+				return;
+			}
+			if ($items->type === 'item') {
+				$this->buildWhereItem($items, $query, $boolean);
+			} else if ($items->type === 'boolean') {
+				$this->buildWhereBoolean($items, $query, $boolean);
+			}
+		}
+	}
+	private function buildWhereBoolean($item, $query, $boolean) {
+		if (empty($item->items)) {
+			return;
+		}
+		$query->where(function ($query) use ($item) {
+			foreach ($item->items as $key => $value) {
+				$this->buildWheres($value, $query, $item->boolean);
+			}
+		});
+	}
+	private function buildWhereItem($item, $query, $boolean) {
+		$tag = $this->parseField($item);
+		QueryCase::attachWhere($query, $item, $item->dbFieldName, $boolean);
+	}
 	private function buildJoins() {
 		foreach ($this->selects as $key => $value) {
 			$this->parseField($value);
@@ -63,10 +130,8 @@ class DataQuery {
 			$this->parseField($value);
 			$this->query->orderBy($value->dbFieldName, $value->direction);
 		}
-		foreach ($this->wheres as $key => $value) {
-			$this->parseField($value);
-			QueryCase::attachWhere($this->query, $value, $value->dbFieldName);
-		}
+		$this->buildWheres($this->wheres, $this->query);
+
 		foreach ($this->entities as $key => $value) {
 			if (empty($value->path) || empty($value->join)) {
 				continue;
@@ -169,6 +234,9 @@ class DataQuery {
 		}
 		$part = array_shift($parts);
 		$mdField = $this->getField($mdEntity, $part);
+		if (empty($mdField)) {
+			return false;
+		}
 
 		$comments[] = $mdField->comment;
 

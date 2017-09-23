@@ -2,9 +2,9 @@
 
 namespace Gmf\Sys\Http\Controllers;
 
-use Gmf\Sys\Builder;
-use Gmf\Sys\Database\DataQuery;
 use Gmf\Sys\Models;
+use Gmf\Sys\Query\EntityQuery;
+use Gmf\Sys\Query\QueryCase;
 use Illuminate\Http\Request;
 
 class QueryController extends Controller {
@@ -28,154 +28,57 @@ class QueryController extends Controller {
 		return $this->toJson($data);
 	}
 	public function show(Request $request, string $queryID) {
-		$data = $this->buildQueryCase($request, $queryID);
-		return $this->toJson($data);
+		$qc = $this->buildQueryCase($request, $queryID);
+		return $this->toJson($qc);
 	}
 	private function buildQueryCase(Request $request, string $queryID) {
-		$queryCase = new Builder;
-		$query = Models\Query::with('fields', 'entity', 'orders');
-		$query->where('id', $queryID)->orWhere('name', $queryID);
-		$model = $query->first();
-		if (!$model) {
-			return $this->toError('not find query');
-		}
-
-		$queryInfo = new Builder;
-		$queryInfo->id($model->id)->name($model->name)->memo($model->memo)->comment($model->comment)
-			->wheres([])->orders([])->columns([]);
-		if ($model->data) {
-			$qm = json_decode($model->data);
-			if ($qm && !empty($qm->wheres)) {
-				$queryInfo->wheres($qm->wheres);
-			}
-			if ($qm && !empty($qm->orders)) {
-				$queryInfo->orders($qm->orders);
-			}
-			if ($qm && !empty($qm->columns)) {
-				$queryInfo->columns($qm->columns);
-			}
-		}
-		if ($model->entity) {
-			$queryInfo->entity_id($model->entity->id)
-				->entity_name($model->entity->name)
-				->entity_comment($model->entity->comment);
-		}
-		$queryCase->query($queryInfo);
-
-		$fields = [];
-		if (count($model->fields) > 0) {
-			foreach ($model->fields as $f) {
-				$field = new Builder;
-				$field->name($f->name);
-				$field->hide(intval($f->hide));
-				$fields[] = $field;
-			}
-		} else if ($model->entity) {
-			$entityFields = Models\EntityField::where('entity_id', $model->entity->id)->where('collection', '0')->get();
-			foreach ($entityFields as $f) {
-				if ($f->name == 'created_at' || $f->name == 'updated_at' || $f->name == 'deleted_at') {
-					continue;
-				}
-				$field = new Builder;
-				$field->name($f->name);
-				$fields[] = $field;
-			}
-		}
-		$queryCase->fields($fields);
-		//匹配项
-		$matchItems = explode(";", $model->matchs);
-		$queryCase->matchs($matchItems);
-
-		$queryCase->filter($model->filter);
-		//条件
-		$wheres = [];
-		if ($request->has('wheres')) {
-			$indatas = $request->wheres;
-
-			foreach ($indatas as $key => $value) {
-				if (!$value || empty($value['name']) || empty($value['value'])) {
-					continue;
-				}
-				$field = new Builder;
-				$field->name($value['name']);
-				if (!empty($value['value'])) {
-					$field->value($value['value']);
-				}
-				if (!empty($value['operator'])) {
-					$field->operator($value['operator']);
-				}
-				$wheres[] = $field;
-			}
-		}
-		$queryCase->wheres($wheres);
-		//排序
-		$orders = [];
-		if ($request->has('orders') && count($request->orders)) {
-			$indatas = $request->orders;
-			foreach ($indatas as $key => $value) {
-				if (!$value || empty($value['name'])) {
-					continue;
-				}
-				$field = new Builder;
-				$field->name($value['name']);
-				if (!empty($value['direction'])) {
-					$field->direction($value['direction']);
-				}
-				$orders[] = $field;
-			}
-		} else if (count($model->orders) > 0) {
-			foreach ($model->orders as $f) {
-				$field = new Builder;
-				$field->name($f['name']);
-				if (!empty($f['direction'])) {
-					$field->direction($f['direction']);
-				}
-				$orders[] = $field;
-			}
-		}
-		$queryCase->orders($orders);
-		return $queryCase;
+		$qc = QueryCase::create();
+		$qc->fromQuery($queryID, $request);
+		return $qc;
 	}
 	public function query(Request $request, string $queryID) {
 		$pageSize = $request->input('size', 10);
 
-		$queryCase = $this->buildQueryCase($request, $queryID);
+		$qc = $this->buildQueryCase($request, $queryID);
 
 		$data = [];
 		$error = false;
 		// try {
-		$queryBuilder = DataQuery::create($queryCase->query->entity_name);
+		$entityQuery = EntityQuery::create($qc->query->entity_name);
 
-		foreach ($queryCase->fields as $f) {
-			$queryBuilder->addSelect($f->name, '', '', $f->toArray());
+		foreach ($qc->fields as $f) {
+			$entityQuery->addSelect($f->name, '', '', $f->toArray());
 		}
-		foreach ($queryCase->wheres as $f) {
-			if (!empty($f->operator)) {
-				$queryBuilder->addWhere($f->name, $f->operator, $f->value);
+
+		foreach ($qc->wheres as $f) {
+			if (!empty($f->type) && $f->type === 'item') {
+				$entityQuery->addWhere($f->name, $f->operator, $f->value);
 			} else {
-				$queryBuilder->addWhere($f->name, '=', $f->value);
+				$entityQuery->addWheres($f);
 			}
 		}
-		foreach ($queryCase->orders as $f) {
+		foreach ($qc->orders as $f) {
 			if (!empty($f->direction)) {
-				$queryBuilder->addOrder($f->name, $f->direction);
+				$entityQuery->addOrder($f->name, $f->direction);
 			} else {
-				$queryBuilder->addOrder($f->name);
+				$entityQuery->addOrder($f->name);
 			}
 		}
-		$query = $queryBuilder->build();
+		$query = $entityQuery->build();
 
 		if ($request->custFilter) {
 			$query->whereRaw($request->custFilter);
 		}
+		if ($qc->query->filter) {
+			$query->whereRaw($qc->query->filter);
+		}
 		if (!empty($request->q)) {
-			$query->where(function ($query) use ($request, $queryCase, $queryBuilder) {
-				foreach ($queryCase->matchs as $f) {
+			$query->where(function ($query) use ($request, $qc, $entityQuery) {
+				foreach ($qc->matchs as $f) {
 					if (empty($f)) {
 						continue;
 					}
-
-					$field = $queryBuilder->parseField($f);
+					$field = $entityQuery->parseField($f);
 					if ($field) {
 						$query->orWhere($field->dbFieldName, 'like', '%' . $request->q . '%');
 					}
@@ -187,8 +90,8 @@ class QueryController extends Controller {
 		// } catch (Exception $e) {
 		// 	$error = $e;
 		// }
-		$schema = $queryBuilder->getSchema();
-		$schema->setAttributes($queryCase->query->toArray());
+		$schema = $entityQuery->getSchema();
+		//$schema->setAttributes($qc->query->toArray());
 		if ($error) {
 			return $this->toError($error, function ($data) use ($schema) {
 				$data->schema($schema);
@@ -198,6 +101,5 @@ class QueryController extends Controller {
 				$data->schema($schema);
 			});
 		}
-
 	}
 }

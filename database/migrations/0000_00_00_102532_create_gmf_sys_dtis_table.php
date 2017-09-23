@@ -30,6 +30,7 @@ class CreateGmfSysDtisTable extends Migration {
 
 		$md->text('header')->nullable()->comment('请求头');
 		$md->text('body')->nullable()->comment('请求体');
+		$md->text('query')->nullable()->comment('请求参数');
 
 		$md->integer('sequence')->default(0)->comment('顺序');
 

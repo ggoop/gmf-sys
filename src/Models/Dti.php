@@ -13,7 +13,7 @@ class Dti extends Model {
 	public $incrementing = false;
 	protected $fillable = ['id', 'ent_id', 'code', 'name', 'memo', 'category_id', 'host', 'path', 'method_enum',
 		'local_id',
-		'sequence', 'header', 'body', 'is_running',
+		'sequence', 'header', 'body', 'query', 'is_running',
 		'begin_date', 'end_date', 'msg'];
 	protected $casts = [
 		'is_running' => 'boolean',
@@ -42,7 +42,7 @@ class Dti extends Model {
 		tap(new Builder, function ($builder) use ($callback) {
 			$callback($builder);
 
-			$data = array_only($builder->toArray(), ['id', 'ent_id', 'code', 'name', 'memo', 'category_id', 'host', 'path', 'method_enum', 'local_id', 'sequence', 'header', 'body', 'is_running']);
+			$data = array_only($builder->toArray(), ['id', 'ent_id', 'code', 'name', 'memo', 'category_id', 'host', 'path', 'method_enum', 'local_id', 'sequence', 'header', 'body', 'query', 'is_running']);
 
 			$category = false;
 			if (!empty($builder->category)) {

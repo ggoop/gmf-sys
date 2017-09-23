@@ -26,7 +26,7 @@ class CreateGmfSysDtiLocalsTable extends Migration {
 		$md->string('path')->nullable()->comment('接口路径');
 		$md->text('header')->nullable()->comment('请求头');
 		$md->text('body')->nullable()->comment('请求体');
-
+		$md->text('query')->nullable()->comment('请求参数');
 		$md->timestamps();
 
 		$md->build();

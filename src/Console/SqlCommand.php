@@ -67,8 +67,8 @@ class SqlCommand extends Command {
 		$this->line($tag . "  execute begin:    {$name}");
 
 		$content = $this->files->get($file);
-		DB::statement($content);
-
+		//DB::statement($content);
+		DB::unprepared($content);
 		$this->line($tag . " execute completed: {$name}");
 	}
 	public function getMigrationFiles($paths) {
