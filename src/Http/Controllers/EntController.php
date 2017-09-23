@@ -16,7 +16,7 @@ class EntController extends Controller {
 	public function getMyEnts(Request $request) {
 		$userID = Auth::id();
 		$query = DB::table('gmf_sys_ents as l')->join('gmf_sys_ent_users as u', 'l.id', '=', 'u.ent_id');
-		$query->addSelect('l.id', 'l.name', 'l.avatar', 'l.dcHost', 'u.type_enum as type');
+		$query->addSelect('l.id', 'l.name', 'l.avatar', 'l.dc_host', 'u.type_enum as type');
 		$query->where('u.user_id', $userID);
 
 		$datas = $query->get();

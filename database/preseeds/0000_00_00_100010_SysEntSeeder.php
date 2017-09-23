@@ -11,7 +11,6 @@ class SysEntSeeder extends Seeder {
 	 * @return void
 	 */
 	public function run() {
-
 		$id = config('app.key');
 		$name = config('app.name');
 		if (!$id) {
@@ -21,6 +20,11 @@ class SysEntSeeder extends Seeder {
 		$b->name($name)->code($id);
 		$ent = Models\Ent::updateOrCreate(['id' => $id], $b->toArray());
 
+		$uid = config('gmf.admin.id');
+		if ($uid && $ent) {
+			Models\Ent::addUser($ent->id, $uid);
+		}
+
 		$id = config('gmf.ent.id');
 		$name = config('gmf.ent.name');
 		if (!$id) {
@@ -29,5 +33,8 @@ class SysEntSeeder extends Seeder {
 		$b = new Builder;
 		$b->name($name)->code($id);
 		$ent = Models\Ent::updateOrCreate(['id' => $id], $b->toArray());
+		if ($uid && $ent) {
+			Models\Ent::addUser($ent->id, $uid);
+		}
 	}
 }

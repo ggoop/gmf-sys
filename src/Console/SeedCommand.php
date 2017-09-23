@@ -17,7 +17,8 @@ class SeedCommand extends Command {
 	protected $signature = 'gmf:seed
             {--force : Overwrite data}
             {--path= : The path of seed files to be executed.}
-            {--tag= : seed by tag}';
+            {--tag= : seed by tag},
+            {--ent= : seed ent data}';
 
 	/**
 	 * The console command description.
@@ -62,8 +63,13 @@ class SeedCommand extends Command {
 		);
 		$this->line($tag . " seeding begin:    {$name}");
 
-		Model::unguarded(function () use ($migration) {
+		$entId = $this->option('ent') ?: false;
+
+		Model::unguarded(function () use ($migration, $entId) {
 			if (method_exists($migration, 'run')) {
+				if ($entId) {
+					$migration->entId = $entId;
+				}
 				$migration->run();
 			}
 		});
