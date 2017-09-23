@@ -7,4 +7,7 @@ preseeds/*_*_*_*.php
 seeds/*_*_*_*.php
 postseeds/*_*_*_*.php
 
+
+*/*_*_*_*.*.back
+*/*_*_*_*.*.bak
 test/
