@@ -80,7 +80,7 @@ class QueryCase {
 		$temps = $request->input('wheres');
 		if ($temps) {
 			$parse = Filter::create();
-			$this->wheres[] = $parse->parse($temps);
+			$this->wheres = $parse->parse($temps);
 		}
 		$temps = $request->input('orders');
 		if ($temps) {
