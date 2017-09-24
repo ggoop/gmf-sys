@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Closure;
 use Exception;
 use Gmf\Sys\Models\Visitor;
+use Log;
 
 class VisitorMiddleware {
 
@@ -64,7 +65,11 @@ class VisitorMiddleware {
 			$endTime = microtime(true);
 			$inData['times'] = ($endTime - $server->get('REQUEST_TIME_FLOAT')) * 1000;
 			$inData['actimes'] = ($endTime - $fromTime) * 1000;
-			Visitor::create($inData);
+			try {
+				Visitor::create($inData);
+			} catch (\Exception $e) {
+				Log::error('Visitor create error:');
+			}
 		}
 
 	}
