@@ -67,7 +67,10 @@ class SeedCommand extends Command {
 
 		Model::unguarded(function () use ($migration, $entId) {
 			if (method_exists($migration, 'run')) {
-				if ($entId) {
+				if ($entId && !array_has(get_object_vars($migration), 'entId')) {
+					$this->line("entId property is not exists, returned");
+					return;
+				} else {
 					$migration->entId = $entId;
 				}
 				$migration->run();
