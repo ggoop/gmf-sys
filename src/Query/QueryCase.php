@@ -1,6 +1,7 @@
 <?php
 
 namespace Gmf\Sys\Query;
+use Auth;
 use Exception;
 use Gmf\Sys\Builder;
 use Gmf\Sys\Models;
@@ -11,6 +12,7 @@ class QueryCase {
 	public $orders = [];
 	public $fields = [];
 	public $matchs = [];
+	public $context = [];
 	public $filter;
 	public $query;
 
@@ -77,6 +79,7 @@ class QueryCase {
 		return $queryInfo;
 	}
 	public function fromRequest(Request $request) {
+		$this->parseContext($request);
 		$temps = $request->input('wheres');
 		if ($temps) {
 			$parse = Filter::create();
@@ -88,8 +91,17 @@ class QueryCase {
 			$this->orders = $parse->parse($temps);
 		}
 	}
+	protected function parseContext(Request $request = null) {
+		$context = [];
+		if ($request) {
+			$context['entId'] = $request->oauth_ent_id;
+			$context['userId'] = Auth::id();
+		}
+		$this->context = $context;
+		return $this->context;
+	}
 	public function fromQuery(string $queryID, Request $request = null) {
-
+		$this->parseContext($request);
 		$this->query = $this->getQueryInfo($queryID);
 		//栏目
 
@@ -98,6 +110,12 @@ class QueryCase {
 		$this->matchs = $this->query->matchs;
 		//其它过滤项
 		$this->filter = $this->query->filter;
+		if ($this->filter) {
+			foreach ($this->context as $key => $value) {
+				$this->filter = str_replace('#{' . $key . '}#', "'" . $value . "'", $this->filter);
+			}
+
+		}
 		//优先使用请求条件
 		if (!empty($request)) {
 			$temps = $request->input('wheres');

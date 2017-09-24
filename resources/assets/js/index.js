@@ -22,14 +22,13 @@ const start = {
 };
 
 function getEntId() {
-  var ent = window.gmfEntID;
-  return ent;
+  return window.gmfEntID;
 }
 start.run = function(elID) {
   elID = elID || '#gmfApp';
   var rootData = {
     title: '',
-    userData: { entId: getEntId(), ents: [] },
+    userData: { ent: {}, entId: getEntId(), ents: [] },
     userConfig: window.gmfConfig
   };
 
@@ -47,18 +46,41 @@ start.run = function(elID) {
     el: elID,
     data: rootData,
     watch: {
-      "userData.entId": function(v, o) {
-        this.$http.defaults.headers.common.Ent = v;
+      "userData.ent": function(v, o) {
+        this.userData.entId = v ? v.id : "";
       },
+      "userData.entId": function(v, o) {
+        this.setHttpConfig();
+      }
     },
     methods: {
+      setHttpConfig() {
+        this.$http.defaults.headers.common.Ent = this.userData.entId;
+      },
       loadEnts() {
         this.$http.get('sys/ents/my').then(response => {
-          this.userData.ents = response.data.data||[];
+          this.userData.ents = response.data.data || [];
+          var ent = false;
+          _.forEach(this.userData.ents, (value, key) => {
+            if (value.id == this.userData.entId) {
+              ent = value;
+            }
+          });
+          if (!ent) {
+            _.forEach(this.userData.ents, function(value, key) {
+              if (value.is_default) {
+                ent = value;
+              }
+            });
+          }
+          if (!ent && this.userData.ents && this.userData.ents.length > 0) {
+            ent = this.userData.ents[0];
+          }
+          this.userData.ent = ent;
         }, response => {
           console.log(response);
         });
-      }
+      },
     },
     created: function() {
       this.loadEnts();

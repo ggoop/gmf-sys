@@ -69,8 +69,8 @@ class QueryController extends Controller {
 		if ($request->custFilter) {
 			$query->whereRaw($request->custFilter);
 		}
-		if ($qc->query->filter) {
-			$query->whereRaw($qc->query->filter);
+		if ($qc->filter) {
+			$query->whereRaw($qc->filter);
 		}
 		if (!empty($request->q)) {
 			$query->where(function ($query) use ($request, $qc, $entityQuery) {
