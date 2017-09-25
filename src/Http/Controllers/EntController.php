@@ -6,6 +6,7 @@ use Auth;
 use DB;
 use Gmf\Sys\Models;
 use Illuminate\Http\Request;
+use Validator;
 
 class EntController extends Controller {
 	public function index(Request $request) {
@@ -24,7 +25,7 @@ class EntController extends Controller {
 		return $this->toJson($data);
 	}
 	public function store(Request $request) {
-		$input = array_only($request->all(), ['id', 'code', 'name']);
+		$input = array_only($request->all(), ['code', 'name', 'memo', 'short_name', 'avatar', 'dc_host', 'industry', 'area']);
 		$validator = Validator::make($input, [
 			'code' => [
 				'required',
@@ -48,7 +49,7 @@ class EntController extends Controller {
 	 * @return [type]           [description]
 	 */
 	public function update(Request $request, $id) {
-		$input = $request->only(['code', 'name']);
+		$input = $request->only(['code', 'name', 'memo', 'short_name', 'avatar', 'dc_host', 'industry', 'area']);
 		$validator = Validator::make($input, [
 			'code' => [
 				'required',
