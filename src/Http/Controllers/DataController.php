@@ -19,7 +19,7 @@ class DataController extends Controller {
 		return $this->toJson($datas);
 	}
 	public function test(Request $request) {
-
+		return md5('123');
 		$w = Filter::create();
 		$w->parse($request->input('wheres'));
 		$eq = EntityQuery::create('suite.amiba.group');
