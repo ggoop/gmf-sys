@@ -29,20 +29,14 @@ class ServiceProvider extends BaseServiceProvider {
 
 			$this->publishes([
 				__DIR__ . '/../resources/git/database.gitignore' => database_path('.gitignore'),
-				__DIR__ . '/../resources/git/allfiles.gitignore' => resource_path('assets/js/vendor/.gitignore'),
-				__DIR__ . '/../resources/git/allfiles.gitignore' => resource_path('assets/fonts/vendor/.gitignore'),
-				__DIR__ . '/../resources/git/allfiles.gitignore' => resource_path('assets/sass/vendor/.gitignore'),
+				__DIR__ . '/../resources/git/jsvendor.gitignore' => resource_path('assets/js/vendor/.gitignore'),
+				__DIR__ . '/../resources/git/fontvendor.gitignore' => resource_path('assets/fonts/vendor/.gitignore'),
+				__DIR__ . '/../resources/git/sassvendor.gitignore' => resource_path('assets/sass/vendor/.gitignore'),
 			], $publishes);
 
 			$this->publishes([
 				__DIR__ . '/../resources/assets/fonts' => resource_path('assets/fonts/vendor/gmf-sys'),
-			], $publishes);
-
-			$this->publishes([
 				__DIR__ . '/../resources/assets/js' => resource_path('assets/js/vendor/gmf-sys'),
-			], $publishes);
-
-			$this->publishes([
 				__DIR__ . '/../resources/assets/sass' => resource_path('assets/sass/vendor/gmf-sys'),
 			], $publishes);
 
