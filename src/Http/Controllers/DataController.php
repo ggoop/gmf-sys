@@ -15,11 +15,13 @@ class DataController extends Controller {
 		return $this->toJson($datas);
 	}
 	public function show(Request $request) {
+
 		$datas = Uuid::generate(1, 'gmf', Uuid::NS_DNS, "");
 		return $this->toJson($datas);
 	}
 	public function test(Request $request) {
-
+		$path = public_path('a.html');
+		return $path;
 		$w = Filter::create();
 		$w->parse($request->input('wheres'));
 		$eq = EntityQuery::create('suite.amiba.group');

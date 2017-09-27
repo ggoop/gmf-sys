@@ -28,35 +28,38 @@ class ServiceProvider extends BaseServiceProvider {
 			], $publishes);
 
 			$this->publishes([
-				__DIR__ . '/../resources/assets/fonts' => base_path('resources/assets/fonts/vendor/gmf-sys'),
+				__DIR__ . '/../resources/git/database.gitignore' => database_path('.gitignore'),
+				__DIR__ . '/../resources/git/allfiles.gitignore' => resource_path('assets/js/vendor/.gitignore'),
+				__DIR__ . '/../resources/git/allfiles.gitignore' => resource_path('assets/fonts/vendor/.gitignore'),
+				__DIR__ . '/../resources/git/allfiles.gitignore' => resource_path('assets/sass/vendor/.gitignore'),
 			], $publishes);
 
 			$this->publishes([
-				__DIR__ . '/../resources/assets/js' => base_path('resources/assets/js/vendor/gmf-sys'),
+				__DIR__ . '/../resources/assets/fonts' => resource_path('assets/fonts/vendor/gmf-sys'),
 			], $publishes);
 
 			$this->publishes([
-				__DIR__ . '/../resources/assets/sass' => base_path('resources/assets/sass/vendor/gmf-sys'),
+				__DIR__ . '/../resources/assets/js' => resource_path('assets/js/vendor/gmf-sys'),
 			], $publishes);
 
 			$this->publishes([
-				__DIR__ . '/../resources/assets/img' => base_path('public/img/vendor/gmf-sys'),
+				__DIR__ . '/../resources/assets/sass' => resource_path('assets/sass/vendor/gmf-sys'),
 			], $publishes);
 
 			$this->publishes([
-				__DIR__ . '/../resources/git/database.gitignore' => base_path('database/.gitignore'),
+				__DIR__ . '/../resources/assets/img' => public_path('img/vendor/gmf-sys'),
 			], $publishes);
 
 			$this->publishes([
-				__DIR__ . '/../database/seeds' => base_path('database/seeds'),
-				__DIR__ . '/../database/preseeds' => base_path('database/preseeds'),
-				__DIR__ . '/../database/postseeds' => base_path('database/postseeds'),
+				__DIR__ . '/../database/seeds' => database_path('seeds'),
+				__DIR__ . '/../database/preseeds' => database_path('preseeds'),
+				__DIR__ . '/../database/postseeds' => database_path('postseeds'),
 			], $publishes);
 
 			$this->publishes([
-				__DIR__ . '/../database/sqls' => base_path('database/sqls'),
-				__DIR__ . '/../database/presqls' => base_path('database/presqls'),
-				__DIR__ . '/../database/postsqls' => base_path('database/postsqls'),
+				__DIR__ . '/../database/sqls' => database_path('sqls'),
+				__DIR__ . '/../database/presqls' => database_path('presqls'),
+				__DIR__ . '/../database/postsqls' => database_path('postsqls'),
 			], $publishes);
 
 		}
