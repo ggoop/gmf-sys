@@ -32,10 +32,17 @@ export default {
     validate() {
       return true;
     },
+    beforeSave(data){
+
+    },
+    afterSave(data){
+
+    },
     save() {
       if (!this.validate()) {
         return false;
       }
+      this.beforeSave(this.model);
       var iterable;
       if (this.model.main && this.model.main.id) {
         iterable = this.$http.put(this.route + '/' + this.model.main.id, this.model.main);
@@ -44,6 +51,7 @@ export default {
       }
       this.loading++;
       iterable && iterable.then(response => {
+        this.afterSave(response.data.data);
         this.$set(this.model, 'main', response.data.data || {});
         this.loading--;
         this.$toast(this.$lang.LANG_SAVESUCCESS);
@@ -97,6 +105,7 @@ export default {
         this.model.main.id = id;
         this.loading++;
         this.$http.get(this.route + '/' + id).then(response => {
+          this.afterLoad(response.data.data);
           this.$set(this.model, 'main', response.data.data || {});
           this.loading--;
         }, response => {
@@ -110,6 +119,9 @@ export default {
       } else {
         this.create();
       }
+    },
+    afterLoad(data){
+
     },
     paging(id) {
       this.load(id);

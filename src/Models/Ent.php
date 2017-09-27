@@ -12,7 +12,7 @@ class Ent extends Model {
 	protected $table = 'gmf_sys_ents';
 	public $incrementing = false;
 	protected $keyType = 'string';
-	protected $fillable = ['id', 'code', 'name', 'memo', 'short_name', 'avatar', 'revoked'];
+	protected $fillable = ['id', 'code', 'name', 'memo', 'short_name', 'avatar', 'dc_host', 'industry', 'area', 'revoked'];
 
 	public static function addUser($entId, $userId, $type = 'member') {
 		$m = EntUser::where('ent_id', $entId)->where('user_id', $userId)->first();
@@ -45,11 +45,11 @@ class Ent extends Model {
 			if (!empty($builder->id)) {
 				$ent = Ent::find($builder->id);
 				if (!$ent) {
-					$ent = static::create(array_only($builder->toArray(), ['id', 'code', 'name', 'memo']));
+					$ent = static::create(array_only($builder->toArray(), ['id', 'code', 'name', 'memo', 'short_name', 'avatar', 'dc_host', 'industry', 'area']));
 				}
 			}
 			if (!$ent) {
-				$ent = static::create(array_only($builder->toArray(), ['id', 'code', 'name', 'memo']));
+				$ent = static::create(array_only($builder->toArray(), ['id', 'code', 'name', 'memo', 'short_name', 'avatar', 'dc_host', 'industry', 'area']));
 			}
 			return $ent;
 		});

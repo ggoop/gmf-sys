@@ -2,6 +2,8 @@
 
 namespace Gmf\Sys\Console;
 
+use Exception;
+use Gmf\Sys\Models;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\Filesystem;
@@ -64,7 +66,13 @@ class SeedCommand extends Command {
 		$this->line($tag . " seeding begin:    {$name}");
 
 		$entId = $this->option('ent') ?: false;
-
+		if ($entId) {
+			if (empty(Models\Ent::find($entId))) {
+				$this->line($tag . " seeding returned:    {$name}. the entid is null");
+				throw new Exception("the entid is null", 1);
+				return;
+			}
+		}
 		Model::unguarded(function () use ($migration, $entId) {
 			if (method_exists($migration, 'run')) {
 				if ($entId && !array_has(get_object_vars($migration), 'entId')) {

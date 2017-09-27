@@ -56,6 +56,7 @@ class RouteRegistrar {
 			$router->resource('profiles', 'ProfileController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 
 			$router->get('/ents/my', ['uses' => 'EntController@getMyEnts']);
+			$router->any('/ents/seed/{id}', ['uses' => 'EntController@seedDatas']);
 			$router->resource('ents', 'EntController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 
 			$router->resource('dtis', 'DtiController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
