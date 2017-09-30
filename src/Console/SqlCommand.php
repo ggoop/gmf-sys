@@ -16,7 +16,7 @@ class SqlCommand extends Command {
 	 */
 	protected $signature = 'gmf:sql
             {--force : Overwrite data}
-            {--path= : The path of sql files to be executed.}
+            {--name= : The name of sql files to be executed.}
             {--tag= : seed by tag}';
 
 	/**
@@ -45,7 +45,7 @@ class SqlCommand extends Command {
 		$this->info('******************' . $tag . ' sql executing*************');
 
 		$files = $this->getMigrationFiles($path);
-
+		$files = $this->filterFiles($files);
 		$migrations = $this->pendingMigrations($files);
 
 		foreach ($migrations as $file) {
@@ -70,6 +70,30 @@ class SqlCommand extends Command {
 		//DB::statement($content);
 		DB::unprepared($content);
 		$this->line($tag . " execute completed: {$name}");
+	}
+	protected function getResolveName($file) {
+		$sp = explode('_', $file);
+		if (count($sp) > 4 && strlen($sp[0]) == 4 && strlen($sp[1]) == 2 && strlen($sp[2]) == 2) {
+			$class = implode('_', array_slice($sp, 4));
+		} else {
+			$class = implode('_', $sp);
+		}
+		return $class;
+	}
+	protected function filterFiles($files) {
+		$names = strtolower($this->option('name') ?: '');
+		if (!empty($names)) {
+			$names = explode(',', $names);
+		}
+		if (empty($names) || count($names) == 0) {
+			return $files;
+		}
+
+		return Collection::make($files)
+			->filter(function ($file) use ($names) {
+				$name = strtolower($this->getResolveName($this->getMigrationName(str_replace('.sql', '', $file))));
+				return in_array($name, $names);
+			})->values()->all();
 	}
 	public function getMigrationFiles($paths) {
 		return Collection::make($paths)->flatMap(function ($path) {
