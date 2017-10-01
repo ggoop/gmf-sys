@@ -25,7 +25,7 @@ export default {
   },
   watch: {
     'model.main.id': function(value, oldValue) {
-      this.loadPagerInfo(value);
+      this.load(value);
     }
   },
   methods: {
@@ -119,6 +119,7 @@ export default {
       } else {
         this.create();
       }
+      this.loadPagerInfo(id);
     },
     afterLoad(data){
 
@@ -146,6 +147,5 @@ export default {
   },
   mounted() {
     this.load(this.$route.params.id);
-    this.loadPagerInfo(this.$route.params.id);
   },
 };

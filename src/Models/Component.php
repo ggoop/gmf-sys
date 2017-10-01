@@ -16,7 +16,7 @@ class Component extends Model {
 		tap(new Builder, function ($builder) use ($callback) {
 			$callback($builder);
 			$data = array_only($builder->toArray(), ['id', 'name', 'code', 'memo', 'path']);
-			static::create($data);
+			static::updateOrCreate(['code' => $data['code']], $data);
 		});
 	}
 }
