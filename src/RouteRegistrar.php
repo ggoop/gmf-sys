@@ -37,8 +37,9 @@ class RouteRegistrar {
 			$router->post('datas', ['uses' => 'DataController@index']);
 			$router->any('datas/test', ['uses' => 'DataController@test']);
 			$router->resource('datas', 'DataController', ['only' => ['index', 'show']]);
+			$router->resource('components', 'ComponentController', ['only' => ['index', 'show']]);
 		});
-		$this->router->group(['prefix' => 'sys', 'middleware' => ['api', 'visitor', 'auth:api', 'ent_check']], function ($router) {
+		$this->router->group(['prefix' => 'sys', 'middleware' => ['api', 'auth:api', 'ent_check']], function ($router) {
 			$router->get('/entities/pager', ['uses' => 'EntityController@pager']);
 			$router->get('/enums/{enum}', ['uses' => 'EntityController@getEnum']);
 			$router->resource('entities', 'EntityController', ['only' => ['index', 'show']]);

@@ -13,10 +13,19 @@ class Component extends Model {
 	public $incrementing = false;
 	protected $fillable = ['id', 'name', 'code', 'memo', 'path'];
 
+	public function setCodeAttribute($value) {
+		$value = kebab_case($value);
+		$value = str_replace('-', '.', $value);
+		$value = str_replace('..', '.', $value);
+		$value = strtolower($value);
+		$this->attributes['code'] = $value;
+	}
+
 	public static function build(Closure $callback) {
 		tap(new Builder, function ($builder) use ($callback) {
 			$callback($builder);
 			$data = array_only($builder->toArray(), ['id', 'name', 'code', 'memo', 'path']);
+
 			static::updateOrCreate(['code' => $data['code']], $data);
 		});
 	}
