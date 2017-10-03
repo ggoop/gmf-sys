@@ -11,10 +11,13 @@ class Query extends Model {
 	protected $table = 'gmf_sys_queries';
 	public $incrementing = false;
 	protected $keyType = 'string';
-	protected $fillable = ['id', 'entity_id', 'name', 'comment', 'memo', 'data'];
+	protected $fillable = ['id', 'entity_id', 'name', 'comment', 'memo', 'type_enum', 'size'];
 	protected $hidden = ['created_at', 'updated_at'];
 	public function fields() {
 		return $this->hasMany('Gmf\Sys\Models\QueryField');
+	}
+	public function wheres() {
+		return $this->hasMany('Gmf\Sys\Models\QueryWhere');
 	}
 	public function orders() {
 		return $this->hasMany('Gmf\Sys\Models\QueryOrder');
@@ -44,7 +47,7 @@ class Query extends Model {
 			if (empty($builder->comment) && $entity) {
 				$builder->comment = $entity->comment;
 			}
-			$data = array_only($builder->toArray(), ['id', 'entity_id', 'name', 'comment', 'memo', 'matchs', 'filter', 'data']);
+			$data = array_only($builder->toArray(), ['id', 'entity_id', 'name', 'comment', 'memo', 'type_enum', 'matchs', 'filter', 'size']);
 			$main = static::create($data);
 			QueryField::where('query_id', $main->id)->delete();
 

@@ -2,11 +2,11 @@
   background-color: #fcfcfc;
   border-top: .01rem solid #e0e0e0;
   color: rgba(0, 0, 0, 0.54);
-  min-height: .56rem;
+  min-height: .4rem;
 }
 
 .md-table-pagination {
-  height: .56rem;
+  height: .4rem;
   display: flex;
   align-items: center;
   -ms-flex-pack: end;
@@ -161,8 +161,8 @@
   }
 
   .md-table-head-container {
-    height: .56rem;
-    padding: .14rem 0;
+    /*height: .56rem;*/
+    padding: .06rem 0;
     width: 100%;
     transition: $swift-ease-out;
   }

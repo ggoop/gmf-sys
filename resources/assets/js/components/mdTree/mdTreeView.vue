@@ -1,6 +1,8 @@
 <template>
   <div class="md-tree-view" :class="[themeClass]">
-    <md-tree :md-selection="mdSelection" :md-auto-select="mdAutoSelect" :nodes="nodes"></md-tree>
+    <md-tree :md-selection="mdSelection" :md-auto-select="mdAutoSelect" :nodes="nodes">
+      <slot></slot>
+    </md-tree>
   </div>
 </template>
 <script>

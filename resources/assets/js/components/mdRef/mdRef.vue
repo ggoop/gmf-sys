@@ -32,6 +32,11 @@
       </md-table>
     </md-dialog-content>
     <md-dialog-actions>
+      <md-query-case :md-query-id="mdRefId" ref="queryCase" @init="initQueryCase">
+        <md-button class="md-icon-button" @click.native="openQueryCase()">
+          <md-icon>search</md-icon>
+        </md-button>
+      </md-query-case>
       <md-table-pagination :md-size="pageInfo.size" :md-total="pageInfo.total" :md-page="pageInfo.page" :md-page-options="[10,20]" @pagination="onTablePagination">
       </md-table-pagination>
       <span class="flex"></span>
@@ -108,6 +113,12 @@ export default {
     },
   },
   methods: {
+    openQueryCase() {
+      this.$refs.queryCase.open();
+    },
+    initQueryCase(options, promise) {
+      promise && promise.resolve(true);
+    },
     onRefOpen() {
       this.selectedRows = [];
       this.$refs['table'].$data.selectedRows = {};

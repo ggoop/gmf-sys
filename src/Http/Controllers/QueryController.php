@@ -28,8 +28,9 @@ class QueryController extends Controller {
 		return $this->toJson($data);
 	}
 	public function show(Request $request, string $queryID) {
-		$qc = $this->buildQueryCase($request, $queryID);
-		return $this->toJson($qc);
+		$qc = QueryCase::create();
+		$queryInfo = $qc->getQueryInfo($queryID);
+		return $this->toJson($queryInfo);
 	}
 	private function buildQueryCase(Request $request, string $queryID) {
 		$qc = QueryCase::create();

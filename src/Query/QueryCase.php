@@ -28,7 +28,7 @@ class QueryCase {
 	}
 
 	public function getQueryInfo(string $queryID) {
-		$query = Models\Query::with('fields', 'entity', 'orders');
+		$query = Models\Query::with('fields', 'entity', 'orders', 'wheres');
 		$query->where('id', $queryID)->orWhere('name', $queryID);
 		$model = $query->first();
 		if (empty($model)) {
@@ -36,7 +36,11 @@ class QueryCase {
 		}
 		$queryInfo = new Builder;
 		$queryInfo->id($model->id)
-			->name($model->name)->memo($model->memo)->comment($model->comment)
+			->type_enum($model->type_enum)
+			->name($model->name)
+			->memo($model->memo)
+			->comment($model->comment)
+			->size($model->size)
 			->wheres([])->orders([])->fields([]);
 
 		if ($model->entity) {
@@ -50,6 +54,7 @@ class QueryCase {
 			foreach ($model->fields as $f) {
 				$field = new Builder;
 				$field->name($f->name);
+				$field->comment($f->comment);
 				$field->hide(intval($f->hide));
 				$fields[] = $field;
 			}
@@ -61,10 +66,42 @@ class QueryCase {
 				}
 				$field = new Builder;
 				$field->name($f->name);
+				$field->comment($f->comment);
 				$fields[] = $field;
 			}
 		}
 		$queryInfo->fields($fields);
+		//wheres
+		$wheres = [];
+		if (count($model->wheres) > 0) {
+			foreach ($model->wheres as $f) {
+				$field = new Builder;
+				$field->name($f->name);
+				$field->comment($f->comment);
+				$field->hide(intval($f->hide));
+				$field->value($f->value);
+				$field->operator_enum($f->operator_enum);
+				$field->type_enum($f->type_enum);
+
+				$field->ref_id($f->ref_id);
+				$field->ref_values($f->ref_values);
+				$field->ref_filter($f->ref_filter);
+				$wheres[] = $field;
+			}
+		}
+		$queryInfo->wheres($wheres);
+		//orders
+		$orders = [];
+		if (count($model->orders) > 0) {
+			foreach ($model->orders as $f) {
+				$field = new Builder;
+				$field->name($f->name);
+				$field->comment($f->comment);
+				$field->direction($f->direction);
+				$orders[] = $field;
+			}
+		}
+		$queryInfo->orders($orders);
 
 		//匹配项
 		$matchItems = [];

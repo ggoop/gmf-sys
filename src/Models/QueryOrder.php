@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class QueryOrder extends Model {
 	use Snapshotable, HasGuard;
 	protected $table = 'gmf_sys_query_orders';
-	protected $fillable = ['query_id', 'name', 'direction', 'sequence'];
+	protected $fillable = ['query_id', 'name', 'comment', 'direction', 'sequence'];
 	protected $hidden = ['created_at', 'updated_at'];
 }

@@ -23,6 +23,9 @@ class CreateGmfSysQueryWheresTable extends Migration {
 		$md->string('value')->nullable()->comment('条件值');
 		$md->enum('type', 'gmf.sys.query.where.type.enum')->nullable()->comment('类型'); //值，栏目
 		$md->integer('sequence')->default(0)->comment('顺序');
+		$md->string('ref_id')->nullable()->comment('参照');
+		$md->string('ref_values')->nullable()->comment('参照值集合');
+		$md->string('ref_filter')->nullable()->comment('参照过滤器');
 		$md->timestamps();
 
 		$md->foreign('query_id')->references('id')->on('gmf_sys_queries')->onDelete('cascade');

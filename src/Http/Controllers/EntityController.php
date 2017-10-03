@@ -97,7 +97,7 @@ class EntityController extends Controller {
 		if ($loadDetail) {
 			$query->with([
 				'fields' => function ($query) {
-					$query->select('entity_id', 'id', 'name', 'comment', 'type_id', 'type_type', 'collection', 'dValue', 'sequence');
+					$query->select('entity_id', 'id', 'name', 'comment', 'type_id', 'type_type', 'collection', 'default_value', 'sequence');
 				},
 				'fields.type' => function ($query) {
 					$query->select('id', 'name', 'comment');
@@ -121,7 +121,7 @@ class EntityController extends Controller {
 		$query = Models\Entity::select('id', 'name', 'comment', 'table_name', 'type');
 		$query->with([
 			'fields' => function ($query) {
-				$query->select('entity_id', 'id', 'name', 'comment', 'type_id', 'type_type', 'collection', 'dValue', 'sequence');
+				$query->select('entity_id', 'id', 'name', 'comment', 'type_id', 'type_type', 'collection', 'default_value', 'sequence');
 			},
 			'fields.type' => function ($query) {
 				$query->select('id', 'name', 'comment');
