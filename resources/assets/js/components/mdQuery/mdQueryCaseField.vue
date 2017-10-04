@@ -16,22 +16,21 @@
         </md-table-body>
       </md-table>
       <md-table-tool>
-        <md-button class="md-icon-button" @click.native="onItemAdd()">
-          <md-icon>add</md-icon>
-        </md-button>
         <md-button class="md-icon-button" @click.native="onItemRemove()">
           <md-icon>clear</md-icon>
         </md-button>
         <span class="flex"></span>
       </md-table-tool>
+      <md-button class="md-fab md-mini md-fab-bottom-right" @click.native="onItemAdd()">
+        <md-icon>add</md-icon>
+      </md-button>
     </md-table-card>
-    <md-dialog ref="newItemDialog" @open="onNewItemDialogOpen">
+    <md-dialog ref="newItemDialog">
       <md-toolbar>
         <h1 class="md-title">选择更多内容</h1>
       </md-toolbar>
       <md-dialog-content class="no-padding layout-column layout-fill">
-        <md-tree-view :nodes="allItems" @focus="focusNewItemNode">
-        </md-tree-view>
+        <md-query-field ref="onNewItemTree" :md-entity-id="options.entity_id"></md-query-field>
       </md-dialog-content>
       <md-dialog-actions>
         <span class="flex"></span>
@@ -50,28 +49,10 @@ export default {
   },
   data() {
     return {
-      allItems: [],
       selectItems: []
     }
   },
   methods: {
-    loadAllNodes(entity_id, nodes) {
-      if (!entity_id) {
-        return;
-      }
-      this.$http.get('sys/entities/' + entity_id).then(response => {
-        this._.forEach(response.data.data.fields, (v, k) => {
-          var item = {
-            field: v.name,
-            name: v.comment || v.name,
-            type_id: v.type.id,
-            type_name: v.type.name,
-            childs: []
-          };
-          nodes.push(item);
-        });
-      }, response => {});
-    },
     onItemSelect(datas) {
       this.selectItems = datas;
     },
@@ -81,22 +62,34 @@ export default {
     onItemRemove() {
 
     },
-    onNewItemDialogOpen() {
-      this.allItems.splice(0, this.allItems.length);
-      this.loadAllNodes(this.options.entity_id,this.allItems);
-    },
     onNewItemConfirm() {
-      var selectedItems = this.$refs.newItemDialog.selecteds;
+      var selectedItems = this.$refs.onNewItemTree.getItems();
+      this._.forEach(selectedItems, (v, k) => {
+        var need = false,
+          item = this.formatFieldToColumn(v);
+        this._.forEach(this.options.fields, (va, ka) => {
+          if (va.name == item.name) {
+            need = true;
+          }
+        });
+        if (need === false) {
+          this.options.fields.push(item);
+        }
+      });
       this.$refs.newItemDialog.close();
     },
     onNewItemCancel() {
       this.$refs.newItemDialog.close();
     },
-    focusNewItemNode(node) {
-      if(node.childs.length==0){
-        this.loadAllNodes(node.type_id,node.childs);
-      }
-    }
+    formatFieldToColumn(field) {
+      return {
+        name: field.path,
+        comment: field.path_name,
+        type_id: field.type_id,
+        type_name: field.type_name,
+        type_type: field.type_type,
+      };
+    },
   },
   created() {
 

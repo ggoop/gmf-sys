@@ -22,6 +22,7 @@
         </md-tabs>
       </md-dialog-content>
       <md-dialog-actions>
+        <md-button class="md-warn" @click.native="cleanCase">不使用方案查询</md-button>
         <span class="flex"></span>
         <md-button class="md-accent md-raised" @click.native="query">确定</md-button>
         <md-button class="md-warn" @click.native="cancel">取消</md-button>
@@ -98,7 +99,8 @@ export default {
       });
     },
     query() {
-      this.$emit('query', this.options);
+      var caseModel = this.getQueryCase();
+      this.$emit('query', caseModel);
       this.$refs.caseDialog.close();
     },
     open() {
@@ -115,27 +117,50 @@ export default {
     onClose() {
       this.$emit('close', this.options);
     },
+    cleanCase(){
+      var caseModel=this.getEmptyCase();
+      this.$emit('query', caseModel);
+      this.$refs.caseDialog.close();
+    },
+    getEmptyCase(){
+      var qc = {
+        size: this.options.size,
+        name: this.options.name,
+        comment: this.options.comment,
+        type_enum: this.options.type_enum,
+        wheres: { case: { items: [], boolean: 'and' } },
+        orders: [],
+        fields: []
+      };
+      return qc;
+    },
     getQueryCase() {
-      var qc = { wheres: [], orders: [], columns: [] };
+      var qc=this.getEmptyCase();
       this._.each(this.options.wheres, (v) => {
-        if (v.value) {
-          var item = this.formatCaseWhereItem(v);
-          if (item) qc.wheres.push(item);
-        }
+        var item = this.formatCaseWhereItem(v);
+        if (item) qc.wheres.case.items.push(item);
+      });
+      this._.each(this.options.orders, (v) => {
+        qc.orders.push({ name: v.name, direction: v.direction, comment: v.comment });
+      });
+      this._.each(this.options.fields, (v) => {
+        qc.fields.push({ name: v.name, comment: v.comment });
       });
       return qc;
     },
     formatCaseWhereItem(where) {
+      if (!where || !where.value) return false;
       var has = false;
-      var whereItem = { name: where.name, comment: where.comment };
+      var whereItem = { name: where.name, comment: where.comment, value: where.value };
       if (where.operator) {
         whereItem.operator = where.operator;
       }
-      if (where.type == 'ref' && where.value) {
+      if (where.type_type == 'ref' && where.value) {
         whereItem.value = this.getRefWhereItemValue(where);
-        if (whereItem.value !== false) { has = true; }
+        if (whereItem.value === false) { return false; }
       }
-      return has ? whereItem : false;
+      if (whereItem.value === false) { return false; }
+      return whereItem;
     },
     getRefWhereItemValue(where) {
       var valueField = 'id',
@@ -159,9 +184,7 @@ export default {
     },
   },
   created() {
-    this.options.getQueryCase = () => {
-      return this.getQueryCase();
-    }
+
   },
   mounted() {},
 };

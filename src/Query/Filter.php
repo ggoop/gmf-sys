@@ -93,6 +93,7 @@ class Filter {
 				if ($item) {
 					$item->type('item');
 					array_push($wheres, $item);
+					continue;
 				}
 			} else if ($b = $this->isBooleanItem($key, $value)) {
 				$item = new Builder;
@@ -100,6 +101,7 @@ class Filter {
 				if ($hasItem) {
 					$item->type('boolean');
 					array_push($wheres, $item);
+					continue;
 				}
 
 			} else {
@@ -109,6 +111,7 @@ class Filter {
 				if ($hasItem) {
 					$item->type('boolean');
 					array_push($wheres, $item);
+					continue;
 				}
 			}
 		}

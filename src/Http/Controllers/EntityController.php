@@ -100,7 +100,7 @@ class EntityController extends Controller {
 					$query->select('entity_id', 'id', 'name', 'comment', 'type_id', 'type_type', 'collection', 'default_value', 'sequence');
 				},
 				'fields.type' => function ($query) {
-					$query->select('id', 'name', 'comment');
+					$query->select('id', 'name', 'comment', 'type');
 				}]);
 		}
 		if ($request->input('q')) {
@@ -124,7 +124,7 @@ class EntityController extends Controller {
 				$query->select('entity_id', 'id', 'name', 'comment', 'type_id', 'type_type', 'collection', 'default_value', 'sequence');
 			},
 			'fields.type' => function ($query) {
-				$query->select('id', 'name', 'comment');
+				$query->select('id', 'name', 'comment', 'type');
 			}]);
 		$data = $query->where('id', $entityId)->orWhere('name', $entityId)->first();
 		if ($data) {

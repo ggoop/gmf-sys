@@ -3,20 +3,24 @@
 namespace Gmf\Sys\Query;
 use Gmf\Sys\Builder;
 
-class Order {
+class Field {
 
 /**
-"orders": {
-"f1": "desc",
-"f2":"asc"
+"fields": {
+"f1": "栏目1",
+"f2":"栏目2"
 }
 
-"orders": ["f1",{"name":"f2"},{"name":"f2","direction":"desc"}]
+"fields": [
+{"name":"f2"},
+{"name":"f2","comment":"栏目1"},
+{"name":"f1","comment":"栏目1","hide":1},
+]
 
  */
 	protected $items = [];
 	public static function create($datas = null) {
-		return new Order($datas);
+		return new Field($datas);
 	}
 	public function __construct($datas = null) {
 
@@ -24,17 +28,26 @@ class Order {
 	protected function _parse($items = null) {
 		$result = [];
 		foreach ($items as $key => $value) {
+			if (is_int($key) && is_string($value)) {
+				$item = new Builder;
+				$item->name($value);
+				$result[] = $item;
+				continue;
+			}
 			if (is_string($key) && is_string($value)) {
 				$item = new Builder;
-				$item->name($key)->direction($value);
+				$item->name($key)->comment($value);
 				$result[] = $item;
 				continue;
 			}
 			if (is_object($value) && !empty($value->name)) {
 				$item = new Builder;
 				$item->name($value->name);
-				if (!empty($value->direction)) {
-					$item->direction($value->direction);
+				if (!empty($value->comment)) {
+					$item->comment($value->comment);
+				}
+				if (!empty($value->hide)) {
+					$item->hide($value->hide);
 				}
 				$result[] = $item;
 				continue;

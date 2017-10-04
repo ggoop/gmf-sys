@@ -32,7 +32,7 @@
       </md-table>
     </md-dialog-content>
     <md-dialog-actions>
-      <md-query-case :md-query-id="mdRefId" ref="queryCase" @init="initQueryCase">
+      <md-query-case :md-query-id="mdRefId" ref="queryCase" @init="initQueryCase" @query="queryQueryCase">
         <md-button class="md-icon-button" @click.native="openQueryCase()">
           <md-icon>search</md-icon>
         </md-button>
@@ -94,6 +94,7 @@ export default {
         total: 0,
         page: 1
       },
+      caseModel: {}
     };
   },
   watch: {
@@ -119,6 +120,10 @@ export default {
     initQueryCase(options, promise) {
       promise && promise.resolve(true);
     },
+    queryQueryCase(caseModel) {
+      this.caseModel = caseModel;
+      this.pagination(1);
+    },
     onRefOpen() {
       this.selectedRows = [];
       this.$refs['table'].$data.selectedRows = {};
@@ -133,7 +138,8 @@ export default {
     },
     doFetch(q) {
       if (this.currentQ != q && this.autoquery) {
-        this.doQuery({ q: q });
+        this.currentQ = q;
+        this.pagination(1);
       }
       this.currentQ = q;
     },
@@ -141,20 +147,21 @@ export default {
       if (this.autoquery && isMana) {
         this.autoquery = false;
       }
-      this.doQuery({ q: this.currentQ });
+      this.pagination(1);
     },
     onTablePagination(pager) {
+      this.pagination(pager);
+    },
+    pagination(pager) {
       if (common.isString(pager) || common.isNumber(pager)) {
         pager = this._.extend({}, this.pageInfo, { page: pager });
       } else {
         pager = pager || this.pageInfo;
       }
-      this.doQuery(pager);
-    },
-    doQuery(params) {
-      params = this._.extend({}, this.pageInfo, this.options, params);
+      var options = this._.extend({}, { q: this.currentQ }, this.options, this.caseModel, pager);
+      
       if (this.mdRefId) {
-        this.$http.post('sys/queries/query/' + this.mdRefId, params).then(response => {
+        this.$http.post('sys/queries/query/' + this.mdRefId, options).then(response => {
           this.refInfo = response.data.schema;
           this.refData = response.data.data;
           this.pageInfo.size = response.data.pager.size;

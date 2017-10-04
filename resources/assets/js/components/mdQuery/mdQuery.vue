@@ -17,7 +17,7 @@
       </md-table-body>
     </md-table>
     <md-table-tool>
-      <md-query-case :md-query-id="mdQueryId" ref="queryCase" @init="initQueryCase">
+      <md-query-case :md-query-id="mdQueryId" ref="queryCase" @init="initQueryCase" @query="queryQueryCase">
         <md-button class="md-icon-button" @click.native="openQueryCase()">
           <md-icon>search</md-icon>
         </md-button>
@@ -83,6 +83,7 @@ export default {
       refInfo: {},
       refData: [],
       loading: 0,
+      caseModel: {}
     };
   },
   methods: {
@@ -91,6 +92,10 @@ export default {
     },
     initQueryCase(options, promise) {
       promise && promise.resolve(true);
+    },
+    queryQueryCase(caseModel) {
+      this.caseModel = caseModel;
+      this.pagination(1);
     },
     onTablePagination(pager) {
       this.pagination(pager);
@@ -103,21 +108,19 @@ export default {
       this.select();
     },
     pagination(pager) {
-      this.$emit('init', this.options);
-
-      this.selectedRows = [];
-      if (this.$refs['table'] && this.$refs['table'].$data) {
-        this.$refs['table'].$data.selectedRows = {};
-      }
       if (common.isString(pager) || common.isNumber(pager)) {
         pager = this._.extend({}, this.pageInfo, { page: pager });
       } else {
         pager = pager || this.pageInfo;
       }
+      var options = this._.extend({}, {}, this.options, this.caseModel, pager);
+      this.$emit('init', options);
+      this.selectedRows = [];
+      if (this.$refs['table'] && this.$refs['table'].$data) {
+        this.$refs['table'].$data.selectedRows = {};
+      }
       this.loading++;
-      const params = {};
-      this._.extend(params, this.options, pager);
-      this.$http.post('sys/queries/query/' + this.mdQueryId, params).then(response => {
+      this.$http.post('sys/queries/query/' + this.mdQueryId, options).then(response => {
         this.refInfo = response.data.schema;
         this.refData = response.data.data;
         this.pageInfo.size = response.data.pager.size;

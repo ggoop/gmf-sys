@@ -48,6 +48,9 @@ class QueryController extends Controller {
 		$entityQuery = EntityQuery::create($qc->query->entity_name);
 
 		foreach ($qc->fields as $f) {
+			if (empty($f)) {
+				continue;
+			}
 			$entityQuery->addSelect($f->name, '', '', $f->toArray());
 		}
 

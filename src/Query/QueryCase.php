@@ -141,7 +141,6 @@ class QueryCase {
 		$this->parseContext($request);
 		$this->query = $this->getQueryInfo($queryID);
 		//栏目
-
 		$this->fields = $this->query->fields;
 		//匹配项
 		$this->matchs = $this->query->matchs;
@@ -152,6 +151,17 @@ class QueryCase {
 				$this->filter = str_replace('#{' . $key . '}#', "'" . $value . "'", $this->filter);
 			}
 
+		}
+		//优先使用方案栏目
+		if (!empty($request)) {
+			$temps = $request->input('fields');
+			if ($temps) {
+				$parse = Field::create();
+				$this->fields = $parse->parse($temps);
+			}
+		}
+		if (empty($this->fields) || count($this->fields) == 0) {
+			$this->fields = $this->query->fields;
 		}
 		//优先使用请求条件
 		if (!empty($request)) {
