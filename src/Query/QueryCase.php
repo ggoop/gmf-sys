@@ -127,6 +127,11 @@ class QueryCase {
 			$parse = Order::create();
 			$this->orders = $parse->parse($temps);
 		}
+		$temps = $request->input('fields');
+		if ($temps) {
+			$parse = Field::create();
+			$this->fields = $parse->parse($temps);
+		}
 	}
 	protected function parseContext(Request $request = null) {
 		$context = [];

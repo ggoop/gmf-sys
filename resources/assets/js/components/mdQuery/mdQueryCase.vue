@@ -6,17 +6,17 @@
         <md-tabs class="md-accent layout-column layout-fill flex" :md-swipeable="true" md-right :md-dynamic-height="false">
           <md-tab md-label="条件" md-icon="filter_list" v-if="mdShowWhere">
             <md-layout md-gutter class="layout-fill">
-              <md-query-case-where :options="options"></md-query-case-where>
+              <md-query-case-where :md-entity-id="options.entity_id" :md-items="options.wheres"></md-query-case-where>
             </md-layout>
           </md-tab>
           <md-tab md-label="栏目" md-icon="more_horiz" v-if="mdShowField">
             <md-layout md-gutter class="layout-fill">
-              <md-query-case-field :options="options"></md-query-case-field>
+              <md-query-case-field :md-entity-id="options.entity_id" :md-items="options.fields"></md-query-case-field>
             </md-layout>
           </md-tab>
           <md-tab md-label="排序" md-icon="sort" v-if="mdShowOrder">
             <md-layout md-gutter class="layout-fill">
-              <md-query-case-order :options="options"></md-query-case-order>
+              <md-query-case-order :md-entity-id="options.entity_id" :md-items="options.orders"></md-query-case-order>
             </md-layout>
           </md-tab>
         </md-tabs>

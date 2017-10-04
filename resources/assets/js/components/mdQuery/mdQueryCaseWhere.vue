@@ -10,7 +10,7 @@
           </md-table-row>
         </md-table-header>
         <md-table-body>
-          <md-table-row v-for="(item, rind) in options.wheres" :key="rind" :md-item="item" :md-auto-select="false" :md-selection="true">
+          <md-table-row v-for="(item, rind) in mdItems" :key="rind" :md-item="item" :md-auto-select="false" :md-selection="true">
             <md-table-cell>{{ item.comment||item.name}}</md-table-cell>
             <md-table-cell>{{ item.operator_enum}}</md-table-cell>
             <md-table-cell>
@@ -40,7 +40,7 @@
         <h1 class="md-title">选择更多内容</h1>
       </md-toolbar>
       <md-dialog-content class="no-padding layout-column layout-fill">
-        <md-query-field ref="onNewItemTree" :md-entity-id="options.entity_id"></md-query-field>
+        <md-query-field ref="onNewItemTree" :md-entity-id="mdEntityId"></md-query-field>
       </md-dialog-content>
       <md-dialog-actions>
         <span class="flex"></span>
@@ -51,45 +51,11 @@
   </md-layout>
 </template>
 <script>
+import commonMixin from './common';
 export default {
-  props: {
-    options: Object
-  },
-  data() {
-    return {
-      selectItems: []
-    }
-  },
+  mixins: [commonMixin],
   methods: {
-    onItemSelect(datas) {
-      this.selectItems = datas;
-    },
-    onItemAdd() {
-      this.$refs.newItemDialog.open();
-    },
-    onItemRemove() {
-
-    },
-    onNewItemConfirm() {
-      var selectedItems = this.$refs.onNewItemTree.getItems();
-      this._.forEach(selectedItems, (v, k) => {
-        var need = false,
-          item = this.formatFieldToWhere(v);
-        this._.forEach(this.options.wheres, (va, ka) => {
-          if (va.name == item.name) {
-            need = true;
-          }
-        });
-        if (need === false) {
-          this.options.wheres.push(item);
-        }
-      });
-      this.$refs.newItemDialog.close();
-    },
-    onNewItemCancel() {
-      this.$refs.newItemDialog.close();
-    },
-    formatFieldToWhere(field) {
+    formatFieldToItem(field) {
       var item = {
         name: field.path,
         comment: field.path_name,

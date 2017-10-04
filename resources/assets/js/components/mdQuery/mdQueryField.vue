@@ -1,6 +1,5 @@
 <template>
-  <md-tree-view ref="tree" :nodes="node.childs" @focus="focusNewItemNode">
-  </md-tree-view>
+  <md-tree-view ref="tree" md-label-field="comment" :nodes="node.childs" @expand="expandNode"></md-tree-view>
 </template>
 <script>
 export default {
@@ -19,7 +18,7 @@ export default {
       node: {
         type_id: '',
         path: '',
-        path_name:'',
+        path_name: '',
         childs: []
       }
     }
@@ -36,20 +35,23 @@ export default {
       if (!parentNode.childs || parentNode.childs.length > 1) {
         return;
       }
+      if (parentNode.childs.length == 1 && parentNode.childs[0] && parentNode.childs[0].type_id !== '') {
+        return;
+      }
       this.$http.get('sys/entities/' + parentNode.type_id).then(response => {
         parentNode.childs.splice(0, parentNode.childs.length);
         this._.forEach(response.data.data.fields, (v, k) => {
           var item = {
-            field: v.name,
-            name: v.comment || v.name,
+            name: v.name,
+            comment: v.comment,
             type_id: v.type.id,
             type_name: v.type.name,
             type_type: v.type.type
           };
-          item.path=item.field;
-          item.path_name=item.name;
+          item.path = item.name;
+          item.path_name = item.comment;
           if (v.type.type === 'entity') {
-            item.childs = [];
+            item.childs = [{ type_id: '' }];
           }
           if (parentNode.path) {
             item.path = parentNode.path + '.' + item.path;
@@ -64,7 +66,7 @@ export default {
     getItems() {
       return this.$refs.tree.selecteds;
     },
-    focusNewItemNode(node) {
+    expandNode(node) {
       if (node.type_type === 'entity') {
         this.loadEntityNodes(node);
       }

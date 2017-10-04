@@ -72,7 +72,10 @@ class Filter {
 			$item->operator($value->operator);
 		}
 		if (!empty($value->value)) {
-			$item->value($value->value);
+			$v = $this->parseItemValue($item, $value->value);
+			if ($v !== false) {
+				$item->value($v);
+			}
 		}
 
 		//值为空，条件无效
@@ -80,6 +83,28 @@ class Filter {
 			return null;
 		}
 		return $item;
+	}
+	protected function parseItemValue($item, $value) {
+		$rtn = false;
+		if (is_object($value)) {
+			if (!empty($value->id)) {
+				$rtn = $value->id;
+			}
+		} else if (is_array($value)) {
+			$rtn = [];
+			foreach ($value as $k => $v) {
+				if (is_object($v)) {
+					if (!empty($v->id)) {
+						$rtn[] = $v->id;
+					}
+				} else {
+					$rtn[] = $v;
+				}
+			}
+		} else {
+			$rtn = $value;
+		}
+		return $rtn;
 	}
 	protected function _parse($items = null, Builder $where, $boolean = 'and') {
 		$wheres = [];

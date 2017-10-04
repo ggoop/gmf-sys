@@ -9,7 +9,8 @@
 <script>
   export default {
     props: {
-      mdNumeric: Boolean
+      mdNumeric: Boolean,
+      mdIsTool:Boolean
     },
     data: () => ({
       hasAction: false
@@ -18,7 +19,8 @@
       classes() {
         return {
           'md-numeric': this.mdNumeric,
-          'md-has-action': this.hasAction
+          'md-has-action': this.hasAction,
+          'md-table-cell-tool':this.mdIsTool
         };
       }
     },

@@ -1,27 +1,30 @@
 <template>
   <ul>
     <li v-for="node in nodes">
-      <md-tree-node :node="node" :md-selection="mdSelection" :md-auto-select="mdAutoSelect">
-        <slot :value="node"></slot>
+      <md-tree-node :node="node" :md-label-field="mdLabelField" :md-selection="mdSelection" :md-auto-select="mdAutoSelect">
       </md-tree-node>
-      <md-tree v-if="node.childs&&node.childs.length" :nodes="node.childs" :md-selection="mdSelection" :md-auto-select="mdAutoSelect"></md-tree>
+      <md-tree v-if="node.childs&&node.childs.length" :md-label-field="mdLabelField" :nodes="node.childs" :md-selection="mdSelection" :md-auto-select="mdAutoSelect">
+      </md-tree>
     </li>
   </ul>
 </template>
 <script>
-  export default {
-    props: {
-      nodes: {
-        type:Array,
-        default:[]
-      },
-      mdAutoSelect:Boolean,
-      mdSelection:Boolean
+export default {
+  props: {
+    nodes: {
+      type: Array,
+      default: []
     },
-    methods: {
+    mdLabelField: {
+      type: String,
+      default: 'name'
     },
-    beforeCreate: function () {
-      this.$options.components.mdTree = require('./mdTree.vue');
-    }
-  };
+    mdAutoSelect: Boolean,
+    mdSelection: Boolean
+  },
+  methods: {},
+  beforeCreate: function() {
+    this.$options.components.mdTree = require('./mdTree.vue');
+  }
+};
 </script>

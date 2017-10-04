@@ -1,34 +1,45 @@
-.md-tree-view{
+.md-tree-view {
   overflow: auto;
   flex: 1;
   max-height: 100%;
-  ul{
-   list-style-type: none;
-   li{
+  ul {
+    list-style-type: none;
+    li {
       margin: 0;
-      +li{
+      +li {
         margin: 0;
       }
     }
   }
-  >ul{
+  >ul {
     margin: 0;
     padding: 0;
   }
-  .md-tree-node{
+  .md-tree-node {
     cursor: context-menu;
     line-height: .38rem;
     padding: 0 .16rem;
-
-    &:hover{
-      background-color: rgba(0,0,0,0.05);
+    +ul {
+      overflow: hidden;
+      height: 0px;
     }
-    &.is-active{
-      background-color: rgba(0,0,0,0.05);
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+    &.is-active {
+      background-color: rgba(0, 0, 0, 0.05);
       font-weight: bold;
     }
-  }
-  .md-checkbox{
+    &.is-opened {
+      .md-expand-indicator {
+        transform: rotateZ(180deg) translate3D(0, 0, 0);
+      }
+      +ul {
+        height: inherit;
+      }
+    }
+    .md-checkbox {
       margin: .04rem .08rem .04rem 0;
+    }
   }
 }
