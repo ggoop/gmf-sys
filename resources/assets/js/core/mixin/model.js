@@ -25,7 +25,7 @@ export default {
   },
   watch: {
     'model.main.id': function(value, oldValue) {
-      this.load(value);
+      value&&this.load(value);
     }
   },
   methods: {
