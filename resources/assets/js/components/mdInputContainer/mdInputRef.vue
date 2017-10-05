@@ -28,7 +28,7 @@
       <md-button class="md-icon-button md-ref-filter" @click.native="openRef()">
         <md-icon>search</md-icon>
       </md-button>
-      <md-ref ref="ref" :options="refOptions" :multiple="!!multiple" :md-ref-id="mdRefId" @open="onRefOpen" @close="onRefClose"></md-ref>
+      <md-ref ref="ref" :options="refOptions" :multiple="!!multiple" :md-ref-id="mdRefId" @open="onRefOpen" @close="onRefClose" @confirm="onRefConfirm"></md-ref>
   </div>
 </template>
 
@@ -105,8 +105,10 @@
       },
       onRefOpen(type) {
       },
-      onRefClose(data) {
+      onRefClose(type) {
         this.refIsOpened=false;
+      },
+      onRefConfirm(data) {
         if(!data||data.length==0)return;
         if(!this.multiple)this.selectedValues=[];
         data&&data.forEach((row, index) =>{

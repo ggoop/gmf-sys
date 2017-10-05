@@ -23,7 +23,7 @@
           </md-table-row>
         </md-table-header>
         <md-table-body>
-          <md-table-row v-for="(row, rowIndex) in refData" :key="row.id" :md-item="row" :md-auto-select="true" :md-selection="!!multiple" @dblclick.native="dblclick(row)">
+          <md-table-row v-for="(row, rowIndex) in refData" :key="row[mdKeyField]" :md-item="row" :md-auto-select="true" :md-selection="!!multiple" @dblclick.native="dblclick(row)">
             <md-table-cell v-for="(column, columnIndex) in refInfo.fields" v-if="!column.hide&&column.alias!='id'" :key="columnIndex">
               {{ row[column.alias||column.name] }}
             </md-table-cell>
@@ -40,7 +40,7 @@
       <md-table-pagination :md-size="pageInfo.size" :md-total="pageInfo.total" :md-page="pageInfo.page" :md-page-options="[10,20]" @pagination="onTablePagination">
       </md-table-pagination>
       <span class="flex"></span>
-      <md-button class="md-accent md-raised" @click.native="close()">确定</md-button>
+      <md-button class="md-accent md-raised" @click.native="onConfirm()">确定</md-button>
       <md-button class="md-warn" @click.native="cancel()">取消</md-button>
     </md-dialog-actions>
     <md-loading :loading="loading"></md-loading>
@@ -58,6 +58,10 @@ export default {
     multiple: {
       type: Boolean,
       default: true
+    },
+    mdKeyField: {
+      type: String,
+      default: 'id'
     },
     mdMax: {
       type: Number,
@@ -126,15 +130,15 @@ export default {
     },
     onRefOpen() {
       this.selectedRows = [];
-      this.$refs['table'].$data.selectedRows = {};
       if (!this.refInfo || !this.refInfo.id || this.refInfo.id !== this.mdRefId) {
         if (!this.refCache[this.mdRefId]) {
-          this.onTablePagination();
+          
         }
       }
+      this.onTablePagination();
     },
     onRefClose() {
-
+      this.$emit('close');
     },
     doFetch(q) {
       if (this.currentQ != q && this.autoquery) {
@@ -159,7 +163,7 @@ export default {
         pager = pager || this.pageInfo;
       }
       var options = this._.extend({}, { q: this.currentQ }, this.options, this.caseModel, pager);
-      
+
       if (this.mdRefId) {
         this.$http.post('sys/queries/query/' + this.mdRefId, options).then(response => {
           this.refInfo = response.data.schema;
@@ -171,6 +175,7 @@ export default {
       }
     },
     onTableSelect(items) {
+      this.selectedRows = [];
       Object.keys(items).forEach((row, index) => {
         this.selectedRows[index] = items[row];
       });
@@ -179,7 +184,8 @@ export default {
       return this.selectedRows;
     },
     dblclick(item) {
-      this.close(item);
+      this.selectedRows = [item];
+      this.onConfirm();
     },
     open() {
       this.$emit('init', this.options);
@@ -188,11 +194,11 @@ export default {
     },
     cancel() {
       this.$refs['dialog'].close();
-      this.$emit('close', false);
+      this.$emit('cancel', false);
     },
-    close(data) {
+    onConfirm() {
       this.$refs['dialog'].close();
-      this.$emit('close', data ? [data] : this.getReturnValue());
+      this.$emit('confirm', this.getReturnValue());
     }
   },
   mounted() {

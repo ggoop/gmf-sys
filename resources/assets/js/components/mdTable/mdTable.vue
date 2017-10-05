@@ -26,6 +26,7 @@
         sortBy: this.mdSort,
         hasRowSelection: false,
         data: [],
+        datas:{},
         numberOfRows: 0,
         numberOfSelected: 0,
         selectedRows: {}
@@ -41,6 +42,9 @@
       },
       emitSelection() {
         this.$emit('select', this.selectedRows);
+      },
+      getSelectRows(){
+        return this.selectedRows;
       }
     },
     watch: {

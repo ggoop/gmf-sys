@@ -51,6 +51,10 @@ start.run = function(elID) {
       },
       "userData.entId": function(v, o) {
         this.setHttpConfig();
+        window.gmfEntID = v;
+      },
+      "userConfig": function(v, o) {
+        window.gmfConfig = v;
       }
     },
     methods: {

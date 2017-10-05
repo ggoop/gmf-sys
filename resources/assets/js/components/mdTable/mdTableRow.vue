@@ -8,7 +8,7 @@
 </template>
 <script>
 import getClosestVueParent from '../../core/utils/getClosestVueParent';
-
+import common from '../../core/utils/common';
 const transitionClass = 'md-transition-off';
 
 export default {
@@ -41,6 +41,10 @@ export default {
   },
   watch: {
     mdItem(newValue, oldValue) {
+      if (!newValue) { newValue = {}; }
+      if (!newValue.$id) {
+        newValue.$id = (oldValue && oldValue.$id) || this._.uniqueId('row');
+      }
       this.parentTable.data[this.index] = this.mdItem;
       this.handleMultipleSelection(newValue === oldValue);
     }
@@ -105,10 +109,11 @@ export default {
         this.parentTable.emitSelection();
       }
     },
-    getIndex() {
+    getIndex(item) {
+      item = item || this.mdItem;
       var ind = -1;
       for (var i = 0; i < this.parentTable.data.length; i++) {
-        if (this.parentTable.data[i] == this.mdItem)
+        if (this.parentTable.data[i].$id == item.$id)
           ind = i;
       }
       return ind;
@@ -128,6 +133,9 @@ export default {
       }
 
       if (this.mdItem) {
+        if (!this.mdItem.$id) {
+          this.mdItem.$id = this._.uniqueId('row');
+        }
         this.parentTable.data.push(this.mdItem);
       }
     }
