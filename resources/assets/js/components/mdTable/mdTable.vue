@@ -5,62 +5,60 @@
     </table>
   </div>
 </template>
-
 <script>
-  import theme from '../../core/components/mdTheme/mixin';
-  import getClosestVueParent from '../../core/utils/getClosestVueParent';
+import theme from '../../core/components/mdTheme/mixin';
+import getClosestVueParent from '../../core/utils/getClosestVueParent';
 
-  export default {
-    props: {
-      mdSortType: String,
-      mdSort: String,
-      multiple:{
-        type: Boolean,
-        default: true
-      }
-    },
-    mixins: [theme],
-    data() {
-      return {
-        sortType: this.mdSortType,
-        sortBy: this.mdSort,
-        hasRowSelection: false,
-        data: [],
-        datas:{},
-        numberOfRows: 0,
-        numberOfSelected: 0,
-        selectedRows: {}
-      };
-    },
-    methods: {
-      emitSort(name) {
-        this.sortBy = name;
-        this.$emit('sort', {
-          name,
-          type: this.sortType
-        });
-      },
-      emitSelection() {
-        this.$emit('select', this.selectedRows);
-      },
-      getSelectRows(){
-        return this.selectedRows;
-      }
-    },
-    watch: {
-      data() {
-        this.numberOfRows = this.data.length;
-      },
-      selectedRows() {
-        this.numberOfSelected = Object.keys(this.selectedRows).length;
-      }
-    },
-    mounted() {
-      this.parentCard = getClosestVueParent(this.$parent, 'md-table-card');
-
-      if (this.parentCard) {
-        this.parentCard.tableInstance = this;
-      }
+export default {
+  props: {
+    mdSortType: String,
+    mdSort: String,
+    multiple: {
+      type: Boolean,
+      default: true
     }
-  };
+  },
+  mixins: [theme],
+  data() {
+    return {
+      sortType: this.mdSortType,
+      sortBy: this.mdSort,
+      hasRowSelection: false,
+      datas: {},
+      numberOfRows: 0,
+      numberOfSelected: 0,
+      selectedRows: {}
+    };
+  },
+  methods: {
+    emitSort(name) {
+      this.sortBy = name;
+      this.$emit('sort', { name, type: this.sortType });
+    },
+    emitSelection() {
+      this.$emit('select', this.selectedRows);
+    },
+    getSelectRows() {
+      return this.selectedRows;
+    },
+    refreshTotal(){
+      this.numberOfRows = Object.keys(this.datas).length;
+      this.numberOfSelected = Object.keys(this.selectedRows).length;
+    }
+  },
+  watch: {
+    datas() {
+      this.numberOfRows = Object.keys(this.datas).length;
+    },
+    selectedRows() {
+      this.numberOfSelected = Object.keys(this.selectedRows).length;
+    }
+  },
+  mounted() {
+    this.parentCard = getClosestVueParent(this.$parent, 'md-table-card');
+    if (this.parentCard) {
+      this.parentCard.tableInstance = this;
+    }
+  }
+};
 </script>

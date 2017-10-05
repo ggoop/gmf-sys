@@ -1,7 +1,7 @@
 <template>
-  <tr class="md-table-row" :class="classes" @click="autoSelect">
+  <tr class="md-table-row" :class="classes" @click="onRowClick">
     <md-table-cell class="md-table-selection" v-if="hasSelection">
-      <md-checkbox v-model="checkbox" :disabled="isDisabled" @change="select"></md-checkbox>
+      <md-checkbox v-model="checkbox" :disabled="isDisabled" @change="onSelect"></md-checkbox>
     </md-table-cell>
     <slot></slot>
   </tr>
@@ -23,7 +23,8 @@ export default {
       headRow: false,
       checkbox: false,
       index: 0,
-      multiple: false
+      multiple: false,
+      rowId:this._.uniqueId('row')
     };
   },
   computed: {
@@ -41,58 +42,45 @@ export default {
   },
   watch: {
     mdItem(newValue, oldValue) {
-      if (!newValue) { newValue = {}; }
-      if (!newValue.$id) {
-        newValue.$id = (oldValue && oldValue.$id) || this._.uniqueId('row');
-      }
-      this.parentTable.data[this.index] = this.mdItem;
+      this.parentTable.datas[this.rowId] = this.mdItem;
+      this.parentTable.refreshTotal();
       this.handleMultipleSelection(newValue === oldValue);
     }
   },
   methods: {
-    setSelectedRow(value, index) {
+    setSelectedRow(value) {
       if (value) {
-        this.parentTable.selectedRows[index] = this.parentTable.data[index];
-        ++this.parentTable.numberOfSelected;
+        this.parentTable.selectedRows[this.rowId] = this.parentTable.datas[this.rowId];
       } else {
-        delete this.parentTable.selectedRows[index];
-        --this.parentTable.numberOfSelected;
+        delete this.parentTable.selectedRows[this.rowId];
       }
+      this.parentTable.refreshTotal();
     },
     handleSingleSelection(value) {
       if (!this.multiple) {
         this.parentTable.$children.forEach((row, index) => {
-          if (!row.headRow && row.index != this.index) {
+          if (!row.headRow && row.rowId != this.rowId) {
             row.checkbox = false;
-            row.setSelectedRow(row.checkbox, row.index - 1);
+            row.setSelectedRow(row.checkbox);
           }
         });
       }
-      this.setSelectedRow(value, this.index - 1);
+      this.setSelectedRow(value);
       this.parentTable.$children[0].checkbox = this.parentTable.numberOfSelected === this.parentTable.numberOfRows;
     },
     handleMultipleSelection(value) {
       if (this.parentTable.numberOfRows > 25) {
         this.parentTable.$el.classList.add(transitionClass);
       }
-
       this.parentTable.$children.forEach((row, index) => {
         row.checkbox = value;
-
         if (!row.headRow) {
-          this.setSelectedRow(value, index - 1);
+          this.setSelectedRow(value);
         }
       });
-
-      if (value) {
-        this.parentTable.numberOfSelected = this.parentTable.numberOfRows;
-      } else {
-        this.parentTable.numberOfSelected = 0;
-      }
-
       window.setTimeout(() => this.parentTable.$el.classList.remove(transitionClass));
     },
-    select(value) {
+    onSelect(value) {
       if (this.hasSelection) {
         if (this.headRow) {
           this.handleMultipleSelection(value);
@@ -102,22 +90,13 @@ export default {
         this.parentTable.emitSelection();
       }
     },
-    autoSelect() {
+    onRowClick() {
       if (this.mdAutoSelect && !this.headRow) {
         this.checkbox = !this.checkbox;
         this.handleSingleSelection(this.checkbox);
         this.parentTable.emitSelection();
       }
     },
-    getIndex(item) {
-      item = item || this.mdItem;
-      var ind = -1;
-      for (var i = 0; i < this.parentTable.data.length; i++) {
-        if (this.parentTable.data[i].$id == item.$id)
-          ind = i;
-      }
-      return ind;
-    }
   },
   mounted() {
     this.parentTable = getClosestVueParent(this.$parent, 'md-table');
@@ -125,34 +104,25 @@ export default {
     if (this.$el.parentNode.tagName.toLowerCase() === 'thead') {
       this.headRow = true;
     } else {
-      this.parentTable.numberOfRows++;
-      this.index = this.parentTable.numberOfRows;
-
       if (this.mdSelection) {
         this.parentTable.hasRowSelection = true;
       }
-
+      if(!this.rowId){
+        this.rowId=this._.uniqueId('row');
+      }
       if (this.mdItem) {
-        if (!this.mdItem.$id) {
-          this.mdItem.$id = this._.uniqueId('row');
-        }
-        this.parentTable.data.push(this.mdItem);
+        this.parentTable.datas[this.rowId]=this.mdItem;
       }
     }
+    this.parentTable.refreshTotal();
   },
   destroyed() {
     if (!this.headRow) {
-      var ind = this.getIndex();
-      if (ind >= 0) {
-        this.parentTable.data.splice(ind, 1);
-        this.parentTable.numberOfRows--;
-
-        if (this.parentTable.selectedRows[ind] != null) {
-          delete this.parentTable.selectedRows[ind];
-          --this.parentTable.numberOfSelected;
-        }
+      if (this.mdItem) {
+        delete this.parentTable.datas[this.rowId];
       }
     }
+    this.parentTable.refreshTotal();
   }
 };
 </script>
