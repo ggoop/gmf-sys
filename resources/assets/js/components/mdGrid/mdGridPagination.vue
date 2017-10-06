@@ -1,8 +1,8 @@
 <template>
-  <div class="md-table-pagination">
-    <span class="md-table-pagination-label">{{ mdLabel }}:</span>
-    <md-select v-model="currentSize" md-container="" md-menu-class="md-pagination-select" @change="changeSize" v-if="mdPageOptions">
-      <md-option v-for="amount in mdPageOptions" :key="amount" :value="amount">{{ amount }}</md-option>
+  <div class="md-pagination" v-if="pager">
+    <span class="md-table-pagination-label">每页:</span>
+    <md-select v-model="currentSize" md-container="" md-menu-class="md-pagination-select" @change="changeSize" v-if="options">
+      <md-option v-for="amount in options" :key="amount" :value="amount">{{ amount }}</md-option>
     </md-select>
     <span class="md-table-pagination-info">{{pageInfo}}</span>
     <md-button class="md-icon-button md-table-pagination-previous" @click.native="previousPage" :disabled="currentPage === 1">
@@ -16,26 +16,12 @@
 <script>
 export default {
   props: {
-    mdSize: {
-      type: [Number, String],
-      default: 10
-    },
-    mdPageOptions: [Array, Boolean],
-    mdPage: {
-      type: [Number, String],
-      default: 1
-    },
-    mdTotal: {
-      type: [Number, String],
-      default: 'Many'
-    },
-    mdLabel: {
-      type: String,
-      default: '每页'
-    },
-    mdSeparator: {
-      type: String,
-      default: '/'
+    pager: Object,
+    options: {
+      type: [Array, Boolean],
+      default: function() {
+        return [5, 10, 20, 50]
+      }
     }
   },
   data() {
@@ -47,13 +33,13 @@ export default {
     };
   },
   watch: {
-    mdTotal(val) {
+    'pager.total' (val) {
       this.totalItems = isNaN(val) ? Number.MAX_SAFE_INTEGER : parseInt(val, 10);
     },
-    mdSize(val) {
+    'pager.size' (val) {
       this.currentSize = parseInt(val, 10);
     },
-    mdPage(val) {
+    'pager.page' (val) {
       this.currentPage = parseInt(val, 10);
     }
   },
@@ -65,12 +51,12 @@ export default {
       return this.currentSize * this.currentPage >= this.totalItems;
     },
     pageInfo() {
-      if (!this.mdTotal) {
-        return '0' + this.mdSeparator + this.mdTotal;
+      if (!this.pager.total) {
+        return '0' + '/' + this.pager.total;
       }
       var sub = this.currentPage * this.currentSize;
-      sub = sub > this.mdTotal ? this.mdTotal : sub;
-      return (((this.currentPage - 1) * this.currentSize) + 1) + '-' + sub + this.mdSeparator + this.mdTotal;
+      sub = sub > this.pager.total ? this.pager.total : sub;
+      return (((this.currentPage - 1) * this.currentSize) + 1) + '-' + sub + '/' + this.pager.total;
     }
   },
   methods: {
@@ -101,8 +87,6 @@ export default {
     }
   },
   mounted() {
-    this.mdPageOptions = this.mdPageOptions || [5, 10, 25, 50];
-    this.currentSize = this.currentSize || this.mdPageOptions[0];
     this.$nextTick(() => {
       this.canFireEvents = true;
     });

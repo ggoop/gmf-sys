@@ -11,6 +11,7 @@ import MdChips from './mdChips';
 import MdDialog from './mdDialog';
 import MdDivider from './mdDivider';
 import MdFile from './mdFile';
+import MdGrid from './MdGrid';
 import MdIcon from './mdIcon';
 import MdImage from './mdImage';
 import MdInputContainer from './mdInputContainer';
@@ -57,6 +58,7 @@ const options = {
     MdDialog,
     MdDivider,
     MdFile,
+    MdGrid,
     MdIcon,
     MdImage,
     MdInputContainer,

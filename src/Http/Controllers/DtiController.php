@@ -25,7 +25,6 @@ class DtiController extends Controller {
 		$validator = Validator::make($input, [
 			'code' => 'required',
 			'name' => 'required',
-			'path' => 'required',
 		]);
 		if ($validator->fails()) {
 			return $this->toError($validator->errors());
@@ -47,7 +46,6 @@ class DtiController extends Controller {
 		$validator = Validator::make($input, [
 			'code' => 'required',
 			'name' => 'required',
-			'path' => 'required',
 		]);
 		if ($validator->fails()) {
 			return $this->toError($validator->errors());
