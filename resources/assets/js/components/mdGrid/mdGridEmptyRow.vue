@@ -1,6 +1,6 @@
 <template>
   <tr class="md-grid-empty-row">
-    <td v-if="multiple" class="md-grid-selection" :style="{'overflow':'hidden','width':'50px'}"></td>
+    <td v-if="multiple" class="md-grid-selection" :style="{'overflow':'hidden'}"></td>
     <td v-for="(column,index) in visibleColumns" :style="{'overflow':'hidden','width':column.width}">
     </td>
   </tr>

@@ -6,18 +6,16 @@
   </div>
 </template>
 <script>
-
-
 export default {
   props: {
     field: { required: false, type: String },
     label: { default: null, type: String },
     dataType: { default: 'string', type: String },
 
-    sortable: { default: true, type: Boolean },
+    sortable: { default: false, type: Boolean },
     sortBy: { default: null },
 
-    filterable: { default: true, type: Boolean },
+    filterable: { default: false, type: Boolean },
     filterOn: { default: null },
 
     formatter: { default: v => v, type: Function },
@@ -25,7 +23,8 @@ export default {
     hidden: { default: false, type: Boolean },
 
     cellClass: { default: '' },
-    headerClass: { default: ''},
+    headerClass: { default: '' },
+    width: { default: '150px' },
   },
 };
 </script>

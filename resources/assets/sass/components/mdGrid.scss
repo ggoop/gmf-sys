@@ -16,6 +16,36 @@
 }
 
 .md-grid {
+  border: 1px solid #c7c7c7;
+  background: #fff;
+  td,
+  th {
+    border-bottom: 1px solid #ededed;
+    border-right: 1px solid #ededed;
+    padding: 0.04rem;
+  }
+  td:last-child,
+  th:last-child {
+    border-right-width: 0;
+  }
+  tr:last-child td,
+  tr:last-child th {
+    border-bottom-width: 0;
+  }
+  .md-grid-selection {
+    width: 40px;
+    position: relative;
+    >div {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      right: 0px;
+      bottom: 0px;
+    }
+    .md-checkbox {
+      margin: 0;
+    }
+  }
   .md-grid-empty-row {
     td,
     th {
@@ -24,57 +54,20 @@
       max-height: 0!important;
     }
   }
-  border: 1px solid #c7c7c7;
-  background: #fff;
+
   .md-grid-wrapper {
     width: 100%;
     border-bottom: none;
   }
-  .md-grid-message {}
   .md-grid-table {
     border-collapse: collapse;
     table-layout: fixed;
-
-    td,
-    th {
-      border-bottom: 1px solid #ededed;
-      border-right: 1px solid #ededed;
-      padding-right: 0.04rem;
-      padding-left: 0.04rem;
-
-      &.md-grid-selection {
-        width: 40px;
-        position: relative;
-        vertical-align: middle;
-        text-align: center;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-        .md-checkbox {
-          margin: 0;
-        }
-      }
-    }
-    td:last-child,
-    th:last-child {
-      border-right-width: 0;
-    }
-    tr:last-child td,
-    tr:last-child th {
-      border-bottom-width: 0;
-    }
   }
-
   .md-grid-head {
     overflow: hidden;
     background-color: #f4f4f4;
     border-bottom: 2px solid #53abe6;
-
     td,
-    th {
-      padding-top: .08rem;
-      padding-bottom: .07rem;
-    }
-
     th {
       color: #999;
       text-transform: uppercase;
@@ -83,9 +76,9 @@
       position: relative;
       padding-right: .07rem;
       padding-left: .08rem;
-      &.md-grid-selection {
-        text-align: center;
-      }
+      padding-top: .08rem;
+      padding-bottom: .07rem;
+
       &.has-sort {
         cursor: pointer;
         text-decoration: underline;
@@ -104,7 +97,6 @@
       }
     }
   }
-
   .md-grid-body {
     background: #fff;
     color: #000;
@@ -118,7 +110,6 @@
     tr.focused {
       background: #009688;
       color: #fff;
-
       td,
       th {
         border-right-color: #009688;

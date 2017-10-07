@@ -5,8 +5,8 @@
       <a v-if="filter" @click="filter = ''" class="md-grid-filter-clear">×</a>
     </div>
     <div class="md-grid-wrapper">
-      <md-grid-head :columns="columns" @sort="changeSorting" :width="width"></md-grid-head>
-      <md-grid-body :columns="columns" :rows="displayedRows" :width="width" :filter-no-results="filterNoResults"></md-grid-body>
+      <md-grid-head :columns="columns" :is-selected-page="isSelectedPage" @sort="onSorting" :width="width"></md-grid-head>
+      <md-grid-body :columns="columns" :rows="rows" :width="width" :filter-no-results="filterNoResults"></md-grid-body>
       <md-grid-foot :columns="columns" :show-sum="showSum" :width="width">
         <md-grid-pagination v-if="pager" :pager="pager" @pagination="onPagination"></md-grid-pagination>
       </md-grid-foot>
@@ -36,10 +36,10 @@ export default {
 
   props: {
     datas: { default: () => [], type: [Array, Function] },
-    autoSelect: Boolean,
+    autoSelect: { default: false, type: Boolean },
     multiple: { default: true, type: Boolean },
-    showFilter: { default: false },
-    showSum: { default: false },
+    showFilter: { default: false, type: Boolean },
+    showSum: { default: false, type: Boolean },
     sortBy: { default: '', type: String },
     sortOrder: { default: '', type: String },
 
@@ -63,20 +63,20 @@ export default {
       total: 0
     },
     focusRow: false,
-    localSettings: {},
     selectedRows: {}, //选择的数据
     cacheRows: {},
-    cacheSelectRows: {},
-    width: ''
+    width: '',
+    isSelectedPage: false,
+    pageCacheKey: 'p1'
   }),
   watch: {
     filter() {
-      if (!this.usesLocalData) {
-        this.mapDataToRows();
-      }
+      this.mapDataToRows();
       this.saveState();
     },
-
+    'pager.page' (v) {
+      this.pageCacheKey = 'p' + v;
+    },
     datas() {
       if (this.usesLocalData) {
         this.mapDataToRows();
@@ -91,46 +91,9 @@ export default {
     usesLocalData() {
       return this._.isArray(this.datas);
     },
-    displayedRows() {
-      if (!this.usesLocalData) {
-        return this.sortedRows;
-      }
-      if (!this.showFilter) {
-        return this.sortedRows;
-      }
-
-      if (!this.columns.filter(column => column.isFilterable()).length) {
-        return this.sortedRows;
-      }
-
-      return this.sortedRows.filter(row => row.passesFilter(this.filter));
-    },
-    sortedRows() {
-      if (!this.usesLocalData) {
-        return this.rows;
-      }
-
-      if (this.sort.field === '') {
-        return this.rows;
-      }
-
-      if (this.columns.length === 0) {
-        return this.rows;
-      }
-
-      const sortColumn = this.getColumn(this.sort.field);
-
-      if (!sortColumn) {
-        return this.rows;
-      }
-
-      return this.rows.sort(sortColumn.getSortPredicate(this.sort.order, this.columns));
-    },
-
     filterableColumnExists() {
       return this.columns.filter(c => c.isFilterable()).length > 0;
     },
-
     storageKey() {
       return this.cacheKey ?
         `md-grid.${this.cacheKey}` :
@@ -138,30 +101,34 @@ export default {
     },
   },
   methods: {
-    handleSizeChange() {
-      if (!this.usesLocalData) {
-        this.cacheRows = {};
-      }
-      this.cacheSelectRows = {};
+    refreshStatus() {
+      this.isSelectedPage = this.rows &&
+        this.rows.length &&
+        this.selectedRows[this.pageCacheKey] &&
+        this.rows.length == Object.keys(this.selectedRows[this.pageCacheKey]).length;
+    },
+    cleanCache() {
+      this.cacheRows = {};
       this.selectedRows = {};
+      this.refreshStatus()
     },
     async onPagination(pager) {
       if (this.pager.size != pager.size) {
-        this.handleSizeChange();
+        this.cleanCache();
       }
       this.pager.page = pager.page;
       this.pager.size = pager.size;
       await this.mapDataToRows();
+      this.refreshStatus();
     },
 
     async mapDataToRows() {
-      this.selectedRows = {};
       if (this.cacheRows[this.pager.page]) {
         this.rows = this.cacheRows[this.pager.page];
         return;
       }
       const data = this.usesLocalData ?
-        this.prepareLocalData() :
+        this.fetchLocalData() :
         await this.fetchServerData();
       this.rows = data
         .map(rowData => {
@@ -173,10 +140,28 @@ export default {
       this.cacheRows[this.pager.page] = this.rows;
     },
 
-    prepareLocalData() {
-      this.pager.page = 1;
+    fetchLocalData() {
+      var allDatas = this.datas;
+      if (this.columns.length && this.showFilter && this.filter && this.columns.filter(column => column.isFilterable()).length) {
+        // allDatas = this.allDatas.filter((row) => {
+        //   var r = new Row(row, this.columns);
+        //   return r.passesFilter(this.filter);
+        // });
+      }
+      if (this.columns.length && this.sort && this.sort.field) {
+        // const sortColumn = this.getColumn(this.sort.field);
+        // if (sortColumn) {
+        //   allDatas = allDatas.sort(function(r1, r2) {
+        //     return 1;
+        //   });
+        // }
+      }
       this.pager.total = this.datas.length;
-      return this.datas;
+      var ds = this._.chunk(allDatas, this.pager.size);
+      if (ds.length >= this.pager.page) {
+        return ds[this.pager.page - 1];
+      }
+      return [];
     },
 
     async fetchServerData() {
@@ -187,7 +172,7 @@ export default {
       });
       if (response.data.pager) {
         if (this.pager.size != response.data.pager.size) {
-          this.handleSizeChange();
+          this.cleanCache();
         }
         this.pager.page = response.data.pager.page;
         this.pager.size = response.data.pager.size;
@@ -197,14 +182,16 @@ export default {
     },
 
     async refresh() {
+      this.cleanCache();
       await this.mapDataToRows();
+      this.refreshStatus();
     },
-    changeSorting(sort) {
+    onSorting(sort) {
       this.sort = sort;
-      if (!this.usesLocalData) {
-        this.mapDataToRows();
-      }
+      this.cleanCache();
+      this.mapDataToRows();
       this.saveState();
+      this.refreshStatus();
     },
     getColumn(columnName) {
       return this.columns.find(column => column.field === columnName);
@@ -227,7 +214,7 @@ export default {
       this.saveState();
     },
     getWidth() {
-      var w = 50;
+      var w = 40;
       this.columns.forEach((c) => {
         if (!c.hidden)
           w += parseInt(c.width);
@@ -236,13 +223,14 @@ export default {
     },
     getSelectedRows() {
       const rows = [];
-      this._.forEach(this.cacheSelectRows, (cv, ck) => {
+      this._.forEach(this.selectedRows, (cv, ck) => {
         this._.forEach(cv, (v, k) => {
           rows.push(v);
         });
       });
       return rows;
     },
+
     emitRowClick(row) {
       if (this.canFireEvents) {
         this.$emit('rowClick', row);
@@ -260,15 +248,14 @@ export default {
     },
     emitSeleced() {
       if (this.canFireEvents) {
-        this.cacheSelectRows[this.pager.page] = this.selectedRows;
-        const rows = this.getSelectedRows();
-
-        this.$emit('select', this.selectedRows);
+        this.$emit('select', this.getSelectedRows());
+        this.refreshStatus();
       }
     },
     emitFocusRow() {
       if (this.canFireEvents) {
         this.$emit('focus', this.focusRow);
+        this.refreshStatus();
       }
     }
   },
@@ -298,10 +285,11 @@ export default {
         );
       });
     }
-    this.width=this.getWidth();
+    this.width = this.getWidth();
     await this.mapDataToRows();
     this.$nextTick(() => {
       this.canFireEvents = true;
+      this.refreshStatus();
     });
   },
 };

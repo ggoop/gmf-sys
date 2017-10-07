@@ -1,7 +1,9 @@
 <template>
   <tr @click="rowClicked" :class="[rowClass]">
     <md-grid-cell type="th" v-if="multiple" class="md-grid-selection">
-      <md-checkbox v-model="selected" @change="handleSelected"></md-checkbox>
+      <div class="layout layout-align-center-center">
+        <md-checkbox v-model="selected" @change="handleSelected"></md-checkbox>
+      </div>
     </md-grid-cell>
     <md-grid-cell v-for="(column,index) in visibleColumns" :row="row" :key="index" :column="column"></md-grid-cell>
   </tr>
@@ -65,10 +67,16 @@ export default {
       this.parentTable.emitRowClick(this.row);
     },
     setSelected(value) {
+      this.selected = value;
+      let items = this.parentTable.selectedRows[this.parentTable.pageCacheKey];
+      if (!items) {
+        items = {};
+        this.parentTable.selectedRows[this.parentTable.pageCacheKey] = items;
+      }
       if (value) {
-        this.parentTable.selectedRows[this.rowId] = this.row.data;
+        items[this.rowId] = this.row.data;
       } else {
-        delete this.parentTable.selectedRows[this.rowId];
+        delete items[this.rowId];
       }
     },
     handleFocused() {
@@ -87,8 +95,7 @@ export default {
           if (body.elType == 'body') {
             body.$children.forEach((row, index) => {
               if (row.elType == 'bodyRow' && rowId.rowId != this.rowId) {
-                row.selected = false;
-                row.setSelected(row.selected);
+                row.setSelected(false);
               }
             });
           }

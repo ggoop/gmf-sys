@@ -7,7 +7,9 @@
       <tbody>
         <tr>
           <md-grid-cell type="th" v-if="multiple" class="md-grid-selection" role="columnheader">
-            <md-checkbox v-model="selected" @change="handleSelected"></md-checkbox>
+            <div class="layout layout-align-center-center">
+              <md-checkbox v-model="selected" @change="handleSelected"></md-checkbox>
+            </div>
           </md-grid-cell>
           <md-grid-cell type="th" v-for="column in visibleColumns" :key="column.field" @click="clicked(column)" role="columnheader" :class="headerClass(column)">
             {{ column.label||column.field }}
@@ -23,7 +25,7 @@ import mdGridEmptyRow from './mdGridEmptyRow';
 import { classList } from './helpers';
 import getClosestVueParent from '../../core/utils/getClosestVueParent';
 export default {
-  props: ['columns','width'],
+  props: ['columns', 'width', 'isSelectedPage'],
 
   components: {
     mdGridCell,
@@ -39,6 +41,11 @@ export default {
       selected: false,
       multiple: false
     };
+  },
+  watch: {
+    isSelectedPage(v) {
+      this.selected = v;
+    }
   },
   computed: {
     visibleColumns() {
@@ -57,7 +64,7 @@ export default {
       return classList(`has-sort sort-${this.sort.order}`, column.headerClass);
     },
     emitSort(column) {
-      if(!this.canFireEvents)return;
+      if (!this.canFireEvents) return;
       if (this.sort.field !== column.field) {
         this.sort.field = column.field;
         this.sort.order = 'asc';
@@ -67,7 +74,7 @@ export default {
       this.$emit('sort', this.sort);
     },
     clicked(column) {
-      if(!this.canFireEvents)return;
+      if (!this.canFireEvents) return;
       if (column.isSortable()) {
         this.emitSort(column);
       }
@@ -79,8 +86,7 @@ export default {
           if (body.elType == 'body') {
             body.$children.forEach((row, index) => {
               if (row.elType == 'bodyRow') {
-                row.selected = value;
-                row.setSelected(row.selected);
+                row.setSelected(value);
               }
             });
           }

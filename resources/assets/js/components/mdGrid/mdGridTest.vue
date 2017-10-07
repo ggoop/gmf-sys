@@ -1,6 +1,6 @@
 <template>
   <div style="padding:40px;margin:20px">
-    <md-grid :datas="datas">
+    <md-grid :datas="datas" :auto-select="true">
       <md-grid-column field="id" label="id" :hidden="true"></md-grid-column>
       <md-grid-column field="code" label="编码"></md-grid-column>
       <md-grid-column field="name" label="名称"></md-grid-column>

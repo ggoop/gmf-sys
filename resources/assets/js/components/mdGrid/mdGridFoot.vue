@@ -7,6 +7,7 @@
       <tbody>
         <tr>
           <md-grid-cell type="th" v-if="multiple" class="md-grid-selection">
+            <div class="layout layout-align-center-center"></div>
           </md-grid-cell>
           <md-grid-cell v-for="column in visibleColumns" :key="column.field">
             <div></div>
