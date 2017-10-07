@@ -11,6 +11,9 @@ export default class Column {
     for (const property in properties) {
       this[property] = columnComponent[property];
     }
+    if (!this.width) {
+      this.width = '120px';
+    }
 
     this.template = columnComponent.$scopedSlots.default;
   }

@@ -67,6 +67,7 @@ export default {
     },
     changeSize() {
       if (this.canFireEvents) {
+        this.currentPage = 1;
         this.$emit('size', this.currentSize);
         this.emitPaginationEvent();
       }
@@ -87,6 +88,8 @@ export default {
     }
   },
   mounted() {
+    if (!this.currentSize && this.pager) this.currentSize = this.pager.size;
+    if (!this.currentSize && this.options) this.currentSize = parseInt(this.options[0]);
     this.$nextTick(() => {
       this.canFireEvents = true;
     });

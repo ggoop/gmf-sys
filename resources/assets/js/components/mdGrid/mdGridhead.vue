@@ -1,6 +1,6 @@
 <template>
   <div class="md-grid-head">
-    <table class="md-grid-table">
+    <table class="md-grid-table" :width="width">
       <thead>
         <md-grid-empty-row :columns="columns"></md-grid-empty-row>
       </thead>
@@ -23,7 +23,7 @@ import mdGridEmptyRow from './mdGridEmptyRow';
 import { classList } from './helpers';
 import getClosestVueParent from '../../core/utils/getClosestVueParent';
 export default {
-  props: ['columns'],
+  props: ['columns','width'],
 
   components: {
     mdGridCell,
@@ -57,6 +57,7 @@ export default {
       return classList(`has-sort sort-${this.sort.order}`, column.headerClass);
     },
     emitSort(column) {
+      if(!this.canFireEvents)return;
       if (this.sort.field !== column.field) {
         this.sort.field = column.field;
         this.sort.order = 'asc';
@@ -66,6 +67,7 @@ export default {
       this.$emit('sort', this.sort);
     },
     clicked(column) {
+      if(!this.canFireEvents)return;
       if (column.isSortable()) {
         this.emitSort(column);
       }
@@ -90,7 +92,9 @@ export default {
   mounted() {
     this.parentTable = getClosestVueParent(this.$parent, 'md-grid');
     this.multiple = this.parentTable.multiple;
-
+    this.$nextTick(() => {
+      this.canFireEvents = true;
+    });
   },
 };
 </script>

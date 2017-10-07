@@ -1,6 +1,6 @@
 <template>
   <div class="md-grid-body">
-    <table class="md-grid-table">
+    <table class="md-grid-table" :width="width">
       <thead>
         <md-grid-empty-row :columns="columns"></md-grid-empty-row>
       </thead>
@@ -19,7 +19,7 @@ import mdGridEmptyRow from './mdGridEmptyRow';
 import { classList } from './helpers';
 import getClosestVueParent from '../../core/utils/getClosestVueParent';
 export default {
-  props: ['columns', 'rows', 'filterNoResults'],
+  props: ['columns', 'rows', 'filterNoResults','width'],
 
   components: {
     mdGridEmptyRow,
@@ -37,12 +37,17 @@ export default {
   },
   methods: {
     rowClicked(row) {
-      this.$emit('click', row);
+      if (this.canFireEvents) {
+        this.$emit('click', row);
+      }
     },
   },
   mounted() {
     this.parentTable = getClosestVueParent(this.$parent, 'md-grid');
     this.multiple = this.parentTable.multiple;
+    this.$nextTick(() => {
+      this.canFireEvents = true;
+    });
   },
 };
 </script>

@@ -38,10 +38,17 @@ export default {
     },
     getDatas({ pager, filter, sort }) {
       var datas = [
-        { id: 'John', code: 'Lennon', name: 'Guitar', date: '04/10/1940', qty: 72 },
-        { id: 'Paul', code: 'McCartney', name: 'Bass', date: '18/06/1942', qty: 70 },
-        { id: 'George', code: 'Harrison', name: 'Guitar', date: '25/02/1943', qty: 22 },
-        { id: 'Ringo', code: 'Starr', name: 'Drums', date: '07/07/1940', qtys: 2 },
+        { id: 'John', code: 'Lennon1', name: 'Guitar', date: '04/10/1940', qty: 72 },
+        { id: 'Paul', code: 'McCartney2', name: 'Bass', date: '18/06/1942', qty: 70 },
+        { id: 'George', code: 'Harrison3', name: 'Guitar', date: '25/02/1943', qty: 22 },
+        { id: 'Ringo', code: 'Starr4', name: 'Drums', date: '07/07/1940', qtys: 2 },
+        { id: 'Paul', code: 'McCartney5', name: 'Bass', date: '18/06/1942', qty: 70 },
+        { id: 'George', code: 'Harrison6', name: 'Guitar', date: '25/02/1943', qty: 22 },
+        { id: 'Ringo', code: 'Starr7', name: 'Drums', date: '07/07/1940', qtys: 2 },
+        { id: 'Paul', code: 'McCartney8', name: 'Bass', date: '18/06/1942', qty: 70 },
+        { id: 'George', code: 'Harrison9', name: 'Guitar', date: '25/02/1943', qty: 22 },
+        { id: 'Ringo', code: 'Starr10', name: 'Drums', date: '07/07/1940', qtys: 2 },
+        { id: 'Ringo', code: 'Starr11', name: 'Drums', date: '07/07/1940', qtys: 2 },
       ];
       this.datas = datas;
     },

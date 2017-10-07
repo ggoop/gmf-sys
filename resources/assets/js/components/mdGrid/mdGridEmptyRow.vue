@@ -1,9 +1,8 @@
 <template>
   <tr class="md-grid-empty-row">
-    <th v-if="multiple">
-    </th>
-    <th v-for="(column,index) in visibleColumns">
-    </th>
+    <td v-if="multiple" class="md-grid-selection" :style="{'overflow':'hidden','width':'50px'}"></td>
+    <td v-for="(column,index) in visibleColumns" :style="{'overflow':'hidden','width':column.width}">
+    </td>
   </tr>
 </template>
 <script>
@@ -11,8 +10,7 @@ import getClosestVueParent from '../../core/utils/getClosestVueParent';
 export default {
   props: ['columns'],
 
-  components: {
-  },
+  components: {},
   data() {
     return {
       parentTable: {},

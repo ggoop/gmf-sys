@@ -37,7 +37,7 @@ class InputHelper {
 					}
 				}
 			}
-
+			unset($data[$field]);
 			$vFieldName = 'id';
 			if (array_has($inputs, $field)) {
 				$data[$field . '_id'] = '';

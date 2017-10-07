@@ -5,9 +5,9 @@
       <a v-if="filter" @click="filter = ''" class="md-grid-filter-clear">×</a>
     </div>
     <div class="md-grid-wrapper">
-      <md-grid-head :columns="columns" @sort="changeSorting"></md-grid-head>
-      <md-grid-body :columns="columns" :rows="displayedRows" :filter-no-results="filterNoResults"></md-grid-body>
-      <md-grid-foot :columns="columns" :show-sum="showSum">
+      <md-grid-head :columns="columns" @sort="changeSorting" :width="width"></md-grid-head>
+      <md-grid-body :columns="columns" :rows="displayedRows" :width="width" :filter-no-results="filterNoResults"></md-grid-body>
+      <md-grid-foot :columns="columns" :show-sum="showSum" :width="width">
         <md-grid-pagination v-if="pager" :pager="pager" @pagination="onPagination"></md-grid-pagination>
       </md-grid-foot>
     </div>
@@ -66,38 +66,9 @@ export default {
     localSettings: {},
     selectedRows: {}, //选择的数据
     cacheRows: {},
-    cacheSelectRows: {}
+    cacheSelectRows: {},
+    width: ''
   }),
-
-  created() {
-    this.sort.field = this.sortBy;
-    this.sort.order = this.sortOrder;
-    this.restoreState();
-  },
-
-  async mounted() {
-    if (this.$slots.default && this.$slots.default.filter) {
-      const columnComponents = this.$slots.default
-        .filter(column => column.componentInstance)
-        .map(column => column.componentInstance);
-
-      this.columns = columnComponents.map(
-        column => new Column(column)
-      );
-
-      columnComponents.forEach(columnCom => {
-        Object.keys(columnCom.$options.props).forEach(
-          prop => columnCom.$watch(prop, () => {
-            this.columns = columnComponents.map(
-              column => new Column(column)
-            );
-          })
-        );
-      });
-    }
-    await this.mapDataToRows();
-  },
-
   watch: {
     filter() {
       if (!this.usesLocalData) {
@@ -111,6 +82,9 @@ export default {
         this.mapDataToRows();
       }
     },
+    columns() {
+      this.width = this.getWidth();
+    }
   },
 
   computed: {
@@ -163,7 +137,6 @@ export default {
         `md-grid.${window.location.host}${window.location.pathname}${this.cacheKey}`;
     },
   },
-
   methods: {
     handleSizeChange() {
       if (!this.usesLocalData) {
@@ -182,6 +155,7 @@ export default {
     },
 
     async mapDataToRows() {
+      this.selectedRows = {};
       if (this.cacheRows[this.pager.page]) {
         this.rows = this.cacheRows[this.pager.page];
         return;
@@ -252,16 +226,83 @@ export default {
 
       this.saveState();
     },
+    getWidth() {
+      var w = 50;
+      this.columns.forEach((c) => {
+        if (!c.hidden)
+          w += parseInt(c.width);
+      });
+      return w + "px";
+    },
+    getSelectedRows() {
+      const rows = [];
+      this._.forEach(this.cacheSelectRows, (cv, ck) => {
+        this._.forEach(cv, (v, k) => {
+          rows.push(v);
+        });
+      });
+      return rows;
+    },
     emitRowClick(row) {
-      this.$emit('rowClick', row);
+      if (this.canFireEvents) {
+        this.$emit('rowClick', row);
+      }
+    },
+    isSelected(row) {
+      let selected = false,
+        vueRowId = row && row.vueRowId || row;
+      const rows = this.getSelectedRows();
+      this._.forEach(rows, (v, k) => {
+        if (v.vueRowId == vueRowId)
+          selected = true;
+      });
+      return selected;
     },
     emitSeleced() {
-      this.cacheSelectRows[this.pager.page] = this.selectedRows;
-      this.$emit('select', this.selectedRows);
+      if (this.canFireEvents) {
+        this.cacheSelectRows[this.pager.page] = this.selectedRows;
+        const rows = this.getSelectedRows();
+
+        this.$emit('select', this.selectedRows);
+      }
     },
     emitFocusRow() {
-      this.$emit('focus', this.focusRow);
+      if (this.canFireEvents) {
+        this.$emit('focus', this.focusRow);
+      }
     }
+  },
+  created() {
+    this.sort.field = this.sortBy;
+    this.sort.order = this.sortOrder;
+    this.restoreState();
+  },
+
+  async mounted() {
+    if (this.$slots.default && this.$slots.default.filter) {
+      const columnComponents = this.$slots.default
+        .filter(column => column.componentInstance)
+        .map(column => column.componentInstance);
+
+      this.columns = columnComponents.map(
+        column => new Column(column)
+      );
+
+      columnComponents.forEach(columnCom => {
+        Object.keys(columnCom.$options.props).forEach(
+          prop => columnCom.$watch(prop, () => {
+            this.columns = columnComponents.map(
+              column => new Column(column)
+            );
+          })
+        );
+      });
+    }
+    this.width=this.getWidth();
+    await this.mapDataToRows();
+    this.$nextTick(() => {
+      this.canFireEvents = true;
+    });
   },
 };
 </script>

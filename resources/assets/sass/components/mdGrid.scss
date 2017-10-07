@@ -32,7 +32,6 @@
   }
   .md-grid-message {}
   .md-grid-table {
-    min-width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
 
@@ -66,6 +65,7 @@
   }
 
   .md-grid-head {
+    overflow: hidden;
     background-color: #f4f4f4;
     border-bottom: 2px solid #53abe6;
 
@@ -108,6 +108,7 @@
   .md-grid-body {
     background: #fff;
     color: #000;
+    overflow: auto;
     tr:nth-child(even) {
       background-color: #f9f9f9;
     }
@@ -117,9 +118,15 @@
     tr.focused {
       background: #009688;
       color: #fff;
+
+      td,
+      th {
+        border-right-color: #009688;
+      }
     }
   }
   .md-grid-foot {
+    overflow: hidden;
     background-color: #fafafa;
     border-top: 1px solid #dfdfdf;
     min-height: .4rem;

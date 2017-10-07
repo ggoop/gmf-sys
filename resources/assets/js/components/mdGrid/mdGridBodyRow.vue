@@ -31,6 +31,9 @@ export default {
   watch: {
     'row.data.vueRowId' (v) {
       this.rowId = v;
+    },
+    'rowId' () {
+      this.resetStatus();
     }
   },
   computed: {
@@ -46,7 +49,15 @@ export default {
     }
   },
   methods: {
+    resetStatus() {
+      this.multiple = this.parentTable.multiple;
+      this.autoSelect = this.parentTable.autoSelect;
+      this.focused = false;
+      this.selected = this.row.data && this.parentTable.isSelected(this.row.data);
+      this.disabled = false;
+    },
     rowClicked() {
+      if (!this.canFireEvents) return;
       if (this.autoSelect) {
         this.handleSelected(true);
       }
@@ -61,6 +72,7 @@ export default {
       }
     },
     handleFocused() {
+      if (!this.canFireEvents) return;
       if (!this.parentTable.focusRow || this.parentTable.focusRow.rowId != this.rowId) {
         if (this.parentTable.focusRow) this.parentTable.focusRow.focused = false;
         this.focused = true;
@@ -69,6 +81,7 @@ export default {
       }
     },
     handleSelected(value) {
+      if (!this.canFireEvents) return;
       if (!this.multiple && value) {
         this.parentTable.$children.forEach((body, index) => {
           if (body.elType == 'body') {
@@ -93,6 +106,9 @@ export default {
     if (this.row && this.row.data.vueRowId) {
       this.rowId = this.row.data.vueRowId;
     }
+    this.$nextTick(() => {
+      this.canFireEvents = true;
+    });
   },
 };
 </script>
