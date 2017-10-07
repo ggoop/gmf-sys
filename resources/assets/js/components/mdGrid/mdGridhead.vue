@@ -1,0 +1,96 @@
+<template>
+  <div class="md-grid-head">
+    <table class="md-grid-table">
+      <thead>
+        <md-grid-empty-row :columns="columns"></md-grid-empty-row>
+      </thead>
+      <tbody>
+        <tr>
+          <md-grid-cell type="th" v-if="multiple" class="md-grid-selection" role="columnheader">
+            <md-checkbox v-model="selected" @change="handleSelected"></md-checkbox>
+          </md-grid-cell>
+          <md-grid-cell type="th" v-for="column in visibleColumns" :key="column.field" @click="clicked(column)" role="columnheader" :class="headerClass(column)">
+            {{ column.label||column.field }}
+          </md-grid-cell>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</template>
+<script>
+import mdGridCell from './mdGridCell';
+import mdGridEmptyRow from './mdGridEmptyRow';
+import { classList } from './helpers';
+import getClosestVueParent from '../../core/utils/getClosestVueParent';
+export default {
+  props: ['columns'],
+
+  components: {
+    mdGridCell,
+    mdGridEmptyRow
+  },
+  data() {
+    return {
+      parentTable: {},
+      sort: {
+        field: '',
+        order: '',
+      },
+      selected: false,
+      multiple: false
+    };
+  },
+  computed: {
+    visibleColumns() {
+      return this.columns && this.columns.filter(column => !column.hidden);
+    },
+  },
+  methods: {
+    headerClass(column) {
+      if (!column.isSortable()) {
+        return classList(column.headerClass);
+      }
+
+      if (column.field !== this.sort.field) {
+        return classList('has-sort', column.headerClass);
+      }
+      return classList(`has-sort sort-${this.sort.order}`, column.headerClass);
+    },
+    emitSort(column) {
+      if (this.sort.field !== column.field) {
+        this.sort.field = column.field;
+        this.sort.order = 'asc';
+      } else {
+        this.sort.order = (this.sort.order === 'asc' ? 'desc' : 'asc');
+      }
+      this.$emit('sort', this.sort);
+    },
+    clicked(column) {
+      if (column.isSortable()) {
+        this.emitSort(column);
+      }
+      this.$emit('click', column);
+    },
+    handleSelected(value) {
+      if (this.multiple) {
+        this.parentTable.$children.forEach((body, index) => {
+          if (body.elType == 'body') {
+            body.$children.forEach((row, index) => {
+              if (row.elType == 'bodyRow') {
+                row.selected = value;
+                row.setSelected(row.selected);
+              }
+            });
+          }
+        });
+        this.parentTable.emitSeleced();
+      }
+    },
+  },
+  mounted() {
+    this.parentTable = getClosestVueParent(this.$parent, 'md-grid');
+    this.multiple = this.parentTable.multiple;
+
+  },
+};
+</script>

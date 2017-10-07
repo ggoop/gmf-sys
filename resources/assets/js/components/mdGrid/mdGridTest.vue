@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding:40px;margin:20px">
     <md-grid :datas="datas">
       <md-grid-column field="id" label="id" :hidden="true"></md-grid-column>
       <md-grid-column field="code" label="编码"></md-grid-column>
@@ -11,7 +11,7 @@
         </template>
       </md-grid-column>
     </md-grid>
-    <md-divider></md-divider>
+    <md-divider style="margin:20px 0px;"></md-divider>
     <md-grid :datas="fetchData">
       <md-grid-column field="id" label="id" :hidden="true"></md-grid-column>
       <md-grid-column field="code" label="编码"></md-grid-column>
@@ -46,7 +46,7 @@ export default {
       this.datas = datas;
     },
     async fetchData({ pager, filter, sort }) {
-      const response = await this.$http.get('cbo/countries');
+      const response = await this.$http.get('cbo/countries',{params:pager});
       return response;
     }
   },

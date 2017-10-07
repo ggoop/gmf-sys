@@ -1,0 +1,48 @@
+<template>
+  <div class="md-grid-body">
+    <table class="md-grid-table">
+      <thead>
+        <md-grid-empty-row :columns="columns"></md-grid-empty-row>
+      </thead>
+      <tbody>
+        <md-grid-body-row v-for="row in rows" :key="row.vueRowId" @click="rowClicked" :row="row" :columns="columns"></md-grid-body-row>
+      </tbody>
+    </table>
+    <div v-if="rows.length === 0" class="md-grid-message">
+      {{ filterNoResults }}
+    </div>
+  </div>
+</template>
+<script>
+import mdGridBodyRow from './mdGridBodyRow';
+import mdGridEmptyRow from './mdGridEmptyRow';
+import { classList } from './helpers';
+import getClosestVueParent from '../../core/utils/getClosestVueParent';
+export default {
+  props: ['columns', 'rows', 'filterNoResults'],
+
+  components: {
+    mdGridEmptyRow,
+    mdGridBodyRow,
+  },
+  data() {
+    return {
+      parentTable: {},
+      multiple: false,
+      elType: 'body'
+    };
+  },
+  computed: {
+
+  },
+  methods: {
+    rowClicked(row) {
+      this.$emit('click', row);
+    },
+  },
+  mounted() {
+    this.parentTable = getClosestVueParent(this.$parent, 'md-grid');
+    this.multiple = this.parentTable.multiple;
+  },
+};
+</script>

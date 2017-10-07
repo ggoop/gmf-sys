@@ -1,4 +1,4 @@
-class ExpiringStorage {
+class localCache {
     get(key) {
         const cached = JSON.parse(
             localStorage.getItem(key)
@@ -31,4 +31,4 @@ class ExpiringStorage {
     }
 }
 
-export default new ExpiringStorage();
+export default new localCache();

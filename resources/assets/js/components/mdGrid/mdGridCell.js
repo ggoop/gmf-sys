@@ -3,24 +3,23 @@ export default {
 
   props: ['column', 'row', 'type'],
 
-  render(createElement, { props, children, slots }) {
-    const type = props.type || 'td';
-    const data = {
-      class: "md-grid-table-" + type
-    };
+  render(createElement, context) {
+    const type = context.props.type || 'td';
+    const data = context.data;
+    data.class=data.class||[];
+    data.domProps = data.domProps || {};
 
-    if (props.column && props.column.cellClass) {
-      data.class = data.class + " " + props.column.cellClass;
+    if (context.props.column && context.props.column.cellClass) {
+      data.class.push(context.props.column.cellClass);
     }
-    if (props.column && props.column.template) {
-      return createElement(type, data, props.column.template(props.row.data));
+    if (context.props.column && context.props.column.template) {
+      return createElement(type, data, context.props.column.template(context.props.row.data));
     }
-    if (children && children.length && slots) {
-      return createElement(type, data, children);
+    if (context.children && context.children.length && context.slots) {
+      return createElement(type, data, context.children);
     }
-    data.domProps = {};
-    if (props.column) {
-      data.domProps.innerHTML = props.column.formatter(props.row.getValue(props.column.field), props.row.data);
+    if (context.props.column) {
+      data.domProps.innerHTML = context.props.column.formatter(context.props.row.getValue(context.props.column.field), context.props.row.data);
     }
     return createElement(type, data);
   },

@@ -1,16 +1,16 @@
 <template>
-  <div class="md-pagination" v-if="pager">
-    <span class="md-table-pagination-label">每页:</span>
+  <div class="md-pagination layout-row layout-align-center-center" v-if="pager">
+    <md-button class="md-icon-button md-pagination-previous" @click.native="previousPage" :disabled="currentPage === 1">
+      <md-icon>keyboard_arrow_left</md-icon>
+    </md-button>
+    <span class="md-pagination-info">{{pageInfo}}</span>
+    <md-button class="md-icon-button md-pagination-next" @click.native="nextPage" :disabled="shouldDisable">
+      <md-icon>keyboard_arrow_right</md-icon>
+    </md-button>
+    <span class="md-pagination-label">每页:</span>
     <md-select v-model="currentSize" md-container="" md-menu-class="md-pagination-select" @change="changeSize" v-if="options">
       <md-option v-for="amount in options" :key="amount" :value="amount">{{ amount }}</md-option>
     </md-select>
-    <span class="md-table-pagination-info">{{pageInfo}}</span>
-    <md-button class="md-icon-button md-table-pagination-previous" @click.native="previousPage" :disabled="currentPage === 1">
-      <md-icon>keyboard_arrow_left</md-icon>
-    </md-button>
-    <md-button class="md-icon-button md-table-pagination-next" @click.native="nextPage" :disabled="shouldDisable">
-      <md-icon>keyboard_arrow_right</md-icon>
-    </md-button>
   </div>
 </template>
 <script>

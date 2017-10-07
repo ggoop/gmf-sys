@@ -1,89 +1,77 @@
 <template>
   <div class="md-grid">
     <div v-if="showFilter && filterableColumnExists" class="md-grid-filter">
-      <input :class="fullFilterInputClass" type="text" v-model="filter" :placeholder="filterPlaceholder">
+      <input type="text" v-model="filter" :placeholder="filterPlaceholder">
       <a v-if="filter" @click="filter = ''" class="md-grid-filter-clear">×</a>
     </div>
     <div class="md-grid-wrapper">
-      <table :class="fullTableClass">
-        <caption v-if="showCaption" class="md-grid-caption" role="alert" aria-live="polite">
-          {{ ariaCaption }}
-        </caption>
-        <thead :class="fullTableHeadClass">
-          <tr>
-            <md-grid-column-header @click="changeSorting" v-for="column in columns" :key="column.field" :sort="sort" :column="column"></md-grid-column-header>
-          </tr>
-        </thead>
-        <tbody :class="fullTableBodyClass">
-          <md-grid-row v-for="row in displayedRows" :key="row.vueRowId" :row="row" :columns="columns"></md-grid-row>
-        </tbody>
-      </table>
-    </div>
-    <div v-if="displayedRows.length === 0" class="md-grid-message">
-      {{ filterNoResults }}
+      <md-grid-head :columns="columns" @sort="changeSorting"></md-grid-head>
+      <md-grid-body :columns="columns" :rows="displayedRows" :filter-no-results="filterNoResults"></md-grid-body>
+      <md-grid-foot :columns="columns" :show-sum="showSum">
+        <md-grid-pagination v-if="pager" :pager="pager" @pagination="onPagination"></md-grid-pagination>
+      </md-grid-foot>
     </div>
     <div style="display:none;">
       <slot></slot>
     </div>
-    <md-grid-pagination v-if="pager" :pager="pager" @pagination="onPagination"></md-grid-pagination>
   </div>
 </template>
 <script>
 import Column from './classes/Column';
-import expiringStorage from './expiring-storage';
+import localCache from '../../core/utils/localCache';
 import Row from './classes/Row';
-import mdGridColumnHeader from './mdGridColumnHeader';
-import mdGridRow from './mdGridRow';
-import isArray from 'lodash/isArray';
-import pick from 'lodash/pick';
+import mdGridHead from './mdGridHead';
+import mdGridBody from './mdGridBody';
+import mdGridFoot from './mdGridFoot';
 import { classList } from './helpers';
 import mdGridCell from './mdGridCell';
 
 export default {
   components: {
-    mdGridColumnHeader,
-    mdGridRow,
+    mdGridHead,
+    mdGridBody,
+    mdGridFoot,
     mdGridCell
   },
 
   props: {
     datas: { default: () => [], type: [Array, Function] },
     autoSelect: Boolean,
-    selection: Boolean,
-    showFilter: { default: true },
-    showCaption: { default: false },
-
+    multiple: { default: true, type: Boolean },
+    showFilter: { default: false },
+    showSum: { default: false },
     sortBy: { default: '', type: String },
     sortOrder: { default: '', type: String },
 
     cacheKey: { default: null },
     cacheLifetime: { default: 5 },
-
-    tableClass: { type: String },
-    theadClass: { type: String },
-    tbodyClass: { type: String },
-    filterInputClass: { type: String },
     filterPlaceholder: { default: 'Filter table…' },
     filterNoResults: { default: 'There are no matching rows' },
   },
 
   data: () => ({
     columns: [],
-    rows: [],
+    rows: [], //当前页数据
     filter: '',
     sort: {
       field: '',
       order: '',
     },
-    pager: null,
-
+    pager: {
+      page: 1,
+      size: 20,
+      total: 0
+    },
+    focusRow: false,
     localSettings: {},
+    selectedRows: {}, //选择的数据
+    cacheRows: {},
+    cacheSelectRows: {}
   }),
 
   created() {
     this.sort.field = this.sortBy;
     this.sort.order = this.sortOrder;
-
     this.restoreState();
   },
 
@@ -115,7 +103,6 @@ export default {
       if (!this.usesLocalData) {
         this.mapDataToRows();
       }
-
       this.saveState();
     },
 
@@ -127,40 +114,13 @@ export default {
   },
 
   computed: {
-    fullTableClass() {
-      return classList('md-grid-table', this.tableClass);
-    },
-
-    fullTableHeadClass() {
-      return classList('md-grid-table-head', this.theadClass);
-    },
-
-    fullTableBodyClass() {
-      return classList('md-grid-table-body', this.tbodyClass);
-    },
-
-    fullFilterInputClass() {
-      return classList('md-grid-filter-field', this.filterInputClass);
-    },
-
-    ariaCaption() {
-      if (this.sort.field === '') {
-        return 'Table not sorted';
-      }
-
-      return `Table sorted by ${this.sort.field} ` +
-        (this.sort.order === 'asc' ? '(ascending)' : '(descending)');
-    },
-
     usesLocalData() {
-      return isArray(this.datas);
+      return this._.isArray(this.datas);
     },
-
     displayedRows() {
       if (!this.usesLocalData) {
         return this.sortedRows;
       }
-
       if (!this.showFilter) {
         return this.sortedRows;
       }
@@ -171,7 +131,6 @@ export default {
 
       return this.sortedRows.filter(row => row.passesFilter(this.filter));
     },
-
     sortedRows() {
       if (!this.usesLocalData) {
         return this.rows;
@@ -206,13 +165,27 @@ export default {
   },
 
   methods: {
-    async onPagination(page) {
-      this.pager.page = page.page;
-      this.pager.size = page.size;
+    handleSizeChange() {
+      if (!this.usesLocalData) {
+        this.cacheRows = {};
+      }
+      this.cacheSelectRows = {};
+      this.selectedRows = {};
+    },
+    async onPagination(pager) {
+      if (this.pager.size != pager.size) {
+        this.handleSizeChange();
+      }
+      this.pager.page = pager.page;
+      this.pager.size = pager.size;
       await this.mapDataToRows();
     },
 
     async mapDataToRows() {
+      if (this.cacheRows[this.pager.page]) {
+        this.rows = this.cacheRows[this.pager.page];
+        return;
+      }
       const data = this.usesLocalData ?
         this.prepareLocalData() :
         await this.fetchServerData();
@@ -222,11 +195,13 @@ export default {
           return rowData;
         })
         .map(rowData => new Row(rowData, this.columns));
+
+      this.cacheRows[this.pager.page] = this.rows;
     },
 
     prepareLocalData() {
-      this.pager = null;
-
+      this.pager.page = 1;
+      this.pager.total = this.datas.length;
       return this.datas;
     },
 
@@ -236,39 +211,37 @@ export default {
         sort: this.sort,
         pager: this.pager
       });
-      this.pager = response.data.pager;
+      if (response.data.pager) {
+        if (this.pager.size != response.data.pager.size) {
+          this.handleSizeChange();
+        }
+        this.pager.page = response.data.pager.page;
+        this.pager.size = response.data.pager.size;
+        this.pager.total = response.data.pager.total;
+      }
       return response.data.data;
     },
 
     async refresh() {
       await this.mapDataToRows();
     },
-
-    changeSorting(column) {
-      if (this.sort.field !== column.field) {
-        this.sort.field = column.field;
-        this.sort.order = 'asc';
-      } else {
-        this.sort.order = (this.sort.order === 'asc' ? 'desc' : 'asc');
-      }
-
+    changeSorting(sort) {
+      this.sort = sort;
       if (!this.usesLocalData) {
         this.mapDataToRows();
       }
-
       this.saveState();
     },
-
     getColumn(columnName) {
       return this.columns.find(column => column.field === columnName);
     },
 
     saveState() {
-      expiringStorage.set(this.storageKey, pick(this.$data, ['filter', 'sort']), this.cacheLifetime);
+      localCache.set(this.storageKey, this._.pick(this.$data, ['filter', 'sort']), this.cacheLifetime);
     },
 
     restoreState() {
-      const previousState = expiringStorage.get(this.storageKey);
+      const previousState = localCache.get(this.storageKey);
 
       if (previousState === null) {
         return;
@@ -279,6 +252,16 @@ export default {
 
       this.saveState();
     },
+    emitRowClick(row) {
+      this.$emit('rowClick', row);
+    },
+    emitSeleced() {
+      this.cacheSelectRows[this.pager.page] = this.selectedRows;
+      this.$emit('select', this.selectedRows);
+    },
+    emitFocusRow() {
+      this.$emit('focus', this.focusRow);
+    }
   },
 };
 </script>
