@@ -1,11 +1,9 @@
 <template>
-  <tr @click="rowClicked" :class="[rowClass]">
+  <tr @click="rowClicked" :class="[rowClass]" @dblclick="rowDblclick">
     <md-grid-cell type="th" v-if="multiple" class="md-grid-selection">
-      <div class="layout layout-align-center-center">
-        <md-checkbox v-model="selected" @change="handleSelected"></md-checkbox>
-      </div>
+      <md-checkbox v-model="selected" @change="handleSelected"></md-checkbox>
     </md-grid-cell>
-    <md-grid-cell v-for="(column,index) in visibleColumns" :row="row" :key="index" :column="column"></md-grid-cell>
+    <md-grid-cell v-for="(column,index) in visibleColumns" :row="row" :rowIndex="rowIndex" :colIndex="index" :key="index" :column="column"></md-grid-cell>
   </tr>
 </template>
 <script>
@@ -13,7 +11,7 @@ import mdGridCell from './mdGridCell';
 import { classList } from './helpers';
 import getClosestVueParent from '../../core/utils/getClosestVueParent';
 export default {
-  props: ['columns', 'row'],
+  props: ['columns', 'row', 'rowIndex'],
 
   components: {
     mdGridCell,
@@ -66,6 +64,9 @@ export default {
       this.handleFocused();
       this.parentTable.emitRowClick(this.row);
     },
+    rowDblclick() {
+      this.parentTable.emitRowDbClick(this.row);
+    },
     setSelected(value) {
       this.selected = value;
       let items = this.parentTable.selectedRows[this.parentTable.pageCacheKey];
@@ -91,10 +92,11 @@ export default {
     handleSelected(value) {
       if (!this.canFireEvents) return;
       if (!this.multiple && value) {
+        this.parentTable.selectedRows = {};
         this.parentTable.$children.forEach((body, index) => {
           if (body.elType == 'body') {
             body.$children.forEach((row, index) => {
-              if (row.elType == 'bodyRow' && rowId.rowId != this.rowId) {
+              if (row.elType == 'bodyRow' && row.rowId != this.rowId) {
                 row.setSelected(false);
               }
             });

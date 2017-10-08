@@ -19,7 +19,7 @@ import mdGridEmptyRow from './mdGridEmptyRow';
 import { classList } from './helpers';
 import getClosestVueParent from '../../core/utils/getClosestVueParent';
 export default {
-  props: ['columns', 'rows', 'filterNoResults','width'],
+  props: ['columns', 'rows', 'filterNoResults', 'width'],
 
   components: {
     mdGridEmptyRow,
@@ -45,8 +45,12 @@ export default {
   mounted() {
     this.parentTable = getClosestVueParent(this.$parent, 'md-grid');
     this.multiple = this.parentTable.multiple;
+    this.$el.addEventListener('scroll', () => {
+      this.parentTable.scrollLeft = this.$el.scrollLeft;
+    }, false);
     this.$nextTick(() => {
       this.canFireEvents = true;
+      this.parentTable.scrollLeft = this.$el.scrollLeft;
     });
   },
 };

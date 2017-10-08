@@ -11,19 +11,39 @@ export default {
     };
   },
   methods: {
+    getItemIndex(item) {
+      var ind = -1;
+      this.mdItems.forEach((v, k) => {
+        if (v.vueRowId === item.vueRowId) {
+          ind = k;
+          return k;
+        }
+      });
+      return ind;
+    },
     onItemSelect(datas) {
       this.selectItems = datas;
     },
     onItemAdd() {
       this.$refs.newItemDialog.open();
     },
-    onItemUp(item, index) {
-      if (index <= 0) return;
+    onItemUp(item,event) {
+      if (event) {
+        event.preventDefault && event.preventDefault();
+        event.stopPropagation && event.stopPropagation();
+      }
+      const index=this.getItemIndex(item);
+      if(index<=0)return;
       this.mdItems.splice(index, 1);
       item = JSON.parse(JSON.stringify(item));
       this.mdItems.splice(index - 1, 0, item);
     },
-    onItemDown(item, index) {
+    onItemDown(item,event) {
+      if (event) {
+        event.preventDefault && event.preventDefault();
+        event.stopPropagation && event.stopPropagation();
+      }
+      const index=this.getItemIndex(item);
       if (index > this.mdItems.length - 1) return;
       this.mdItems.splice(index, 1);
       item = JSON.parse(JSON.stringify(item));

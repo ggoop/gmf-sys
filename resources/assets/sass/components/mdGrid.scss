@@ -15,14 +15,57 @@
   }
 }
 
+@include layout-small {
+  .md-pagination {
+    .md-pagination-label {
+      display: none;
+    }
+    .md-select {
+      display: none;
+    }
+    .md-pagination-info {
+      display: none;
+    }
+  }
+}
 .md-grid {
   border: 1px solid #c7c7c7;
   background: #fff;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  .md-grid-cell-container {
+    padding: 0.04rem;
+    .md-input-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      margin: 0;
+      padding: 0;
+      min-height: auto;
+    }
+    .md-select-date>div {
+      height: 100%;
+      max-height: 100%;
+      .md-icon-button {
+        max-height: 100%;
+        height: 100%;
+        min-height: auto;
+        margin: 0px;
+        width: .3rem;
+        min-width: auto;
+        height: .3rem;
+      }
+    }
+  }
   td,
   th {
     border-bottom: 1px solid #ededed;
     border-right: 1px solid #ededed;
-    padding: 0.04rem;
+    overflow: hidden;
+    position: relative;
   }
   td:last-child,
   th:last-child {
@@ -35,12 +78,10 @@
   .md-grid-selection {
     width: 40px;
     position: relative;
-    >div {
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      right: 0px;
-      bottom: 0px;
+    >.md-grid-cell-container {
+      text-align: center !important;
+      padding: 0!important;
+      margin: 0!important;
     }
     .md-checkbox {
       margin: 0;
@@ -62,11 +103,20 @@
   .md-grid-table {
     border-collapse: collapse;
     table-layout: fixed;
+    position: relative;
   }
   .md-grid-head {
     overflow: hidden;
     background-color: #f4f4f4;
     border-bottom: 2px solid #53abe6;
+    position: relative;
+
+    .md-grid-cell-container {
+      padding-right: .07rem;
+      padding-left: .08rem;
+      padding-top: .08rem;
+      padding-bottom: .07rem;
+    }
     td,
     th {
       color: #999;
@@ -74,11 +124,6 @@
       white-space: nowrap;
       text-align: left;
       position: relative;
-      padding-right: .07rem;
-      padding-left: .08rem;
-      padding-top: .08rem;
-      padding-bottom: .07rem;
-
       &.has-sort {
         cursor: pointer;
         text-decoration: underline;
@@ -101,11 +146,41 @@
     background: #fff;
     color: #000;
     overflow: auto;
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-    tr.selected {
-      background-color: #80cbc4;
+    position: relative;
+    tr {
+      .is-tool {
+        overflow: visible;
+        position: relative;
+
+        .md-grid-cell-container {
+          z-index: -1;
+          position: absolute;
+          right: 0px;
+          top: 0px;
+          bottom: 0px;
+
+          .md-button.md-icon-button {
+            margin: 0px;
+            padding: 0px;
+            padding: 0px;
+            margin: 0px;
+            min-width: 0;
+            min-height: 0;
+            max-height: 100%;
+          }
+        }
+      }
+      &:hover {
+        .is-tool>.md-grid-cell-container {
+          z-index: inherit;
+        }
+      }
+      &:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+      &.selected {
+        background-color: #80cbc4;
+      }
     }
     tr.focused {
       background: #009688;
@@ -121,5 +196,19 @@
     background-color: #fafafa;
     border-top: 1px solid #dfdfdf;
     min-height: .4rem;
+    position: relative;
+  }
+  .md-grid-actions {
+    background-color: #fafafa;
+    border-top: 1px solid #dfdfdf;
+    min-height: .4rem;
+    color: #666;
+    >div>.md-icon-button {
+      margin: 0px;
+      padding: 0px;
+    }
+    .md-button-query {
+      color: #009688;
+    }
   }
 }

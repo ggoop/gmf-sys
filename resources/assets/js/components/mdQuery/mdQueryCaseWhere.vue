@@ -1,40 +1,21 @@
 <template>
   <md-layout md-flex="100">
-    <md-table-card class="flex">
-      <md-table @select="onItemSelect" class="flex">
-        <md-table-header>
-          <md-table-row>
-            <md-table-head>名称</md-table-head>
-            <md-table-head>操作符</md-table-head>
-            <md-table-head>条件值</md-table-head>
-          </md-table-row>
-        </md-table-header>
-        <md-table-body>
-          <md-table-row v-for="(item, rind) in mdItems" :key="rind" :md-item="item" :md-auto-select="false" :md-selection="true">
-            <md-table-cell>{{ item.comment||item.name}}</md-table-cell>
-            <md-table-cell>{{ item.operator_enum}}</md-table-cell>
-            <md-table-cell>
-              <md-input-container>
-                <md-input v-if="item.type_enum=='value'" v-model="item.value"></md-input>
-                <md-input-ref v-else-if="item.type_enum=='ref'" v-model="item.value" :md-ref-id="item.ref_id"></md-input-ref>
-                <md-enum v-else-if="item.type_enum=='enum'" v-model="item.value" :md-enum-id="item.ref_id"></md-enum>
-                <md-date v-else-if="item.type_enum=='date'" v-model="item.value"></md-date>
-                <md-input v-else v-model="item.value"></md-input>
-              </md-input-container>
-            </md-table-cell>
-          </md-table-row>
-        </md-table-body>
-      </md-table>
-      <md-table-tool>
-        <md-button class="md-icon-button" @click.native="onItemRemove()">
-          <md-icon>clear</md-icon>
-        </md-button>
-        <span class="flex"></span>
-      </md-table-tool>
-      <md-button class="md-fab md-mini md-fab-bottom-right" @click.native="onItemAdd()">
-        <md-icon>add</md-icon>
-      </md-button>
-    </md-table-card>
+    <md-grid :datas="mdItems" ref="grid" :showRemove="true" :showReload="false" :showAdd="true" @select="onItemSelect" @onAdd="onItemAdd" class="flex">>
+      <md-grid-column field="id" label="id" :hidden="true"></md-grid-column>
+      <md-grid-column field="comment" label="名称"></md-grid-column>
+      <md-grid-column field="operator_enum" label="操作符"></md-grid-column>
+      <md-grid-column label="条件值">
+        <template scope="row">
+          <md-input-container>
+            <md-input v-if="row.type_enum=='value'" v-model="row.value"></md-input>
+            <md-input-ref v-else-if="row.type_enum=='ref'" v-model="row.value" :md-ref-id="row.ref_id"></md-input-ref>
+            <md-enum v-else-if="row.type_enum=='enum'" v-model="row.value" :md-enum-id="row.ref_id"></md-enum>
+            <md-date v-else-if="row.type_enum=='date'" v-model="row.value"></md-date>
+            <md-input v-else v-model="row.value"></md-input>
+          </md-input-container>
+        </template>
+      </md-grid-column>
+    </md-grid>
     <md-dialog ref="newItemDialog">
       <md-toolbar>
         <h1 class="md-title">选择更多内容</h1>

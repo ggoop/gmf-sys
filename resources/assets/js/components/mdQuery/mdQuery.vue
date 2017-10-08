@@ -1,33 +1,11 @@
 <template>
-  <md-table-card class="flex md-query">
-    <md-table @select="onTableSelect" class="flex">
-      <md-table-header>
-        <md-table-row>
-          <md-table-head v-for="(column, columnIndex) in refInfo.fields" v-if="!column.hide&&column.alias!='id'" :key="columnIndex">
-            {{column.comment||column.name}}
-          </md-table-head>
-        </md-table-row>
-      </md-table-header>
-      <md-table-body>
-        <md-table-row v-for="(row, rowIndex) in refData" :key="row.id" :md-item="row" :md-auto-select="mdAutoSelect" :md-selection="mdSelection" @dblclick.native="dblclick(row)">
-          <md-table-cell v-for="(column, columnIndex) in refInfo.fields" :key="columnIndex" v-if="!column.hide&&column.alias!='id'">
-            {{ row[column.alias||column.name] }}
-          </md-table-cell>
-        </md-table-row>
-      </md-table-body>
-    </md-table>
-    <md-table-tool>
-      <md-query-case :md-query-id="mdQueryId" ref="queryCase" @init="initQueryCase" @query="queryQueryCase">
-        <md-button class="md-icon-button" @click.native="openQueryCase()">
-          <md-icon>search</md-icon>
-        </md-button>
-      </md-query-case>
-      <span class="flex"></span>
-      <md-table-pagination :md-size="pageInfo.size" :md-total="pageInfo.total" :md-page="pageInfo.page" :md-page-options="[5, 10, 25, 50]" @pagination="onTablePagination">
-      </md-table-pagination>
-    </md-table-tool>
+  <div class="layout layout-full flex md-query">
+    <md-grid ref="grid" :datas="fetchData" :multiple="multiple" showQuery @select="onSelected" @dblclick="dblclick" @onQuery="openQueryCase">
+    </md-grid>
+    <md-query-case :md-query-id="mdQueryId" ref="queryCase" @init="initQueryCase" @query="queryQueryCase">
+    </md-query-case>
     <md-loading :loading="loading"></md-loading>
-  </md-table-card>
+  </div>
 </template>
 <script>
 import theme from '../../core/components/mdTheme/mixin';
@@ -36,25 +14,9 @@ import common from '../../core/utils/common';
 export default {
   props: {
     mdQueryId: String,
-    mdKey: {
-      type: String,
-      default: 'id'
-    },
-    mdMax: {
-      type: Number,
-      default: Infinity
-    },
-    mdAutoSelect: {
-      type: [String, Boolean],
+    multiple: {
+      type: Boolean,
       default: true
-    },
-    mdSelection: {
-      type: [String, Boolean],
-      default: true
-    },
-    mdPageSize: {
-      type: [Number, String],
-      default: '25'
     },
     options: {
       type: Object,
@@ -68,20 +30,12 @@ export default {
   },
   mixins: [theme],
   watch: {
-    mdPageSize(val) {
-      this.pageInfo.size = val;
-    },
+
   },
   data() {
     return {
       selectedRows: [],
-      pageInfo: {
-        size: 0,
-        total: 0,
-        page: 1
-      },
       refInfo: {},
-      refData: [],
       loading: 0,
       caseModel: {}
     };
@@ -95,54 +49,44 @@ export default {
     },
     queryQueryCase(caseModel) {
       this.caseModel = caseModel;
-      this.pagination(1);
+      this.pagination();
     },
-    onTablePagination(pager) {
-      this.pagination(pager);
-    },
-    onTableSelect(items) {
+    onSelected({ data }) {
       this.selectedRows = [];
-      Object.keys(items).forEach((row, index) => {
-        this.selectedRows[index] = items[row];
+      Object.keys(data).forEach((row, index) => {
+        this.selectedRows[index] = data[row];
       });
-      this.select();
-    },
-    pagination(pager) {
-      if (common.isString(pager) || common.isNumber(pager)) {
-        pager = this._.extend({}, this.pageInfo, { page: pager });
-      } else {
-        pager = pager || this.pageInfo;
-      }
-      var options = this._.extend({}, {}, this.options, this.caseModel, pager);
-      this.$emit('init', options);
-      this.selectedRows = [];
-      if (this.$refs['table'] && this.$refs['table'].$data) {
-        this.$refs['table'].$data.selectedRows = {};
-      }
-      this.loading++;
-      this.$http.post('sys/queries/query/' + this.mdQueryId, options).then(response => {
-        this.refInfo = response.data.schema;
-        this.refData = response.data.data;
-        this.pageInfo.size = response.data.pager.size;
-        this.pageInfo.page = response.data.pager.page;
-        this.pageInfo.total = response.data.pager.total;
-        this.loading--;
-        this.$emit('page');
-      }, response => {
-        this.loading--;
-        this.$emit('page');
-      });
-    },
-    select() {
       this.$emit('select', this.selectedRows);
     },
-    dblclick(item) {
-      this.$emit('dblclick', item);
+    formatFieldToColumn(field) {
+      return {
+        field: field.alias,
+        label: field.comment,
+        hidden: field.alias == 'id' || field.hide || field.hidden
+      };
+    },
+    pagination(page){
+      this.$refs.grid.refresh();
+    },
+    async fetchData({ pager, filter, sort }) {
+      this.loading++;
+      var options = this._.extend({}, { q: filter }, this.options, this.caseModel, pager);
+
+      this.$emit('init', options);
+      const response = await this.$http.post('sys/queries/query/' + this.mdQueryId, options);
+
+      this.refInfo = response.data.schema;
+      this.$refs.grid.setColumns(this.refInfo.fields.map(col => this.formatFieldToColumn(col)));
+
+      this.loading--;
+      return response;
+    },
+    dblclick({ data }) {
+      this.$emit('dblclick', data);
     },
   },
   mounted() {
     if (this.mdQueryId) {
-      this.pageInfo.size = this.mdPageSize;
       this.pagination();
     }
   },

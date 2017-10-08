@@ -193,10 +193,7 @@
         this.updateValues(this.formatValue());
         this.setParentDisabled();
         this.setParentRequired();
-
-
       });
-      this.$refs['ref'].cancel();
     }
   };
 </script>

@@ -21,7 +21,7 @@ export default {
     formatter: { default: v => v, type: Function },
 
     hidden: { default: false, type: Boolean },
-
+    isTool: { default: false, type: Boolean },
     cellClass: { default: '' },
     headerClass: { default: '' },
     width: { default: '150px' },

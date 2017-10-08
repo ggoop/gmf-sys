@@ -65,12 +65,14 @@ body {
 
 
 
+
 /*  Fluid Media
    ========================================================================== */
 
 ul:not(.md-list)>li+li {
   margin-top: 8px;
 }
+
 
 
 
@@ -98,6 +100,7 @@ a {
     text-decoration: none;
   }
 }
+
 
 
 
@@ -131,6 +134,7 @@ video.responsive-video {
   max-width: 100%;
   height: auto;
 }
+
 
 
 
@@ -172,6 +176,10 @@ video.responsive-video {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.no-overflow {
+  overflow: hidden!important;
 }
 
 .circle {

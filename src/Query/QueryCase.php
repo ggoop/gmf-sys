@@ -39,7 +39,7 @@ class QueryCase {
 			->type_enum($model->type_enum)
 			->name($model->name)
 			->memo($model->memo)
-			->comment($model->comment)
+			->comment($model->comment ?: $model->name)
 			->size($model->size)
 			->wheres([])->orders([])->fields([]);
 
@@ -54,7 +54,7 @@ class QueryCase {
 			foreach ($model->fields as $f) {
 				$field = new Builder;
 				$field->name($f->name);
-				$field->comment($f->comment);
+				$field->comment($f->comment ?: $f->name);
 				$field->hide(intval($f->hide));
 				$fields[] = $field;
 			}
@@ -66,7 +66,7 @@ class QueryCase {
 				}
 				$field = new Builder;
 				$field->name($f->name);
-				$field->comment($f->comment);
+				$field->comment($f->comment ?: $f->name);
 				$fields[] = $field;
 			}
 		}
@@ -77,7 +77,7 @@ class QueryCase {
 			foreach ($model->wheres as $f) {
 				$field = new Builder;
 				$field->name($f->name);
-				$field->comment($f->comment);
+				$field->comment($f->comment ?: $f->name);
 				$field->hide(intval($f->hide));
 				$field->value($f->value);
 				$field->operator_enum($f->operator_enum);
@@ -96,7 +96,7 @@ class QueryCase {
 			foreach ($model->orders as $f) {
 				$field = new Builder;
 				$field->name($f->name);
-				$field->comment($f->comment);
+				$field->comment($f->comment ?: $f->name);
 				$field->direction($f->direction);
 				$orders[] = $field;
 			}

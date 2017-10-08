@@ -1,19 +1,25 @@
 import pick from 'lodash/pick';
-
+import extend from 'lodash/extend';
 export default class Column {
   constructor(columnComponent) {
-    const properties = pick(columnComponent, [
+    const
+      options = {
+        width: '150px'
+      },
+      mixins = extend({}, options, columnComponent);
+    const properties = pick(mixins, [
       'field', 'label', 'dataType', 'sortable', 'sortBy', 'filterable',
       'filterOn', 'hidden', 'formatter', 'cellClass', 'headerClass',
-      'width'
+      'width', 'isTool'
     ]);
 
     for (const property in properties) {
-      this[property] = columnComponent[property];
+      this[property] = mixins[property];
     }
-    this.template = columnComponent.$scopedSlots.default;
+    if (mixins.$scopedSlots && mixins.$scopedSlots.default) {
+      this.template = mixins.$scopedSlots.default;
+    }
   }
-
 
   isFilterable() {
     return this.filterable;

@@ -1,15 +1,13 @@
 <template>
   <div class="md-grid-head">
-    <table class="md-grid-table" :width="width">
+    <table class="md-grid-table" :width="width" :style="tableStyle">
       <thead>
         <md-grid-empty-row :columns="columns"></md-grid-empty-row>
       </thead>
       <tbody>
         <tr>
           <md-grid-cell type="th" v-if="multiple" class="md-grid-selection" role="columnheader">
-            <div class="layout layout-align-center-center">
-              <md-checkbox v-model="selected" @change="handleSelected"></md-checkbox>
-            </div>
+            <md-checkbox v-model="selected" @change="handleSelected"></md-checkbox>
           </md-grid-cell>
           <md-grid-cell type="th" v-for="column in visibleColumns" :key="column.field" @click="clicked(column)" role="columnheader" :class="headerClass(column)">
             {{ column.label||column.field }}
@@ -25,7 +23,7 @@ import mdGridEmptyRow from './mdGridEmptyRow';
 import { classList } from './helpers';
 import getClosestVueParent from '../../core/utils/getClosestVueParent';
 export default {
-  props: ['columns', 'width', 'isSelectedPage'],
+  props: ['columns', 'width', 'isSelectedPage', 'scrollLeft'],
 
   components: {
     mdGridCell,
@@ -50,6 +48,11 @@ export default {
   computed: {
     visibleColumns() {
       return this.columns && this.columns.filter(column => !column.hidden);
+    },
+    tableStyle() {
+      return {
+        left: (0-(parseInt(this.scrollLeft) || 0)) + 'px'
+      }
     },
   },
   methods: {

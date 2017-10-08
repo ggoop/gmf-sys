@@ -1,15 +1,15 @@
 <template>
-  <div class="md-grid">
+  <div class="md-grid layout layout-full flex">
     <div v-if="showFilter && filterableColumnExists" class="md-grid-filter">
       <input type="text" v-model="filter" :placeholder="filterPlaceholder">
       <a v-if="filter" @click="filter = ''" class="md-grid-filter-clear">×</a>
     </div>
-    <div class="md-grid-wrapper">
-      <md-grid-head :columns="columns" :is-selected-page="isSelectedPage" @sort="onSorting" :width="width"></md-grid-head>
-      <md-grid-body :columns="columns" :rows="rows" :width="width" :filter-no-results="filterNoResults"></md-grid-body>
-      <md-grid-foot :columns="columns" :show-sum="showSum" :width="width">
-        <md-grid-pagination v-if="pager" :pager="pager" @pagination="onPagination"></md-grid-pagination>
-      </md-grid-foot>
+    <div class="md-grid-wrapper layout layout-column">
+      <md-grid-head :columns="columns" :is-selected-page="isSelectedPage" :scrollLeft="scrollLeft" @sort="onSorting" :width="width"></md-grid-head>
+      <md-grid-body :columns="columns" :rows="rows" :width="width" :filter-no-results="filterNoResults" class="flex"></md-grid-body>
+      <md-grid-foot :columns="columns" v-if="showSum" :scrollLeft="scrollLeft" :width="width"></md-grid-foot>
+      <md-grid-actions :pager-info="pager" :showQuery="showQuery" :showAdd="showAdd" :showInsert="showInsert" :showRemove="showRemove" :showReload="showReload" :showConfirm="showConfirm" :showCancel="showCancel" @pagination="onPagination" @onQuery="onQuery" @onAdd="onAdd" @onInsert="onInsert" @onRemove="onRemove" @onReload="onReload" @onConfirm="onConfirm" @onCancel="onCancel">
+      </md-grid-actions>
     </div>
     <div style="display:none;">
       <slot></slot>
@@ -23,6 +23,7 @@ import Row from './classes/Row';
 import mdGridHead from './mdGridHead';
 import mdGridBody from './mdGridBody';
 import mdGridFoot from './mdGridFoot';
+import mdGridActions from './mdGridActions';
 import { classList } from './helpers';
 import mdGridCell from './mdGridCell';
 
@@ -31,15 +32,25 @@ export default {
     mdGridHead,
     mdGridBody,
     mdGridFoot,
-    mdGridCell
+    mdGridCell,
+    mdGridActions
   },
 
   props: {
     datas: { default: () => [], type: [Array, Function] },
     autoSelect: { default: false, type: Boolean },
+    autoLoad: { default: false, type: Boolean },
     multiple: { default: true, type: Boolean },
     showFilter: { default: false, type: Boolean },
     showSum: { default: false, type: Boolean },
+    showQuery: { default: false, type: Boolean },
+    showAdd: { default: false, type: Boolean },
+    showInsert: { default: false, type: Boolean },
+    showRemove: { default: false, type: Boolean },
+    showReload: { default: true, type: Boolean },
+    showConfirm: { default: false, type: Boolean },
+    showCancel: { default: false, type: Boolean },
+
     sortBy: { default: '', type: String },
     sortOrder: { default: '', type: String },
 
@@ -66,6 +77,7 @@ export default {
     selectedRows: {}, //选择的数据
     cacheRows: {},
     width: '',
+    scrollLeft:0,
     isSelectedPage: false,
     pageCacheKey: 'p1'
   }),
@@ -79,6 +91,7 @@ export default {
     },
     datas() {
       if (this.usesLocalData) {
+        this.cleanCache();
         this.mapDataToRows();
       }
     },
@@ -101,6 +114,68 @@ export default {
     },
   },
   methods: {
+    onConfirm() {
+      if (!this.canFireEvents) return;
+      var options = {};
+      this.$emit('onConfirm', options);
+    },
+    onCancel() {
+      if (!this.canFireEvents) return;
+      var options = {};
+      this.$emit('onCancel', options);
+    },
+    onQuery() {
+      if (!this.canFireEvents) return;
+      var options = {};
+      this.$emit('onQuery', options);
+    },
+    onAdd() {
+      if (!this.canFireEvents) return;
+      var options = {};
+      this.$emit('onAdd', options);
+    },
+    onInsert() {
+      if (!this.canFireEvents) return;
+      var options = {};
+      this.$emit('onInsert', options);
+    },
+    onRemove() {
+      if (!this.canFireEvents) return;
+      var options = {};
+      this.$emit('onRemove', options);
+    },
+    onReload() {
+      if (!this.canFireEvents) return;
+      var options = {};
+      this.$emit('onReload', options);
+    },
+    emitRowClick(row) {
+      if (!this.canFireEvents) return;
+      var options = {};
+      options.data = row.data;
+      this.$emit('click', options);
+    },
+    emitRowDbClick(row) {
+      if (!this.canFireEvents) return;
+      var options = {};
+      options.data = row.data;
+      this.$emit('dblclick', options);
+    },
+    emitSeleced() {
+      if (!this.canFireEvents) return;
+      var options = {};
+      options.data = this.getSelectedRows();
+      this.$emit('select', options);
+      this.refreshStatus();
+
+    },
+    emitFocusRow() {
+      if (!this.canFireEvents) return;
+      var options = {};
+      options.data = this.focusRow ? this.focusRow.row.data : null;
+      this.$emit('focus', options);
+      this.refreshStatus();
+    },
     refreshStatus() {
       this.isSelectedPage = this.rows &&
         this.rows.length &&
@@ -124,8 +199,11 @@ export default {
 
     async mapDataToRows() {
       if (this.cacheRows[this.pager.page]) {
-        this.rows = this.cacheRows[this.pager.page];
-        return;
+        const rs = this.cacheRows[this.pager.page];
+        if(rs&&rs.length){
+          this.rows=rs;
+          return;
+        }
       }
       const data = this.usesLocalData ?
         this.fetchLocalData() :
@@ -217,7 +295,7 @@ export default {
       var w = 40;
       this.columns.forEach((c) => {
         if (!c.hidden)
-          w += parseInt(c.width);
+          w += (parseInt(c.width) || 0);
       });
       return w + "px";
     },
@@ -230,12 +308,6 @@ export default {
       });
       return rows;
     },
-
-    emitRowClick(row) {
-      if (this.canFireEvents) {
-        this.$emit('rowClick', row);
-      }
-    },
     isSelected(row) {
       let selected = false,
         vueRowId = row && row.vueRowId || row;
@@ -246,18 +318,13 @@ export default {
       });
       return selected;
     },
-    emitSeleced() {
-      if (this.canFireEvents) {
-        this.$emit('select', this.getSelectedRows());
-        this.refreshStatus();
-      }
+
+    setColumns(instances) {
+      this.columns = instances.map(column => new Column(column));
     },
-    emitFocusRow() {
-      if (this.canFireEvents) {
-        this.$emit('focus', this.focusRow);
-        this.refreshStatus();
-      }
-    }
+    addColumn(instance) {
+      this.columns.push(new Column(instance));
+    },
   },
   created() {
     this.sort.field = this.sortBy;
@@ -270,23 +337,20 @@ export default {
       const columnComponents = this.$slots.default
         .filter(column => column.componentInstance)
         .map(column => column.componentInstance);
-
-      this.columns = columnComponents.map(
-        column => new Column(column)
-      );
+      this.setColumns(columnComponents);
 
       columnComponents.forEach(columnCom => {
         Object.keys(columnCom.$options.props).forEach(
           prop => columnCom.$watch(prop, () => {
-            this.columns = columnComponents.map(
-              column => new Column(column)
-            );
+            this.setColumns(columnComponents);
           })
         );
       });
     }
     this.width = this.getWidth();
-    await this.mapDataToRows();
+    if (this.autoLoad) {
+      await this.mapDataToRows();
+    }
     this.$nextTick(() => {
       this.canFireEvents = true;
       this.refreshStatus();
