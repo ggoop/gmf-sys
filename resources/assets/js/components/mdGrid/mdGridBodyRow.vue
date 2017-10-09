@@ -3,7 +3,7 @@
     <md-grid-cell type="th" v-if="multiple" class="md-grid-selection">
       <md-checkbox v-model="selected" @change="handleSelected"></md-checkbox>
     </md-grid-cell>
-    <md-grid-cell v-for="(column,index) in visibleColumns" :row="row" :rowIndex="rowIndex" :colIndex="index" :key="index" :column="column"></md-grid-cell>
+    <md-grid-cell v-for="(column,index) in visibleColumns" @click="cellClick(column,$event)" :row="row" :rowIndex="rowIndex" :colIndex="index" :key="index" :column="column"></md-grid-cell>
   </tr>
 </template>
 <script>
@@ -24,6 +24,7 @@ export default {
       focused: false,
       selected: false,
       disabled: false,
+      rowFocused: true,
       rowId: 'row-1',
       elType: 'bodyRow'
     };
@@ -44,7 +45,8 @@ export default {
       return {
         'focused': this.focused,
         'selected': this.selected,
-        'disabled': this.disabled
+        'disabled': this.disabled,
+        'row-focused': this.rowFocused
       };
     }
   },
@@ -52,6 +54,7 @@ export default {
     resetStatus() {
       this.multiple = this.parentTable.multiple;
       this.autoSelect = this.parentTable.autoSelect;
+      this.rowFocused = this.parentTable.rowFocused;
       this.focused = false;
       this.selected = this.row.data && this.parentTable.isSelected(this.row.data);
       this.disabled = false;
@@ -64,6 +67,7 @@ export default {
       this.handleFocused();
       this.parentTable.emitRowClick(this.row);
     },
+
     rowDblclick() {
       this.parentTable.emitRowDbClick(this.row);
     },
@@ -107,11 +111,15 @@ export default {
 
       this.parentTable.emitSeleced();
     },
+    cellClick(column, event) {
+      console.log(column, event);
+    },
   },
   mounted() {
     this.parentTable = getClosestVueParent(this.$parent, 'md-grid');
     this.multiple = this.parentTable.multiple;
     this.autoSelect = this.parentTable.autoSelect;
+    this.rowFocused = this.parentTable.rowFocused;
     if (this.row && this.row.data.vueRowId) {
       this.rowId = this.row.data.vueRowId;
     }

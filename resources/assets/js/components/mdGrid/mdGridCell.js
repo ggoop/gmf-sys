@@ -8,6 +8,7 @@ export default {
     const data = context.data;
     data.class = data.class || [];
     data.domProps = data.domProps || {};
+    data.on = data.on || {};
     if (context.props.column && context.props.column.isTool) {
       data.class.push('is-tool');
     }

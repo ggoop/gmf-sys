@@ -144,4 +144,19 @@ class EntityController extends Controller {
 		}
 		return $this->toJson($data);
 	}
+	public function getAllEnums(Request $request) {
+		$query = Models\Entity::select('id', 'name', 'comment');
+		$query->with([
+			'fields' => function ($query) {
+				$query->select('entity_id', 'name', 'comment');
+			}]);
+		$data = $query->where('type', 'enum')->get();
+		if ($data) {
+			$data = $data->map(function ($item) {
+				$item->fields->makeHidden(['entity_id']);
+				return $item;
+			})->all();
+		}
+		return $this->toJson($data);
+	}
 }

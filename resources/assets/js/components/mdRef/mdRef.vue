@@ -1,28 +1,26 @@
 <template>
-  <div>
-    <md-dialog ref="dialog" :md-click-outside-to-close="false" @open="onRefOpen" @close="onRefClose" class="md-refs-dialog">
-      <md-toolbar>
-        <h1 class="md-title">{{refInfo.comment}}</h1>
-        <md-input-container class="md-flex md-header-search">
-          <md-input class="md-header-search-input" :fetch="autoFetch" placeholder="search" @keyup.enter.native="doSearch({isMana:true})"></md-input>
-          <md-button class="md-icon-button md-inset" @click.native="doSearch({isMana:true})">
-            <md-icon v-if="autoquery">filter_list</md-icon>
-            <md-icon v-else>search</md-icon>
-          </md-button>
-        </md-input-container>
-        <md-button class="md-icon-button" @click.native="onCancel()">
-          <md-icon>close</md-icon>
+  <md-dialog ref="dialog" :md-click-outside-to-close="false" @open="onRefOpen" @close="onRefClose" class="md-refs-dialog">
+    <md-toolbar>
+      <h1 class="md-title">{{refInfo.comment}}</h1>
+      <md-input-container class="md-flex md-header-search">
+        <md-input class="md-header-search-input" :fetch="autoFetch" placeholder="search" @keyup.enter.native="doSearch({isMana:true})"></md-input>
+        <md-button class="md-icon-button md-inset" @click.native="doSearch({isMana:true})">
+          <md-icon v-if="autoquery">filter_list</md-icon>
+          <md-icon v-else>search</md-icon>
         </md-button>
-      </md-toolbar>
-      <md-dialog-content class="no-padding layout flex">
-        <md-grid :auto-select="true" ref="grid" :datas="fetchData" :multiple="multiple" showConfirm showCancel showQuery @select="onSelected" @dblclick="dblclick" @onQuery="openQueryCase" @onConfirm="onConfirm" @onCancel="onCancel">
-        </md-grid>
-      </md-dialog-content>
-      <md-loading :loading="loading"></md-loading>
-    </md-dialog>
-    <md-query-case :md-query-id="mdRefId" ref="queryCase" @init="initQueryCase" @query="queryQueryCase">
+      </md-input-container>
+      <md-button class="md-icon-button" @click.native="onCancel()">
+        <md-icon>close</md-icon>
+      </md-button>
+    </md-toolbar>
+    <md-dialog-content class="no-padding layout flex">
+      <md-grid :auto-select="true" ref="grid" :datas="fetchData" :multiple="multiple" showConfirm showCancel showQuery @select="onSelected" @dblclick="dblclick" @onQuery="openQueryCase" @onConfirm="onConfirm" @onCancel="onCancel">
+      </md-grid>
+    </md-dialog-content>
+    <md-loading :loading="loading"></md-loading>
+    <md-query-case v-if="canQueryCaseOpen" :md-query-id="mdRefId" ref="queryCase" @init="initQueryCase" @query="queryQueryCase">
     </md-query-case>
-  </div>
+  </md-dialog>
 </template>
 <script>
 import theme from '../../core/components/mdTheme/mixin';
@@ -56,7 +54,8 @@ export default {
       selectedRows: [],
       refInfo: {},
       loading: 0,
-      caseModel: {}
+      caseModel: {},
+      canQueryCaseOpen: false
     };
   },
   watch: {
@@ -74,7 +73,10 @@ export default {
   },
   methods: {
     openQueryCase() {
-      this.$refs.queryCase.open();
+      this.canQueryCaseOpen = true;
+      this.$nextTick(() => {
+        this.$refs.queryCase.open();
+      });
     },
     initQueryCase(options, promise) {
       promise && promise.resolve(true);
@@ -87,6 +89,7 @@ export default {
       this.pagination();
     },
     onRefClose() {
+      if (!this.canFireEvents) return;
       this.$emit('close');
     },
     autoFetch(q) {
@@ -109,7 +112,7 @@ export default {
         hidden: field.alias == 'id' || field.hide || field.hidden
       };
     },
-    pagination(){
+    pagination() {
       this.$refs.grid.refresh();
     },
     async fetchData({ pager, filter, sort }) {
@@ -121,6 +124,7 @@ export default {
       return response;
     },
     onSelected({ data }) {
+      if (!this.canFireEvents) return;
       this.selectedRows = [];
       Object.keys(data).forEach((row, index) => {
         this.selectedRows[index] = data[row];
@@ -128,26 +132,33 @@ export default {
       this.$emit('select', this.selectedRows);
     },
     getReturnValue() {
-      return this.selectedRows;
+      return this.selectedRows.map(row => this._.pick(row, Object.keys(row).filter(f => f !== 'vueRowId')));
     },
     dblclick({ data }) {
       this.selectedRows = [data];
       this.onConfirm();
     },
     open() {
+      if (!this.canFireEvents) return;
       this.$emit('init', this.options);
       this.$refs['dialog'].open();
       this.$emit('open');
     },
     onCancel() {
+      if (!this.canFireEvents) return;
       this.$refs['dialog'].close();
       this.$emit('cancel', false);
     },
     onConfirm() {
+      if (!this.canFireEvents) return;
       this.$refs['dialog'].close();
       this.$emit('confirm', this.getReturnValue());
     }
   },
-  mounted() {},
+  mounted() {
+    this.$nextTick(() => {
+      this.canFireEvents = true;
+    });
+  },
 };
 </script>

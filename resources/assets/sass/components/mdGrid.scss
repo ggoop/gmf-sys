@@ -28,6 +28,7 @@
     }
   }
 }
+
 .md-grid {
   border: 1px solid #c7c7c7;
   background: #fff;
@@ -182,7 +183,17 @@
         background-color: #80cbc4;
       }
     }
-    tr.focused {
+    tr:hover>:first-child:before,
+    tr.focused>:first-child:before {
+      content: " ";
+      position: absolute;
+      left: 0;
+      background: #009688;
+      width: 3px;
+      height: 100%;
+      top: 0;
+    }
+    tr.focused.row-focused {
       background: #009688;
       color: #fff;
       td,

@@ -19,6 +19,9 @@ export default class Column {
     if (mixins.$scopedSlots && mixins.$scopedSlots.default) {
       this.template = mixins.$scopedSlots.default;
     }
+    if (mixins.$scopedSlots && mixins.$scopedSlots.editor) {
+      this.templateEditor = mixins.$scopedSlots.editor;
+    }
   }
 
   isFilterable() {

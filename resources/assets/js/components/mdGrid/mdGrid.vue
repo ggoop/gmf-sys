@@ -51,6 +51,8 @@ export default {
     showConfirm: { default: false, type: Boolean },
     showCancel: { default: false, type: Boolean },
 
+    rowFocused: { default: true, type: Boolean },
+
     sortBy: { default: '', type: String },
     sortOrder: { default: '', type: String },
 
@@ -77,7 +79,7 @@ export default {
     selectedRows: {}, //选择的数据
     cacheRows: {},
     width: '',
-    scrollLeft:0,
+    scrollLeft: 0,
     isSelectedPage: false,
     pageCacheKey: 'p1'
   }),
@@ -147,6 +149,7 @@ export default {
     onReload() {
       if (!this.canFireEvents) return;
       var options = {};
+      this.refresh();
       this.$emit('onReload', options);
     },
     emitRowClick(row) {
@@ -200,8 +203,8 @@ export default {
     async mapDataToRows() {
       if (this.cacheRows[this.pager.page]) {
         const rs = this.cacheRows[this.pager.page];
-        if(rs&&rs.length){
-          this.rows=rs;
+        if (rs && rs.length) {
+          this.rows = rs;
           return;
         }
       }

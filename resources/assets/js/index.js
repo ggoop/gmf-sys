@@ -13,6 +13,8 @@ import http from './core/utils/http';
 
 import common from './core/utils/common';
 
+import localCache from './core/utils/localCache';
+
 window._ = window._ || lodash;
 
 window.Vue = window.Vue || Vue;
@@ -57,9 +59,31 @@ start.run = function(elID) {
         window.gmfConfig = v;
       }
     },
+    computed: {
+      storageKey() {
+        return `gmf.${window.location.host}${window.location.pathname}`;
+      },
+    },
     methods: {
       setHttpConfig() {
         this.$http.defaults.headers.common.Ent = this.userData.entId;
+      },
+      loadEnums() {
+        this.$http.get('sys/enums/all').then(response => {
+          if (response.data && response.data.data) {
+            response.data.data.forEach((item) => {
+              this.setCacheEnum(item);
+            });
+          }
+        }, response => {
+          console.log(response);
+        });
+      },
+      setCacheEnum(item) {
+        localCache.set(`${this.storageKey}.enum.${item.name}`, item, 360);
+      },
+      getCacheEnum(name) {
+        return localCache.get(`${this.storageKey}.enum.${name}`);
       },
       loadEnts() {
         this.$http.get('sys/ents/my').then(response => {
@@ -88,6 +112,7 @@ start.run = function(elID) {
     },
     created: function() {
       this.loadEnts();
+      this.loadEnums();
     }
   });
 }

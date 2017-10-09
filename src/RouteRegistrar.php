@@ -41,6 +41,7 @@ class RouteRegistrar {
 		});
 		$this->router->group(['prefix' => 'sys', 'middleware' => ['api', 'auth:api', 'ent_check']], function ($router) {
 			$router->get('/entities/pager', ['uses' => 'EntityController@pager']);
+			$router->get('/enums/all', ['uses' => 'EntityController@getAllEnums']);
 			$router->get('/enums/{enum}', ['uses' => 'EntityController@getEnum']);
 			$router->resource('entities', 'EntityController', ['only' => ['index', 'show']]);
 

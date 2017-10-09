@@ -25,17 +25,17 @@ export default {
   },
   watch: {
     'model.main.id': function(value, oldValue) {
-      value&&this.load(value);
+      value && this.load(value);
     }
   },
   methods: {
     validate() {
       return true;
     },
-    beforeSave(data){
+    beforeSave(data) {
 
     },
-    afterSave(data){
+    afterSave(data) {
 
     },
     save() {
@@ -121,23 +121,25 @@ export default {
       }
       this.loadPagerInfo(id);
     },
-    afterLoad(data){
+    afterLoad(data) {
 
     },
     paging(id) {
       this.load(id);
     },
     loadPagerInfo(id) {
-      this.$http.get('sys/entities/pager', {
-        params: {
-          entity: this.model.entity,
-          id: id,
-          order: this.model.order,
-          wheres: this.model.wheres
-        }
-      }).then(response => {
-        this.$set(this.model, 'pager', response.data.data);
-      }, response => {});
+      if (id) {
+        this.$http.get('sys/entities/pager', {
+          params: {
+            entity: this.model.entity,
+            id: id,
+            order: this.model.order,
+            wheres: this.model.wheres
+          }
+        }).then(response => {
+          this.$set(this.model, 'pager', response.data.data);
+        }, response => {});
+      }
     },
   },
   created() {
