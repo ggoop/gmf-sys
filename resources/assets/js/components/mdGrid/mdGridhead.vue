@@ -6,10 +6,10 @@
       </thead>
       <tbody>
         <tr>
-          <md-grid-cell type="th" v-if="multiple" class="md-grid-selection" role="columnheader">
+          <md-grid-cell v-if="multiple" :selection="true">
             <md-checkbox v-model="selected" @change="handleSelected"></md-checkbox>
           </md-grid-cell>
-          <md-grid-cell type="th" v-for="column in visibleColumns" :key="column.field" @click="clicked(column)" role="columnheader" :class="headerClass(column)">
+          <md-grid-cell v-for="column in visibleColumns" :key="column.field" @click="clicked(column)" :class="headerClass(column)">
             {{ column.label||column.field }}
           </md-grid-cell>
         </tr>

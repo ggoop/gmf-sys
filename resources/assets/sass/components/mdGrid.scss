@@ -37,6 +37,9 @@
   overflow: hidden;
   .md-grid-cell-container {
     padding: 0.04rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     .md-input-container {
       position: absolute;
       top: 0;

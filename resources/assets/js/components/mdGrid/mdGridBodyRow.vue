@@ -1,9 +1,9 @@
 <template>
   <tr @click="rowClicked" :class="[rowClass]" @dblclick="rowDblclick">
-    <md-grid-cell type="th" v-if="multiple" class="md-grid-selection">
+    <md-grid-cell v-if="multiple" :selection="true">
       <md-checkbox v-model="selected" @change="handleSelected"></md-checkbox>
     </md-grid-cell>
-    <md-grid-cell v-for="(column,index) in visibleColumns" @click="cellClick(column,$event)" :row="row" :rowIndex="rowIndex" :colIndex="index" :key="index" :column="column"></md-grid-cell>
+    <md-grid-cell v-for="(column,index) in visibleColumns" :row="row" :key="index" :column="column"></md-grid-cell>
   </tr>
 </template>
 <script>
@@ -110,9 +110,6 @@ export default {
       this.setSelected(value);
 
       this.parentTable.emitSeleced();
-    },
-    cellClick(column, event) {
-      console.log(column, event);
     },
   },
   mounted() {

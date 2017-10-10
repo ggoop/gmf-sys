@@ -76,6 +76,7 @@ export default {
       total: 0
     },
     focusRow: false,
+    focusCell:false,
     selectedRows: {}, //选择的数据
     cacheRows: {},
     width: '',

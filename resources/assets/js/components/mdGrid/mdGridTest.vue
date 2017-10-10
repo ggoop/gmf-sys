@@ -5,11 +5,11 @@
       <md-table class="flex">
         <md-table-header>
           <md-table-row>
-            <md-table-head>阿米巴</md-table-head>
-            <md-table-head>阿米巴</md-table-head>
-            <md-table-head>阿米巴</md-table-head>
-            <md-table-head>阿米巴</md-table-head>
-            <md-table-head>利润</md-table-head>
+            <md-table-head>f4</md-table-head>
+            <md-table-head>f3</md-table-head>
+            <md-table-head>f2</md-table-head>
+            <md-table-head>f1</md-table-head>
+            <md-table-head>f0</md-table-head>
           </md-table-row>
         </md-table-header>
         <md-table-body>

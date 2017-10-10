@@ -6,7 +6,7 @@
       </thead>
       <tbody>
         <tr>
-          <md-grid-cell type="th" v-if="multiple" class="md-grid-selection">
+          <md-grid-cell v-if="multiple" :selection="true">
           </md-grid-cell>
           <md-grid-cell v-for="column in visibleColumns" :key="column.field">
           </md-grid-cell>
