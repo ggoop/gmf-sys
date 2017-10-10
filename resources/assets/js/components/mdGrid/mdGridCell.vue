@@ -1,7 +1,7 @@
 <template>
   <td @click="handleClick" :class="[objClass]">
-    <md-grid-cell-edit v-if="status=='edit'" class="md-grid-cell-container" :column="column" :row="row">
-      <slot></slot>
+    <md-grid-cell-edit v-if="status=='editor'" class="md-grid-cell-container" :column="column" :row="row">
+      <slot name="editor"></slot>
     </md-grid-cell-edit>
     <md-grid-cell-show v-else class="md-grid-cell-container" :column="column" :row="row">
       <slot></slot>
@@ -59,7 +59,7 @@ export default {
           this.parentTable.focusCell.endEdit();
         }
         this.parentTable.focusCell = this;
-        this.status = 'edit';
+        this.status = 'editor';
       }
     },
     endEdit() {

@@ -1,6 +1,6 @@
 export default {
   functional: true,
-  props: ['column', 'row', 'type'],
+  props: ['column', 'row'],
 
   render(createElement, context) {
     const data = context.data||{};
