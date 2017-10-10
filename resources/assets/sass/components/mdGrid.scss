@@ -190,11 +190,11 @@
     tr.focused>:first-child:before {
       content: " ";
       position: absolute;
-      left: 0;
-      background: #009688;
+      left: 0; //background: #009688;
       width: 3px;
       height: 100%;
       top: 0;
+      background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAACCAYAAAB7Xa1eAAAABmJLR…UH3QYDDjkw3UJvAwAAABRJREFUCNdj/P//PwM2wASl/6PTAKrrBf4+lD8LAAAAAElFTkSuQmCC);
     }
     tr.focused.row-focused {
       background: #009688;
