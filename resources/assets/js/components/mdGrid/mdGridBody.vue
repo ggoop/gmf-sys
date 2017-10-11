@@ -8,7 +8,7 @@
         <md-grid-body-row v-for="row in rows" :key="row.vueRowId" @click="rowClicked" :row="row" :columns="columns"></md-grid-body-row>
       </tbody>
     </table>
-    <div v-if="rows.length === 0" class="md-grid-message">
+    <div v-if="rows.length === 0" class="md-grid-body-empty">
       {{ filterNoResults }}
     </div>
   </div>

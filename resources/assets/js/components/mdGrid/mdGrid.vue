@@ -59,7 +59,7 @@ export default {
     cacheKey: { default: null },
     cacheLifetime: { default: 5 },
     filterPlaceholder: { default: 'Filter table…' },
-    filterNoResults: { default: 'There are no matching rows' },
+    filterNoResults: { default: '暂无数据！' },
   },
 
   data: () => ({
