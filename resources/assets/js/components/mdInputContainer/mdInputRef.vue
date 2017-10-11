@@ -78,6 +78,7 @@ export default {
       this.setParentValue(this.selectedValues);
     },
     openRef() {
+      if (!this.mdRefId) return;
       this.refIsOpened = true;
       this.$emit('init', this.refOptions);
       this.$nextTick(() => {

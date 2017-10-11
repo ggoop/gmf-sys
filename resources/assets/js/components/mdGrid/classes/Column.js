@@ -8,9 +8,9 @@ export default class Column {
       },
       mixins = extend({}, options, columnComponent);
     const properties = pick(mixins, [
-      'field', 'label', 'dataType', 'sortable', 'sortBy', 'filterable',
+      'field', 'label', 'dataType', 'sortable', 'sortBy', 'filterable', 'editable',
       'filterOn', 'hidden', 'formatter', 'cellClass', 'headerClass',
-      'width', 'isTool'
+      'width', 'isTool', 'refType', 'refId', 'refInit'
     ]);
 
     for (const property in properties) {

@@ -66,6 +66,7 @@ export default {
       };
     },
     pagination(page){
+      this.selectedRows = [];
       this.$refs.grid.refresh();
     },
     async fetchData({ pager, filter, sort }) {

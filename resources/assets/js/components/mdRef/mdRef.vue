@@ -113,6 +113,7 @@ export default {
       };
     },
     pagination() {
+      this.selectedRows = [];
       this.$refs.grid.refresh();
     },
     async fetchData({ pager, filter, sort }) {
@@ -139,7 +140,6 @@ export default {
       this.onConfirm();
     },
     open() {
-      if (!this.canFireEvents) return;
       this.$emit('init', this.options);
       this.$refs['dialog'].open();
       this.$emit('open');

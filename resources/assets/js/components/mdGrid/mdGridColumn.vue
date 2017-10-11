@@ -12,6 +12,12 @@ export default {
     label: { default: null, type: String },
     dataType: { default: 'string', type: String },
 
+    refType: { default: '', type: String },
+    refId: { default: '', type: String },
+    refInit: { default: v => v, type: Function },
+
+    editable: { default: false, type: Boolean },
+
     sortable: { default: false, type: Boolean },
     sortBy: { default: null },
 

@@ -1,7 +1,29 @@
 <template>
   <td @click="handleClick" :class="[objClass]">
     <md-grid-cell-edit v-if="status=='editor'" class="md-grid-cell-container" :column="column" :row="row">
-      <slot name="editor"></slot>
+      <template v-if="column&&column.templateEditor">
+        <slot name="editor"></slot>
+      </template>
+      <template v-else-if="column&&column.dataType=='entity'">
+        <md-input-container>
+          <md-input-ref :md-ref-id="column.refId||column.refType" @init="on_init_ref" v-model="row.data[column.field]"></md-input-ref>
+        </md-input-container>
+      </template>
+      <template v-else-if="column&&column.dataType=='enum'">
+        <md-input-container>
+          <md-enum :md-enum-id="column.refId||column.refType" v-model="row.data[column.field]"></md-enum>
+        </md-input-container>
+      </template>
+      <template v-else-if="column&&column.dataType=='date'">
+        <md-input-container>
+          <md-date v-model="row.data[column.field]"></md-date>
+        </md-input-container>
+      </template>
+      <template v-else>
+        <md-input-container>
+          <md-input v-model="row.data[column.field]"></md-input>
+        </md-input-container>
+      </template>
     </md-grid-cell-edit>
     <md-grid-cell-show v-else class="md-grid-cell-container" :column="column" :row="row">
       <slot></slot>
@@ -27,27 +49,36 @@ export default {
     objClass() {
       return {
         'is-tool': this.column && this.column.isTool,
-        'md-grid-selection': this.selection
+        'md-grid-selection': this.selection,
+        'cell-focused': this.focused
       };
     },
-    canEdit() {
-      return (!this.selection) && this.column && (this.column.templateEditor || this.column.canEdit);
-    },
+    editable() {
+      return (this.row && this.row.data) && (!this.selection) && this.column && (this.column.templateEditor || this.column.editable);
+    }
   },
   data() {
     return {
       parentTable: {},
-      status: 'display'
+      status: 'display',
+      focused: false
     };
   },
   methods: {
+    handleFocused() {
+      if (this.parentTable && this.parentTable.focusCell) {
+        this.parentTable.focusCell.focused = false;
+      }
+      this.focused = true;
+    },
     handleClick(event) {
       if (!this.canFireEvents) return;
+      this.handleFocused();
       this.$emit('click', event);
       this.beginEdit();
     },
     beginEdit() {
-      if (!this.canEdit) {
+      if (!this.editable) {
         if (this.parentTable.focusCell) {
           this.parentTable.focusCell.endEdit();
         }
@@ -64,6 +95,9 @@ export default {
     },
     endEdit() {
       this.status = 'display'
+    },
+    on_init_ref(options, event) {
+      this.column && this.row && this.column.refInit && this.column.refInit(options, this.row.data, event);
     },
   },
   mounted() {

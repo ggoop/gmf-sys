@@ -1,6 +1,6 @@
 <template>
   <md-layout md-flex="100">
-    <md-grid :datas="mdItems" ref="grid" :showRemove="true" :showReload="false" :showAdd="true" @select="onItemSelect" @onAdd="onItemAdd" class="flex">>
+    <md-grid :datas="mdItems" :row-focused="false"  ref="grid" :showRemove="true" :showReload="false" :showAdd="true" @select="onItemSelect" @onAdd="onItemAdd" class="flex">>
       <md-grid-column field="id" label="id" :hidden="true"></md-grid-column>
       <md-grid-column field="comment" label="名称"></md-grid-column>
       <md-grid-column field="comment" label="显示名称"></md-grid-column>

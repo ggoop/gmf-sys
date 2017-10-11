@@ -13,7 +13,7 @@ import http from './core/utils/http';
 
 import common from './core/utils/common';
 
-import localCache from './core/utils/localCache';
+import enumCache from './core/utils/enumCache';
 
 window._ = window._ || lodash;
 
@@ -60,9 +60,7 @@ start.run = function(elID) {
       }
     },
     computed: {
-      storageKey() {
-        return `gmf.${window.location.host}${window.location.pathname}`;
-      },
+      
     },
     methods: {
       setHttpConfig() {
@@ -80,10 +78,13 @@ start.run = function(elID) {
         });
       },
       setCacheEnum(item) {
-        localCache.set(`${this.storageKey}.enum.${item.name}`, item, 360);
+        enumCache.set(item);
       },
-      getCacheEnum(name) {
-        return localCache.get(`${this.storageKey}.enum.${name}`);
+      getCacheEnum(type) {
+        return enumCache.get(type);
+      },
+      getCacheEnumName(type,item) {
+        return enumCache.getEnumName(type,item);
       },
       loadEnts() {
         this.$http.get('sys/ents/my').then(response => {
