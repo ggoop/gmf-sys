@@ -15,6 +15,7 @@ class CreateGmfSysAuthorityRoleUsersTable extends Migration {
 		$md->mdEntity('gmf.sys.authority.role.user')->comment('角色用户')->tableName('gmf_sys_authority_role_users');
 
 		$md->string('id', 100)->primary();
+		$md->entity('ent', 'gmf.sys.ent')->nullable()->comment('企业');
 		$md->entity('role', 'gmf.sys.authority.role')->nullable()->comment('角色');
 		$md->entity('user', config('gmf.user.entity'))->nullable()->comment('用户');
 		$md->boolean('is_revoked')->default(0)->comment('注销');

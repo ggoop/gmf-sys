@@ -9,5 +9,5 @@ class Permit extends Model {
 	use Snapshotable, HasGuard;
 	protected $table = 'gmf_sys_authority_permits';
 	public $incrementing = false;
-	protected $fillable = ['id', 'code', 'name', 'memo'];
+	protected $fillable = ['id', 'ent_id', 'code', 'name', 'memo'];
 }

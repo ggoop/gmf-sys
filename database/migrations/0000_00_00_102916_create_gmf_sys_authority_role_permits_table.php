@@ -15,6 +15,7 @@ class CreateGmfSysAuthorityRolePermitsTable extends Migration {
 		$md->mdEntity('gmf.sys.authority.role.permit')->comment('角色-权限')->tableName('gmf_sys_authority_role_permits');
 
 		$md->string('id', 100)->primary();
+		$md->entity('ent', 'gmf.sys.ent')->nullable()->comment('企业');
 		$md->entity('role', 'gmf.sys.authority.role')->nullable()->comment('角色');
 		$md->entity('permit', 'gmf.sys.authority.permit')->nullable()->comment('权限');
 		$md->boolean('is_revoked')->default(0)->comment('注销');

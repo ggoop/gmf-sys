@@ -15,6 +15,7 @@ class CreateGmfSysAuthorityRoleMenusTable extends Migration {
 		$md->mdEntity('gmf.sys.authority.role.menu')->comment('角色-菜单')->tableName('gmf_sys_authority_role_menus');
 
 		$md->string('id', 100)->primary();
+		$md->entity('ent', 'gmf.sys.ent')->nullable()->comment('企业');
 		$md->entity('role', 'gmf.sys.authority.role')->nullable()->comment('角色');
 		$md->entity('menu', 'gmf.sys.menu')->nullable()->comment('菜单');
 		$md->boolean('is_revoked')->default(0)->comment('注销');

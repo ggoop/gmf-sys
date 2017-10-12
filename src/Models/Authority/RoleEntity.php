@@ -5,9 +5,9 @@ use Gmf\Sys\Traits\HasGuard;
 use Gmf\Sys\Traits\Snapshotable;
 use Illuminate\Database\Eloquent\Model;
 
-class RoleData extends Model {
+class RoleEntity extends Model {
 	use Snapshotable, HasGuard;
-	protected $table = 'gmf_sys_authority_role_datas';
+	protected $table = 'gmf_sys_authority_role_entities';
 	public $incrementing = false;
-	protected $fillable = ['role_id', 'entity_id'];
+	protected $fillable = ['role_id', 'entity_id', 'filter'];
 }

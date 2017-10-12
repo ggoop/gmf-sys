@@ -64,6 +64,25 @@ class RouteRegistrar {
 			$router->resource('dtis', 'DtiController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 			$router->resource('dti-categories', 'DtiCategoryController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 			$router->resource('dti-params', 'DtiParamController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
+
+			$router->post('/roles/batch', ['uses' => 'Authority\RoleController@batchStore']);
+			$router->resource('roles', 'Authority\RoleController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
+
+			$router->post('/permits/batch', ['uses' => 'Authority\PermitController@batchStore']);
+			$router->resource('permits', 'Authority\PermitController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
+
+			$router->post('/role-entities/batch', ['uses' => 'Authority\RoleEntityController@batchStore']);
+			$router->resource('role-entities', 'Authority\RoleEntityController', ['only' => ['show', 'store', 'destroy']]);
+
+			$router->post('/role-permits/batch', ['uses' => 'Authority\RolePermitController@batchStore']);
+			$router->resource('role-permits', 'Authority\RolePermitController', ['only' => ['show', 'store', 'destroy']]);
+
+			$router->post('/role-menus/batch', ['uses' => 'Authority\RoleMenuController@batchStore']);
+			$router->resource('role-menus', 'Authority\RoleMenuController', ['only' => ['show', 'store', 'destroy']]);
+
+			$router->post('/role-users/batch', ['uses' => 'Authority\RoleUserController@batchStore']);
+			$router->resource('role-users', 'Authority\RoleUserController', ['only' => ['show', 'store', 'destroy']]);
+
 		});
 	}
 }
