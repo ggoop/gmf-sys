@@ -48,7 +48,7 @@ class RoleUserController extends Controller {
 			$data = InputHelper::fillEntity($data, $v,
 				[
 					'role' => ['type' => Role::class, 'matchs' => ['code', 'ent_id' => '${ent_id}']],
-					'user',
+					'user' => ['type' => config('gmf.user.model'), 'matchs' => ['email']],
 				],
 				['ent_id' => $entId]
 			);
