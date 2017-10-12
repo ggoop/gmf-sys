@@ -16,7 +16,7 @@ class CreateGmfSysEntUsersTable extends Migration {
 
 		$md->string('id', 100)->primary();
 		$md->entity('ent', 'gmf.sys.ent');
-		$md->entity('user', 'gmf.sys.user');
+		$md->entity('user', config('gmf.user.entity'));
 		$md->integer('is_default')->nullable()->comment('是否默认');
 		$md->enum('type', 'gmf.sys.ent.user.type.enum');
 		$md->boolean('revoked')->default(0)->comment('注销');
