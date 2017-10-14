@@ -30,7 +30,8 @@ class DtiController extends Controller {
 			return $this->toError($validator->errors());
 		}
 		$input = InputHelper::fillEntity($input, $request, ['category', 'local']);
-		$entId = $request->oauth_ent_id;
+
+		$input['ent_id'] = $request->oauth_ent_id;
 		$data = Models\Dti::create($input);
 		return $this->show($request, $data->id);
 	}

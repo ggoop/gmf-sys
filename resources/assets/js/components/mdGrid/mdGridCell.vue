@@ -90,7 +90,7 @@ export default {
         if (this.parentTable.focusCell) {
           this.parentTable.focusCell.endEdit();
         }
-        if(!this.row.data.sys_updated){
+        if (!this.row.data.sys_updated) {
           this.oldValue = this.row.getValueKey(this.column.field);
         }
         this.parentTable.focusCell = this;

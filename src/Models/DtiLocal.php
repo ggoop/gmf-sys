@@ -19,8 +19,12 @@ class DtiLocal extends Model {
 
 			$data = array_only($builder->toArray(), ['id', 'ent_id', 'code', 'name', 'host', 'path', 'method_enum', 'header', 'body']);
 
-			static::create($data);
+			$find = ['code' => $data['code']];
+			if (!empty($data['ent_id'])) {
+				$find['ent_id'] = $data['ent_id'];
+			}
 
+			static::updateOrCreate($find, $data);
 		});
 	}
 }

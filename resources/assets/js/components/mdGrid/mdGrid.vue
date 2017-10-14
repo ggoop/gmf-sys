@@ -193,8 +193,8 @@ export default {
       this.$emit('focus', options);
       this.refreshStatus();
     },
-    endEdit(){
-      this.focusCell&&this.focusCell.endEdit();
+    endEdit() {
+      this.focusCell && this.focusCell.endEdit();
     },
     refreshStatus() {
       this.isSelectedPage = this.rows &&
@@ -384,10 +384,10 @@ export default {
       return this.getAllDatas().map(v => {
         if (v.sys_deleted && !v.sys_created) {
           v.sys_state = 'd';
-        } else if (v.sys_updated && !v.sys_deleted) {
-          v.sys_state = 'u';
         } else if (v.sys_created && !v.sys_deleted) {
           v.sys_state = 'c';
+        } else if (v.sys_updated && !v.sys_created && !v.sys_deleted) {
+          v.sys_state = 'u';
         }
         return v;
       }).filter(v => (v.sys_state == 'c' || v.sys_state == 'u' || v.sys_state == 'd'));
