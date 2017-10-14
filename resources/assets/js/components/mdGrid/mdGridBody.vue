@@ -8,8 +8,15 @@
         <md-grid-body-row v-for="row in rows" :key="row.vueRowId" @click="rowClicked" :row="row" :columns="columns"></md-grid-body-row>
       </tbody>
     </table>
-    <div v-if="rows.length === 0" class="md-grid-body-empty">
-      {{ filterNoResults }}
+    <div v-if="rows.length === 0" class="md-grid-body-empty layout layout-align-center-center">
+      <template v-if="showAdd">
+        <md-button class="md-fab md-fab-center-center" @click.native="onAdd()">
+          <md-icon>add</md-icon>
+        </md-button>
+      </template>
+      <template v-if="filterNoResults">
+        {{ filterNoResults }}
+      </template>
     </div>
   </div>
 </template>
@@ -19,8 +26,13 @@ import mdGridEmptyRow from './mdGridEmptyRow';
 import { classList } from './helpers';
 import getClosestVueParent from '../../core/utils/getClosestVueParent';
 export default {
-  props: ['columns', 'rows', 'filterNoResults', 'width'],
-
+  props: {
+    columns: { },
+    rows: {  },
+    filterNoResults: { type: String },
+    width: {  },
+    showAdd: { default: false, type: Boolean },
+  },
   components: {
     mdGridEmptyRow,
     mdGridBodyRow,
@@ -40,6 +52,10 @@ export default {
       if (this.canFireEvents) {
         this.$emit('click', row);
       }
+    },
+    onAdd() {
+      if (!this.canFireEvents) return;
+      this.parentTable.onAdd();
     },
   },
   mounted() {
