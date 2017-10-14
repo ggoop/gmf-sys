@@ -6,7 +6,7 @@
     </div>
     <div class="md-grid-wrapper layout layout-column">
       <md-grid-head :columns="columns" :is-selected-page="isSelectedPage" :scrollLeft="scrollLeft" @sort="onSorting" :width="width"></md-grid-head>
-      <md-grid-body :columns="columns" :rows="rows" :width="width" :filter-no-results="filterNoResults" class="flex"></md-grid-body>
+      <md-grid-body :columns="columns" :rows="displayedRows" :width="width" :filter-no-results="filterNoResults" class="flex"></md-grid-body>
       <md-grid-foot :columns="columns" v-if="showSum" :scrollLeft="scrollLeft" :width="width"></md-grid-foot>
       <md-grid-actions :pager-info="pager" :showQuery="showQuery" :showAdd="showAdd" :showInsert="showInsert" :showRemove="showRemove" :showReload="showReload" :showConfirm="showConfirm" :showCancel="showCancel" @pagination="onPagination" @onQuery="onQuery" @onAdd="onAdd" @onInsert="onInsert" @onRemove="onRemove" @onReload="onReload" @onConfirm="onConfirm" @onCancel="onCancel">
       </md-grid-actions>
@@ -65,6 +65,7 @@ export default {
   data: () => ({
     columns: [],
     rows: [], //当前页数据
+    displayedRows: [],
     filter: '',
     sort: {
       field: '',
@@ -76,7 +77,7 @@ export default {
       total: 0
     },
     focusRow: false,
-    focusCell:false,
+    focusCell: false,
     selectedRows: {}, //选择的数据
     cacheRows: {},
     width: '',
@@ -100,6 +101,9 @@ export default {
     },
     columns() {
       this.width = this.getWidth();
+    },
+    rows() {
+      this.refreshDisplayRow();
     }
   },
 
@@ -115,6 +119,7 @@ export default {
         `md-grid.${this.cacheKey}` :
         `md-grid.${window.location.host}${window.location.pathname}${this.cacheKey}`;
     },
+
   },
   methods: {
     onConfirm() {
@@ -136,16 +141,24 @@ export default {
       if (!this.canFireEvents) return;
       var options = {};
       this.$emit('onAdd', options);
+      this.refreshDisplayRow();
     },
     onInsert() {
       if (!this.canFireEvents) return;
       var options = {};
       this.$emit('onInsert', options);
+      this.refreshDisplayRow();
     },
     onRemove() {
       if (!this.canFireEvents) return;
+      let rs = this.getSelectedDatas();
+      rs.forEach(r => {
+        r.sys_deleted = true;
+      });
       var options = {};
+      options.data = rs;
       this.$emit('onRemove', options);
+      this.refreshDisplayRow();
     },
     onReload() {
       if (!this.canFireEvents) return;
@@ -168,7 +181,7 @@ export default {
     emitSeleced() {
       if (!this.canFireEvents) return;
       var options = {};
-      options.data = this.getSelectedRows();
+      options.data = this.getSelectedDatas(true);
       this.$emit('select', options);
       this.refreshStatus();
 
@@ -180,16 +193,22 @@ export default {
       this.$emit('focus', options);
       this.refreshStatus();
     },
+    endEdit(){
+      this.focusCell&&this.focusCell.endEdit();
+    },
     refreshStatus() {
       this.isSelectedPage = this.rows &&
         this.rows.length &&
         this.selectedRows[this.pageCacheKey] &&
         this.rows.length == Object.keys(this.selectedRows[this.pageCacheKey]).length;
     },
+    refreshDisplayRow() {
+      this.displayedRows = this.rows.filter(row => row.displayed());
+    },
     cleanCache() {
       this.cacheRows = {};
       this.selectedRows = {};
-      this.refreshStatus()
+      this.refreshStatus();
     },
     async onPagination(pager) {
       if (this.pager.size != pager.size) {
@@ -199,6 +218,14 @@ export default {
       this.pager.size = pager.size;
       await this.mapDataToRows();
       this.refreshStatus();
+    },
+
+    formatDataToRow(data) {
+      data.vueRowId = data.vueRowId || this._.uniqueId('row');
+      data.sys_deleted = data.sys_deleted || false;
+      data.sys_updated = data.sys_updated || false;
+      data.sys_created = data.sys_created || false;
+      return new Row(data, this.columns);
     },
 
     async mapDataToRows() {
@@ -213,17 +240,15 @@ export default {
         this.fetchLocalData() :
         await this.fetchServerData();
       this.rows = data
-        .map(rowData => {
-          rowData.vueRowId = this._.uniqueId('row');
-          return rowData;
-        })
-        .map(rowData => new Row(rowData, this.columns));
+        .map(rowData => this.formatDataToRow(rowData))
+        .filter(row => row.displayed());
 
       this.cacheRows[this.pager.page] = this.rows;
     },
 
     fetchLocalData() {
-      var allDatas = this.datas;
+      var allDatas = this.datas.filter(r => !r.sys_deleted);
+
       if (this.columns.length && this.showFilter && this.filter && this.columns.filter(column => column.isFilterable()).length) {
         // allDatas = this.allDatas.filter((row) => {
         //   var r = new Row(row, this.columns);
@@ -238,7 +263,7 @@ export default {
         //   });
         // }
       }
-      this.pager.total = this.datas.length;
+      this.pager.total = allDatas.length;
       var ds = this._.chunk(allDatas, this.pager.size);
       if (ds.length >= this.pager.page) {
         return ds[this.pager.page - 1];
@@ -252,6 +277,9 @@ export default {
         sort: this.sort,
         pager: this.pager
       });
+      if (this._.isArray(response)) {
+        return response;
+      }
       if (response.data.pager) {
         if (this.pager.size != response.data.pager.size) {
           this.cleanCache();
@@ -275,25 +303,21 @@ export default {
       this.saveState();
       this.refreshStatus();
     },
-    getColumn(columnName) {
-      return this.columns.find(column => column.field === columnName);
-    },
-
     saveState() {
       localCache.set(this.storageKey, this._.pick(this.$data, ['filter', 'sort']), this.cacheLifetime);
     },
-
     restoreState() {
       const previousState = localCache.get(this.storageKey);
-
       if (previousState === null) {
         return;
       }
-
       this.sort = previousState.sort;
       this.filter = previousState.filter;
 
       this.saveState();
+    },
+    getColumn(columnName) {
+      return this.columns.find(column => column.field === columnName);
     },
     getWidth() {
       var w = 40;
@@ -303,19 +327,26 @@ export default {
       });
       return w + "px";
     },
-    getSelectedRows() {
+    getSelectedDatas(isAll) {
       const rows = [];
-      this._.forEach(this.selectedRows, (cv, ck) => {
-        this._.forEach(cv, (v, k) => {
+      if (isAll) {
+        this._.forEach(this.selectedRows, (cv, ck) => {
+          this._.forEach(cv, (v, k) => {
+            rows.push(v);
+          });
+        });
+      } else {
+        let items = this.selectedRows[this.pageCacheKey];
+        items && this._.forEach(items, (v, k) => {
           rows.push(v);
         });
-      });
+      }
       return rows;
     },
     isSelected(row) {
       let selected = false,
         vueRowId = row && row.vueRowId || row;
-      const rows = this.getSelectedRows();
+      const rows = this.getSelectedDatas(true);
       this._.forEach(rows, (v, k) => {
         if (v.vueRowId == vueRowId)
           selected = true;
@@ -329,6 +360,38 @@ export default {
     addColumn(instance) {
       this.columns.push(new Column(instance));
     },
+    addDatas(datas) {
+      if (this._.isArray(datas)) {
+        datas.forEach((data) => {
+          data.sys_created = true;
+          this.rows.push(this.formatDataToRow(data));
+        });
+      } else {
+        datas.sys_created = true;
+        this.rows.push(this.formatDataToRow(datas));
+      }
+    },
+    getAllDatas() {
+      const datas = [];
+      this._.forEach(this.cacheRows, (cv, ck) => {
+        this._.forEach(cv, (v, k) => {
+          datas.push(v.data);
+        });
+      });
+      return datas;
+    },
+    getPostDatas() {
+      return this.getAllDatas().map(v => {
+        if (v.sys_deleted && !v.sys_created) {
+          v.sys_state = 'd';
+        } else if (v.sys_updated && !v.sys_deleted) {
+          v.sys_state = 'u';
+        } else if (v.sys_created && !v.sys_deleted) {
+          v.sys_state = 'c';
+        }
+        return v;
+      }).filter(v => (v.sys_state == 'c' || v.sys_state == 'u' || v.sys_state == 'd'));
+    }
   },
   created() {
     this.sort.field = this.sortBy;

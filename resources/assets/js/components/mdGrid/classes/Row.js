@@ -19,6 +19,14 @@ export default class Row {
     }
     return get(this.data, columnName);
   }
+  getValueKey(columnName){
+    const column = this.getColumn(columnName);
+    if (column && column.dataType === 'entity') {
+      columnName += '.id';
+      return get(this.data, columnName);
+    }
+    return get(this.data, columnName);
+  }
   getData(columnName) {
     return get(this.data, columnName);
   }
@@ -62,6 +70,9 @@ export default class Row {
     }
 
     return value.toString();
+  }
+  displayed(nor) {
+    return !this.data.sys_deleted;
   }
 
   passesFilter(filter) {

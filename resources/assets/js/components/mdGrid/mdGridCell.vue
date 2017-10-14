@@ -61,7 +61,8 @@ export default {
     return {
       parentTable: {},
       status: 'display',
-      focused: false
+      focused: false,
+      oldValue: {}
     };
   },
   methods: {
@@ -89,11 +90,20 @@ export default {
         if (this.parentTable.focusCell) {
           this.parentTable.focusCell.endEdit();
         }
+        if(!this.row.data.sys_updated){
+          this.oldValue = this.row.getValueKey(this.column.field);
+        }
         this.parentTable.focusCell = this;
         this.status = 'editor';
       }
     },
     endEdit() {
+      if (this.status == 'editor') {
+        const newValue = this.row.getValueKey(this.column.field);
+        if (newValue != this.oldValue) {
+          this.row.data.sys_updated = true;
+        }
+      }
       this.status = 'display'
     },
     on_init_ref(options, event) {
