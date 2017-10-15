@@ -75,6 +75,12 @@
   th:last-child {
     border-right-width: 0;
   }
+  td.multiple,
+  th.multiple {
+    .md-grid-cell-container {
+      white-space: normal;
+    }
+  }
   .md-grid-head,
   .md-grid-foot {
     tr:last-child td,

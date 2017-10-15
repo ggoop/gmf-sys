@@ -8,10 +8,10 @@ use Validator;
 
 class DtiController extends Controller {
 	public function index(Request $request) {
-		$query = Models\Dti::with('category', 'local')->where('ent_id', $request->oauth_ent_id);
-
-		$data = $query->get();
-
+		$size = $request->input('size', 10);
+		$query = Models\Dti::with('category', 'local');
+		$query->where('ent_id', $request->oauth_ent_id);
+		$data = $query->paginate($size);
 		return $this->toJson($data);
 	}
 	public function show(Request $request, string $id) {

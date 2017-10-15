@@ -60,6 +60,7 @@ export default {
     cacheLifetime: { default: 5 },
     filterPlaceholder: { default: 'Filter table…' },
     filterNoResults: { default: '暂无数据！' },
+    pagerSize: { default: 20, type: Number },
   },
 
   data: () => ({
@@ -86,6 +87,9 @@ export default {
     pageCacheKey: 'p1'
   }),
   watch: {
+    pagerSize(v){
+      this.pager.size=v;
+    },
     filter() {
       this.mapDataToRows();
       this.saveState();
@@ -415,6 +419,7 @@ export default {
       });
     }
     this.width = this.getWidth();
+    this.pager.size=this.pagerSize;
     if (this.autoLoad) {
       await this.mapDataToRows();
     }

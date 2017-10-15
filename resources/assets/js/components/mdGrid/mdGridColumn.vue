@@ -11,6 +11,7 @@ export default {
     field: { required: false, type: String },
     label: { default: null, type: String },
     dataType: { default: 'string', type: String },
+    multiple: { default: false, type: Boolean },
 
     refType: { default: '', type: String },
     refId: { default: '', type: String },

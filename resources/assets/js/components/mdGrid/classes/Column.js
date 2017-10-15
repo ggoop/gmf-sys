@@ -10,7 +10,7 @@ export default class Column {
     const properties = pick(mixins, [
       'field', 'label', 'dataType', 'sortable', 'sortBy', 'filterable', 'editable',
       'filterOn', 'hidden', 'formatter', 'cellClass', 'headerClass',
-      'width', 'isTool', 'refType', 'refId', 'refInit'
+      'width', 'isTool', 'refType', 'refId', 'refInit','multiple'
     ]);
 
     for (const property in properties) {

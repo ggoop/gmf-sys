@@ -50,7 +50,8 @@ export default {
       return {
         'is-tool': this.column && this.column.isTool,
         'md-grid-selection': this.selection,
-        'cell-focused': this.focused
+        'cell-focused': this.focused,
+        'multiple': this.column && this.column.multiple
       };
     },
     editable() {
