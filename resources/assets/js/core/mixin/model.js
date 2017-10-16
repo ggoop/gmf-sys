@@ -60,9 +60,9 @@ export default {
         if (this.model.main.code) {
           this.model.main.code = '';
         }
-        this.afterCopy();
-        this.$toast('复制成功，请保存!');
       }
+      this.afterCopy();
+      this.$toast('复制成功，请保存!');
     },
     afterCopy() {},
 

@@ -18,6 +18,7 @@ class CreateGmfSysAuthorityRoleEntitiesTable extends Migration {
 		$md->entity('ent', 'gmf.sys.ent')->nullable()->comment('企业');
 		$md->entity('role', 'gmf.sys.authority.role')->nullable()->comment('角色');
 		$md->entity('entity', 'gmf.sys.entity')->nullable()->comment('实体');
+		$md->enum('operation', 'gmf.sys.authority.data.operation.type.enum')->nullable()->comment('操作类型');
 		$md->string('filter')->nullable()->comment('条件');
 		$md->boolean('is_revoked')->default(0)->comment('注销');
 		$md->timestamps();

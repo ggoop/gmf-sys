@@ -65,6 +65,10 @@ class RouteRegistrar {
 			$router->resource('dti-categories', 'DtiCategoryController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 			$router->resource('dti-params', 'DtiParamController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 
+		});
+
+		$this->router->group(['prefix' => 'sys/authority', 'middleware' => ['api', 'auth:api', 'ent_check']], function ($router) {
+
 			$router->post('/roles/batch', ['uses' => 'Authority\RoleController@batchStore']);
 			$router->resource('roles', 'Authority\RoleController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 
@@ -84,5 +88,6 @@ class RouteRegistrar {
 			$router->resource('role-users', 'Authority\RoleUserController', ['only' => ['show', 'store', 'destroy']]);
 
 		});
+
 	}
 }

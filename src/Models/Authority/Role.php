@@ -9,5 +9,5 @@ class Role extends Model {
 	use Snapshotable, HasGuard;
 	protected $table = 'gmf_sys_authority_roles';
 	public $incrementing = false;
-	protected $fillable = ['id', 'ent_id', 'code', 'name', 'memo'];
+	protected $fillable = ['id', 'ent_id', 'code', 'name', 'memo', 'type_enum'];
 }

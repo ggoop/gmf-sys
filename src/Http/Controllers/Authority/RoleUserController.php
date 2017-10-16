@@ -24,7 +24,7 @@ class RoleUserController extends Controller {
 			return $this->toError($validator->errors());
 		}
 		$entId = $request->oauth_ent_id;
-		$data['ent_id'] = $entId;
+		$input['ent_id'] = $entId;
 		$data = RoleUser::create($input);
 		return $this->show($request, $data->id);
 	}

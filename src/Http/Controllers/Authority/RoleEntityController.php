@@ -15,7 +15,7 @@ class RoleEntityController extends Controller {
 		return $this->toJson($data);
 	}
 	public function store(Request $request) {
-		$input = array_only($request->all(), ['is_revoked']);
+		$input = array_only($request->all(), ['operation_enum', 'filter']);
 		$input = InputHelper::fillEntity($input, $request, ['role', 'entity']);
 		$validator = Validator::make($input, [
 			'role_id' => 'required',
@@ -25,7 +25,7 @@ class RoleEntityController extends Controller {
 			return $this->toError($validator->errors());
 		}
 		$entId = $request->oauth_ent_id;
-		$data['ent_id'] = $entId;
+		$input['ent_id'] = $entId;
 		$data = RoleEntity::create($input);
 		return $this->show($request, $data->id);
 	}
@@ -45,7 +45,7 @@ class RoleEntityController extends Controller {
 		$entId = $request->oauth_ent_id;
 		$datas = $request->input('datas');
 		foreach ($datas as $k => $v) {
-			$data = array_only($v, ['is_revoked']);
+			$data = array_only($v, ['operation_enum', 'filter']);
 			$data = InputHelper::fillEntity($data, $v,
 				[
 					'role' => ['type' => Role::class, 'matchs' => ['code', 'ent_id' => '${ent_id}']],

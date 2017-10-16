@@ -9,5 +9,5 @@ class RoleEntity extends Model {
 	use Snapshotable, HasGuard;
 	protected $table = 'gmf_sys_authority_role_entities';
 	public $incrementing = false;
-	protected $fillable = ['role_id', 'entity_id', 'filter'];
+	protected $fillable = ['role_id', 'entity_id', 'filter', 'operation_enum'];
 }

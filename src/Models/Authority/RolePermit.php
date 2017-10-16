@@ -9,5 +9,5 @@ class RolePermit extends Model {
 	use Snapshotable, HasGuard;
 	protected $table = 'gmf_sys_authority_role_permits';
 	public $incrementing = false;
-	protected $fillable = ['role_id', 'permit_id'];
+	protected $fillable = ['role_id', 'permit_id', 'opinion_enum'];
 }

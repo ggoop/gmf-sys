@@ -12,7 +12,7 @@ class CreateGmfSysAuthorityOpinionTypeEnum extends Migration {
 	 */
 	public function up() {
 		$md = Metadata::create($this->mdID);
-		$md->mdEnum('gmf.sys.authority.opinion.type.enum')->comment('权限类型');
+		$md->mdEnum('gmf.sys.authority.opinion.type.enum')->comment('建议');
 		$md->string('permit')->comment('允许')->default(0);
 		$md->string('deny')->comment('拒绝')->default(1);
 		$md->string('password')->comment('密码')->default(2);
