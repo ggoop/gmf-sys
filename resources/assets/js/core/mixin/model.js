@@ -114,11 +114,7 @@ export default {
         this.loading--;
         this.$toast(this.$lang.LANG_SAVESUCCESS);
       }, response => {
-        if (response && response.data && response.data.data) {
-          this.$toast(response.data.data);
-        } else {
-          this.$toast(response);
-        }
+        this.$toast(response);
         this.afterSave(false);
         this.loading--;
       });

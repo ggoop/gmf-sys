@@ -9,52 +9,54 @@ use Illuminate\Http\Request;
 use Validator;
 
 class RolePermitController extends Controller {
-	public function show(Request $request, string $id) {
-		$query = RolePermit::where('ent_id', $request->oauth_ent_id);
-		$data = $query->where('role_id', $id)->get();
-		return $this->toJson($data);
-	}
-	public function store(Request $request) {
-		$input = array_only($request->all(), ['is_revoked', 'opinion_enum']);
-		$input = InputHelper::fillEntity($input, $request, ['role', 'permit']);
-		$validator = Validator::make($input, [
-			'role_id' => 'required',
-			'permit_id' => 'required',
-		]);
-		if ($validator->fails()) {
-			return $this->toError($validator->errors());
+	public function index(Request $request) {
+		$query = RolePermit::with('role', 'permit')->where('ent_id', $request->oauth_ent_id);
+		$matchs = array_only($request->all(), ['role_id', 'permit_id', 'opinion_enum']);
+		if ($matchs && count($matchs)) {
+			$query->where($matchs);
 		}
-		$entId = $request->oauth_ent_id;
-		$input['ent_id'] = $entId;
-		$data = RolePermit::create($input);
-		return $this->show($request, $data->id);
+		$data = $query->get();
+		return $this->toJson($data);
 	}
 	public function destroy(Request $request, $id) {
 		$ids = explode(",", $id);
 		RolePermit::destroy($ids);
 		return $this->toJson(true);
 	}
-	public function batchStore(Request $request) {
+	public function store(Request $request) {
 		$input = $request->all();
 		$validator = Validator::make($input, [
-			'datas' => 'required|array|min:1',
+			'datas' => 'array',
 		]);
 		if ($validator->fails()) {
 			return $this->toError($validator->errors());
 		}
 		$entId = $request->oauth_ent_id;
-		$datas = $request->input('datas');
-		foreach ($datas as $k => $v) {
-			$data = array_only($v, ['is_revoked', 'opinion_enum']);
-			$data = InputHelper::fillEntity($data, $v,
-				[
-					'role' => ['type' => Role::class, 'matchs' => ['code', 'ent_id' => '${ent_id}']],
-					'permit' => ['type' => Permit::class, 'matchs' => ['code']],
-				],
-				['ent_id' => $entId]
-			);
-			if (!empty($data['role_id']) && !empty($data['permit_id'])) {
-				RolePermit::updateOrCreate(['ent_id' => $entId, 'role_id' => $data['role_id'], 'permit_id' => $data['permit_id']], $data);
+		$lines = $request->input('datas');
+
+		$fillable = ['is_revoked', 'opinion_enum'];
+		$entityable = [
+			'role' => ['type' => Role::class, 'matchs' => ['code', 'ent_id' => '${ent_id}']],
+			'permit' => ['type' => Permit::class, 'matchs' => ['code']],
+		];
+
+		foreach ($lines as $key => $value) {
+			if (!empty($value['sys_state']) && $value['sys_state'] == 'c') {
+				$data = array_only($value, $fillable);
+				$data = InputHelper::fillEntity($data, $value, $entityable, ['ent_id' => $entId]);
+
+				$data['ent_id'] = $entId;
+				RolePermit::create($data);
+				continue;
+			}
+			if (!empty($value['sys_state']) && $value['sys_state'] == 'u' && $value['id']) {
+				$data = array_only($value, $fillable);
+				$data = InputHelper::fillEntity($data, $value, $entityable, ['ent_id' => $entId]);
+				RolePermit::where('id', $value['id'])->update($data);
+			}
+			if (!empty($value['sys_state']) && $value['sys_state'] == 'd' && !empty($value['id'])) {
+				RolePermit::destroy($value['id']);
+				continue;
 			}
 		}
 		return $this->toJson(true);

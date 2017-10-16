@@ -1,6 +1,6 @@
 export default {
   methods: {
-    async loadLineDatas({ pager }) {
+    async fetchLineDatas({ pager }) {
       if (!this.model.main.id) {
         return [];
       }

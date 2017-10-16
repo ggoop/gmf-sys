@@ -9,5 +9,12 @@ class RoleUser extends Model {
 	use Snapshotable, HasGuard;
 	protected $table = 'gmf_sys_authority_role_users';
 	public $incrementing = false;
-	protected $fillable = ['role_id', 'user_id'];
+	protected $fillable = ['ent_id', 'role_id', 'user_id'];
+
+	public function role() {
+		return $this->belongsTo('Gmf\Sys\Models\Authority\Role');
+	}
+	public function user() {
+		return $this->belongsTo(config('gmf.user.model'));
+	}
 }
