@@ -118,17 +118,23 @@ class EntityQuery {
 		});
 	}
 	private function buildWhereItem($item, $query, $boolean) {
-		$tag = $this->parseField($item);
-		QueryCase::attachWhere($query, $item, $item->dbFieldName, $boolean);
+		if ($this->parseField($item)) {
+			QueryCase::attachWhere($query, $item, $item->dbFieldName, $boolean);
+		}
+
 	}
 	private function buildJoins() {
 		foreach ($this->selects as $key => $value) {
-			$this->parseField($value);
-			$this->query->addSelect($value->dbFieldName . ' as ' . $value->alias);
+			if ($this->parseField($value)) {
+				$this->query->addSelect($value->dbFieldName . ' as ' . $value->alias);
+			}
+
 		}
 		foreach ($this->orders as $key => $value) {
-			$this->parseField($value);
-			$this->query->orderBy($value->dbFieldName, $value->direction);
+			if ($this->parseField($value)) {
+				$this->query->orderBy($value->dbFieldName, $value->direction);
+			}
+
 		}
 		$this->buildWheres($this->wheres, $this->query);
 
@@ -165,6 +171,7 @@ class EntityQuery {
 		foreach ($ent->fields as $key => $value) {
 			$f = new Builder($value->toArray());
 			$f->tableAlias($b->alias);
+			$f->field_name = $f->field_name ?: $f->name;
 			$f->dbFieldName($f->tableAlias . '.' . $f->field_name);
 			$parts[$value->name] = $f;
 		}
@@ -234,6 +241,7 @@ class EntityQuery {
 		}
 		$part = array_shift($parts);
 		$mdField = $this->getField($mdEntity, $part);
+
 		if (empty($mdField)) {
 			return false;
 		}
@@ -252,6 +260,7 @@ class EntityQuery {
 		$field->name($mdField->name);
 		$field->type_id($mdField->type_id)->type_type($mdField->type_type);
 		$field->dbFieldName($field->tableAlias . '.' . $field->field_name);
+		$field->is_parsed(true);
 		return $field;
 	}
 }

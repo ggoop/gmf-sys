@@ -28,6 +28,7 @@ class CreateGmfSysMenusTable extends Migration {
 		$md->text('style')->nullable()->comment('样式');
 
 		$md->integer('sequence')->default('0')->comment('顺序号');
+		$md->boolean('is_leaf')->default(1)->comment('叶子');
 		$md->timestamps();
 
 		$md->build();

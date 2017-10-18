@@ -1,7 +1,9 @@
 <?php
 
 namespace Gmf\Sys\Models;
+use Closure;
 use DB;
+use Gmf\Sys\Builder;
 use Gmf\Sys\Traits\HasGuard;
 use Gmf\Sys\Traits\Snapshotable;
 use Illuminate\Database\Eloquent\Model;
@@ -37,5 +39,20 @@ class Entity extends Model {
 			});
 		$p = $query->first();
 		return $p;
+	}
+	public static function build(Closure $callback) {
+		tap(new Builder, function ($builder) use ($callback) {
+			$callback($builder);
+
+			$data = array_only($builder->toArray(), ['id', 'name', 'comment', 'table_name', 'type']);
+			$find = [];
+			if (!empty($data['id'])) {
+				$find['id'] = $data['id'];
+			}
+			if (!empty($data['name'])) {
+				$find['name'] = $data['name'];
+			}
+			static::updateOrCreate($find, $data);
+		});
 	}
 }

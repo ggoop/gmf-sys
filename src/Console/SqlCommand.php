@@ -67,6 +67,18 @@ class SqlCommand extends Command {
 		$this->line($tag . "  execute begin:    {$name}");
 
 		$content = $this->files->get($file);
+		if (str_contains($content, 'DELIMITER')) {
+
+			$content = str_replace('DELIMITER', 'DELIMITER ', $content);
+			$content = str_replace('  ', ' ', $content);
+			$content = str_replace('DELIMITER $$', '', $content);
+			$content = str_replace('END$$', 'END', $content);
+
+			$content = str_replace('DELIMITER ;', '', $content);
+			$content = str_replace('$$', ';', $content);
+			$content = str_replace('DELIMITER', '', $content);
+		}
+
 		//DB::statement($content);
 		DB::unprepared($content);
 		$this->line($tag . " execute completed: {$name}");

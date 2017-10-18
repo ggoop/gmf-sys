@@ -5,6 +5,7 @@ namespace Gmf\Sys;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 class ServiceProvider extends BaseServiceProvider {
+
 	/**
 	 * Bootstrap the application services.
 	 *
@@ -16,6 +17,7 @@ class ServiceProvider extends BaseServiceProvider {
 			Console\InstallCommand::class,
 			Console\SeedCommand::class,
 			Console\SqlCommand::class,
+			Console\MdCommand::class,
 		]);
 		$this->loadViewsFrom(__DIR__ . '/../resources/views', 'gmf');
 		$this->loadRoutesFrom(__DIR__ . '/../routes/web.php');

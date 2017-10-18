@@ -11,7 +11,7 @@ class Menu extends Model {
 	use Snapshotable, HasGuard;
 	protected $table = 'gmf_sys_menus';
 	public $incrementing = false;
-	protected $fillable = ['id', 'root_id', 'parent_id',
+	protected $fillable = ['id', 'root_id', 'parent_id', 'is_leaf',
 		'code', 'name', 'memo', 'uri', 'icon', 'style', 'tag', 'params',
 		'sequence'];
 	public function menus() {
@@ -30,7 +30,7 @@ class Menu extends Model {
 			$data = array_only($builder->toArray(), ['id', 'code', 'name', 'memo', 'uri', 'icon', 'style', 'tag', 'params', 'sequence']);
 			$parent = false;
 			if (!empty($builder->parent)) {
-				$parent = Menu::where('code', $builder->parent)->where('tag', $builder->tag)->first();
+				$parent = static::where('code', $builder->parent)->where('tag', $builder->tag)->first();
 			}
 			if ($parent) {
 				$data['root_id'] = $parent->root_id;
@@ -40,6 +40,9 @@ class Menu extends Model {
 				$data['parent_id'] = null;
 			}
 			static::create($data);
+			if ($parent) {
+				static::where('id', $parent->id)->update(['is_leaf' => '0']);
+			}
 		});
 	}
 }

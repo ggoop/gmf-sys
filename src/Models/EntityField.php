@@ -1,6 +1,8 @@
 <?php
 
 namespace Gmf\Sys\Models;
+use Closure;
+use Gmf\Sys\Builder;
 use Gmf\Sys\Traits\HasGuard;
 use Gmf\Sys\Traits\Snapshotable;
 use Illuminate\Database\Eloquent\Model;
@@ -12,12 +14,48 @@ class EntityField extends Model {
 	protected $keyType = 'string';
 	protected $fillable = ['id', 'name', 'comment', 'field_name', 'entity_id', 'type_id',
 		'type_type', 'collection', 'sequence', 'default_alue',
-		'foreign_key', 'local_key'];
+		'foreign_key', 'local_key', 'nullable', 'length', 'scale', 'precision',
+		'format', 'former'];
 	protected $hidden = ['created_at', 'updated_at'];
 	public function type() {
 		return $this->belongsTo('Gmf\Sys\Models\Entity');
 	}
 	public function entity() {
 		return $this->belongsTo('Gmf\Sys\Models\Entity');
+	}
+	public static function build(Closure $callback) {
+		tap(new Builder, function ($builder) use ($callback) {
+			$callback($builder);
+
+			$data = array_only($builder->toArray(), ['id', 'name', 'comment', 'field_name', 'entity_id', 'type_id',
+				'type_type', 'collection', 'sequence', 'default_alue',
+				'foreign_key', 'local_key', 'nullable', 'length', 'format', 'former']);
+			if (!empty($builder->entity)) {
+				$entity = Entity::where('name', $builder->entity)->first();
+				if (!empty($entity)) {
+					$data['entity_id'] = $entity->id;
+				}
+				if (empty($data['entity_id'])) {
+					$data['entity_id'] = $builder->entity;
+				}
+			}
+			if (!empty($builder->type)) {
+				$entity = Entity::where('name', $builder->type)->first();
+				if (!empty($entity)) {
+					$data['type_id'] = $entity->id;
+					$data['type_type'] = $entity->name;
+				}
+				if (empty($data['type_type'])) {
+					$data['type_type'] = $builder->type;
+				}
+			}
+			$find = [];
+			if (!empty($data['entity_id'])) {
+				$find['entity_id'] = $data['entity_id'];
+			}
+			$find['name'] = $data['name'];
+
+			static::updateOrCreate($find, $data);
+		});
 	}
 }
