@@ -32,7 +32,7 @@ class MDInstaller {
 		if (empty($command->name)) {
 			return;
 		}
-		if (in_array($command->name, ['primary', 'unique', 'index', 'foreign', 'dropColumn'])) {
+		if (in_array($command->name, ['primary', 'unique', 'index', 'foreign'])) {
 			$params = array_except($command->toArray(), ['name', 'columns']);
 			$cmd = $table->{$command->name}($command->columns);
 			foreach ($params as $key => $value) {
@@ -46,7 +46,7 @@ class MDInstaller {
 		if (!empty($column->collection)) {
 			return;
 		}
-		$parameters = array_only($column->toArray(), ['length', 'autoIncrement', 'comment', 'nullable', 'primary', 'index']);
+		$parameters = array_only($column->toArray(), ['length', 'autoIncrement', 'comment', 'nullable', 'primary', 'index', 'unique']);
 		if (isset($column->default_value)) {
 			$parameters['default'] = $column->default_value;
 		}
@@ -202,8 +202,7 @@ class MDInstaller {
 					$colNames[] = $column;
 					break;
 				}
-				if ($oldColumn->comment != $column->comment
-					|| $oldColumn->default_value != $column->default_value
+				if ($oldColumn->default_value != $column->default_value
 					|| $oldColumn->nullable != $column->nullable
 					|| $oldColumn->length != $column->length
 					|| $oldColumn->scale != $column->scale
@@ -212,7 +211,8 @@ class MDInstaller {
 					$colNames[] = $column;
 					break;
 				}
-				if ($oldColumn->foreign_key != $column->foreign_key
+				if ($oldColumn->comment != $column->comment
+					|| $oldColumn->foreign_key != $column->foreign_key
 					|| $oldColumn->local_key != $column->local_key
 					|| $oldColumn->former != $column->former
 					|| $oldColumn->format != $column->format) {
@@ -251,7 +251,7 @@ class MDInstaller {
 		$columns = [];
 
 		foreach ($this->columns as $column) {
-			$item = new Fluent(array_only($column->toArray(), ['id', 'name', 'comment', 'field_name', 'type', 'length', 'collection', 'nullable', 'autoIncrement', 'unsigned', 'index', 'primary']));
+			$item = new Fluent(array_only($column->toArray(), ['id', 'name', 'comment', 'field_name', 'type', 'length', 'collection', 'nullable', 'autoIncrement', 'unsigned', 'index', 'primary', 'unique']));
 			$item->sequence = $s++;
 			$item->entity_id = $this->mainEntity->id;
 			if (empty($item->id)) {
