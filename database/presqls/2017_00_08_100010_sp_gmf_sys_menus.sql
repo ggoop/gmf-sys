@@ -9,6 +9,11 @@ BEGIN
 
 DECLARE v_level INT DEFAULT 0;
 
+DROP TEMPORARY TABLE IF EXISTS temp_mid_data;
+CREATE TEMPORARY TABLE IF NOT EXISTS temp_mid_data(
+`id` NVARCHAR(100)
+);
+
 DROP TEMPORARY TABLE IF EXISTS temp_menus_data;
 CREATE TEMPORARY TABLE IF NOT EXISTS temp_menus_data(
 `root_id` NVARCHAR(100),
@@ -43,10 +48,16 @@ DELETE FROM temp_menus_data WHERE id IN (SELECT menu_id FROM temp_opinion_data A
 
 /*上1级*/
 WHILE v_level>=0 DO 
+	DELETE FROM temp_mid_data;
+	
+	INSERT INTO temp_mid_data(id)
+	SELECT d.parent_id 
+	FROM temp_menus_data AS d WHERE d.id!=d.root_id AND d.level=v_level AND d.parent_id IS NOT NULL;
+	
 	INSERT INTO temp_menus_data(root_id,parent_id,id,`code`,`name`,`level`)
 	SELECT m.root_id,m.parent_id,m.id,m.code,m.name,v_level+1
 	FROM gmf_sys_menus AS m
-	WHERE m.id IN (SELECT d.parent_id FROM temp_menus_data AS d WHERE d.id!=d.root_id AND d.level=v_level AND d.parent_id IS NOT NULL);
+	WHERE m.id IN (SELECT d.id FROM temp_mid_data AS d);
 
 	IF ROW_COUNT()=0 THEN
 		SET v_level=-2;
