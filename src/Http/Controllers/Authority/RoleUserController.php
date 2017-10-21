@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Validator;
 
 class RoleUserController extends Controller {
-	public function index(Request $request, string $id) {
+	public function index(Request $request) {
 		$query = RoleUser::with(['role', 'user' => function ($query) {
 			$query->select('id', 'name');
 		}])->where('ent_id', $request->oauth_ent_id);

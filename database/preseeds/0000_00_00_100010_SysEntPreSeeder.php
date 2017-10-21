@@ -4,7 +4,7 @@ use Gmf\Sys\Builder;
 use Gmf\Sys\Models;
 use Illuminate\Database\Seeder;
 
-class SysEntSeeder extends Seeder {
+class SysEntPreSeeder extends Seeder {
 	/**
 	 * Run the database seeds.
 	 *

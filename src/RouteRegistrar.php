@@ -54,6 +54,8 @@ class RouteRegistrar {
 
 			$router->resource('languages', 'LanguageController', ['only' => ['index', 'show']]);
 
+			$router->resource('users', 'UserController', ['only' => ['index', 'show']]);
+
 			$router->post('/profiles/batch', ['uses' => 'ProfileController@batchStore']);
 			$router->resource('profiles', 'ProfileController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 

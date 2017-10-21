@@ -8,14 +8,17 @@ class Filter {
 
 /**
 "wheres": {
-"f1": {"name": "f1","value": "001","boolean":"or"},
+"fielda":"asdfe",
+"fieldb":[2,3,4,5,6],
+"fieldc":{"id":"123","code":"code"},
+"f1": {"name": "f1","value": "001"},
 "and":[{"name": "f3","value": "001"},{"name": "f4","value": "001"}],
 "or": [
 {"name": "f5","value": "001"},
 {"and": [{"name": "code","value": "001"},{"name": "code","value": "001"}]},
 {"or": [{"name": "code","value": "001"},{"name": "code1","value": "001"}]}
 ],
-"other or and":{"boolean":"or","f6":{"name": "f6","value": "001"},"f7":{"name": "f7","value": "001"}},
+"filter":{"or":[]},
 "boolean":"and"
 }
 
@@ -31,7 +34,10 @@ class Filter {
 		if (empty($value)) {
 			return false;
 		}
-		if (is_object($value) && !empty($value->name) && is_string($value->name)) {
+		if (is_object($value)
+			&& !empty($value->name)
+			&& is_string($value->name)
+			&& (isset($value->value) || !empty($value->operator))) {
 			return true;
 		}
 
@@ -49,6 +55,13 @@ class Filter {
 		}
 		return false;
 	}
+	private function isBooleanTag($key) {
+		if (is_string($key) && !empty($key) && ($key === 'and' || $key === 'or')) {
+			return $key;
+		}
+		return false;
+	}
+
 	private function getBooleanExp($value, $default) {
 		if (is_object($value) && !empty($value->boolean) && ($value->boolean === 'and' || $value->boolean === 'or')) {
 			return $value->boolean;
@@ -72,7 +85,7 @@ class Filter {
 			$item->operator($value->operator);
 		}
 		if (!empty($value->value)) {
-			$v = $this->parseItemValue($item, $value->value);
+			$v = $this->parseItemValue($value->value, $item);
 			if ($v !== false) {
 				$item->value($v);
 			}
@@ -84,7 +97,11 @@ class Filter {
 		}
 		return $item;
 	}
-	protected function parseItemValue($item, $value) {
+	protected function parseItemValue($value, $item = null) {
+		if (empty($value)) {
+			return false;
+		}
+
 		$rtn = false;
 		if (is_object($value)) {
 			if (!empty($value->id)) {
@@ -97,10 +114,11 @@ class Filter {
 					if (!empty($v->id)) {
 						$rtn[] = $v->id;
 					}
-				} else {
+				} else if (!is_array($v)) {
 					$rtn[] = $v;
 				}
 			}
+			return count($rtn) > 0 ? $rtn : false;
 		} else {
 			$rtn = $value;
 		}
@@ -113,22 +131,37 @@ class Filter {
 			if (is_bool($value) || empty($value) || !(is_object($value) || is_array($value))) {
 				continue;
 			}
-			if ($this->isFilterItem($key, $value)) {
+			if ($this->isBooleanTag($key)) {
+				if ($b = $this->isBooleanItem($key, $value)) {
+					$item = new Builder;
+					$hasItem = $this->_parse($value, $item, $b);
+					if ($hasItem) {
+						$item->type('boolean');
+						array_push($wheres, $item);
+					}
+				}
+				continue;
+			} else if ($this->isFilterItem($key, $value)) {
 				$item = $this->parseItem($value);
 				if ($item) {
 					$item->type('item');
 					array_push($wheres, $item);
-					continue;
 				}
-			} else if ($b = $this->isBooleanItem($key, $value)) {
+				continue;
+			} else if (is_string($key) && ($v = $this->parseItemValue($value))) {
 				$item = new Builder;
-				$hasItem = $this->_parse($value, $item, $b);
-				if ($hasItem) {
-					$item->type('boolean');
+				$item->name($key);
+				if ($v !== false) {
+					$item->type('item');
+					if (is_array($v)) {
+						$item->operator('in');
+					} else {
+						$item->operator('equal');
+					}
+					$item->value($v);
 					array_push($wheres, $item);
-					continue;
 				}
-
+				continue;
 			} else {
 				$item = new Builder;
 				$b = $this->getBooleanExp($value, $boolean);
