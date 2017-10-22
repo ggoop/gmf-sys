@@ -117,12 +117,12 @@ export default {
     onClose() {
       this.$emit('close', this.options);
     },
-    cleanCase(){
-      var caseModel=this.getEmptyCase();
+    cleanCase() {
+      var caseModel = this.getEmptyCase();
       this.$emit('query', caseModel);
       this.$refs.caseDialog.close();
     },
-    getEmptyCase(){
+    getEmptyCase() {
       var qc = {
         size: this.options.size,
         name: this.options.name,
@@ -135,50 +135,82 @@ export default {
       return qc;
     },
     getQueryCase() {
-      var qc=this.getEmptyCase();
+      var qc = this.getEmptyCase();
       this._.each(this.options.wheres, (v) => {
-        var item = this.formatCaseWhereItem(v);
-        if (item) qc.wheres.case.items.push(item);
+        if (v && (!v.sys_deleted)) {
+          var item = this.formatCaseWhereItem(v);
+          if (item) qc.wheres.case.items.push(item);
+        }
       });
       this._.each(this.options.orders, (v) => {
-        qc.orders.push({ name: v.name, direction: v.direction, comment: v.comment });
+        if (v && (!v.sys_deleted)) {
+          qc.orders.push({ name: v.name, direction: v.direction, comment: v.comment });
+        }
       });
       this._.each(this.options.fields, (v) => {
-        qc.fields.push({ name: v.name, comment: v.comment });
+        if (v && (!v.sys_deleted)) {
+          qc.fields.push({ name: v.name, comment: v.comment });
+        }
       });
       return qc;
     },
     formatCaseWhereItem(where) {
-      if (!where || !where.value) return false;
       var has = false;
-      var whereItem = { name: where.name, comment: where.comment, value: where.value };
-      if (where.operator) {
-        whereItem.operator = where.operator;
-      }
-      if (where.type_type == 'ref' && where.value) {
-        whereItem.value = this.getRefWhereItemValue(where);
-        if (whereItem.value === false) { return false; }
-      }
+      var whereItem = {
+        name: where.name,
+        comment: where.comment,
+        operator: where.operator_enum
+      };
+      whereItem.value = this.getCaseWhereValue(where);
       if (whereItem.value === false) { return false; }
       return whereItem;
     },
-    getRefWhereItemValue(where) {
+    getCaseWhereValue(where) {
+      if (where.operator_enum.indexOf('null') >= 0) {
+        return '';
+      }
+      if (!where.value) {
+        return false;
+      }
+      if (where.operator_enum === 'between') {
+        if (where.value && where.value2) {
+          var values = [];
+          if (where.type_type == 'ref') {
+            values.push(getRefWhereItemValue(where, where.value));
+            values.push(getRefWhereItemValue(where, where.value2));
+          } else {
+            values.push(where.value);
+            values.push(where.value2);
+          }
+          return values[0] !== false && values[1] !== false ? values : false;
+        }
+      } else {
+        if (where.type_type == 'ref') {
+          return this.getRefWhereItemValue(where, where.value);
+        } else {
+          return where.value;
+        }
+      }
+      return false;
+    },
+    getRefWhereItemValue(where, values) {
+      if (values === false) return false;
       var valueField = 'id',
         temp = false,
         value = false;
       if (where.refs && where.refs.valueField) {
         valueField = where.refs.valueField;
       }
-      if (where.multiple && where.value && where.value.length > 0) {
+      if (where.multiple && values && values.length > 0) {
         value = [];
-        for (var i = 0; i < where.value.length; i++) {
-          temp = where.value[i][valueField];
+        for (var i = 0; i < values.length; i++) {
+          temp = values[i][valueField];
           if (temp !== '' && temp !== undefined && temp !== false) {
             value.push(temp);
           }
         }
-      } else if (where.value && where.value[valueField]) {
-        value = where.value[valueField];
+      } else if (values && values[valueField]) {
+        value = values[valueField];
       }
       return value;
     },

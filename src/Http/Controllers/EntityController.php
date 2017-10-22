@@ -24,6 +24,12 @@ class EntityController extends Controller {
 			if (empty($request->order)) {
 				$request->order = 'created_at';
 			}
+			foreach ($entity->fields as $fk => $fv) {
+				if ($fv->name === 'ent') {
+					$entity->is_ent = true;
+					break;
+				}
+			}
 			//total_items
 			$query = $this->pager_build_query($request, $entity);
 			$result->total_items($query->count());
@@ -85,6 +91,9 @@ class EntityController extends Controller {
 			foreach ($request->wheres as $key => $value) {
 				$query->where($key, $value);
 			}
+		}
+		if ($entity->is_ent) {
+			$query->where('ent_id', $request->oauth_ent_id);
 		}
 		if ($request->filter) {
 			$query->whereRaw($request->filter);

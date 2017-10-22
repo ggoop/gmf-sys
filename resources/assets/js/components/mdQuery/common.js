@@ -6,7 +6,6 @@ export default {
   },
   data() {
     return {
-      selectItems: [],
       loading: false
     };
   },
@@ -20,9 +19,6 @@ export default {
         }
       });
       return ind;
-    },
-    onItemSelect(datas) {
-      this.selectItems = datas;
     },
     onItemAdd() {
       this.$refs.newItemDialog.open();
@@ -49,11 +45,11 @@ export default {
       item = JSON.parse(JSON.stringify(item));
       this.mdItems.splice(index + 1, 0, item);
     },
-    onItemRemove() {
+    onItemRemove(options) {
       var ind = -1;
       for (var i = this.mdItems.length - 1; i >= 0; i--) {
         ind = -1;
-        this._.forEach(this.selectItems, (sv, sk) => {
+        this._.forEach(options.data, (sv, sk) => {
           if (this.mdItems[i].name === sv.name) {
             ind = i;
           }
