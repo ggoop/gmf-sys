@@ -4,7 +4,7 @@ use Gmf\Sys\Database\Metadata;
 use Illuminate\Database\Migrations\Migration;
 
 class CreateGmfSysAuthorityRoleTypeEnum extends Migration {
-	private $mdID = "3710bc60af0811e7b83ad3eae83818f1";
+	public $mdID = "3710bc60af0811e7b83ad3eae83818f1";
 	/**
 	 * Run the migrations.
 	 *

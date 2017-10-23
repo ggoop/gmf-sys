@@ -4,7 +4,7 @@ use Gmf\Sys\Database\Metadata;
 use Illuminate\Database\Migrations\Migration;
 
 class CreateGmfSysLnsItemsTable extends Migration {
-	private $mdID = "8118fe300a9d11e78823076f4d2525cf";
+	public $mdID = "8118fe300a9d11e78823076f4d2525cf";
 	/**
 	 * Run the migrations.
 	 *

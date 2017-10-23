@@ -4,7 +4,7 @@ use Gmf\Sys\Database\Metadata;
 use Illuminate\Database\Migrations\Migration;
 
 class CreateGmfSysQueryWhereTypeEnum extends Migration {
-	private $mdID = "b6332760a03011e7910811d937ac140a";
+	public $mdID = "b6332760a03011e7910811d937ac140a";
 	/**
 	 * Run the migrations.
 	 *

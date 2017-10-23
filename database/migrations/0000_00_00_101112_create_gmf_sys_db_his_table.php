@@ -4,7 +4,7 @@ use Gmf\Sys\Database\Metadata;
 use Illuminate\Database\Migrations\Migration;
 
 class CreateGmfSysDbHisTable extends Migration {
-	private $mdID = "c8e846e009cb11e7859585dac2f8c3e1";
+	public $mdID = "c8e846e009cb11e7859585dac2f8c3e1";
 	/**
 	 * Run the migrations.
 	 *

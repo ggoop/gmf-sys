@@ -4,7 +4,7 @@ use Gmf\Sys\Database\Metadata;
 use Illuminate\Database\Migrations\Migration;
 
 class CreateGmfSysProfileScopeEnum extends Migration {
-	private $mdID = "7008152009cd11e79c4af9baacb8f332";
+	public $mdID = "7008152009cd11e79c4af9baacb8f332";
 	/**
 	 * Run the migrations.
 	 *

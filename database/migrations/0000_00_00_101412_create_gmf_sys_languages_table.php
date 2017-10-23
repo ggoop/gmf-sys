@@ -4,7 +4,7 @@ use Gmf\Sys\Database\Metadata;
 use Illuminate\Database\Migrations\Migration;
 
 class CreateGmfSysLanguagesTable extends Migration {
-	private $mdID = "c8e8481009cb11e7aca01bea5e7f1af7";
+	public $mdID = "c8e8481009cb11e7aca01bea5e7f1af7";
 	/**
 	 * Run the migrations.
 	 *

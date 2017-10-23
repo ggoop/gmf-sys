@@ -4,7 +4,7 @@ use Gmf\Sys\Database\Metadata;
 use Illuminate\Database\Migrations\Migration;
 
 class CreateGmfSysMenusTable extends Migration {
-	private $mdID = "c8e847c009cb11e7bc1d095fc7d1b98a";
+	public $mdID = "c8e847c009cb11e7bc1d095fc7d1b98a";
 	/**
 	 * Run the migrations.
 	 *

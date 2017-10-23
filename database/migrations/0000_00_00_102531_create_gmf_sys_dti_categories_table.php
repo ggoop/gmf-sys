@@ -4,7 +4,7 @@ use Gmf\Sys\Database\Metadata;
 use Illuminate\Database\Migrations\Migration;
 
 class CreateGmfSysDtiCategoriesTable extends Migration {
-	private $mdID = "777d004063ae11e78231e95dd4273a4c";
+	public $mdID = "777d004063ae11e78231e95dd4273a4c";
 	/**
 	 * Run the migrations.
 	 *

@@ -4,7 +4,7 @@ use Gmf\Sys\Database\Metadata;
 use Illuminate\Database\Migrations\Migration;
 
 class CreateGmfSysAuthorityRolePermitsTable extends Migration {
-	private $mdID = "c87b2200af1811e7baa3eb1e54d7d0d4";
+	public $mdID = "c87b2200af1811e7baa3eb1e54d7d0d4";
 	/**
 	 * Run the migrations.
 	 *

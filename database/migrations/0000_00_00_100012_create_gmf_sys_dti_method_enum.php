@@ -4,7 +4,7 @@ use Gmf\Sys\Database\Metadata;
 use Illuminate\Database\Migrations\Migration;
 
 class CreateGmfSysDtiMethodEnum extends Migration {
-	private $mdID = "0e3ad6109b9211e79822cdba17fcc670";
+	public $mdID = "0e3ad6109b9211e79822cdba17fcc670";
 	/**
 	 * Run the migrations.
 	 *
