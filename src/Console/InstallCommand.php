@@ -46,6 +46,8 @@ class InstallCommand extends Command {
 		$opt = [];
 		$this->call('gmf:md', $opt);
 
+		$this->call('migrate', $opt);
+
 		//gmf:sql --tag=pre
 		$opt = ['--tag' => 'pre'];
 		$this->call('gmf:sql', $opt);
