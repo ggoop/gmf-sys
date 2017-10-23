@@ -23,8 +23,6 @@ class CreateGmfSysProfileValuesTable extends Migration {
 		$md->text('value_name')->nullable()->comment('值');
 		$md->timestamps();
 
-		$md->foreign('profile_id')->references('id')->on('gmf_sys_profiles')->onDelete('cascade');
-
 		$md->build();
 
 	}

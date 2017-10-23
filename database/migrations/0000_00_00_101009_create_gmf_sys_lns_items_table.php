@@ -16,11 +16,11 @@ class CreateGmfSysLnsItemsTable extends Migration {
 
 		$md->bigIncrements('id');
 		$md->entity('lns', 'gmf.sys.lns')->comment('许可');
+		$md->string('type')->nullable()->comment('拥有者类型');
 		$md->string('code')->nullable()->comment('编码');
 		$md->string('name')->nullable()->comment('名称');
 		$md->integer('number')->nullable()->comment('许可数');
-
-		$md->foreign('lns_id')->references('id')->on('gmf_sys_lns')->onDelete('cascade');
+		$md->string('filter')->nullable()->comment('条件');
 
 		$md->build();
 	}

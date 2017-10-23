@@ -3,8 +3,8 @@
 use Gmf\Sys\Database\Metadata;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGmfSysEntUsersTable extends Migration {
-	public $mdID = "c8e8495009cb11e793acff00e76e4941";
+class CreateGmfSysEntLnsTable extends Migration {
+	public $mdID = "84c5a7c0b7d711e79434a7e4ea4de71b";
 	/**
 	 * Run the migrations.
 	 *
@@ -12,13 +12,11 @@ class CreateGmfSysEntUsersTable extends Migration {
 	 */
 	public function up() {
 		$md = Metadata::create($this->mdID);
-		$md->mdEntity('gmf.sys.ent.user')->comment('企业用户')->tableName('gmf_sys_ent_users');
+		$md->mdEntity('gmf.sys.ent.lns')->comment('企业许可')->tableName('gmf_sys_ent_lns');
 
 		$md->string('id', 100)->primary();
 		$md->entity('ent', 'gmf.sys.ent')->comment('企业');
-		$md->entity('user', config('gmf.user.entity'));
-		$md->integer('is_default')->nullable()->comment('是否默认');
-		$md->enum('type', 'gmf.sys.ent.user.type.enum');
+		$md->entity('lns', 'gmf.sys.lns')->nullable()->comment('许可');
 		$md->boolean('revoked')->default(0)->comment('注销');
 		$md->timestamps();
 

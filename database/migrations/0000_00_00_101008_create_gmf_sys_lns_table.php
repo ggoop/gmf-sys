@@ -15,10 +15,11 @@ class CreateGmfSysLnsTable extends Migration {
 		$md->mdEntity('gmf.sys.lns')->comment('许可')->tableName('gmf_sys_lns');
 
 		$md->string('id')->primary();
-		$md->string('owner_id', 100)->comment('拥有者ID');
-		$md->string('owner_type')->comment('拥有者类型');
+		$md->string('code')->nullable()->comment('编码');
+		$md->string('name')->nullable()->comment('名称');
 		$md->string('serial_number')->nullable()->comment('序列号');
 		$md->string('request_code')->nullable()->comment('申请码');
+		$md->string('request_date')->nullable()->comment('申请时间');
 		$md->string('answer_code')->nullable()->comment('答应码');
 		$md->build();
 	}

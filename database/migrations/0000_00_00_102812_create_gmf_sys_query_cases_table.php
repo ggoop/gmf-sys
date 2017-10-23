@@ -22,8 +22,6 @@ class CreateGmfSysQueryCasesTable extends Migration {
 		$md->longText('data')->comment('数据');
 		$md->timestamps();
 
-		$md->foreign('query_id')->references('id')->on('gmf_sys_queries')->onDelete('cascade');
-
 		$md->build();
 
 	}

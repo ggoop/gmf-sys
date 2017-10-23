@@ -22,7 +22,6 @@ class CreateGmfSysQueryOrdersTable extends Migration {
 		$md->integer('sequence')->default(0)->comment('顺序');
 		$md->timestamps();
 
-		$md->foreign('query_id')->references('id')->on('gmf_sys_queries')->onDelete('cascade');
 		$md->build();
 
 	}

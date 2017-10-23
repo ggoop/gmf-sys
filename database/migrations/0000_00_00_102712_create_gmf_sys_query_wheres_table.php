@@ -28,7 +28,6 @@ class CreateGmfSysQueryWheresTable extends Migration {
 		$md->string('ref_filter')->nullable()->comment('参照过滤器');
 		$md->timestamps();
 
-		$md->foreign('query_id')->references('id')->on('gmf_sys_queries')->onDelete('cascade');
 		$md->build();
 
 	}
