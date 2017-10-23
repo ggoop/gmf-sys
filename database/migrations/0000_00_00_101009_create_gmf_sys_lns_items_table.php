@@ -20,6 +20,7 @@ class CreateGmfSysLnsItemsTable extends Migration {
 		$md->string('code')->nullable()->comment('编码');
 		$md->string('name')->nullable()->comment('名称');
 		$md->integer('number')->nullable()->comment('许可数');
+		$md->string('field')->nullable()->comment('字段');
 		$md->string('filter')->nullable()->comment('条件');
 
 		$md->build();
