@@ -1,6 +1,6 @@
 <template>
   <div class="layout layout-full flex md-query">
-    <md-grid ref="grid" :datas="fetchData" :multiple="multiple" showQuery @select="onSelected" @dblclick="dblclick" @onQuery="openQueryCase">
+    <md-grid :title="gridTitle" ref="grid" :datas="fetchData" :multiple="multiple" showQuery showDownload @select="onSelected" @dblclick="dblclick" @onQuery="openQueryCase">
     </md-grid>
     <md-query-case :md-query-id="mdQueryId" ref="queryCase" @init="initQueryCase" @query="queryQueryCase">
     </md-query-case>
@@ -14,6 +14,7 @@ import common from '../../core/utils/common';
 export default {
   props: {
     mdQueryId: String,
+    title: { type: String },
     multiple: {
       type: Boolean,
       default: true
@@ -29,8 +30,12 @@ export default {
     }
   },
   mixins: [theme],
-  watch: {
-
+  computed: {
+    gridTitle() {
+      if (this.title) return this.title;
+      if (this.refInfo) return this.refInfo.comment;
+      return '';
+    },
   },
   data() {
     return {
@@ -65,7 +70,7 @@ export default {
         hidden: field.alias == 'id' || field.hide || field.hidden
       };
     },
-    pagination(page){
+    pagination(page) {
       this.selectedRows = [];
       this.$refs.grid.refresh();
     },

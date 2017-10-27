@@ -8,7 +8,7 @@
       <md-grid-head :columns="columns" :is-selected-page="isSelectedPage" :scrollLeft="scrollLeft" @sort="onSorting" :width="width"></md-grid-head>
       <md-grid-body :columns="columns" :rows="displayedRows" :width="width" :showAdd="showAdd" :filter-no-results="filterNoResults" class="flex"></md-grid-body>
       <md-grid-foot :columns="columns" v-if="showSum" :scrollLeft="scrollLeft" :width="width"></md-grid-foot>
-      <md-grid-actions :pager-info="pager" :showQuery="showQuery" :showAdd="showAdd" :showInsert="showInsert" :showRemove="showRemove" :showReload="showReload" :showConfirm="showConfirm" :showCancel="showCancel" @pagination="onPagination" @onQuery="onQuery" @onAdd="onAdd" @onInsert="onInsert" @onRemove="onRemove" @onReload="onReload" @onConfirm="onConfirm" @onCancel="onCancel">
+      <md-grid-actions :pager-info="pager" :showQuery="showQuery" :showDownload="showDownload" :showAdd="showAdd" :showInsert="showInsert" :showRemove="showRemove" :showReload="showReload" :showConfirm="showConfirm" :showCancel="showCancel" @pagination="onPagination" @onQuery="onQuery" @onAdd="onAdd" @onInsert="onInsert" @onRemove="onRemove" @onReload="onReload" @onDownload="onDownload" @onConfirm="onConfirm" @onCancel="onCancel">
       </md-grid-actions>
     </div>
     <div style="display:none;">
@@ -20,6 +20,7 @@
 import Column from './classes/Column';
 import localCache from '../../core/utils/localCache';
 import Row from './classes/Row';
+import DataExport from './classes/DataExport';
 import mdGridHead from './mdGridHead';
 import mdGridBody from './mdGridBody';
 import mdGridFoot from './mdGridFoot';
@@ -48,10 +49,12 @@ export default {
     showInsert: { default: false, type: Boolean },
     showRemove: { default: false, type: Boolean },
     showReload: { default: true, type: Boolean },
+    showDownload: { default: false, type: Boolean },
     showConfirm: { default: false, type: Boolean },
     showCancel: { default: false, type: Boolean },
 
     rowFocused: { default: true, type: Boolean },
+    title: { type: String },
 
     sortBy: { default: '', type: String },
     sortOrder: { default: '', type: String },
@@ -87,8 +90,8 @@ export default {
     pageCacheKey: 'p1'
   }),
   watch: {
-    pagerSize(v){
-      this.pager.size=v;
+    pagerSize(v) {
+      this.pager.size = v;
     },
     filter() {
       this.mapDataToRows();
@@ -163,6 +166,14 @@ export default {
       options.data = rs;
       this.$emit('onRemove', options);
       this.refreshDisplayRow();
+    },
+    async onDownload(title) {
+      title = title || this.title || '我的表格';
+      var datas = await this.getExportData();
+
+      const columns = this.columns && this.columns.filter(column => !column.hidden);
+      const de = new DataExport(datas, columns);
+      de.toExcel(title);
     },
     onReload() {
       if (!this.canFireEvents) return;
@@ -249,7 +260,40 @@ export default {
 
       this.cacheRows[this.pager.page] = this.rows;
     },
-
+    async getExportData() {
+      var datas = this.getSelectedDatas(true),
+        rds = [],
+        response, pager = { size: 1000, page: 1 };
+      if (datas && datas.length > 0) {
+        return datas;
+      }
+      if (this.usesLocalData) {
+        return this.datas;
+      }
+      datas = [];
+      while (true) {
+        rds = [];
+        response = await this.datas({
+          filter: this.filter,
+          sort: this.sort,
+          pager: pager
+        });
+        if (this._.isArray(response) && response.length > 0) {
+          rds = response;
+        }
+        if (response && response.data && this._.isArray(response.data.data) && response.data.data.length > 0) {
+          rds = response.data.data;
+        }
+        if (rds && rds.length > 0) {
+          datas.push.apply(datas, rds);
+        }
+        pager.page++;
+        if (!rds || !rds.length || rds.length < pager.size || pager.size <= 0) {
+          break;
+        }
+      }
+      return datas;
+    },
     fetchLocalData() {
       var allDatas = this.datas.filter(r => !r.sys_deleted);
 
@@ -419,7 +463,7 @@ export default {
       });
     }
     this.width = this.getWidth();
-    this.pager.size=this.pagerSize;
+    this.pager.size = this.pagerSize;
     if (this.autoLoad) {
       await this.mapDataToRows();
     }

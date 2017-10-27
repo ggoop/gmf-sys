@@ -14,7 +14,7 @@
       </md-button>
     </md-toolbar>
     <md-dialog-content class="no-padding layout flex">
-      <md-grid :auto-select="true" ref="grid" :datas="fetchData" :multiple="multiple" showConfirm showCancel showQuery @select="onSelected" @dblclick="dblclick" @onQuery="openQueryCase" @onConfirm="onConfirm" @onCancel="onCancel">
+      <md-grid :auto-select="true" ref="grid" :datas="fetchData" :multiple="multiple" showConfirm showCancel showQuery showDownload @select="onSelected" @dblclick="dblclick" @onQuery="openQueryCase" @onConfirm="onConfirm" @onCancel="onCancel">
       </md-grid>
     </md-dialog-content>
     <md-loading :loading="loading"></md-loading>

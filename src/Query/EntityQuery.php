@@ -73,6 +73,7 @@ class EntityQuery {
 			$fields[] = array_only($value->toArray(), ['name', 'alias', 'comment', 'type_id', 'type_type', 'path', 'hide']);
 		}
 		$schema->fields($fields);
+		$schema->comment($this->mainEntity->comment);
 		return $schema;
 	}
 	private function buildMainEntity() {

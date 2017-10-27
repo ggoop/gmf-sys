@@ -17,10 +17,12 @@ class CreateGmfSysLnsTable extends Migration {
 		$md->string('id')->primary();
 		$md->string('code')->nullable()->comment('编码');
 		$md->string('name')->nullable()->comment('名称');
-		$md->string('serial_number')->nullable()->comment('序列号');
-		$md->string('request_code')->nullable()->comment('申请码');
+		$md->text('serial_number')->nullable()->comment('序列号');
+		$md->text('request_code')->nullable()->comment('申请码');
 		$md->string('request_date')->nullable()->comment('申请时间');
-		$md->string('answer_code')->nullable()->comment('答应码');
+		$md->string('fm_date')->nullable()->comment('开始时间');
+		$md->string('to_date')->nullable()->comment('结束时间');
+		$md->text('answer_code')->nullable()->comment('答应码');
 		$md->build();
 	}
 

@@ -14,7 +14,6 @@ class MDInstaller {
 	protected $columns = [];
 	protected $commands = [];
 	protected $mainEntity;
-	public static $mdEntityName = 'gmf_sys_entities';
 
 	public function __construct($mainEntity, $columns, $commands) {
 		$this->mainEntity = $mainEntity;
@@ -156,7 +155,11 @@ class MDInstaller {
 		}
 		if ($mdType == 'entity' && $colNames && count($colNames)) {
 			Schema::table($this->mainEntity->table_name, function (Blueprint $table) use ($colNames) {
-				$table->dropColumn($colNames);
+				foreach ($colNames as $column) {
+					if (Schema::hasColumn($this->mainEntity->table_name, $column)) {
+						$table->dropColumn($column);
+					}
+				}
 			});
 		}
 		if ($colIds && count($colIds)) {
@@ -180,7 +183,9 @@ class MDInstaller {
 		if ($mdType == 'entity' && $colNames && count($colNames)) {
 			Schema::table($this->mainEntity->table_name, function (Blueprint $table) use ($colNames) {
 				foreach ($colNames as $column) {
-					$this->buildDBColumn($table, $column);
+					if (!Schema::hasColumn($this->mainEntity->table_name, $column->field_name)) {
+						$this->buildDBColumn($table, $column);
+					}
 				}
 			});
 		}
@@ -225,15 +230,18 @@ class MDInstaller {
 		if ($mdType == 'entity' && $reNames && count($reNames)) {
 			Schema::table($this->mainEntity->table_name, function (Blueprint $table) use ($reNames) {
 				foreach ($reNames as $old => $new) {
-					$table->renameColumn($old, $new);
+					if (Schema::hasColumn($this->mainEntity->table_name, $old)) {
+						$table->renameColumn($old, $new);
+					}
 				}
 			});
 		}
 		if ($mdType == 'entity' && $dbChanges && count($dbChanges)) {
-
 			Schema::table($this->mainEntity->table_name, function (Blueprint $table) use ($dbChanges) {
 				foreach ($dbChanges as $column) {
-					$this->buildDBColumn($table, $column, ['change' => true]);
+					if (Schema::hasColumn($this->mainEntity->table_name, $column->field_name)) {
+						$this->buildDBColumn($table, $column, ['change' => true]);
+					}
 				}
 			});
 		}
@@ -329,7 +337,8 @@ class MDInstaller {
 		return $ct;
 	}
 	private function initContext() {
-		if (!Schema::hasTable(static::$mdEntityName)) {
+		$mdCols = [];
+		if (!Schema::hasTable('gmf_sys_entities')) {
 			Schema::create('gmf_sys_entities', function (Blueprint $table) {
 				$table->string('id', 100)->primary();
 				$table->string('name', 250)->index()->comment('名称');
@@ -338,6 +347,8 @@ class MDInstaller {
 				$table->string('type')->comment('类型');
 				$table->timestamps();
 			});
+		}
+		if (!Schema::hasTable('gmf_sys_entity_fields')) {
 			Schema::create('gmf_sys_entity_fields', function (Blueprint $table) {
 				$table->string('id', 100)->primary();
 				$table->string('entity_id', 100);

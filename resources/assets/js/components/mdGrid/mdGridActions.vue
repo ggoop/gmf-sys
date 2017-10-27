@@ -21,6 +21,10 @@
         <md-icon>autorenew</md-icon>
         <md-tooltip>重新加载</md-tooltip>
       </md-button>
+      <md-button class="md-icon-button" @click.native="onDownload()" v-if="showDownload">
+        <md-icon>cloud_download</md-icon>
+        <md-tooltip>导出数据</md-tooltip>
+      </md-button>
     </div>
     <md-pagination v-if="pagerInfo" :pager="pagerInfo" :options="pagerOptions" @pagination="onPagination"></md-pagination>
     <div class="layout-row layout-align-end-center" v-if="showConfirm||showCancel">
@@ -46,6 +50,7 @@ export default {
     showReload: { default: true, type: Boolean },
     showConfirm: { default: true, type: Boolean },
     showCancel: { default: true, type: Boolean },
+    showDownload: { default: true, type: Boolean },
   },
   methods: {
     onPagination(pager) {
@@ -65,6 +70,9 @@ export default {
     },
     onReload() {
       this.$emit('onReload');
+    },
+    onDownload() {
+      this.$emit('onDownload');
     },
     onConfirm() {
       this.$emit('onConfirm');

@@ -40,6 +40,11 @@ class RouteRegistrar {
 			$router->resource('components', 'ComponentController', ['only' => ['index', 'show']]);
 		});
 		$this->router->group(['prefix' => 'sys', 'middleware' => ['api', 'auth:api', 'ent_check']], function ($router) {
+
+			$router->post('/lns/request', ['uses' => 'LnsController@issueRequest']);
+			$router->post('/lns/answer', ['uses' => 'LnsController@issueAnswer']);
+			$router->post('/lns/regist', ['uses' => 'LnsController@storeRegist']);
+
 			$router->get('/entities/pager', ['uses' => 'EntityController@pager']);
 			$router->get('/enums/all', ['uses' => 'EntityController@getAllEnums']);
 			$router->get('/enums/{enum}', ['uses' => 'EntityController@getEnum']);
