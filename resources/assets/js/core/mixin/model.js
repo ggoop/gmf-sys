@@ -34,23 +34,22 @@ export default {
     },
     initModel() { return {}; },
 
-    create() {
+    createInitData() {
       var m = this.initModel();
       if (m) {
         this._.forOwn(m, (value, key) => {
           this.$set(this.model, key, value);
         });
       }
-      this.afterCreate();
     },
-    afterCreate() {},
-
-    cancel() {
-      if (this.model.main && this.model.main.id) {
-        this.loadData();
-      } else {
-        this.create();
+    beforeCreate() { return true },
+    create() {
+      if (this.beforeCreate() !== false) {
+        this.$goID('-' + this._.uniqueId(), {}, true);
       }
+    },
+    cancel() {
+      this.loadData(this.getRouteIdValue());
     },
     afterCancel() {},
 
@@ -66,84 +65,104 @@ export default {
     },
     afterCopy() {},
 
-    loadData(id) {
+    async loadData(id) {
       if (!id && this.model.main && this.model.main.id) {
         id = this.model.main.id;
       }
       if (id) {
         this.model.main.id = id;
         this.loading++;
-        this.$http.get(this.route + '/' + id).then(response => {
+        try {
+          const response = await this.$http.get(this.route + '/' + id);
           this.$set(this.model, 'main', response.data.data || {});
           this.afterLoadData(response.data.data);
           this.loading--;
-        }, response => {
-          if (response && response.data && response.data.data) {
-            this.$toast(response.data.data);
-          } else {
-            this.$toast(response);
-          }
-          this.afterLoadData(false);
+        } catch (error) {
           this.loading--;
-        });
+          this.$toast(error);
+          this.afterLoadData(false);
+        }
       } else {
-        this.create();
+        this.createInitData();
       }
-      this.loadPagerInfo(id);
+      await this.loadPagerInfo(id);
     },
     afterLoadData(data) {},
 
-    beforeSave(data) {},
-    save() {
+    async serverStore() {
       if (!this.validate()) {
         return false;
       }
       if (this.beforeSave(this.model.main) === false) {
         return false;
       }
-      var iterable;
-      if (this.model.main && this.model.main.id) {
-        iterable = this.$http.put(this.route + '/' + this.model.main.id, this.model.main);
-      } else {
-        iterable = this.$http.post(this.route, this.model.main);
-      }
-      this.loading++;
-      iterable && iterable.then(response => {
+      try {
+        var response;
+        this.loading++;
+        if (this.model.main && this.model.main.id) {
+          response = await this.$http.put(this.route + '/' + this.model.main.id, this.model.main);
+        } else {
+          response = await this.$http.post(this.route, this.model.main);
+        }
         this.$set(this.model, 'main', response.data.data || {});
         this.afterSave(response.data.data);
         this.loading--;
-        this.$toast(this.$lang.LANG_SAVESUCCESS);
-      }, response => {
-        this.$toast(response);
-        this.afterSave(false);
+        return true;
+      } catch (error) {
+        this.$toast(error);
         this.loading--;
-      });
+        return false;
+      }
+      return true;
+    },
+    beforeSave(data) {},
+    async save() {
+      const tag = await this.serverStore();
+      if (tag) {
+        this.$toast(this.$lang.LANG_SAVESUCCESS);
+        this.$goID(this.model.main.id, {}, true);
+      }
     },
     afterSave(data) {},
 
-    paging(id) { this.loadData(id); },
-    loadPagerInfo(id) {
-      if (id) {
-        this.$http.get('sys/entities/pager', {
+    paging(id) {
+      this.$goID(id, {}, true);
+    },
+    async loadPagerInfo(id) {
+      try {
+        const response = await this.$http.get('sys/entities/pager', {
           params: {
             entity: this.model.entity,
             id: id,
             order: this.model.order,
             wheres: this.model.wheres
           }
-        }).then(response => {
-          this.$set(this.model, 'pager', response.data.data);
-        }, response => {});
+        });
+        this.$set(this.model, 'pager', response.data.data);
+        return true;
+      } catch (error) {
+        return false;
       }
     },
-  },
-  created() {
-    this.create();
-    if (this.$route && this.$route.params && this.$route.params.id) {
-      this.model.main.id = this.$route.params.id;
+    getRouteIdValue() {
+      if (this.$route &&
+        this.$route.params &&
+        this.$route.params.id &&
+        this.$route.params.id.substr(0, 1) !== '-') {
+        return this.$route.params.id;
+      }
+      return false;
     }
   },
+  created() {
+    this.createInitData();
+  },
   mounted() {
-    this.loadData(this.model.main.id);
+    const rid = this.getRouteIdValue();
+    if (rid) {
+      this.model.main.id = rid;
+    } else {
+      this.loadPagerInfo();
+    }
   },
 };

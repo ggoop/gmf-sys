@@ -5,10 +5,10 @@
     </md-input-value>
     <md-input v-show="canEdit" v-model="currentInputValue" type="text" :placeholder="placeholder" :id="inputId" :name="name" :disabled="disabled" :required="required" @keydown.native.delete="deleteLastChip" @keydown.native.prevent.enter="addInputChip" @keydown.native.prevent.186="addInputChip" @dblclick.native="openRef()" tabindex="0" md-container="" ref="input">
     </md-input>
-    <md-button class="md-icon-button md-ref-filter" @click.native="openRef()">
+    <md-button v-if="!disabled" class="md-icon-button md-ref-filter" @click.native="openRef()">
       <md-icon>search</md-icon>
     </md-button>
-    <md-ref v-if="refIsOpened" ref="ref" :options="refOptions" :multiple="!!multiple" :md-ref-id="mdRefId" @open="onRefOpen" @close="onRefClose" @confirm="onRefConfirm"></md-ref>
+    <md-ref v-if="refIsOpened&&!disabled" ref="ref" :options="refOptions" :multiple="!!multiple" :md-ref-id="mdRefId" @open="onRefOpen" @close="onRefClose" @confirm="onRefConfirm"></md-ref>
   </div>
 </template>
 <script>

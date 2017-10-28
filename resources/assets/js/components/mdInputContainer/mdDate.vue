@@ -9,7 +9,7 @@
        :disabled="disabled" 
        :required="required" 
        v-on:input="updateValue($event.target.value)" />
-    <md-select-date :value="value" @change="updateValue" :option="option"></md-select-date>
+    <md-select-date v-if="!disabled" :value="value" @change="updateValue" :option="option"></md-select-date>
   </div>
 </template>
 <script>

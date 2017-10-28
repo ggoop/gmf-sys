@@ -60,7 +60,7 @@ start.run = function(elID) {
       }
     },
     computed: {
-      
+
     },
     methods: {
       setHttpConfig() {
@@ -83,8 +83,8 @@ start.run = function(elID) {
       getCacheEnum(type) {
         return enumCache.get(type);
       },
-      getCacheEnumName(type,item) {
-        return enumCache.getEnumName(type,item);
+      getCacheEnumName(type, item) {
+        return enumCache.getEnumName(type, item);
       },
       loadEnts() {
         this.$http.get('sys/ents/my').then(response => {
@@ -133,6 +133,12 @@ function baseConfig() {
   Vue.prototype.$lang = lang;
   Vue.prototype.$validate = function(input, rules, customMessages) {
     return new validator(input, rules, customMessages);
+  };
+  Vue.prototype.$goID = function(id, options, isReplace) {
+    var localtion = { name: 'id', params: { id: id } };
+    isReplace = !!isReplace;
+    localtion = common.merge(localtion, options);
+    this.$router && this.$router[isReplace ? 'replace' : 'push'](localtion);
   };
   Vue.prototype.$goModule = function(module, options, isReplace) {
     var localtion = { name: 'module', params: { module: module } };

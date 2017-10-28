@@ -6,9 +6,9 @@
     </div>
     <div class="md-grid-wrapper layout layout-column">
       <md-grid-head :columns="columns" :is-selected-page="isSelectedPage" :scrollLeft="scrollLeft" @sort="onSorting" :width="width"></md-grid-head>
-      <md-grid-body :columns="columns" :rows="displayedRows" :width="width" :showAdd="showAdd" :filter-no-results="filterNoResults" class="flex"></md-grid-body>
+      <md-grid-body :columns="columns" :rows="displayedRows" :width="width" :showAdd="showAdd&&!readonly" :filter-no-results="filterNoResults" class="flex"></md-grid-body>
       <md-grid-foot :columns="columns" v-if="showSum" :scrollLeft="scrollLeft" :width="width"></md-grid-foot>
-      <md-grid-actions :pager-info="pager" :showQuery="showQuery" :showDownload="showDownload" :showAdd="showAdd" :showInsert="showInsert" :showRemove="showRemove" :showReload="showReload" :showConfirm="showConfirm" :showCancel="showCancel" @pagination="onPagination" @onQuery="onQuery" @onAdd="onAdd" @onInsert="onInsert" @onRemove="onRemove" @onReload="onReload" @onDownload="onDownload" @onConfirm="onConfirm" @onCancel="onCancel">
+      <md-grid-actions :pager-info="pager" :showQuery="showQuery" :showDownload="showDownload" :showAdd="showAdd&&!readonly" :showInsert="showInsert&&!readonly" :showRemove="showRemove&&!readonly" :showReload="showReload&&!readonly" :showConfirm="showConfirm" :showCancel="showCancel" @pagination="onPagination" @onQuery="onQuery" @onAdd="onAdd" @onInsert="onInsert" @onRemove="onRemove" @onReload="onReload" @onDownload="onDownload" @onConfirm="onConfirm" @onCancel="onCancel">
       </md-grid-actions>
     </div>
     <div style="display:none;">
@@ -39,6 +39,7 @@ export default {
 
   props: {
     datas: { default: () => [], type: [Array, Function] },
+    readonly: { default: false, type: Boolean },
     autoSelect: { default: false, type: Boolean },
     autoLoad: { default: false, type: Boolean },
     multiple: { default: true, type: Boolean },

@@ -55,7 +55,11 @@ export default {
       };
     },
     editable() {
-      return (this.row && this.row.data) && (!this.selection) && this.column && (this.column.templateEditor || this.column.editable);
+      return (this.row && this.row.data) &&
+        (!this.selection) &&
+        this.column &&
+        (this.column.templateEditor || this.column.editable) &&
+        this.parentTable && !this.parentTable.readonly;
     }
   },
   data() {
@@ -87,7 +91,7 @@ export default {
         this.parentTable.focusCell = this;
         return;
       }
-      if (this.status == 'display') {
+      if (this.status == 'display' && !this.parentTable.readonly) {
         if (this.parentTable.focusCell) {
           this.parentTable.focusCell.endEdit();
         }

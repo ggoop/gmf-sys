@@ -29,7 +29,7 @@
       transition-duration: .25s;
       transition-property: opacity, transform, top;
 
-      > * {
+      >* {
         opacity: 1;
         transition: $swift-ease-in;
         transition-duration: .15s;
@@ -42,6 +42,10 @@
     pointer-events: none;
     user-select: none;
     user-drag: none;
+
+    &:after {
+      content: "";
+    }
   }
 
   select {
