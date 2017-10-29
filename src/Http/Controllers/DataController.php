@@ -1,8 +1,7 @@
 <?php
 
 namespace Gmf\Sys\Http\Controllers;
-use Gmf\Sys\Query\EntityQuery;
-use Gmf\Sys\Query\Filter;
+use DB;
 use Gmf\Sys\Uuid;
 use Illuminate\Http\Request;
 
@@ -19,17 +18,13 @@ class DataController extends Controller {
 		$datas = Uuid::generate(1, 'gmf', Uuid::NS_DNS, "");
 		return $this->toJson($datas);
 	}
-	public function test(Request $request) {
-		$path = public_path('a.html');
-		return $path;
-		$w = Filter::create();
-		$w->parse($request->input('wheres'));
-		$eq = EntityQuery::create('suite.amiba.group');
-
-		$eq->addWheres($w->getItems());
-		$sql = $eq->toSql();
-		$bs = $eq->getBindings();
-		var_dump($bs);
-		return $this->toJson($sql);
+	public function issueUid(Request $request) {
+		$num = $request->input('num', 1);
+		$num = intval($num);
+		$num = $num > 0 ? $num : 1;
+		DB::statement('SET @num =' . $num . ';');
+		DB::statement("CALL sp_gmf_sys_uid(?,@num);", [$request->input('node')]);
+		$datas = DB::select('select @num as sn');
+		return $this->toJson($datas && count($datas) ? $datas[0]->sn : false);
 	}
 }

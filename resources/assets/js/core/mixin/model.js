@@ -41,7 +41,9 @@ export default {
           this.$set(this.model, key, value);
         });
       }
+      this.afterInitData();
     },
+    afterInitData() {},
     beforeCreate() { return true },
     create() {
       if (this.beforeCreate() !== false) {

@@ -110,6 +110,15 @@ start.run = function(elID) {
           console.log(response);
         });
       },
+      async issueUid(node, num) {
+        try {
+          const response = await this.$http.get('sys/uid', { params: { node: node, num: num } });
+          return response.data.data;
+        } catch (error) {
+          return false;
+        }
+        return false;
+      },
     },
     created: function() {
       this.loadEnts();
@@ -156,5 +165,7 @@ function baseConfig() {
     document.title = title;
     this.$root.title = title;
   };
+
+
 }
 export default start;

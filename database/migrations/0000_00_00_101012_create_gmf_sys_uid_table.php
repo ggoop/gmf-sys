@@ -13,7 +13,10 @@ class CreateGmfSysUidTable extends Migration {
 	public function up() {
 		$md = Metadata::create($this->mdID);
 		$md->mdEntity('gmf.sys.uid')->comment('UID')->tableName('gmf_sys_uids');
-		$md->string('id')->primary();
+		$md->string('id')->index();
+		$md->string('node')->nullable()->index();
+		$md->string('type')->nullable();
+		$md->integer('len')->default(12);
 		$md->bigInteger('sn')->default(0)->index();
 		$md->build();
 	}
