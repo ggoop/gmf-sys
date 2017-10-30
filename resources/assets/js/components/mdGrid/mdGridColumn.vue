@@ -19,7 +19,7 @@ export default {
 
     editable: { default: false, type: Boolean },
 
-    sortable: { default: false, type: Boolean },
+    sortable: { default: true, type: Boolean },
     sortBy: { default: null },
 
     filterable: { default: false, type: Boolean },

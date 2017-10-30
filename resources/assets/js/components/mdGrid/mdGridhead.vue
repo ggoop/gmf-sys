@@ -51,7 +51,7 @@ export default {
     },
     tableStyle() {
       return {
-        left: (0-(parseInt(this.scrollLeft) || 0)) + 'px'
+        left: (0 - (parseInt(this.scrollLeft) || 0)) + 'px'
       }
     },
   },
@@ -71,6 +71,8 @@ export default {
       if (this.sort.field !== column.field) {
         this.sort.field = column.field;
         this.sort.order = 'asc';
+      } else if (this.sort.order === 'desc') {
+        this.sort.field = '';
       } else {
         this.sort.order = (this.sort.order === 'asc' ? 'desc' : 'asc');
       }
@@ -100,6 +102,10 @@ export default {
   },
   mounted() {
     this.parentTable = getClosestVueParent(this.$parent, 'md-grid');
+    if (this.parentTable.sort) {
+      this.sort.field = this.parentTable.sort.field;
+      this.sort.order = this.parentTable.sort.order;
+    }
     this.multiple = this.parentTable.multiple;
     this.$nextTick(() => {
       this.canFireEvents = true;

@@ -1,10 +1,11 @@
 export default {
   methods: {
-    async fetchLineDatas({ pager }) {
+    async fetchLineDatas({ pager, filter, sort }) {
       if (!this.model.main.id) {
         return [];
       }
-      return await this.$http.get(this.route + '/' + this.model.main.id + '/lines', { params: pager });
+      const options = this._.extend({}, { sortField: sort.field, sortOrder: sort.order }, pager);
+      return await this.$http.get(this.route + '/' + this.model.main.id + '/lines', { params: options });
     },
     beforeSave() {
       if (this.$refs.grid) {

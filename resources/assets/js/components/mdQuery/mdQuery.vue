@@ -24,7 +24,7 @@ export default {
       default () {
         return {
           wheres: {},
-          orders: {}
+          orders: []
         }
       }
     }
@@ -77,7 +77,12 @@ export default {
     async fetchData({ pager, filter, sort }) {
       this.loading++;
       var options = this._.extend({}, { q: filter }, this.options, this.caseModel, pager);
-
+      if (options.orders && sort && sort.field) {
+        options.orders.length && this._.remove(options.orders, function(n) {
+          return n.name === sort.field;
+        });
+        options.orders.splice && options.orders.splice(0, 0, { name: sort.field, direction: sort.order });
+      }
       this.$emit('init', options);
       const response = await this.$http.post('sys/queries/query/' + this.mdQueryId, options);
 

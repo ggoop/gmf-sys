@@ -57,7 +57,7 @@ export default {
     rowFocused: { default: true, type: Boolean },
     title: { type: String },
 
-    sortBy: { default: '', type: String },
+    sortField: { default: '', type: String },
     sortOrder: { default: '', type: String },
 
     cacheKey: { default: null },
@@ -297,20 +297,17 @@ export default {
     },
     fetchLocalData() {
       var allDatas = this.datas.filter(r => !r.sys_deleted);
-
       if (this.columns.length && this.showFilter && this.filter && this.columns.filter(column => column.isFilterable()).length) {
-        // allDatas = this.allDatas.filter((row) => {
-        //   var r = new Row(row, this.columns);
-        //   return r.passesFilter(this.filter);
-        // });
+        const tds = allDatas.map(rowData => new Row(rowData, this.columns)).filter(row => row.passesFilter(this.filter));
+        allDatas = tds.map(rowData => rowData.data);
       }
       if (this.columns.length && this.sort && this.sort.field) {
-        // const sortColumn = this.getColumn(this.sort.field);
-        // if (sortColumn) {
-        //   allDatas = allDatas.sort(function(r1, r2) {
-        //     return 1;
-        //   });
-        // }
+        const sortColumn = this.getColumn(this.sort.field);
+        if (sortColumn) {
+          const tds = allDatas.map(rowData => new Row(rowData, this.columns))
+            .sort(sortColumn.getSortPredicate(this.sort.order, this.columns));
+          allDatas = tds.map(rowData => rowData.data);
+        }
       }
       this.pager.total = allDatas.length;
       var ds = this._.chunk(allDatas, this.pager.size);
@@ -443,7 +440,7 @@ export default {
     }
   },
   created() {
-    this.sort.field = this.sortBy;
+    this.sort.field = this.sortField;
     this.sort.order = this.sortOrder;
     this.restoreState();
   },

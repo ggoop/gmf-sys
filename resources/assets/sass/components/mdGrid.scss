@@ -143,8 +143,12 @@
         &:after {
           position: absolute;
           left: 0.01rem;
-          display: inline-block;
+          display: flex;
+          align-items: center;
+          align-content: center;
           color: #bbb;
+          top: 0;
+          height: 100%;
         }
         &.sort-asc:after {
           content: '↑';

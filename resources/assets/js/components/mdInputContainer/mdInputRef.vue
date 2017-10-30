@@ -42,7 +42,7 @@ export default {
       loading: 0,
       canEdit: true,
       refIsOpened: false,
-      refOptions: { wheres: {}, orders: {} }
+      refOptions: { wheres: {}, orders: [] }
     };
   },
   watch: {

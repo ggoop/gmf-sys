@@ -41,7 +41,7 @@ export default {
       default () {
         return {
           wheres: {},
-          orders: {}
+          orders: []
         }
       }
     }
@@ -118,6 +118,12 @@ export default {
     },
     async fetchData({ pager, filter, sort }) {
       var options = this._.extend({}, { q: this.currentQ }, this.options, this.caseModel, pager);
+      if (options.orders && sort && sort.field) {
+        options.orders.length && this._.remove(options.orders, function(n) {
+          return n.name === sort.field;
+        });
+        options.orders.splice && options.orders.splice(0, 0, { name: sort.field, direction: sort.order });
+      }
       const response = await this.$http.post('sys/queries/query/' + this.mdRefId, options);
 
       this.refInfo = response.data.schema;

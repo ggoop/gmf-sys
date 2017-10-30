@@ -4,13 +4,14 @@ export default class Column {
   constructor(columnComponent) {
     const
       options = {
-        width: '150px'
+        width: '150px',
+        sortable: true
       },
       mixins = extend({}, options, columnComponent);
     const properties = pick(mixins, [
       'field', 'label', 'dataType', 'sortable', 'sortBy', 'filterable', 'editable',
       'filterOn', 'hidden', 'formatter', 'cellClass', 'headerClass',
-      'width', 'isTool', 'refType', 'refId', 'refInit','multiple'
+      'width', 'isTool', 'refType', 'refId', 'refInit', 'multiple'
     ]);
 
     for (const property in properties) {
@@ -33,7 +34,7 @@ export default class Column {
   }
 
   isSortable() {
-    return this.sortable;
+    return this.sortable && this.field && this.field != 'id';
   }
 
   getSortPredicate(sortOrder, allColumns) {
