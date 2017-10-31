@@ -1,8 +1,10 @@
 <?php
 namespace Gmf\Sys\Http\Middleware;
 use Closure;
+use DB;
 use Exception;
 use Gmf\Sys\Builder;
+use Gmf\Sys\Models;
 
 class LnsCheck {
 
@@ -26,29 +28,40 @@ class LnsCheck {
 
 			$checker = false;
 			foreach ($items as $key => $value) {
-				$item = explode(':', $value);
-				if ($item && count($item) == 2 && $item[0] === $item) {
+				$datas = explode(':', $value);
+				if ($datas && count($datas) == 2 && $datas[0] === $item) {
 					$checker = new Builder;
-					$checker->code($item[0])->number($item[1]);
+					$checker->code($datas[0])->number($datas[1]);
 				}
 			}
-			if ($checker) {
-
+			if (!$checker) {
+				throw new Exception("许可系统错误!", 8000);
 			}
 
-			if ($checker && $checker->number > 0) {
+			$item = Models\LnsItem::where('code', $checker->code)->first();
+			if ($item) {
+				$checker->name($item->name)
+					->type($item->type)
+					->field($item->field)
+					->filter($item->filter);
+			}
+			if (empty($checker->type)) {
+				throw new Exception("未设置许可!", 8000);
+			}
+
+			if ($checker && !empty($checker->type) && $checker->number > 0) {
 				$num = 0;
-				$query = $lns->item_type::where('id', '!=', '');
-				if ($lns->item_filter) {
-					$query->whereRaw($lns->item_filter);
+				$query = $checker->type::where('id', '!=', '');
+				if (!empty($checker->filter)) {
+					$query->whereRaw($checker->filter);
 				}
-				if ($lns->field) {
-					$num = $query->max($lns->field);
+				if (!empty($checker->field)) {
+					$num = $query->max($checker->field);
 				} else {
 					$num = $query->count();
 				}
-				if ($num >= $lns->item_number) {
-					throw new Exception($lns->item_name . "超过许可控制数" . $lns->item_number, 8000);
+				if ($num >= $checker->number) {
+					throw new Exception($checker->name . " - 超过许可控制数 - " . $checker->number, 8000);
 				}
 			}
 		}

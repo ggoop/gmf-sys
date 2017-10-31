@@ -18,8 +18,8 @@ class CreateGmfSysLnsTable extends Migration {
 		$md->text('request_serial')->nullable()->comment('序列号');
 		$md->text('request_code')->nullable()->comment('申请码');
 		$md->text('answer_code')->nullable()->comment('答应码');
-		$md->dateTime('fm_date')->nullable()->comment('开始时间');
-		$md->dateTime('to_date')->nullable()->comment('结束时间');
+		$md->string('fm_date')->nullable()->comment('开始时间');
+		$md->string('to_date')->nullable()->comment('结束时间');
 		$md->text('content')->nullable()->comment('申请内容');
 		$md->build();
 	}
