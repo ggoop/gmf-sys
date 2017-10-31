@@ -37,4 +37,26 @@ class LnsController extends Controller {
 		}
 		return $this->toJson(Createor::issueRegist($input['req_code'], $input['ans_code'], $request));
 	}
+	public function getWebRegist(Request $request) {
+		return view('gmf::lns.regist', ['ent_id' => config('gmf.ent.id')]);
+	}
+	public function storeWebRegist(Request $request) {
+		$input = array_only($request->all(), ['ent_id', 'content']);
+		$validator = Validator::make($input, [
+			'ent_id' => 'required',
+			'content' => 'required',
+		]);
+		if ($validator->fails()) {
+			$this->throwValidationException(
+				$request, $validator
+			);
+		}
+		$req_code = Createor::issueRequestCode(['content' => $input['content']]);
+
+		$ans_code = Createor::issueAnswer($req_code);
+		$request->oauth_ent_id = $input['ent_id'];
+		Createor::issueRegist($req_code, $ans_code, $request);
+
+		return view('gmf::lns.regist', ['ent_id' => config('gmf.ent.id')]);
+	}
 }

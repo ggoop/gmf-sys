@@ -20,8 +20,8 @@ class ServiceProvider extends BaseServiceProvider {
 			Console\MdCommand::class,
 		]);
 		$this->loadViewsFrom(__DIR__ . '/../resources/views', 'gmf');
-		$this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
 		$this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
+		$this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
 
 		if ($this->app->runningInConsole()) {
 			$this->registerMigrations();
