@@ -37,9 +37,9 @@ class RouteRegistrar {
 			$router->get('uid', ['uses' => 'DataController@issueUid']);
 			$router->resource('datas', 'DataController', ['only' => ['index', 'show']]);
 			$router->resource('components', 'ComponentController', ['only' => ['index', 'show']]);
+
 		});
 		$this->router->group(['prefix' => 'sys', 'middleware' => ['api', 'auth:api', 'ent_check']], function ($router) {
-
 			$router->post('/lns/request', ['uses' => 'LnsController@issueRequest']);
 			$router->post('/lns/answer', ['uses' => 'LnsController@issueAnswer']);
 			$router->post('/lns/regist', ['uses' => 'LnsController@storeRegist']);

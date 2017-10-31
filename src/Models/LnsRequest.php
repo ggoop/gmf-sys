@@ -5,9 +5,10 @@ use Gmf\Sys\Traits\HasGuard;
 use Gmf\Sys\Traits\Snapshotable;
 use Illuminate\Database\Eloquent\Model;
 
-class LnsItem extends Model {
+class LnsRequest extends Model {
 	use Snapshotable, HasGuard;
 	public $timestamps = false;
-	protected $table = 'gmf_sys_lns_items';
-	protected $fillable = ['type', 'code', 'name', 'field', 'filter'];
+	protected $table = 'gmf_sys_lns_requests';
+	public $incrementing = false;
+	protected $fillable = ['id', 'code', 'serial', 'fm_date', 'to_date', 'content'];
 }

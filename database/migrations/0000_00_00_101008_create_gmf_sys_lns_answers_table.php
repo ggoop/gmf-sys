@@ -3,8 +3,8 @@
 use Gmf\Sys\Database\Metadata;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGmfSysLnsTable extends Migration {
-	public $mdID = "8118fdb00a9d11e7959eebbed0dc7db2";
+class CreateGmfSysLnsAnswersTable extends Migration {
+	public $mdID = "03707690be1011e7936da5575e6a36a0";
 	/**
 	 * Run the migrations.
 	 *
@@ -12,15 +12,16 @@ class CreateGmfSysLnsTable extends Migration {
 	 */
 	public function up() {
 		$md = Metadata::create($this->mdID);
-		$md->mdEntity('gmf.sys.lns')->comment('许可')->tableName('gmf_sys_lns');
+		$md->mdEntity('gmf.sys.lns.answer')->comment('许可')->tableName('gmf_sys_lns_answers');
 
 		$md->string('id')->primary();
+		$md->text('code')->nullable()->comment('答应码');
+
 		$md->text('request_serial')->nullable()->comment('序列号');
 		$md->text('request_code')->nullable()->comment('申请码');
-		$md->text('answer_code')->nullable()->comment('答应码');
 		$md->dateTime('fm_date')->nullable()->comment('开始时间');
 		$md->dateTime('to_date')->nullable()->comment('结束时间');
-		$md->text('content')->nullable()->comment('申请内容');
+
 		$md->build();
 	}
 

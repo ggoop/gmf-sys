@@ -14,12 +14,10 @@ class CreateGmfSysLnsItemsTable extends Migration {
 		$md = Metadata::create($this->mdID);
 		$md->mdEntity('gmf.sys.lns.item')->comment('许可号')->tableName('gmf_sys_lns_items');
 
-		$md->bigIncrements('id');
-		$md->entity('lns', 'gmf.sys.lns')->comment('许可');
+		$md->string('id')->primary();
 		$md->string('type')->nullable()->comment('拥有者类型');
 		$md->string('code')->nullable()->comment('编码');
 		$md->string('name')->nullable()->comment('名称');
-		$md->integer('number')->nullable()->comment('许可数');
 		$md->string('field')->nullable()->comment('字段');
 		$md->string('filter')->nullable()->comment('条件');
 
