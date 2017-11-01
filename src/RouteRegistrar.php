@@ -34,6 +34,8 @@ class RouteRegistrar {
 
 	public function forSys() {
 		$this->router->group(['prefix' => 'sys', 'middleware' => ['api']], function ($router) {
+			$router->post('/token', ['uses' => 'AuthController@issueToken']);
+
 			$router->get('uid', ['uses' => 'DataController@issueUid']);
 			$router->resource('datas', 'DataController', ['only' => ['index', 'show']]);
 			$router->resource('components', 'ComponentController', ['only' => ['index', 'show']]);
