@@ -23,13 +23,4 @@ class SysRolePreSeeder extends Seeder {
 			$b->ent_id($this->entId)->code($this->role)->name('超级管理员');
 		});
 	}
-
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down() {
-		Role::where('code', $this->role)->delete();
-	}
 }

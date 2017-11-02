@@ -39,7 +39,9 @@ class Menu extends Model {
 				$data['root_id'] = $builder->id;
 				$data['parent_id'] = null;
 			}
-			static::create($data);
+			$find = array_only($data, ['code', 'tag']);
+			static::updateOrCreate($find, $data);
+
 			if ($parent) {
 				static::where('id', $parent->id)->update(['is_leaf' => '0']);
 			}

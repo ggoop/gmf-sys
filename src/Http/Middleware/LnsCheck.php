@@ -35,7 +35,7 @@ class LnsCheck {
 				}
 			}
 			if (!$checker) {
-				throw new Exception("许可系统错误!", 8000);
+				throw new Exception("许可系统错误!" . $item, 8000);
 			}
 
 			$item = Models\LnsItem::where('code', $checker->code)->first();

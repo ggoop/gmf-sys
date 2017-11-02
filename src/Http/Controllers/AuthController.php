@@ -6,6 +6,7 @@ use Auth;
 use Gmf\Sys\Builder;
 use Gmf\Sys\Models\User;
 use Illuminate\Http\Request;
+use Validator;
 
 class AuthController extends Controller {
 
@@ -30,7 +31,7 @@ class AuthController extends Controller {
 		$rtn = new Builder;
 		$rtn->access_token($token->accessToken);
 		$rtn->expires_in(strtotime($token->token->expires_at));
-		$rtn->type('Bearer');
+		$rtn->token_type('Bearer');
 
 		return $this->toJson($rtn);
 	}

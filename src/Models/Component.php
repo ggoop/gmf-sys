@@ -26,7 +26,8 @@ class Component extends Model {
 			$callback($builder);
 			$data = array_only($builder->toArray(), ['id', 'name', 'code', 'memo', 'path']);
 
-			static::updateOrCreate(['code' => $data['code']], $data);
+			$find = array_only($data, ['code']);
+			static::updateOrCreate($find, $data);
 		});
 	}
 }

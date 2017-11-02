@@ -48,7 +48,10 @@ class Query extends Model {
 				$builder->comment = $entity->comment;
 			}
 			$data = array_only($builder->toArray(), ['id', 'entity_id', 'name', 'comment', 'memo', 'type_enum', 'matchs', 'filter', 'size']);
-			$main = static::create($data);
+
+			$find = array_only($data, ['name']);
+			$main = static::updateOrCreate($find, $data);
+
 			QueryField::where('query_id', $main->id)->delete();
 
 			if (!empty($builder->fields) && is_array($builder->fields)) {
@@ -78,6 +81,7 @@ class Query extends Model {
 					QueryField::create($field);
 				}
 			}
+			QueryOrder::where('query_id', $main->id)->delete();
 			if (!empty($builder->orders) && is_array($builder->orders)) {
 				foreach ($builder->orders as $key => $value) {
 					$field = ['query_id' => $builder->id];

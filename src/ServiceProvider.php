@@ -78,8 +78,6 @@ class ServiceProvider extends BaseServiceProvider {
 	 * @return void
 	 */
 	protected function registerMigrations() {
-		if (Sys::$runsMigrations) {
-			return $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-		}
+		return $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 	}
 }

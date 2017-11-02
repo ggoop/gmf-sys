@@ -42,7 +42,8 @@ class DtiParam extends Model {
 					$data['dti_id'] = $t->id;
 				}
 			}
-			static::updateOrCreate(['code' => $data['code'], 'ent_id' => $data['ent_id']], $data);
+			$find = array_only($data, ['code', 'ent_id']);
+			static::updateOrCreate($find, $data);
 		});
 	}
 }

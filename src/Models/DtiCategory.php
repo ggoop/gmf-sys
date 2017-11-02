@@ -25,8 +25,8 @@ class DtiCategory extends Model {
 
 			$data = array_only($builder->toArray(), ['id', 'ent_id', 'code', 'name', 'host', 'is_revoked']);
 
-			static::updateOrCreate(['code' => $data['code'], 'ent_id' => $data['ent_id']], $data);
-
+			$find = array_only($data, ['code', 'ent_id']);
+			static::updateOrCreate($find, $data);
 		});
 	}
 }

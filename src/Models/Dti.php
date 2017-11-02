@@ -58,7 +58,9 @@ class Dti extends Model {
 			if ($local) {
 				$data['local_id'] = $local->id;
 			}
-			static::updateOrCreate(['code' => $data['code'], 'ent_id' => $data['ent_id']], $data);
+
+			$find = array_only($data, ['code', 'ent_id']);
+			static::updateOrCreate($find, $data);
 
 		});
 	}
