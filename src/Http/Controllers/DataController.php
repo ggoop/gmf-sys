@@ -14,7 +14,6 @@ class DataController extends Controller {
 		return $this->toJson($datas);
 	}
 	public function show(Request $request) {
-
 		$datas = Uuid::generate(1, 'gmf', Uuid::NS_DNS, "");
 		return $this->toJson($datas);
 	}

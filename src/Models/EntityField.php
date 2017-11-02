@@ -13,7 +13,7 @@ class EntityField extends Model {
 	public $incrementing = false;
 	protected $keyType = 'string';
 	protected $fillable = ['id', 'name', 'comment', 'field_name', 'entity_id', 'type_id',
-		'type_type', 'collection', 'sequence', 'default_alue',
+		'type_type', 'type_enum', 'collection', 'sequence', 'default_alue',
 		'foreign_key', 'local_key', 'nullable', 'length', 'scale', 'precision',
 		'format', 'former'];
 	protected $hidden = ['created_at', 'updated_at'];
@@ -28,7 +28,7 @@ class EntityField extends Model {
 			$callback($builder);
 
 			$data = array_only($builder->toArray(), ['id', 'name', 'comment', 'field_name', 'entity_id', 'type_id',
-				'type_type', 'collection', 'sequence', 'default_alue',
+				'type_type', 'collection', 'sequence', 'default_value',
 				'foreign_key', 'local_key', 'nullable', 'length', 'format', 'former']);
 			if (!empty($builder->entity)) {
 				$entity = Entity::where('name', $builder->entity)->first();
@@ -44,17 +44,19 @@ class EntityField extends Model {
 				if (!empty($entity)) {
 					$data['type_id'] = $entity->id;
 					$data['type_type'] = $entity->name;
+					$data['type_enum'] = $entity->type;
 				}
 				if (empty($data['type_type'])) {
 					$data['type_type'] = $builder->type;
 				}
 			}
 			$find = [];
-			if (!empty($data['entity_id'])) {
+			if (!empty($data['id'])) {
+				$find['id'] = $data['id'];
+			} else {
 				$find['entity_id'] = $data['entity_id'];
+				$find['name'] = $data['name'];
 			}
-			$find['name'] = $data['name'];
-
 			static::updateOrCreate($find, $data);
 		});
 	}

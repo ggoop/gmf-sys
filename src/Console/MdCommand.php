@@ -39,6 +39,7 @@ class MdCommand extends Command {
 		if (!$this->migrator->repositoryExists()) {
 			$this->call('migrate:install');
 		}
+
 		$files = $this->migrator->getMigrationFiles($this->migrator->paths());
 
 		$this->migrator->requireFiles($files, []);
