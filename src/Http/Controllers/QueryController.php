@@ -29,8 +29,16 @@ class QueryController extends Controller {
 	}
 	public function show(Request $request, string $queryID) {
 		$qc = QueryCase::create();
-		$queryInfo = $qc->getQueryInfo($queryID);
+		$caseID = $request->input('case_id');
+		$queryInfo = $qc->getQueryInfo($queryID, $caseID);
 		return $this->toJson($queryInfo);
+	}
+	public function getCases(Request $request, string $queryID) {
+		$query = Models\QueryCase::select('id', 'name');
+		$query->where('query_id', $queryID);
+		$data = $query->get();
+
+		return $this->toJson($data);
 	}
 	private function buildQueryCase(Request $request, string $queryID) {
 		$qc = QueryCase::create();

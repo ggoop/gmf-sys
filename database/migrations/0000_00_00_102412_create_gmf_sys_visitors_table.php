@@ -18,24 +18,24 @@ class CreateGmfSysVisitorsTable extends Migration {
 		$md->entity('user', config('gmf.user.entity'))->nullable();
 		$md->entity('ent', 'gmf.md.ent')->nullable();
 		$md->text('path')->nullable();
-		$md->text('url', 500)->nullable();
+		$md->text('url')->nullable();
 		$md->string('ip')->nullable();
 		$md->string('method')->nullable();
 		$md->longText('input')->nullable();
 		$md->longText('query')->nullable();
 		$md->longText('body')->nullable();
 		$md->longText('header')->nullable();
-		$md->text('agent', 500)->nullable();
-		$md->text('referer', 500)->nullable();
-		$md->text('content_type', 500)->nullable();
+		$md->text('agent')->nullable();
+		$md->text('referer')->nullable();
+		$md->text('content_type')->nullable();
 
 		//客户名称
-		$md->text('client_name', 500)->nullable();
+		$md->text('client_name')->nullable();
 		//产品序列号
-		$md->text('client_sn', 500)->nullable();
-		$md->text('client_id', 500)->nullable();
+		$md->text('client_sn')->nullable();
+		$md->text('client_id')->nullable();
 		//登录帐号
-		$md->text('client_account', 500)->nullable();
+		$md->text('client_account')->nullable();
 
 		//请求总时间.秒
 		$md->float('times')->default(0);

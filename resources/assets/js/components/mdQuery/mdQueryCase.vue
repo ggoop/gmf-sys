@@ -19,18 +19,44 @@
               <md-query-case-order :md-entity-id="options.entity_id" :md-items="options.orders"></md-query-case-order>
             </md-layout>
           </md-tab>
+          <md-tab md-label="设置" md-icon="build">
+            <md-layout md-gutter class="layout-fill">
+              
+            </md-layout>
+          </md-tab>
         </md-tabs>
       </md-dialog-content>
       <md-dialog-actions>
-        <md-button class="md-warn" @click.native="cleanCase">不使用方案查询</md-button>
+        <div class="layout layour-row">
+          <md-input-container class="layout-align-center-center query-cases">
+            <md-select v-model="options.case_id">
+              <md-option value="">新方案</md-option>
+              <md-option :value="false">不使用方案</md-option>
+              <md-option :value="item.id" v-for="item in cases" :key="item.id">{{ item.name }}</md-option>
+            </md-select>
+          </md-input-container>
+          <md-button v-if="options.case_id!==false" class="md-icon-button md-warn" @click.native="onSaveCase">
+            <md-icon>save</md-icon>
+          </md-button>
+        </div>
         <span class="flex"></span>
         <md-button class="md-accent md-raised" @click.native="query">确定</md-button>
         <md-button class="md-warn" @click.native="cancel">取消</md-button>
       </md-dialog-actions>
       <md-loading :loading="loading"></md-loading>
+      <md-dialog-prompt md-title="输入方案名称" md-ok-text="确认" md-cancel-text="取消" @close="onNewCaseSave" v-model="options.case_name" ref="diaNewCaseName">
+      </md-dialog-prompt>
     </md-dialog>
   </div>
 </template>
+<style scoped>
+.query-cases {
+  margin: 0px;
+  padding: 0px;
+  min-height: auto;
+  color: #f4f4f5;
+}
+</style>
 <script>
 export default {
   props: {
@@ -49,32 +75,59 @@ export default {
       default: true
     },
   },
+
   data() {
     return {
       inited: false,
       loading: 0,
       options: {
-        name: '',
-        comment: '',
-        type_enum: '',
+        case_id: '',
+        case_name: '',
+        query_id: '',
+        query_name: '',
         size: 0,
         wheres: [],
         fields: [],
         orders: []
-      }
+      },
+      cases: []
     }
   },
+  watch: {
+    'options.case_id' (val) {
+      if (val && val) {
+        this.fetchCase();
+      }
+    },
+  },
+  computed: {
+
+  },
   methods: {
-    init() {
+    async init() {
       if (this.inited) {
         return;
       }
-      this.loading++;
-      this.$http.get('sys/queries/' + this.mdQueryId).then(response => {
+      if (!this.mdQueryId) return;
+
+      await this.fetchCase();
+      const promise = new Promise((resolve, reject) => {
+        this.$emit('init', this.options, { resolve, reject });
+      });
+      promise.then((value) => {
+        this.inited = true;
+      }, (reason) => {
+        this.inited = false;
+      });
+    },
+    async fetchCase() {
+      try {
+        const response = await this.$http.get('sys/queries/' + this.mdQueryId, { params: { case_id: this.options.case_id } });
+        this.options.query_id = response.data.data.query_id;
+        this.options.query_name = response.data.data.query_name;
+        this.options.case_id = response.data.data.case_id || '';
+        this.options.case_name = response.data.data.case_name || '';
         this.options.size = response.data.data.size;
-        this.options.name = response.data.data.name;
-        this.options.comment = response.data.data.comment;
-        this.options.type_enum = response.data.data.type_enum;
         this.options.entity_id = response.data.data.entity_id;
         this.options.entity_name = response.data.data.entity_name;
         this.options.entity_comment = response.data.data.entity_comment;
@@ -83,28 +136,61 @@ export default {
         this.options.wheres = response.data.data.wheres;
         this.options.orders = response.data.data.orders;
         this.options.fields = response.data.data.fields;
-
-        const promise = new Promise((resolve, reject) => {
-          this.$emit('init', this.options, { resolve, reject });
-        });
-        promise.then((value) => {
-          this.inited = true;
-          this.loading--;
-        }, (reason) => {
-          this.inited = false;
-          this.loading--;
-        });
-      }, response => {
-        this.loading--;
-      });
+      } catch (e) {
+        this.$toast(e);
+      }
+    },
+    async fetchCases() {
+      try {
+        if (!this.options.query_id) return;
+        const response = await this.$http.get('sys/queries/' + this.options.query_id + '/cases');
+        this.cases = response.data.data;
+      } catch (e) {
+        this.$toast(e);
+      }
+    },
+    async onNewCaseSave(type) {
+      if (type == 'ok' && this.options.case_name) {
+        await this.saveCase();
+      }
+    },
+    async onSaveCase() {
+      if (this.options.case_id) {
+        await this.saveCase();
+      } else {
+        this.options.case_name = '';
+        this.$refs['diaNewCaseName'].open();
+      }
+    },
+    async saveCase() {
+      var caseModel = {
+        size: this.options.size,
+        name: this.options.case_name,
+        query_id: this.options.query_id,
+        wheres: this.options.wheres.filter(v => !v.sys_deleted).map(v => this._.omit(v, ['sys_deleted', 'sys_created', 'sys_updated', 'vueRowId'])),
+        orders: this.options.orders.filter(v => !v.sys_deleted).map(v => this._.omit(v, ['sys_deleted', 'sys_created', 'sys_updated', 'vueRowId'])),
+        fields: this.options.fields.filter(v => !v.sys_deleted).map(v => this._.omit(v, ['sys_deleted', 'sys_created', 'sys_updated', 'vueRowId']))
+      };
+      if (this.options.case_id) {
+        caseModel.id = this.options.case_id;
+      }
+      try {
+        const response = await this.$http.post('sys/query-cases/', caseModel);
+        await this.fetchCases();
+        this.options.case_id = response.data.data.id;
+        this.options.case_name = response.data.data.name;
+      } catch (e) {
+        this.$toast(e);
+      }
     },
     query() {
       var caseModel = this.getQueryCase();
       this.$emit('query', caseModel);
       this.$refs.caseDialog.close();
     },
-    open() {
-      this.init();
+    async open() {
+      await this.init();
+      await this.fetchCases();
       this.$refs.caseDialog.open();
     },
     cancel() {
@@ -117,25 +203,21 @@ export default {
     onClose() {
       this.$emit('close', this.options);
     },
-    cleanCase() {
-      var caseModel = this.getEmptyCase();
-      this.$emit('query', caseModel);
-      this.$refs.caseDialog.close();
-    },
-    getEmptyCase() {
+    getQueryCase() {
       var qc = {
         size: this.options.size,
-        name: this.options.name,
-        comment: this.options.comment,
-        type_enum: this.options.type_enum,
+        name: this.options.case_name,
+        query_id: this.options.query_id || this.mdQueryId,
         wheres: { case: { items: [], boolean: 'and' } },
         orders: [],
         fields: []
       };
-      return qc;
-    },
-    getQueryCase() {
-      var qc = this.getEmptyCase();
+      if (this.options.case_id === false) {
+        return qc;
+      }
+      if (this.options.case_id) {
+        qc.id = this.options.case_id;
+      }
       this._.each(this.options.wheres, (v) => {
         if (v && (!v.sys_deleted)) {
           var item = this.formatCaseWhereItem(v);

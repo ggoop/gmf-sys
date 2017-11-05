@@ -19,8 +19,11 @@ Route::prefix('api/sys')->middleware(['api', 'auth:api', 'ent_check'])->namespac
 	Route::get('/enums/{enum}', 'EntityController@getEnum');
 	Route::resource('entities', 'EntityController', ['only' => ['index', 'show']]);
 
+	Route::get('/queries/{query}/cases', 'QueryController@getCases');
 	Route::post('/queries/query/{query}', 'QueryController@query');
 	Route::resource('queries', 'QueryController', ['only' => ['index', 'show']]);
+
+	Route::resource('query-cases', 'QueryCaseController', ['only' => ['show', 'store', 'destroy']]);
 
 	Route::get('/menus/all', 'MenuController@all');
 	Route::get('/menus/path/{id}', 'MenuController@getPath');

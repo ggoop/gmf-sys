@@ -27,80 +27,101 @@ class QueryCase {
 		return $parse;
 	}
 
-	public function getQueryInfo(string $queryID) {
+	public function getQueryInfo(string $queryID, $caseID = '') {
 		$query = Models\Query::with('fields', 'entity', 'orders', 'wheres');
 		$query->where('id', $queryID)->orWhere('name', $queryID);
 		$model = $query->first();
 		if (empty($model)) {
 			throw new Exception("not find query");
 		}
+		$caseModel = false;
 		$queryInfo = new Builder;
-		$queryInfo->id($model->id)
-			->type_enum($model->type_enum)
-			->name($model->name)
-			->memo($model->memo)
-			->comment($model->comment ?: $model->name)
+		$queryInfo->query_id($model->id)
+			->query_type_enum($model->type_enum)
+			->query_name($model->name)
+			->query_memo($model->memo)
+			->query_comment($model->comment ?: $model->name)
 			->size($model->size)
 			->wheres([])->orders([])->fields([]);
 
 		if ($model->entity) {
-			$queryInfo->entity_id($model->entity->id)
-				->entity_name($model->entity->name)
-				->entity_comment($model->entity->comment);
+			$queryInfo->entity_id($model->entity->id)->entity_name($model->entity->name)->entity_comment($model->entity->comment);
 		}
-		//栏目
+		if ($caseID) {
+			$caseModel = Models\QueryCase::where('query_id', $model->id)->where('id', $caseID)->first();
+			$caseModel->data = json_decode($caseModel->data);
+		}
+		if ($caseModel) {
+			$queryInfo->case_name($caseModel->name)->case_id($caseModel->id);
+		} else {
+			$queryInfo->case_name('')->case_id('');
+		}
 		$fields = [];
-		if (count($model->fields) > 0) {
-			foreach ($model->fields as $f) {
-				$field = new Builder;
-				$field->name($f->name);
-				$field->comment($f->comment ?: $f->name);
-				$field->hide(intval($f->hide));
-				$fields[] = $field;
+		$wheres = [];
+		$orders = [];
+		if ($caseModel) {
+			if ($caseModel->data->fields) {
+				$fields = $caseModel->data->fields;
 			}
-		} else if ($model->entity) {
-			$entityFields = Models\EntityField::where('entity_id', $model->entity->id)->where('collection', '0')->get();
-			foreach ($entityFields as $f) {
-				if ($f->name == 'created_at' || $f->name == 'updated_at' || $f->name == 'deleted_at') {
-					continue;
+			if ($caseModel->data->wheres) {
+				$wheres = $caseModel->data->wheres;
+			}
+			if ($caseModel->data->orders) {
+				$orders = $caseModel->data->orders;
+			}
+		} else {
+			//fields
+			if (count($model->fields) > 0) {
+				foreach ($model->fields as $f) {
+					$field = new Builder;
+					$field->name($f->name);
+					$field->comment($f->comment ?: $f->name);
+					$field->hide(intval($f->hide));
+					$fields[] = $field;
 				}
-				$field = new Builder;
-				$field->name($f->name);
-				$field->comment($f->comment ?: $f->name);
-				$fields[] = $field;
+			} else if ($model->entity) {
+				$entityFields = Models\EntityField::where('entity_id', $model->entity->id)->where('collection', '0')->get();
+				foreach ($entityFields as $f) {
+					if ($f->name == 'created_at' || $f->name == 'updated_at' || $f->name == 'deleted_at') {
+						continue;
+					}
+					$field = new Builder;
+					$field->name($f->name);
+					$field->comment($f->comment ?: $f->name);
+					$fields[] = $field;
+				}
+			}
+
+			//wheres
+			if (count($model->wheres) > 0) {
+				foreach ($model->wheres as $f) {
+					$field = new Builder;
+					$field->name($f->name);
+					$field->comment($f->comment ?: $f->name);
+					$field->hide(intval($f->hide));
+					$field->value($f->value);
+					$field->operator_enum($f->operator_enum);
+					$field->type_enum($f->type_enum);
+
+					$field->ref_id($f->ref_id);
+					$field->ref_values($f->ref_values);
+					$field->ref_filter($f->ref_filter);
+					$wheres[] = $field;
+				}
+			}
+			//orders
+			if (count($model->orders) > 0) {
+				foreach ($model->orders as $f) {
+					$field = new Builder;
+					$field->name($f->name);
+					$field->comment($f->comment ?: $f->name);
+					$field->direction($f->direction);
+					$orders[] = $field;
+				}
 			}
 		}
 		$queryInfo->fields($fields);
-		//wheres
-		$wheres = [];
-		if (count($model->wheres) > 0) {
-			foreach ($model->wheres as $f) {
-				$field = new Builder;
-				$field->name($f->name);
-				$field->comment($f->comment ?: $f->name);
-				$field->hide(intval($f->hide));
-				$field->value($f->value);
-				$field->operator_enum($f->operator_enum);
-				$field->type_enum($f->type_enum);
-
-				$field->ref_id($f->ref_id);
-				$field->ref_values($f->ref_values);
-				$field->ref_filter($f->ref_filter);
-				$wheres[] = $field;
-			}
-		}
 		$queryInfo->wheres($wheres);
-		//orders
-		$orders = [];
-		if (count($model->orders) > 0) {
-			foreach ($model->orders as $f) {
-				$field = new Builder;
-				$field->name($f->name);
-				$field->comment($f->comment ?: $f->name);
-				$field->direction($f->direction);
-				$orders[] = $field;
-			}
-		}
 		$queryInfo->orders($orders);
 
 		//匹配项
