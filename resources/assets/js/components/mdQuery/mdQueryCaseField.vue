@@ -5,7 +5,7 @@
       <md-grid-column field="comment" label="名称"></md-grid-column>
       <md-grid-column field="comment" label="显示名称"></md-grid-column>
       <md-grid-column label="..." :isTool="true">
-        <template scope="row">
+        <template slot-scope="row">
           <md-button class="md-icon-button" @click.native="onItemUp(row,$event)">
             <md-icon>vertical_align_top</md-icon>
           </md-button>

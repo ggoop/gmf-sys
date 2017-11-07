@@ -4,7 +4,7 @@
       <md-grid-column field="id" label="id" :hidden="true"></md-grid-column>
       <md-grid-column field="comment" label="名称"></md-grid-column>
       <md-grid-column label="排序">
-        <template scope="row">
+        <template slot-scope="row">
           <md-button class="md-icon-button" @click.native="orderFieldSwap(row,$event)">
             <md-icon v-if="row.direction=='desc'">arrow_downward</md-icon>
             <md-icon v-else>arrow_upward</md-icon>
@@ -12,7 +12,7 @@
         </template>
       </md-grid-column>
       <md-grid-column label="..." :isTool="true">
-        <template scope="row">
+        <template slot-scope="row">
           <md-button class="md-icon-button" @click.native="onItemUp(row,$event)">
             <md-icon>vertical_align_top</md-icon>
           </md-button>

@@ -4,14 +4,14 @@
       <md-grid-column field="id" label="id" :hidden="true"></md-grid-column>
       <md-grid-column field="comment" label="名称"></md-grid-column>
       <md-grid-column field="operator_enum" label="操作符" width="100px">
-        <template scope="row">
+        <template slot-scope="row">
           <md-input-container>
             <md-enum v-model="row.operator_enum" :items="row.operators" md-enum-id="gmf.sys.query.operator.enum"></md-enum>
           </md-input-container>
         </template>
       </md-grid-column>
       <md-grid-column label="条件值" width="200px">
-        <template scope="row">
+        <template slot-scope="row">
           <template v-if="row.operator_enum&&row.operator_enum.indexOf('null')>=0">
           </template>
           <template v-else-if="row.operator_enum&&row.operator_enum.indexOf('like')>=0">
@@ -53,7 +53,7 @@
         </template>
       </md-grid-column>
       <md-grid-column label="" width="200px">
-        <template scope="row">
+        <template slot-scope="row">
           <template v-if="row.operator_enum&&row.operator_enum.indexOf('between')>=0">
             <template v-if="row.type_enum=='date'">
               <md-input-container>
