@@ -34,7 +34,8 @@ export default {
     useCustomImageHandler: {
       type: Boolean,
       default: false
-    }
+    },
+    minHeight:Number
   },
 
   data() {
@@ -81,7 +82,10 @@ export default {
     },
 
     setEditorElement() {
-      this.editor = document.querySelector(`#${this.id} .ql-editor`)
+      this.editor = document.querySelector(`#${this.id} .ql-editor`);
+      if(this.minHeight&&this.minHeight>10){
+        this.editor.style.minHeight=this.minHeight+'px';
+      }
     },
 
     checkForInitialContent() {

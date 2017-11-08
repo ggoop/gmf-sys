@@ -1,13 +1,12 @@
 <template>
-  <div class="md-chips" :class="[themeClass, classes]">
-    <md-input-container @click.native="applyInputFocus">
+    <md-input-container class="md-chips" :class="[themeClass, classes]" @click.native="applyInputFocus">
       <md-chip
         v-for="chip in selectedChips"
         :md-deletable="!mdStatic"
         :disabled="disabled"
         :key="chip"
         @delete="deleteChip(chip)">
-        <slot :value="chip"></slot>
+        <slot :value="chip">{{ chip }}</slot>
       </md-chip>
 
       <md-input
@@ -25,7 +24,6 @@
         ref="input">
       </md-input>
     </md-input-container>
-  </div>
 </template>
 
 <script>

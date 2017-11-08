@@ -38,8 +38,8 @@
     margin: 0;
     padding: 0;
     position: absolute;
-    top: .4rem;
-    right: .4rem;
+    top: .04rem;
+    right: .04rem;
     border-radius: $chip-icon-size;
     transition: $swift-ease-out;
 
@@ -63,17 +63,13 @@
 }
 
 .md-chips {
+  min-height: .54rem;
+  display: flex;
+  flex-wrap: wrap;
   .md-chip {
     margin-right: .08rem;
     margin-bottom: .04rem;
   }
-
-  .md-input-container {
-    min-height: .54rem;
-    display: flex;
-    flex-wrap: wrap;
-  }
-
   .md-input {
     width: 1.28rem;
     flex: 1;

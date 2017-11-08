@@ -1,7 +1,8 @@
 <template>
   <div class="md-chip" :class="[themeClass, classes]" tabindex="0">
-    <slot></slot>
-
+    <div class="md-chip-container">
+      <slot></slot>
+    </div>
     <md-button
       class="md-icon-button md-dense md-delete"
       v-if="mdDeletable"
