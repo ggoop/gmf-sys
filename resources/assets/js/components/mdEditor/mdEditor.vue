@@ -1,5 +1,5 @@
 <template>
-  <div class="md-editor-wrapper">
+  <div class="md-editor-wrapper layout layout-column layout-fill">
     <div ref="quillContainer" :id="id"></div>
     <input v-if="useCustomImageHandler" @change="emitImageInfo($event)" ref="fileInput" id="file-upload" type="file" style="display:none;">
   </div>
