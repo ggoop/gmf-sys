@@ -22,11 +22,10 @@
       ref="fileInput">
   </div>
 </template>
-
 <script>
   import getClosestVueParent from '../../core/utils/getClosestVueParent';
-
   export default {
+    name: 'md-file',
     props: {
       value: String,
       id: String,
@@ -50,22 +49,24 @@
     methods: {
       getMultipleName(files) {
         let names = [];
-
         [...files].forEach((file) => {
           names.push(file.name);
         });
-
         return names.join(', ');
       },
       openPicker() {
         if (!this.disabled) {
+          this.resetFile();
           this.$refs.fileInput.click();
           this.$refs.textInput.$el.focus();
         }
       },
+      resetFile() {
+        this.parentContainer.value = '';
+        this.$refs.fileInput.value = '';
+      },
       onFileSelected($event) {
         const files = $event.target.files || $event.dataTransfer.files;
-
         if (files) {
           if (files.length > 1) {
             this.filename = this.getMultipleName(files);
@@ -77,20 +78,16 @@
         } else {
           this.filename = $event.target.value.split('\\').pop();
         }
-
         this.$emit('selected', files || $event.target.value);
         this.$emit('input', this.filename);
       }
     },
     mounted() {
       this.parentContainer = getClosestVueParent(this.$parent, 'md-input-container');
-
       if (!this.parentContainer) {
         this.$destroy();
-
         throw new Error('You should wrap the md-file in a md-input-container');
       }
-
       this.parentContainer.hasFile = true;
     },
     beforeDestroy() {

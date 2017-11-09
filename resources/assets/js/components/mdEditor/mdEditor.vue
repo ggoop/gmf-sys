@@ -1,6 +1,6 @@
 <template>
   <div class="md-editor-wrapper layout layout-column layout-fill">
-    <div ref="quillContainer" :id="id"></div>
+    <div ref="quillContainer" :id="inputId"></div>
     <input v-if="useCustomImageHandler" @change="emitImageInfo($event)" ref="fileInput" id="file-upload" type="file" style="display:none;">
   </div>
 </template>
@@ -8,7 +8,7 @@
 import Quill from 'quill'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
-
+import uniqueId from '../../core/utils/uniqueId';
 var defaultToolbar = [
   [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
   [{ 'size': ['small', false, 'large', 'huge'] }],
@@ -24,10 +24,7 @@ export default {
   name: 'vue-editor',
   props: {
     value: String,
-    id: {
-      type: String,
-      default: 'quill-container'
-    },
+    mdInputId: String,
     placeholder: String,
     disabled: Boolean,
     editorToolbar: Array,
@@ -35,11 +32,12 @@ export default {
       type: Boolean,
       default: false
     },
-    minHeight:Number
+    height:Number
   },
 
   data() {
     return {
+      inputId: this.mdInputId || 'quill-' + uniqueId(),
       quill: null,
       editor: null,
       toolbar: this.editorToolbar ? this.editorToolbar : defaultToolbar,
@@ -82,9 +80,9 @@ export default {
     },
 
     setEditorElement() {
-      this.editor = document.querySelector(`#${this.id} .ql-editor`);
-      if(this.minHeight&&this.minHeight>10){
-        this.editor.style.minHeight=this.minHeight+'px';
+      this.editor = document.querySelector(`#${this.inputId} .ql-editor`);
+      if(this.height&&this.height>10){
+        this.editor.style.minHeight=this.height+'px';
       }
     },
 

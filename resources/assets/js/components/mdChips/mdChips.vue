@@ -8,7 +8,6 @@
         @delete="deleteChip(chip)">
         <slot :value="chip">{{ chip }}</slot>
       </md-chip>
-
       <md-input
         v-show="!mdStatic"
         v-model="currentChip"
@@ -20,9 +19,13 @@
         @keydown.native.delete="deleteLastChip"
         @keydown.native.prevent.enter="addChip"
         @keydown.native.prevent.186="addChip"
+        @dblclick.native="onQuery()"
         tabindex="0"
         ref="input">
       </md-input>
+      <md-button v-if="showQuery" class="md-icon-button md-filter" @click.native="onQuery">
+        <md-icon>search</md-icon>
+      </md-button>
     </md-input-container>
 </template>
 
@@ -45,7 +48,8 @@
       mdMax: {
         type: Number,
         default: Infinity
-      }
+      },
+      showQuery:Boolean
     },
     mixins: [theme],
     data() {
@@ -86,6 +90,9 @@
             this.applyInputFocus();
           }
         }
+      },
+      onQuery(){
+        this.$emit('query', this.selectedChips);
       },
       deleteChip(chip) {
         let index = this.selectedChips.indexOf(chip);

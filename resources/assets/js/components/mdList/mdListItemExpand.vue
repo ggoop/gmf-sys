@@ -6,7 +6,7 @@
       <md-icon class="md-list-expand-indicator">keyboard_arrow_down</md-icon>
     </div>
 
-    <md-button type="button" class="md-button-ghost" @click.native="toggleExpandList" :disabled="disabled"></md-button>
+    <md-button type="button" class="md-button-ghost" @click="toggleExpandList" :disabled="disabled"></md-button>
 
     <div class="md-list-expand" ref="expand" :class="expandClasses" :style="expandStyles">
       <slot name="expand"></slot>
@@ -16,12 +16,12 @@
 
 <script>
   import getClosestVueParent from '../../core/utils/getClosestVueParent';
-
   export default {
     name: 'md-list-item',
     props: {
       disabled: Boolean,
-      mdExpandMultiple: Boolean
+      mdExpandMultiple: Boolean,
+      mdActive:Boolean
     },
     data() {
       return {
@@ -46,7 +46,7 @@
       },
       expandStyles() {
         return {
-          'margin-bottom': this.height
+          'height': this.height
         };
       }
     },
@@ -60,20 +60,22 @@
       },
       calculatePadding() {
         window.requestAnimationFrame(() => {
-          this.height = -this.$el.scrollHeight + 'px';
-
+          if (this._destroyed) {
+            return;
+          }
+          this.height =this.active?'auto':'0px';
           window.setTimeout(() => {
             this.transitionOff = false;
           });
         });
       },
-      toggleExpandList() {
+      toggleExpandList($event) {
         if (!this.mdExpandMultiple) {
           this.resetSiblings();
         }
-
         this.calculatePadding();
         this.active = !this.active;
+        this.$emit('click', $event);
       },
       recalculateAfterChange() {
         this.transitionOff = true;
@@ -89,6 +91,7 @@
       }
     },
     mounted() {
+      this.active=this.mdActive;
       this.$nextTick(() => {
         this.parentList = getClosestVueParent(this.$parent, 'md-list');
         this.calculatePadding();
@@ -100,8 +103,8 @@
       if (this.contentObserver) {
         this.contentObserver.disconnect();
       }
-
       window.removeEventListener('resize', this.recalculateAfterChange);
+      this._destroyed = true;
     }
   };
 </script>

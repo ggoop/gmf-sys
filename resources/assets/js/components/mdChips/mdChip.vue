@@ -20,16 +20,21 @@
   export default {
     props: {
       disabled: Boolean,
-      mdDeletable: Boolean
+      mdDeletable: Boolean,
+      mdActive:Boolean,
     },
     mixins: [theme],
     computed: {
       classes() {
         return {
           'md-deletable': this.mdDeletable,
-          'md-disabled': this.disabled
+          'md-disabled': this.disabled,
+          'md-active': this.mdActive
         };
       }
+    },
+    methods:{
+      
     }
   };
 </script>

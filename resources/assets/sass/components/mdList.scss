@@ -244,7 +244,7 @@
 .md-list-item-expand {
   min-height: .48rem;
   flex-flow: column wrap;
-  overflow: hidden;
+  //overflow: hidden;
   transform: translate3D(0, 0, 0);
 
   &:before,
@@ -309,8 +309,9 @@
     position: relative;
     z-index: 1;
     transform: translate3D(0, 0, 0);
-    will-change: margin-bottom;
+    will-change:all;
     transition: $swift-ease-in-out;
+    overflow: hidden;
 
     &.md-transition-off {
       transition: none !important;
