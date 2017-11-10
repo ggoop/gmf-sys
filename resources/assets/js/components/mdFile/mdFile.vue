@@ -65,6 +65,13 @@
         this.parentContainer.value = '';
         this.$refs.fileInput.value = '';
       },
+      toBase64Data(file){
+        const reader = new window.FileReader();
+        reader.onload = function() {
+          const result = this.result;
+        }
+        reader.readAsDataURL(file);
+      },
       onFileSelected($event) {
         const files = $event.target.files || $event.dataTransfer.files;
         if (files) {
@@ -74,6 +81,9 @@
             this.filename = files[0].name;
           } else {
             this.filename = null;
+          }
+          for (var i = 0; i < files.length; i++) {
+            this.toBase64Data(files[i]);
           }
         } else {
           this.filename = $event.target.value.split('\\').pop();
