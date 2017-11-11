@@ -127,6 +127,19 @@ export default {
     },
     afterSave(data) {},
 
+    async importData(file){
+      try {
+        var response = await this.$http.post(this.route+'/import',{files:file});
+        this.$toast('导入成功!');
+        this.loading--;
+        return true;
+      } catch (error) {
+        this.$toast(error);
+        this.loading--;
+        return false;
+      }
+      return true;
+    },
     paging(id) {
       this.$goID(id, {}, true);
     },
