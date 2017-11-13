@@ -21,13 +21,19 @@ class File {
 				$files = $this->request->file($mdFiles);
 			}
 			if ($this->request->has($mdFiles)) {
-				$files = $this->request->input($mdFiles);
+				$files = json_decode(json_encode($this->request->input($mdFiles)));
+			}
+		} else {
+			if (is_a($mdFiles, UploadedFile::class)) {
+				$files = $mdFiles;
+			} else {
+				$files = json_decode(json_encode($mdFiles));
 			}
 		}
 		if (!$files) {
 			return false;
 		}
-		if ((!is_array($files)) || (is_array($files) && !empty($files['name']))) {
+		if (!is_array($files)) {
 			$files = [$files];
 		}
 		$datas = [];
@@ -43,7 +49,7 @@ class File {
 		if (is_a($file, UploadedFile::class)) {
 			return $this->storageFile($file, $path, $disk);
 		}
-		if (!empty($file['name']) && !empty($file['base64'])) {
+		if (!empty($file->name) && !empty($file->base64)) {
 			return $this->storageBase64($file, $path, $disk);
 		}
 		return false;
@@ -96,29 +102,29 @@ class File {
 		}
 		$builder->user_id(Auth::id());
 		$builder->code(Uuid::generate(1, 'gmf', Uuid::NS_DNS, ""));
-		$builder->title($file['name']);
-		if (!empty($file['size'])) {
-			$builder->size($file['size']);
+		$builder->title($file->name);
+		if (!empty($file->size)) {
+			$builder->size($file->size);
 		}
-		if (!empty($file['type'])) {
-			$builder->type($file['type']);
+		if (!empty($file->type)) {
+			$builder->type($file->type);
 		}
-		if (!empty($file['ext'])) {
-			$builder->ext($file['ext']);
+		if (!empty($file->ext)) {
+			$builder->ext($file->ext);
 		}
 		if ($path) {
 			$name = $path . '/' . date('Ymd', time());
 		} else {
 			$name = date('Ymd', time());
 		}
-		$name .= Uuid::generate(1, 'gmf', Uuid::NS_DNS, "");
+		$name .= Uuid::generate(1, 'gmf', Uuid::NS_DNS, '');
 		if ($builder->ext) {
 			$name .= '.' . $builder->ext;
 		}
 		$builder->path($name);
 
-		if (!empty($file['base64'])) {
-			$builder->data($file['base64']);
+		if (!empty($file->base64)) {
+			$builder->data($file->base64);
 		}
 		if (preg_match('/^(data:)/', $builder->data, $result)) {
 			$base64_body = substr(strstr($builder->data, ','), 1);

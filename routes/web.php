@@ -4,3 +4,6 @@ Route::middleware(['web', 'auth'])->prefix('sys/lns')->namespace($ns)->group(fun
 	Route::get('regist', 'LnsController@getWebRegist');
 	Route::post('regist', 'LnsController@storeWebRegist');
 });
+Route::middleware(['web'])->prefix('sys')->namespace($ns)->group(function () {
+	Route::get('image/{id}', 'ImageController@show');
+});
