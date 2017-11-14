@@ -27,8 +27,11 @@ class EntityField extends Model {
 		tap(new Builder, function ($builder) use ($callback) {
 			$callback($builder);
 
-			$data = array_only($builder->toArray(), ['id', 'name', 'comment', 'field_name', 'entity_id', 'type_id',
-				'type_type', 'collection', 'sequence', 'default_value',
+			$data = array_only($builder->toArray(), ['id',
+				'name', 'comment', 'field_name',
+				'entity_id', 'type_id',
+				'type_type', 'type_enum',
+				'collection', 'sequence', 'default_value',
 				'foreign_key', 'local_key', 'nullable', 'length', 'format', 'former']);
 			if (!empty($builder->entity)) {
 				$entity = Entity::where('name', $builder->entity)->first();

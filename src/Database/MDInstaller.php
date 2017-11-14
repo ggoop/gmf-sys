@@ -243,7 +243,8 @@ class MDInstaller {
 							&& $oldColumn->foreign_key == $column->foreign_key
 							&& $oldColumn->local_key == $column->local_key
 							&& $oldColumn->former == $column->former
-							&& $oldColumn->format == $column->format) {
+							&& $oldColumn->type_type == $column->type_type
+							&& $oldColumn->type_enum == $column->type_enum) {
 							$isChange = false;
 						}
 						break;
