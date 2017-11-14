@@ -3,12 +3,16 @@
 namespace Gmf\Sys\Libs;
 use Closure;
 use Gmf\Sys\Builder;
+use Illuminate\Container\Container;
+use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 
 class APIResult {
 	public static function json($data, Closure $callback = null) {
 		$pager = false;
+
 		if ($data instanceof LengthAwarePaginator) {
 			$pager = new Builder;
 			$pager->page($data->currentPage())
@@ -23,6 +27,18 @@ class APIResult {
 				->from($data->firstItem())
 				->to($data->lastItem());
 			$data = $data->items();
+		} else if ($data instanceof ResourceCollection) {
+			$pager = new Builder;
+			$pager->page($data->resource->currentPage())
+				->size($data->resource->perPage())
+				->total($data->resource->total())
+				->lastPage($data->resource->lastPage());
+			$res = $data->toArray(Container::getInstance()->make('request'));
+			if (isset($res['data'])) {
+				$data = $res['data'];
+			}
+		} else if ($data instanceof Resource) {
+			$data = $data->toArray(Container::getInstance()->make('request'));
 		}
 		$builder = new Builder(compact('data'));
 		if ($pager) {

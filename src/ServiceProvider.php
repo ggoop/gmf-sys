@@ -70,7 +70,12 @@ class ServiceProvider extends BaseServiceProvider {
 	 * @return void
 	 */
 	public function register() {
-
+		$this->registerEnt();
+	}
+	protected function registerEnt() {
+		$this->app->singleton('ent', function ($app) {
+			return new Ent\EntManager($app);
+		});
 	}
 	/**
 	 * Register Passport's migration files.

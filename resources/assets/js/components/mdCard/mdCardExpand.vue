@@ -16,13 +16,13 @@
         this.trigger = this.$el.querySelector('[md-expand-trigger]');
         this.content = this.$el.querySelector('.md-card-content');
 
-        if (this.content) {
+        if (this.content&&this.trigger) {
           this.trigger.addEventListener('click', this.toggle);
         }
       }, 200);
     },
     destroyed() {
-      if (this.content) {
+      if (this.content&&this.trigger) {
         this.trigger.removeEventListener('click', this.toggle);
       }
     }

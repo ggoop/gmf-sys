@@ -36,7 +36,8 @@
       ],
       "aliases":
       {
-        "uuid": "Gmf\\Sys\\UuidFacade"
+        "Uuid": "Gmf\\Sys\\UuidFacade",
+        "Ent": "Gmf\\Sys\\EntFacade"
       }
     }
   },
