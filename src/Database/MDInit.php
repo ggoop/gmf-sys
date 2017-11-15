@@ -187,23 +187,36 @@ class MDInit {
 		$this->seedSysEntityMD();
 	}
 	private function seedBaseEntityMD() {
-		Models\Entity::build(function ($b) {$b->id('4ed0e57009b611e7b2bbbfa514fdeb8d')->name('string')->comment('字符')->type('string');});
+
 		Models\Entity::build(function ($b) {$b->id('4ed0e76009b611e7825fcd17c27385aa')->name('number')->comment('数值')->type('number');});
 		Models\Entity::build(function ($b) {$b->id('4ed0e7e009b611e7aa8a6ded049c186f')->name('integer')->comment('整数')->type('integer');});
+		Models\Entity::build(function ($b) {$b->id('984f1400c9c111e78af3e1b5b480d007')->name('tinyInteger')->comment('整数')->type('tinyInteger');});
+		Models\Entity::build(function ($b) {$b->id('984f18d0c9c111e7a873abffd2400e44')->name('smallInteger')->comment('整数')->type('smallInteger');});
+		Models\Entity::build(function ($b) {$b->id('984f1b40c9c111e7aeab93ba1dd3c681')->name('mediumInteger')->comment('整数')->type('mediumInteger');});
 		Models\Entity::build(function ($b) {$b->id('4ed0e85009b611e7b0e4e94c422d56dd')->name('bigInteger')->comment('长整数')->type('bigInteger');});
 		Models\Entity::build(function ($b) {$b->id('4ed0e8a009b611e79be9a9e8d4997010')->name('float')->comment('浮点数')->type('float');});
+		Models\Entity::build(function ($b) {$b->id('392bebb0187911e7b790eb28cb3253c6')->name('decimal')->comment('十进制')->type('decimal');});
+		Models\Entity::build(function ($b) {$b->id('fb35ab20c9c011e78abd3dfdd8f66e00')->name('double')->comment('双精度数字')->type('double');});
+
 		Models\Entity::build(function ($b) {$b->id('4ed0e8f009b611e78ef127fdddb27dab')->name('boolean')->comment('布尔')->type('boolean');});
+
 		Models\Entity::build(function ($b) {$b->id('4ed0e94009b611e78a41c9fc87e23627')->name('date')->comment('日期')->type('date');});
+		Models\Entity::build(function ($b) {$b->id('cd87e960c9c111e7b0d92564a66dee16')->name('time')->comment('日期')->type('time');});
+		Models\Entity::build(function ($b) {$b->id('cb6672a018a611e7bff313c35726f18b')->name('dateTime')->comment('日期时间')->type('dateTime');});
 		Models\Entity::build(function ($b) {$b->id('37cfb5e0187611e79a6c7b8596e6a936')->name('timestamp')->comment('时间戳')->type('timestamp');});
+		Models\Entity::build(function ($b) {$b->id('e9bceac0c9c111e780803f1d97b6470a')->name('timestampTz')->comment('时间戳')->type('timestampTz');});
+
 		Models\Entity::build(function ($b) {$b->id('4ed0e99009b611e7b216d7856f61a5f4')->name('object')->comment('对象')->type('object');});
 		Models\Entity::build(function ($b) {$b->id('4ed0e9e009b611e7b65f21229f6ab51d')->name('entity')->comment('实体')->type('entity');});
 		Models\Entity::build(function ($b) {$b->id('4ed0ea4009b611e796f7a196aabad97c')->name('enum')->comment('枚举')->type('enum');});
+		Models\Entity::build(function ($b) {$b->id('cb66753018a611e78a38372cae478b7e')->name('json')->comment('json')->type('json');});
+		Models\Entity::build(function ($b) {$b->id('11887bd0c9c111e7b3a54f2570c01bae')->name('jsonb')->comment('jsonb')->type('jsonb');});
 
+		Models\Entity::build(function ($b) {$b->id('d8d01230c9c011e795c22b375e101413')->name('char')->comment('字符')->type('char');});
+		Models\Entity::build(function ($b) {$b->id('4ed0e57009b611e7b2bbbfa514fdeb8d')->name('string')->comment('字符')->type('string');});
 		Models\Entity::build(function ($b) {$b->id('392bee00187911e7bb094174849e0866')->name('text')->comment('文本')->type('text');});
-		Models\Entity::build(function ($b) {$b->id('392bebb0187911e7b790eb28cb3253c6')->name('decimal')->comment('十进制')->type('decimal');});
-
-		Models\Entity::build(function ($b) {$b->id('cb6672a018a611e7bff313c35726f18b')->name('dateTime')->comment('日期时间')->type('dateTime');});
-		Models\Entity::build(function ($b) {$b->id('cb66753018a611e78a38372cae478b7e')->name('json')->comment('对象')->type('json');});
+		Models\Entity::build(function ($b) {$b->id('8462abd0c9c111e788a3793832b42f18')->name('mediumText')->comment('文本')->type('mediumText');});
+		Models\Entity::build(function ($b) {$b->id('6236ac60c9c011e7be784dfa7b483491')->name('longText')->comment('长文本')->type('longText');});
 
 	}
 	private function seedSysTypeEnumMD() {
@@ -239,6 +252,7 @@ class MDInit {
 				if (isset($column->default)) {
 					$b->default_value($column->default);
 				}
+				$b->type_enum($column->type);
 				if (isset($column->refType)) {
 					$b->type($column->refType);
 				}
@@ -261,6 +275,7 @@ class MDInit {
 				if (isset($column->default)) {
 					$b->default_value($column->default);
 				}
+				$b->type_enum($column->type);
 				if (isset($column->refType)) {
 					$b->type($column->refType);
 				}

@@ -41,18 +41,17 @@ class Entity extends Model {
 		return $p;
 	}
 	public static function build(Closure $callback) {
-		tap(new Builder, function ($builder) use ($callback) {
-			$callback($builder);
+		$builder = new Builder;
+		$callback($builder);
+		$data = array_only($builder->toArray(), ['id', 'name', 'comment', 'table_name', 'type']);
+		$find = [];
+		if (!empty($data['id'])) {
+			$find['id'] = $data['id'];
+		}
+		if (!empty($data['name'])) {
+			$find['name'] = $data['name'];
+		}
+		return static::updateOrCreate($find, $data);
 
-			$data = array_only($builder->toArray(), ['id', 'name', 'comment', 'table_name', 'type']);
-			$find = [];
-			if (!empty($data['id'])) {
-				$find['id'] = $data['id'];
-			}
-			if (!empty($data['name'])) {
-				$find['name'] = $data['name'];
-			}
-			static::updateOrCreate($find, $data);
-		});
 	}
 }

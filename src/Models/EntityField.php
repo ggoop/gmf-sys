@@ -13,7 +13,7 @@ class EntityField extends Model {
 	public $incrementing = false;
 	protected $keyType = 'string';
 	protected $fillable = ['id', 'name', 'comment', 'field_name', 'entity_id', 'type_id',
-		'type_type', 'type_enum', 'collection', 'sequence', 'default_alue',
+		'type_type', 'type_enum', 'collection', 'sequence', 'default_value',
 		'foreign_key', 'local_key', 'nullable', 'length', 'scale', 'precision',
 		'format', 'former'];
 	protected $hidden = ['created_at', 'updated_at'];
@@ -29,9 +29,8 @@ class EntityField extends Model {
 
 			$data = array_only($builder->toArray(), ['id',
 				'name', 'comment', 'field_name',
-				'entity_id', 'type_id',
-				'type_type', 'type_enum',
-				'collection', 'sequence', 'default_value',
+				'entity_id', 'type_id', 'type_type', 'type_enum',
+				'collection', 'sequence', 'default_value', 'scale', 'precision',
 				'foreign_key', 'local_key', 'nullable', 'length', 'format', 'former']);
 			if (!empty($builder->entity)) {
 				$entity = Entity::where('name', $builder->entity)->first();
