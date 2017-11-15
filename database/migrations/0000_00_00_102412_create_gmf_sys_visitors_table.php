@@ -16,7 +16,7 @@ class CreateGmfSysVisitorsTable extends Migration {
 
 		$md->bigIncrements('id');
 		$md->entity('user', config('gmf.user.entity'))->nullable();
-		$md->entity('ent', 'gmf.md.ent')->nullable();
+		$md->entity('ent', 'gmf.sys.ent')->nullable();
 		$md->text('path')->nullable();
 		$md->text('url')->nullable();
 		$md->string('ip')->nullable();

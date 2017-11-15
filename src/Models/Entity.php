@@ -44,14 +44,25 @@ class Entity extends Model {
 		$builder = new Builder;
 		$callback($builder);
 		$data = array_only($builder->toArray(), ['id', 'name', 'comment', 'table_name', 'type']);
-		$find = [];
-		if (!empty($data['id'])) {
-			$find['id'] = $data['id'];
-		}
-		if (!empty($data['name'])) {
-			$find['name'] = $data['name'];
-		}
-		return static::updateOrCreate($find, $data);
 
+		$old = false;
+		if (!empty($data['id']) || !empty($data['name'])) {
+			$query = static::where('id', '!=', '');
+			if (!empty($data['id']) && !empty($data['name'])) {
+				$query->where(function ($query) use ($data) {
+					$query->where('name', $data['name'])->orWhere('id', $data['id']);
+				});
+			} else if (!empty($data['id'])) {
+				$query->where('id', $data['id']);
+			} else if (!empty($data['name'])) {
+				$query->where('name', $data['name']);
+			}
+			$old = $query->first();
+		}
+		if ($old) {
+			return static::updateOrCreate(['id' => $old->id], $data);
+		} else {
+			return static::create($data);
+		}
 	}
 }
