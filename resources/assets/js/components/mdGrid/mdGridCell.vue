@@ -102,6 +102,17 @@ export default {
         this.status = 'editor';
       }
     },
+    setValue(data) {
+      this.row.setData(this.column.field, data);
+      const newValue = this.row.getValueKey(this.column.field);
+      if (newValue != this.oldValue) {
+        this.row.data.sys_updated = true;
+      }
+    },
+    getValue() {
+      this.endEdit();
+      return this.row.getData(this.column.field);
+    },
     endEdit() {
       if (this.status == 'editor') {
         const newValue = this.row.getValueKey(this.column.field);
