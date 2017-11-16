@@ -129,7 +129,6 @@ class SeedCommand extends Command {
 		if (empty($names) || count($names) == 0) {
 			return $files;
 		}
-
 		return Collection::make($files)
 			->filter(function ($file) use ($names) {
 				$name = strtolower($this->getResolveName($this->getMigrationName($file)));

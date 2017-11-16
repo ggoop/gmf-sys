@@ -41,7 +41,9 @@ class MdCommand extends Command {
 		}
 
 		$files = $this->migrator->getMigrationFiles($this->migrator->paths());
-
+		if ($this->option('name')) {
+			$files = $this->filterFiles($files, $this->option('name'));
+		}
 		$this->migrator->requireFiles($files, []);
 		$files = $this->pendingMigrations($files);
 
@@ -50,6 +52,12 @@ class MdCommand extends Command {
 		foreach ($this->migrator->getNotes() as $note) {
 			$this->output->writeln($note);
 		}
+	}
+	public function filterFiles($files, $name) {
+		return Collection::make($files)
+			->filter(function ($file) use ($name) {
+				return str_contains($this->migrator->getMigrationName($file), $name);
+			})->values()->all();
 	}
 	protected function pendingMigrations($files) {
 		return Collection::make($files)

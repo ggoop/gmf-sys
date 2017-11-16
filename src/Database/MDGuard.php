@@ -94,12 +94,12 @@ class MDGuard {
 			if (!empty($this->entity->id)) {
 				$item->entity_id($this->entity->id);
 			}
-			if ($field->type === 'entity' || $field->type === 'enum') {
+			if ($item->type_enum === 'entity' || $item->type_enum === 'enum') {
 				$item->length(100);
 			}
-			if ($field->type === 'entity') {
+			if ($item->type_enum === 'entity') {
 				$item->field_name($field->name . '_id');
-			} else if ($field->type === 'enum') {
+			} else if ($item->type_enum === 'enum') {
 				$item->field_name($field->name . '_enum');
 			} else {
 				$item->field_name($field->name);
@@ -113,14 +113,14 @@ class MDGuard {
 			if (isset($field->places)) {
 				$item->scale($field->places);
 			}
-			if (empty($item->local_key) && $item->type === 'entity') {
+			if (empty($item->local_key) && $item->type_enum === 'entity') {
 				if (!empty($item->collection) && $item->collection) {
 					$item->local_key('id');
 				} else {
 					$item->local_key($item->name . '_id');
 				}
 			}
-			if (empty($item->foreign_key) && $item->type === 'entity') {
+			if (empty($item->foreign_key) && $item->type_enum === 'entity') {
 				if (!empty($item->collection) && $item->collection) {
 					$item->foreign_key = $this->getShortName($this->getMDEntity()->name) . '_id';
 				} else {
