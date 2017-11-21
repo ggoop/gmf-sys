@@ -48,6 +48,7 @@ class InputHelper {
 			if (empty($vObj)) {
 				$vObj = Arr::get($data, $field);
 			}
+			$vObj = json_decode(json_encode($vObj));
 			unset($data[$field]);
 			$vFieldName = 'id';
 			if (array_has($inputs, $field)) {
@@ -60,6 +61,17 @@ class InputHelper {
 			}
 			if (empty($vValue) && !empty($vObj) && !empty($vObj[$vFieldName])) {
 				$vValue = $vObj[$vFieldName];
+			}
+			if (empty($vValue) && !empty($vObj) && is_array($vObj)) {
+				$vids = [];
+				foreach ($vObj as $vk => $vv) {
+					if (!empty($vv) && !empty($vv->{$vFieldName})) {
+						$vids[] = $vv->{$vFieldName};
+					}
+				}
+				if ($vids && count($vids)) {
+					$vValue = $vids;
+				}
 			}
 			if (empty($vValue) && is_a($callback, Closure::class)) {
 				$vValue = $callback($vObj, $data);
