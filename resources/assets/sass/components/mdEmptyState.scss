@@ -1,0 +1,49 @@
+.md-empty-state {
+  max-width: 420px;
+  padding: 36px;
+  margin: 0 auto;
+  position: relative;
+
+  &.md-rounded {
+    max-width: auto;
+    border-radius: 50%;
+
+    .md-empty-state-container {
+      padding: 40px;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: rgba(0,0,0,.06);
+    }
+  }
+  .md-button {
+    margin: .5em 0 0;
+  }
+
+  .md-empty-state-container {
+    text-align: center;
+  }
+
+  .md-empty-state-icon {
+    width: 160px;
+    min-width: 160px;
+    height: 160px;
+    font-size: 160px;
+    color: rgba(0,0,0,.26);
+    margin: 0;
+  }
+
+  .md-empty-state-label {
+    font-size: 26px;
+    font-weight: 500;
+    line-height: 40px;
+  }
+
+  .md-empty-state-description {
+    margin: 1em 0;
+    font-size: 16px;
+    line-height: 24px;
+  }
+}

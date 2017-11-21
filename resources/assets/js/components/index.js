@@ -44,6 +44,8 @@ import mdView from './mdView';
 import mdTree from './mdTree';
 import mdChart from './mdChart';
 
+import mdEmptyState from './mdEmptyState';
+
 const options = {
     MdAvatar,
     MdBackdrop,
@@ -90,6 +92,7 @@ const options = {
     mdView,
     mdTree,
     mdChart,
+    mdEmptyState,
 };
 
 export default function install(Vue) {
