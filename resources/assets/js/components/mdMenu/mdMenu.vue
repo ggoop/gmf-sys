@@ -1,205 +1,140 @@
 <template>
-  <div class="md-menu">
-    <slot></slot>
-    <md-backdrop class="md-menu-backdrop md-transparent md-active" ref="backdrop" @close="close"></md-backdrop>
+  <div class="md-menu" v-on="$listeners">
+    <slot />
   </div>
 </template>
+
 <script>
-import transitionEndEventName from '../../core/utils/transitionEndEventName';
-import getInViewPosition from '../../core/utils/getInViewPosition';
+  import MdPropValidator from 'core/utils/MdPropValidator'
 
-export default {
-  props: {
-    mdSize: {
-      type: [Number, String],
-      default: 0
-    },
-    mdDirection: {
-      type: String,
-      default: 'bottom right'
-    },
-    mdAlignTrigger: {
-      type: Boolean,
-      default: false
-    },
-    mdOffsetX: {
-      type: [Number, String],
-      default: 0
-    },
-    mdOffsetY: {
-      type: [Number, String],
-      default: 0
-    },
-    mdCloseOnSelect: {
-      type: Boolean,
-      default: true
-    }
-  },
-  data: () => ({
-    active: false
-  }),
-  watch: {
-    mdSize(current, previous) {
-      if (current >= 1 && current <= 7) {
-        this.removeLastSizeMenuContentClass(previous);
-        this.addNewSizeMenuContentClass(current);
+  export default {
+    name: 'MdMenu',
+    props: {
+      mdActive: Boolean,
+      mdAlignTrigger: Boolean,
+      mdOffsetX: Number,
+      mdOffsetY: Number,
+      mdFullWidth: Boolean,
+      mdDense: Boolean,
+      mdDirection: {
+        type: String,
+        default: 'bottom-start',
+        ...MdPropValidator('md-direction', [
+          'top-end',
+          'top-start',
+          'bottom-end',
+          'bottom-start'
+        ])
+      },
+      mdCloseOnSelect: {
+        type: Boolean,
+        default: true
+      },
+      mdSize: {
+        type: String,
+        default: 'small',
+        ...MdPropValidator('md-size', [
+          'auto',
+          'small',
+          'medium',
+          'big',
+          'huge'
+        ])
       }
     },
-    mdDirection(current, previous) {
-      this.removeLastDirectionMenuContentClass(previous);
-      this.addNewDirectionMenuContentClass(current);
-    },
-    mdAlignTrigger(trigger) {
-      this.handleAlignTriggerClass(trigger);
-    }
-  },
-  methods: {
-    validateMenu() {
-      if (!this.menuContent) {
-        this.$destroy();
-
-        throw new Error('You must have a md-menu-content inside your menu.');
-      }
-
-      if (!this.menuTrigger) {
-        this.$destroy();
-
-        throw new Error('You must have an element with a md-menu-trigger attribute inside your menu.');
+    data () {
+      return {
+        triggerEl: null,
+        MdMenu: {
+          instance: this,
+          active: this.mdActive,
+          direction: this.mdDirection,
+          size: this.mdSize,
+          alignTrigger: this.mdAlignTrigger,
+          offsetX: this.mdOffsetX,
+          offsetY: this.mdOffsetY,
+          fullWidth: this.mdFullWidth,
+          dense: this.mdDense,
+          closeOnSelect: this.mdCloseOnSelect,
+          bodyClickObserver: null,
+          windowResizeObserver: null
+        }
       }
     },
-    removeLastSizeMenuContentClass(size) {
-      this.menuContent.classList.remove('md-size-' + size);
-    },
-    removeLastDirectionMenuContentClass(direction) {
-      this.menuContent.classList.remove('md-direction-' + direction.replace(/ /g, '-'));
-    },
-    addNewSizeMenuContentClass(size) {
-      this.menuContent.classList.add('md-size-' + size);
-    },
-    addNewDirectionMenuContentClass(direction) {
-      this.menuContent.classList.add('md-direction-' + direction.replace(/ /g, '-'));
-    },
-    handleAlignTriggerClass(trigger) {
-      if (trigger) {
-        this.menuContent.classList.add('md-align-trigger');
+    provide () {
+      return {
+        MdMenu: this.MdMenu
       }
     },
-    getPosition(vertical, horizontal) {
-      let menuTriggerRect = this.menuTrigger.getBoundingClientRect();
+    computed: {
+      isActive () {
+        return this.MdMenu.active
+      }
+    },
+    watch: {
+      mdActive: {
+        immediate: true,
+        handler (isActive) {
+          this.MdMenu.active = isActive
+        }
+      },
+      mdDirection (direction) {
+        this.MdMenu.direction = direction
+      },
+      mdSize (size) {
+        this.MdMenu.size = size
+      },
+      mdAlignTrigger (aligned) {
+        this.MdMenu.alignTrigger = aligned
+      },
+      mdOffsetX (offset) {
+        this.MdMenu.offsetX = offset
+      },
+      mdOffsetY (offset) {
+        this.MdMenu.offsetY = offset
+      },
+      isActive (isActive) {
+        this.$emit('update:mdActive', isActive)
 
-      let top = vertical === 'top' ?
-        menuTriggerRect.top + menuTriggerRect.height - this.menuContent.offsetHeight :
-        menuTriggerRect.top;
-
-      let left = horizontal === 'left' ?
-        menuTriggerRect.left - this.menuContent.offsetWidth + menuTriggerRect.width :
-        menuTriggerRect.left;
-
-      top += parseInt(this.mdOffsetY, 10);
-      left += parseInt(this.mdOffsetX, 10);
-
-      if (this.mdAlignTrigger) {
-        if (vertical === 'top') {
-          top -= menuTriggerRect.height + 11;
+        if (!isActive) {
+          this.$emit('md-closed')
         } else {
-          top += menuTriggerRect.height + 11;
+          this.$emit('md-opened')
         }
       }
-
-      return { top, left };
     },
-    calculateMenuContentPos() {
-      let position;
-
-      if (!this.mdDirection) {
-        position = this.getPosition('bottom', 'right');
-      } else {
-        position = this.getPosition.apply(this, this.mdDirection.trim().split(' '));
+    methods: {
+      toggleContent ($event) {
+        $event.stopPropagation()
+        this.MdMenu.active = !this.MdMenu.active
       }
-
-      position = getInViewPosition(this.menuContent, position);
-
-      this.menuContent.style.top = position.top + window.pageYOffset + 'px';
-      this.menuContent.style.left = position.left + window.pageXOffset + 'px';
     },
-    recalculateOnResize() {
-      window.requestAnimationFrame(this.calculateMenuContentPos);
-    },
-    open() {
-      if (document.body.contains(this.menuContent)) {
-        document.body.removeChild(this.menuContent);
+    async mounted () {
+      await this.$nextTick()
+
+      this.triggerEl = this.$el.querySelector('[md-menu-trigger]')
+
+      if (this.triggerEl) {
+        this.triggerEl.addEventListener('click', this.toggleContent)
       }
-
-      document.body.appendChild(this.menuContent);
-      document.body.appendChild(this.backdropElement);
-      window.addEventListener('resize', this.recalculateOnResize);
-
-      this.calculateMenuContentPos();
-
-      getComputedStyle(this.menuContent).top;
-      this.menuContent.classList.add('md-active');
-      this.menuContent.focus();
-      this.active = true;
-      this.$emit('open');
     },
-    close() {
-      let close = (event) => {
-        if (this.menuContent && event.target === this.menuContent) {
-          let activeRipple = this.menuContent.querySelector('.md-ripple.md-active');
-
-          this.menuContent.removeEventListener(transitionEndEventName, close);
-          this.menuTrigger.focus();
-          this.active = false;
-
-          if (activeRipple) {
-            activeRipple.classList.remove('md-active');
-          }
-
-          document.body.removeChild(this.menuContent);
-          document.body.removeChild(this.backdropElement);
-          window.removeEventListener('resize', this.recalculateOnResize);
-        }
-      };
-
-      this.menuContent.addEventListener(transitionEndEventName, close);
-      this.menuContent.classList.remove('md-active');
-      this.$emit('close');
-    },
-    toggle() {
-      if (this.active) {
-        this.close();
-      } else {
-        this.open();
+    beforeDestroy () {
+      if (this.triggerEl) {
+        this.triggerEl.removeEventListener('click', this.toggleContent)
       }
     }
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.menuTrigger = this.$el.querySelector('[md-menu-trigger]');
-      this.menuContent = this.$el.querySelector('.md-menu-content');
-      if (this.$refs.backdrop) {
-        this.backdropElement = this.$refs.backdrop.$el;
-      }
-      this.validateMenu();
-      this.handleAlignTriggerClass(this.mdAlignTrigger);
-      this.addNewSizeMenuContentClass(this.mdSize);
-      this.addNewDirectionMenuContentClass(this.mdDirection);
-      if (this.$el && this.$refs.backdrop) {
-        this.$el.removeChild(this.$refs.backdrop.$el);
-      }
-
-      this.menuContent && this.menuContent.parentNode && this.menuContent.parentNode.removeChild(this.menuContent);
-      this.menuTrigger && this.menuTrigger.addEventListener('click', this.toggle);
-    });
-  },
-  beforeDestroy() {
-    if (this.menuContent && document.body.contains(this.menuContent)) {
-      document.body.removeChild(this.menuContent);
-      document.body.removeChild(this.backdropElement);
-    }
-
-    this.menuTrigger && this.menuTrigger.removeEventListener('click', this.toggle);
-    window.removeEventListener('resize', this.recalculateOnResize);
   }
-};
 </script>
+
+<style lang="scss">
+  @import "~components/MdAnimation/variables";
+  @import "~components/MdLayout/mixins";
+
+  .md-menu {
+    display: inline-block;
+
+    > .md-button {
+      margin: 0;
+    }
+  }
+</style>

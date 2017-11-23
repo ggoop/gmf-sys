@@ -1,95 +1,78 @@
 <template>
-  <i class="md-icon" :class="[themeClass]" v-html="svgContent" v-if="svgContent"></i>
-
-  <md-image class="md-icon" :class="[themeClass]" :md-src="imageSrc" v-else-if="imageSrc"></md-image>
-
-  <i class="md-icon" :class="[themeClass, mdIconset]" :aria-hidden="!!mdIconset" v-else>
-    <slot></slot>
+  <md-svg-loader class="md-icon md-icon-image" :md-src="mdSrc" :class="[$mdActiveTheme]" v-if="mdSrc" @md-loaded="$emit('md-loaded')" />
+  <i class="md-icon md-icon-font" :class="[$mdActiveTheme]" v-else>
+    <slot />
   </i>
 </template>
 
-
 <script>
-  import theme from '../../core/components/mdTheme/mixin';
+  import MdComponent from 'core/MdComponent'
+  import MdSvgLoader from 'components/MdSvgLoader/MdSvgLoader'
 
-  let registeredIcons = {};
-
-  export default {
+  export default new MdComponent({
+    name: 'MdIcon',
+    components: {
+      MdSvgLoader
+    },
     props: {
-      mdSrc: String,
-      mdIconset: {
-        type: String,
-        default: 'material-icons'
-      }
-    },
-    data: () => ({
-      svgContent: null,
-      imageSrc: null
-    }),
-    mixins: [theme],
-    watch: {
-      mdSrc() {
-        this.svgContent = null;
-        this.imageSrc = null;
-        this.checkSrc();
-      }
-    },
-    methods: {
-      isImage(mimetype) {
-        return mimetype.indexOf('image') >= 0;
-      },
-      isSVG(mimetype) {
-        return mimetype.indexOf('svg') >= 0;
-      },
-      setSVGContent(value) {
-        this.svgContent = value;
-
-        this.$nextTick(() => {
-          this.$el.children[0].removeAttribute('fill');
-        });
-      },
-      loadSVG() {
-        if (!registeredIcons[this.mdSrc]) {
-          const request = new XMLHttpRequest();
-          const self = this;
-
-          request.open('GET', this.mdSrc, true);
-
-          request.onload = function() {
-            const mimetype = this.getResponseHeader('content-type');
-
-            if (this.status >= 200 && this.status < 400 && self.isImage(mimetype)) {
-              if (self.isSVG(mimetype)) {
-                registeredIcons[self.mdSrc] = this.response;
-                self.setSVGContent(this.response);
-              } else {
-                self.loadImage();
-              }
-            } else {
-              console.warn(`The file ${self.mdSrc} is not a valid image.`);
-            }
-          };
-
-          request.send();
-        } else {
-          this.setSVGContent(registeredIcons[this.mdSrc]);
-        }
-      },
-      loadImage() {
-        this.imageSrc = this.mdSrc;
-      },
-      checkSrc() {
-        if (this.mdSrc) {
-          if (this.mdSrc.indexOf('.svg') >= 0) {
-            this.loadSVG();
-          } else {
-            this.loadImage();
-          }
-        }
-      }
-    },
-    mounted() {
-      this.checkSrc();
+      mdSrc: String
     }
-  };
+  })
 </script>
+
+<style lang="scss">
+  @import "~components/MdAnimation/variables";
+  @import "./mixins";
+
+  $icon-size: 24px;
+
+  .md-icon {
+    @include md-icon-size($icon-size);
+    margin: auto;
+    display: inline-flex;
+    user-select: none;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+
+    &.md-size-2x {
+      @include md-icon-size($icon-size * 2);
+    }
+
+    &.md-size-3x {
+      @include md-icon-size($icon-size * 3);
+    }
+
+    &.md-size-4x {
+      @include md-icon-size($icon-size * 4);
+    }
+
+    &.md-size-5x {
+      @include md-icon-size($icon-size * 5);
+    }
+  }
+
+  .md-icon-image {
+    svg {
+      height: 100%;
+      flex: 1;
+      transition: fill .4s $md-transition-default-timing;
+    }
+  }
+
+  .md-icon {
+    transition: color .4s $md-transition-default-timing;
+    direction: ltr;
+    font-family: "Material Icons";
+    font-feature-settings: "liga";
+    font-style: normal;
+    letter-spacing: normal;
+    line-height: 1;
+    text-rendering: optimizeLegibility;
+    text-transform: none;
+    word-wrap: normal;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+</style>

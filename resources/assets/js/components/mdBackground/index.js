@@ -1,4 +1,7 @@
-import mdBackground from './mdBackground.vue';
-export default function install(Vue) {
-  Vue.component('md-background', mdBackground);
+import MdBackground from './MdBackground.vue';
+import material from 'vue-material/material'
+
+export default Vue => {
+  material(Vue)
+  Vue.component(MdBackground.name, MdBackground)
 }

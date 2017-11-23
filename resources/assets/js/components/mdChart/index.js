@@ -1,4 +1,4 @@
-import mdChart from './mdChart.vue'
+import MdChart from './MdChart.vue'
 export default function install(Vue) {
-    Vue.component('mdChart', mdChart);
+    Vue.component(MdChart.name, MdChart);
 }

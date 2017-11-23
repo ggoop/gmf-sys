@@ -1,5 +1,5 @@
-import mdLayout from './mdLayout.vue';
+import './layout.scss'
 
-export default function install(Vue) {
-  Vue.component('md-layout', mdLayout);
+export default Vue => {
+
 }

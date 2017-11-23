@@ -23,8 +23,8 @@
   </md-dialog>
 </template>
 <script>
-import theme from '../../core/components/mdTheme/mixin';
-import common from '../../core/utils/common';
+
+import common from 'core/utils/common';
 
 export default {
   props: {
@@ -46,7 +46,6 @@ export default {
       }
     }
   },
-  mixins: [theme],
   data() {
     return {
       currentQ: '',
@@ -168,3 +167,31 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+@import "~components/MdAnimation/variables";
+.md-refs-dialog{
+  .md-dialog-actions{
+    border-top: 0.01rem solid #e0e0e0;
+    .md-table-pagination{
+      border-top:none;
+    }
+  }
+  .md-dialog{
+      min-width: 50%;
+      height: 70%;
+  }
+  .md-dialog-content{
+    background-attachment: inherit;
+  }
+  .md-dialog-actions:before{
+    display: none;
+  }
+  .md-table-pagination .md-select{
+    margin: 0 .1rem;
+  }
+  .md-table-pagination .md-button{
+    min-width: .3rem;
+  }
+}
+</style>

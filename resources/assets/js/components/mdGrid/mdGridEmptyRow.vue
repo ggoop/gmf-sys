@@ -6,7 +6,7 @@
   </tr>
 </template>
 <script>
-import getClosestVueParent from '../../core/utils/getClosestVueParent';
+import getClosestVueParent from 'core/utils/getClosestVueParent';
 export default {
   props: ['columns'],
 

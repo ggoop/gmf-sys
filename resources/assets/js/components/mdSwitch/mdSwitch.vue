@@ -1,87 +1,129 @@
 <template>
-  <div class="md-switch" :class="[themeClass, classes]">
-    <div class="md-switch-container" @click="toggle($event)"  v-wave="!disabled">
-      <div class="md-switch-thumb" :style="styles">
-        <input type="checkbox" :name="name" :id="id" :disabled="disabled" :value="value">
-        <button :type="type" class="md-switch-holder"></button>
+  <div class="md-switch" :class="[$mdActiveTheme, checkClasses]">
+    <div class="md-switch-container" @click.stop="toggleCheck">
+      <div class="md-switch-thumb">
+        <md-ripple md-centered :md-active.sync="rippleActive" :md-disabled="disabled">
+          <input type="checkbox" v-bind="{ id, name, disabled, required, value }">
+        </md-ripple>
       </div>
     </div>
 
-    <label :for="id || name" class="md-switch-label" v-if="$slots.default">
-      <slot></slot>
+    <label :for="id" class="md-switch-label" v-if="$slots.default" @click.prevent="toggleCheck">
+      <slot />
     </label>
   </div>
 </template>
 
 <script>
-  import theme from '../../core/components/mdTheme/mixin';
+  import MdComponent from 'core/MdComponent'
+  import MdCheckboxMixin from 'components/MdCheckbox/MdCheckboxMixin'
+  import MdUuid from 'core/utils/MdUuid'
 
-  const checkedPosition = 75;
-  const initialPosition = '-1px';
-
-  export default {
+  export default new MdComponent({
+    name: 'MdSwitch',
+    mixins: [MdCheckboxMixin],
     props: {
-      name: String,
-      value: Boolean,
-      id: String,
-      disabled: Boolean,
-      type: {
+      id: {
         type: String,
-        default: 'button'
+        default: () => 'md-switch-' + MdUuid()
       }
-    },
-    mixins: [theme],
-    data() {
-      return {
-        leftPos: initialPosition,
-        checked: this.value
-      };
-    },
-    computed: {
-      classes() {
-        return {
-          'md-checked': Boolean(this.value),
-          'md-disabled': this.disabled
-        };
-      },
-      styles() {
-        return {
-          transform: `translate3D(${this.leftPos}, -50%, 0)`
-        };
-      }
-    },
-    watch: {
-      checked() {
-        this.setPosition();
-      },
-      value(value) {
-        this.changeState(value);
-      }
-    },
-    methods: {
-      setPosition() {
-        this.leftPos = this.checked ? checkedPosition + '%' : initialPosition;
-      },
-      changeState(checked, $event) {
-        if (typeof $event !== 'undefined') {
-          this.$emit('change', checked, $event);
-
-          if (!$event.defaultPrevented) {
-            this.checked = checked;
-          }
-          this.$emit('input', this.checked, $event);
-        } else {
-          this.checked = checked;
-        }
-      },
-      toggle($event) {
-        if (!this.disabled) {
-          this.changeState(!this.checked, $event);
-        }
-      }
-    },
-    mounted() {
-      this.$nextTick(this.setPosition);
     }
-  };
+  })
 </script>
+
+<style lang="scss">
+  @import "~components/MdAnimation/variables";
+  @import "~components/MdElevation/mixins";
+
+  $md-switch-width: 34px;
+  $md-switch-height: 14px;
+  $md-switch-size: 20px;
+  $md-switch-touch-size: 48px;
+
+  .md-switch {
+    width: auto;
+    margin: 16px 16px 16px 0;
+    display: inline-flex;
+    position: relative;
+
+    &:not(.md-disabled) {
+      cursor: pointer;
+
+      .md-switch-label {
+        cursor: pointer;
+      }
+    }
+
+    .md-switch-container {
+      width: $md-switch-width;
+      min-width: $md-switch-width;
+      height: $md-switch-height;
+      margin: 3px 0;
+      display: flex;
+      align-items: center;
+      position: relative;
+      border-radius: $md-switch-height;
+      transition: $md-transition-stand;
+    }
+
+    .md-switch-thumb {
+      @include md-elevation(1);
+      width: $md-switch-size;
+      height: $md-switch-size;
+      position: relative;
+      border-radius: 50%;
+      transition: $md-transition-stand;
+
+      &:before {
+        width: $md-switch-touch-size;
+        height: $md-switch-touch-size;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 11;
+        transform: translate(-50%, -50%);
+        content: " ";
+      }
+
+      .md-ripple {
+        width: $md-switch-touch-size !important;
+        height: $md-switch-touch-size !important;
+        top: 50% !important;
+        left: 50% !important;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+      }
+
+      input {
+        position: absolute;
+        left: -999em;
+      }
+    }
+
+    .md-switch-label {
+      height: $md-switch-size;
+      padding-left: 16px;
+      position: relative;
+      line-height: $md-switch-size;
+    }
+  }
+
+  .md-switch.md-checked {
+    .md-switch-thumb {
+      transform: translate3d(15px, 0, 0);
+    }
+  }
+
+  .md-switch.md-required {
+    label:after {
+      position: absolute;
+      top: 2px;
+      right: 0;
+      transform: translateX(calc(100% + 2px));
+      content: "*";
+      line-height: 1em;
+      vertical-align: top;
+    }
+  }
+</style>

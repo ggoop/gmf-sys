@@ -1,6 +1,7 @@
-import mdSubheader from './mdSubheader.vue';
-import mdSubheaderTheme from './mdSubheader.theme';
-export default function install(Vue) {
-  Vue.component('md-subheader', mdSubheader);
-Vue.material.styles.push(mdSubheaderTheme);
+import material from 'vue-material/material'
+import MdSubheader from './MdSubheader'
+
+export default Vue => {
+  material(Vue)
+  Vue.component(MdSubheader.name, MdSubheader)
 }

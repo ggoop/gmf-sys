@@ -1,112 +1,111 @@
-import MdAvatar from './mdAvatar';
-import MdBackdrop from './mdBackdrop';
-import MdBottomBar from './mdBottomBar';
-import MdOnboarding from './mdOnboarding';
-import mdBackground from './mdBackground';
-import MdButton from './mdButton';
-import MdButtonToggle from './mdButtonToggle';
-import MdCard from './mdCard';
-import MdCheckbox from './mdCheckbox';
-import MdChips from './mdChips';
-import MdDialog from './mdDialog';
-import MdDivider from './mdDivider';
-import MdFile from './mdFile';
-import MdGrid from './MdGrid';
-import MdIcon from './mdIcon';
-import MdImage from './mdImage';
-import MdInputContainer from './mdInputContainer';
-import MdLayout from './mdLayout';
-import MdList from './mdList';
-import MdMenu from './mdMenu';
-import MdProgress from './mdProgress';
-import MdRadio from './mdRadio';
-import MdSelect from './mdSelect';
-import MdSidenav from './mdSidenav';
-import MdSnackbar from './mdSnackbar';
-import MdSpeedDial from './mdSpeedDial';
-import MdSpinner from './mdSpinner';
-import MdSubheader from './mdSubheader';
-import MdSwitch from './mdSwitch';
-import MdTable from './mdTable';
-import MdTabs from './mdTabs';
-import MdToolbar from './mdToolbar';
-import MdTooltip from './mdTooltip';
-import MdWhiteframe from './mdWhiteframe';
-import MdEnum from './mdEnum';
-import MdRef from './mdRef';
-import mdLoading from './mdLoading';
-import mdWrap from './mdWrap';
-import mdToast from './mdToast';
-import mdContent from './mdContent';
-import mdQuery from './mdQuery';
-import mdPart from './mdPart';
-import mdView from './mdView';
-import mdTree from './mdTree';
-import mdChart from './mdChart';
+import MdApp from './MdApp'
+import MdAutocomplete from './MdAutocomplete'
+import MdAvatar from './MdAvatar'
+import MdBottomBar from './MdBottomBar'
+import MdButton from './MdButton'
+import MdCard from './MdCard'
+import MdCheckbox from './MdCheckbox'
+import MdChips from './MdChips'
+import MdContent from './MdContent'
+import MdDatepicker from './MdDatepicker'
+import MdDialog from './MdDialog'
+import MdDialogAlert from './MdDialog/MdDialogAlert'
+import MdDialogConfirm from './MdDialog/MdDialogConfirm'
+import MdDialogPrompt from './MdDialog/MdDialogPrompt'
+import MdDivider from './MdDivider'
+import MdDrawer from './MdDrawer'
+import MdElevation from './MdElevation'
+import MdEmptyState from './MdEmptyState'
+import MdField from './MdField'
+import MdHighlightText from './MdHighlightText'
+import MdIcon from './MdIcon'
+import MdImage from './MdImage'
+import MdLayout from './MdLayout'
+import MdList from './MdList'
+import MdMenu from './MdMenu'
+import MdProgress from './MdProgress'
+import MdRadio from './MdRadio'
+import MdRipple from './MdRipple'
+import MdSnackbar from './MdSnackbar'
+import MdSpeedDial from './MdSpeedDial'
+import MdSteppers from './MdSteppers'
+import MdSubheader from './MdSubheader'
+import MdSwitch from './MdSwitch'
+import MdTable from './MdTable'
+import MdTabs from './MdTabs'
+import MdToolbar from './MdToolbar'
+import MdTooltip from './MdTooltip'
 
-import mdEmptyState from './mdEmptyState';
 
-const options = {
-    MdAvatar,
-    MdBackdrop,
-    MdBottomBar,
-    mdBackground,
-    MdOnboarding,
-    MdButton,
-    MdButtonToggle,
-    MdCard,
-    MdCheckbox,
-    MdChips,
-    MdDialog,
-    MdDivider,
-    MdFile,
-    MdGrid,
-    MdIcon,
-    MdImage,
-    MdInputContainer,
-    MdLayout,
-    MdList,
-    MdMenu,
-    MdProgress,
-    MdRadio,
-    MdSelect,
-    MdSidenav,
-    MdSnackbar,
-    MdSpeedDial,
-    MdSpinner,
-    MdSubheader,
-    MdSwitch,
-    MdTable,
-    MdTabs,
-    MdToolbar,
-    MdTooltip,
-    MdWhiteframe,
-    MdEnum,
-    MdRef,
-    mdLoading,
-    mdWrap,
-    mdToast,
-    mdContent,
-    mdQuery,
-    mdPart,
-    mdView,
-    mdTree,
-    mdChart,
-    mdEmptyState,
-};
+//news
+import MdOnboarding from './MdOnboarding'
+// import MdPart from './MdPart'
+// import MdQuery from './MdQuery'
+// import MdRef from './MdRef'
+// import MdToast from './MdToast'
+// import MdTree from './MdTree'
+// import MdWrap from './MdWrap'
+// import MdLoading from './MdLoading'
+// import MdGrid from './MdGrid'
+// import MdEnum from './MdEnum'
+// import MdEditor from './MdEditor'
+// import MdChart from './MdChart'
+// import MdBackground from './MdBackground'
 
-export default function install(Vue) {
-    if (install.installed) {
-        console.warn('Vue components is already installed.');
-        return;
-    }
-    install.installed = true;
 
-    for (let component in options) {
-        const componentInstaller = options[component];
 
-        if (componentInstaller && component !== 'install') {
-            Vue.use(componentInstaller);
-        }
-    }
+
+export {
+  MdApp,
+  MdAutocomplete,
+  MdAvatar,
+  MdBottomBar,
+  MdButton,
+  MdCard,
+  MdCheckbox,
+  MdChips,
+  MdContent,
+  MdDatepicker,
+  MdDialog,
+  MdDialogAlert,
+  MdDialogConfirm,
+  MdDialogPrompt,
+  MdDivider,
+  MdDrawer,
+  MdElevation,
+  MdEmptyState,
+  MdField,
+  MdHighlightText,
+  MdIcon,
+  MdImage,
+  MdLayout,
+  MdList,
+  MdMenu,
+  MdProgress,
+  MdRadio,
+  MdRipple,
+  MdSnackbar,
+  MdSpeedDial,
+  MdSteppers,
+  MdSubheader,
+  MdSwitch,
+  MdTable,
+  MdTabs,
+  MdToolbar,
+  MdTooltip,
+  //news
+  MdOnboarding,
+  // MdPart,
+  // MdQuery,
+  // MdRef,
+  // MdToast,
+  // MdTree,
+  // MdWrap,
+  // MdLoading,
+  // MdGrid,
+  // MdEnum,
+  // MdEditor,
+  // MdChart,
+  // MdBackground,
+
 }

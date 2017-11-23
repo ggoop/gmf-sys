@@ -28,3 +28,56 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+  @import "~components/MdAnimation/variables";
+  .md-tree-view {
+  overflow: auto;
+  flex: 1;
+  max-height: 100%;
+  ul {
+    list-style-type: none;
+    li {
+      margin: 0;
+      +li {
+        margin: 0;
+      }
+    }
+  }
+  >ul {
+    margin: 0;
+    padding: 0;
+  }
+  ul>li>ul {
+    padding-left: .22rem;
+  }
+  .md-tree-node {
+    cursor: context-menu;
+    line-height: .30rem;
+    padding: 0 .08rem;
+    +ul {
+      overflow: hidden;
+      height: 0px;
+    }
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+    &.is-active {
+      background-color: rgba(0, 0, 0, 0.05);
+      font-weight: bold;
+    }
+    &.is-opened {
+      .md-expand-indicator {
+        transform: rotateZ(180deg) translate3D(0, 0, 0);
+      }
+      +ul {
+        height: inherit;
+      }
+    }
+    .md-checkbox {
+      margin: .04rem .08rem .04rem 0;
+    }
+  }
+}
+</style>

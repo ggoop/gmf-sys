@@ -5,8 +5,8 @@
 </template>
 
 <script>
-  import uniqueId from '../../core/utils/uniqueId';
-  import getClosestVueParent from '../../core/utils/getClosestVueParent';
+  import uniqueId from 'core/utils/uniqueId';
+  import getClosestVueParent from 'core/utils/getClosestVueParent';
 
   export default {
     props: {

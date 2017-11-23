@@ -1,316 +1,422 @@
 <template>
-  <div class="md-tabs" :class="[themeClass, tabClasses]">
-    <md-whiteframe md-tag="nav" class="md-tabs-navigation" :md-elevation="mdElevation" :class="navigationClasses" ref="tabNavigation">
-      <button
-        v-for="header in tabList"
-        :key="header.id"
-        type="button"
-        class="md-tab-header"
-        :class="getHeaderClass(header)"
-        :disabled="header.disabled"
-        @click="setActiveTab(header)"
-        ref="tabHeader"
-        v-wave="!header.disabled" >
-        <div class="md-tab-header-container">
-          <md-icon v-if="header.icon">{{ header.icon }}</md-icon>
-          <span v-if="header.label">{{ header.label }}</span>
-          <md-tooltip v-if="header.tooltip" :md-direction="header.tooltipDirection" :md-delay="header.tooltipDelay">{{ header.tooltip }}</md-tooltip>
-        </div>
-      </button>
-      <span class="md-tab-indicator" :class="indicatorClasses" ref="indicator"></span>
-      <md-background v-if="mdBackground"></md-background>
-    </md-whiteframe>
+  <div class="md-tabs" :class="[tabsClasses, $mdActiveTheme]">
+    <div class="md-tabs-navigation" :class="navigationClasses">
+      <md-button
+        v-for="({ label, props, icon, disabled, data, events }, index) in MdTabs.items"
+        :key="index"
+        :class="{
+          'md-active': index === activeTab,
+          'md-icon-label': icon && label
+        }"
+        :disabled="disabled"
+        v-bind="props"
+        v-on="events"
+        @click.native="setActiveTab(index)">
+        <slot name="md-tab" :tab="{ label, icon, data }" v-if="$scopedSlots['md-tab']"></slot>
 
-    <div class="md-tabs-content flex" ref="tabContent">
-      <div class="md-tabs-wrapper" :style="{transform: `translate3D(-${contentWidth}, 0, 0)` }">
-        <slot></slot>
-      </div>
+        <template v-else>
+          <template v-if="!icon">{{ label }}</template>
+          <template v-else>
+            <md-icon class="md-tab-icon" v-if="isAssetIcon(icon)" :md-src="icon"></md-icon>
+            <md-icon class="md-tab-icon" v-else>{{ icon }}</md-icon>
+            <span class="md-tab-label">{{ label }}</span>
+          </template>
+        </template>
+      </md-button>
+      <span class="md-tabs-indicator" :style="indicatorStyles" :class="indicatorClass" ref="indicator"></span>
     </div>
+
+    <md-content class="md-tabs-content" :style="contentStyles" v-show="hasContent">
+      <div class="md-tabs-container" :style="containerStyles">
+        <slot />
+      </div>
+    </md-content>
   </div>
 </template>
 
 <script>
-  import theme from '../../core/components/mdTheme/mixin';
-  import throttle from '../../core/utils/throttle';
+  import MdComponent from 'core/MdComponent'
+  import MdAssetIcon from 'core/mixins/MdAssetIcon/MdAssetIcon'
+  import MdPropValidator from 'core/utils/MdPropValidator'
+  import MdObserveElement from 'core/utils/MdObserveElement'
+  import MdContent from 'components/MdContent/MdContent'
 
-  export default {
+  export default new MdComponent({
+    name: 'MdTabs',
+    mixins: [MdAssetIcon],
+    components: {
+      MdContent
+    },
     props: {
-      mdFixed: Boolean,
-      mdCentered: Boolean,
-      mdRight: Boolean,
-      mdBackground:Boolean,
-      mdSwipeable: Boolean,
-      mdSwipeDistance: {
-        type: Number,
-        default: 100
-      },
-      mdDynamicHeight: {
-        type: Boolean,
-        default: true
+      mdAlignment: {
+        type: String,
+        default: 'left',
+        ...MdPropValidator('md-alignment', ['left', 'right', 'centered', 'fixed'])
       },
       mdElevation: {
-        type: [String, Number],
+        type: [Number, String],
         default: 0
+      },
+      mdSyncRoute: Boolean,
+      mdDynamicHeight: Boolean,
+      mdActiveTab: [String, Number]
+    },
+    data: () => ({
+      resizeObserver: null,
+      activeTab: 0,
+      activeTabIndex: 0,
+      indicatorStyles: {},
+      indicatorClass: null,
+      noTransition: true,
+      containerStyles: {},
+      contentStyles: {
+        height: '0px'
+      },
+      hasContent: false,
+      MdTabs: {
+        items: {}
+      }
+    }),
+    provide () {
+      return {
+        MdTabs: this.MdTabs
       }
     },
-    mixins: [theme],
-    data: () => ({
-      tabList: {},
-      activeTab: null,
-      activeTabNumber: 0,
-      hasIcons: false,
-      hasLabel: false,
-      transitionControl: null,
-      transitionOff: false,
-      contentHeight: '0px',
-      contentWidth: '0px'
-    }),
     computed: {
-      tabClasses() {
+      tabsClasses () {
         return {
-          'md-dynamic-height': this.mdDynamicHeight,
-          'md-transition-off': this.transitionOff
-        };
+          ['md-alignment-' + this.mdAlignment]: true,
+          'md-no-transition': this.noTransition,
+          'md-dynamic-height': this.mdDynamicHeight
+        }
       },
-      navigationClasses() {
-        return {
-          'md-has-icon': this.hasIcons,
-          'md-has-label': this.hasLabel,
-          'md-fixed': this.mdFixed,
-          'md-right': !this.mdCentered && this.mdRight,
-          'md-centered': this.mdCentered || this.mdFixed
-        };
+      navigationClasses () {
+        return 'md-elevation-' + this.mdElevation
+      }
+    },
+    watch: {
+      MdTabs: {
+        deep: true,
+        handler () {
+          this.setHasContent()
+        }
       },
-      indicatorClasses() {
-        let toLeft = this.lastIndicatorNumber > this.activeTabNumber;
-
-        this.lastIndicatorNumber = this.activeTabNumber;
-
-        return {
-          'md-transition-off': this.transitionOff,
-          'md-to-right': !toLeft,
-          'md-to-left': toLeft
-        };
+      async activeTab () {
+        await this.$nextTick()
+        this.setIndicatorStyles()
+        this.setActiveTabIndex()
+        this.calculateTabPos()
+      },
+      mdActiveTab (tab) {
+        this.activeTab = tab
+        this.$emit('md-changed', tab)
+      },
+      async mdAlignment () {
+        await this.$nextTick()
+        this.setIndicatorStyles()
       }
     },
     methods: {
-      getHeaderClass(header) {
+      hasActiveTab () {
+        return this.activeTab || this.mdActiveTab
+      },
+      getItemsAndKeys () {
+        const items = this.MdTabs.items
+
         return {
-          'md-active': this.activeTab === header.id,
-          'md-disabled': header.disabled
-        };
+          items,
+          keys: Object.keys(items)
+        }
       },
-      registerTab(tabData) {
-        this.tabList[tabData.id] = tabData;
+      setActiveTab (index) {
+        this.activeTab = index
+        this.$emit('md-changed', index)
       },
-      unregisterTab(tabData) {
-        delete this.tabList[tabData.id];
-      },
-      updateTab(tabData) {
-        this.registerTab(tabData);
+      setActiveTabIndex () {
+        const activeButton = this.$el.querySelector('.md-button.md-active')
 
-        if (tabData.active) {
-          if (!tabData.disabled) {
-            this.setActiveTab(tabData);
-          } else if (Object.keys(this.tabList).length) {
-            let tabsIds = Object.keys(this.tabList);
-            let targetIndex = tabsIds.indexOf(tabData.id) + 1;
-            let target = tabsIds[targetIndex];
+        if (activeButton) {
+          this.activeTabIndex = [].indexOf.call(activeButton.parentNode.childNodes, activeButton)
+        }
+      },
+      setActiveTabByIndex (index) {
+        const { keys } = this.getItemsAndKeys()
 
-            if (target) {
-              this.setActiveTab(this.tabList[target]);
+        if (!this.hasActiveTab()) {
+          this.activeTab = keys[index]
+        }
+      },
+      setActiveTabByRoute () {
+        const { items, keys } = this.getItemsAndKeys()
+        let tabIndex = null
+
+        if (this.$router) {
+          keys.forEach((key, index) => {
+            const item = items[key]
+            const toProp = item.props.to
+
+            if (toProp && toProp === this.$route.path) {
+              tabIndex = index
+            }
+          })
+        }
+
+        if (!this.hasActiveTab() && !tabIndex) {
+          this.activeTab = keys[0]
+        } else {
+          this.activeTab = keys[tabIndex]
+        }
+      },
+      setHasContent () {
+        const { items, keys } = this.getItemsAndKeys()
+
+        this.hasContent = keys.some(key => items[key].hasContent)
+      },
+      setIndicatorStyles () {
+        window.requestAnimationFrame(async () => {
+          await this.$nextTick()
+
+          const activeButton = this.$el.querySelector('.md-button.md-active')
+
+          if (activeButton && this.$refs.indicator) {
+            const buttonWidth = activeButton.offsetWidth
+            const buttonLeft = activeButton.offsetLeft
+            const indicatorLeft = this.$refs.indicator.offsetLeft
+
+            if (indicatorLeft < buttonLeft) {
+              this.indicatorClass = 'md-tabs-indicator-right'
             } else {
-              this.setActiveTab(this.tabList[0]);
+              this.indicatorClass = 'md-tabs-indicator-left'
+            }
+
+            this.indicatorStyles = {
+              left: `${buttonLeft}px`,
+              right: `calc(100% - ${buttonWidth + buttonLeft}px)`
             }
           }
-        }
+        })
       },
-      nextTab(){
-        const idList = Object.keys(this.tabList);
-        var tabId='';
-        if(this.activeTabNumber>=idList.length-1){
-          tabId=idList[0];
-        }else{
-          tabId=idList[this.activeTabNumber+1];
-        }
-        if(tabId){
-          return this.tabList[tabId];
-        }
-        return false;
-      },
-      prevTab(){
-        const idList = Object.keys(this.tabList);
-        var tabId='';
-        if(this.activeTabNumber<=0){
-          tabId=idList[idList.length-1];
-        }else{
-          tabId=idList[this.activeTabNumber-1];
-        }
-        if(tabId){
-          return this.tabList[tabId];
-        }
-        return false;
-      },
-      observeElementChanges() {
-        this.parentObserver = new MutationObserver(throttle(this.calculateOnWatch, 50));
-        this.parentObserver.observe(this.$refs.tabContent, {
-          childList: true,
-          attributes: true,
-          subtree: true
-        });
-      },
-      getTabIndex(id) {
-        const idList = Object.keys(this.tabList);
+      calculateTabPos () {
+        if (this.hasContent) {
+          const tabElement = this.$el.querySelector(`.md-tab:nth-child(${this.activeTabIndex + 1})`)
 
-        return idList.indexOf(id);
-      },
-      calculateIndicatorPos() {
-        if (this.$refs.tabHeader && this.$refs.tabHeader[this.activeTabNumber]) {
-          const tabsWidth = this.$el.offsetWidth;
-          const activeTab = this.$refs.tabHeader[this.activeTabNumber];
-          const left = activeTab.offsetLeft;
-          const right = tabsWidth - left - activeTab.offsetWidth;
+          this.contentStyles = {
+            height: `${tabElement.offsetHeight}px`
+          }
 
-          this.$refs.indicator.style.left = left + 'px';
-          this.$refs.indicator.style.right = right + 'px';
+          this.containerStyles = {
+            transform: `translate3D(${-this.activeTabIndex * 100}%, 0, 0)`
+          }
         }
       },
-      calculateTabsWidthAndPosition() {
-        const width = this.$el.offsetWidth;
-        let index = 0;
+      setupObservers () {
+        if ('ResizeObserver' in window) {
+          this.resizeObserver = new window.ResizeObserver(this.setIndicatorStyles)
+          this.resizeObserver.observe(this.$el)
+        } else {
+          this.resizeObserver = MdObserveElement(this.$el.querySelector('.md-tabs-content'), {
+            childList: true,
+            characterData: true,
+            subtree: true
+          }, () => {
+            this.setIndicatorStyles()
+            this.calculateTabPos()
+          })
 
-        this.contentWidth = width * this.activeTabNumber + 'px';
-
-        for (const tabId in this.tabList) {
-          const tab = this.tabList[tabId];
-
-          tab.ref.width = width + 'px';
-          tab.ref.left = width * index + 'px';
-          index++;
+          window.addEventListener('resize', this.setIndicatorStyles)
         }
       },
-      calculateContentHeight() {
-        this.$nextTick(() => {
-          if (Object.keys(this.tabList).length&&this.activeTab) {
-            let height = this.tabList[this.activeTab].ref.$el.offsetHeight;
-
-            this.contentHeight = height + 'px';
-            if(this.mdDynamicHeight){
-              this.$refs.tabContent.style.height=this.contentHeight;
+      setupWatchers () {
+        if (this.mdSyncRoute) {
+          this.$watch('$route', {
+            deep: true,
+            handler () {
+              if (this.mdSyncRoute) {
+                this.setActiveTabByRoute()
+              }
             }
-          }
-        });
-      },
-      calculatePosition() {
-        window.requestAnimationFrame(() => {
-          this.calculateIndicatorPos();
-          this.calculateTabsWidthAndPosition();
-          this.calculateContentHeight();
-        });
-      },
-      debounceTransition() {
-        window.clearTimeout(this.transitionControl);
-        this.transitionControl = window.setTimeout(() => {
-          this.calculatePosition();
-          this.transitionOff = false;
-        }, 200);
-      },
-      calculateOnWatch() {
-        this.calculatePosition();
-        this.debounceTransition();
-      },
-      calculateOnResize() {
-        this.transitionOff = true;
-        this.calculateOnWatch();
-      },
-      setActiveTab(tag) {
-        var tabData=tag;
-        if(typeof tag==='string'){
-          tabData=this.tabList[tag];
-        }
-        if(tabData&&typeof tabData==='object'){
-          this.hasIcons = !!tabData.icon;
-          this.hasLabel = !!tabData.label;
-          this.activeTab = tabData.id;
-          this.activeTabNumber = this.getTabIndex(this.activeTab);
-          this.calculatePosition();
-          this.$emit('click', tabData);
-          this.$emit('change', this.activeTabNumber);
-        }
-      },
-      movePrevTab(){
-        this.setActiveTab(this.prevTab());
-      },
-      moveNextTab(){
-        this.setActiveTab(this.nextTab());
-      },
-      isHorizontallyInside(positionX) {
-        return positionX > this.mountedRect.left && positionX < this.mountedRect.left + this.mountedRect.width;
-      },
-      isVerticallyInside(positionY) {
-        return positionY > this.mountedRect.top && positionY < this.mountedRect.top + this.mountedRect.height;
-      },
-      handleTouchStart(event) {
-        this.mountedRect = this.$refs.tabContent.getBoundingClientRect();
-        const positionX = event.changedTouches[0].clientX;
-        const positionY = event.changedTouches[0].clientY;
-
-        if (this.isHorizontallyInside(positionX) && this.isVerticallyInside(positionY)) {
-          this.initialTouchPosition = positionX;
-          this.canMove = true;
-        }
-      },
-      handleTouchEnd(event) {
-        if (this.canMove) {
-          const positionX = event.changedTouches[0].clientX;
-
-          const difference = this.initialTouchPosition - positionX;
-
-          const action = difference > 0
-            ? 'moveNextTab'
-            : 'movePrevTab';
-
-          if (Math.abs(difference) > this.mdSwipeDistance) {
-            this[action]();
-          }
-
-          this.canMove = false;
-          this.initialTouchPosition = null;
+          })
         }
       }
     },
-    mounted() {
-      this.$nextTick(() => {
-        this.observeElementChanges();
-        window.addEventListener('resize', this.calculateOnResize);
-
-        if (Object.keys(this.tabList).length && !this.activeTab) {
-          let firstTab = Object.keys(this.tabList)[0];
-
-          this.setActiveTab(this.tabList[firstTab]);
-        }
-
-        if (this.mdSwipeable) {
-          this.mountedRect = this.$refs.tabContent.getBoundingClientRect();
-          this.initialTouchPosition = null;
-          this.canMove = false;
-
-          document.addEventListener('touchstart', this.handleTouchStart);
-          document.addEventListener('touchend', this.handleTouchEnd);
-        }
-
-      });
+    created () {
+      this.setHasContent()
+      this.activeTab = this.mdActiveTab
     },
-    beforeDestroy() {
-      if (this.parentObserver) {
-        this.parentObserver.disconnect();
+    async mounted () {
+      await this.$nextTick()
+
+      if (this.mdSyncRoute) {
+        this.setActiveTabByRoute()
+      } else {
+        this.setActiveTabByIndex(0)
       }
 
-      window.removeEventListener('resize', this.calculateOnResize);
-      if (this.mdSwipeable) {
-        document.removeEventListener('touchstart', this.handleTouchStart);
-        document.removeEventListener('touchend', this.handleTouchEnd);
+      await this.$nextTick()
+
+      this.setActiveTabIndex()
+      this.calculateTabPos()
+
+      window.setTimeout(() => {
+        this.noTransition = false
+        this.setupObservers()
+        this.setupWatchers()
+      }, 100)
+    },
+    beforeDestroy () {
+      if (this.resizeObserver) {
+        this.resizeObserver.disconnect()
+      }
+
+      window.removeEventListener('resize', this.setIndicatorStyles)
+    }
+  })
+</script>
+
+<style lang="scss">
+  @import "~components/MdAnimation/variables";
+  @import "~components/MdElevation/mixins";
+  @import "~components/MdLayout/mixins";
+
+  .md-tabs {
+    display: flex;
+    flex-direction: column;
+
+    &.md-no-transition * {
+      transition: none !important;
+    }
+
+    &.md-dynamic-height .md-tabs-content {
+      transition: height .3s $md-transition-default-timing;
+      will-change: height;
+    }
+
+    &.md-transparent .md-tabs-navigation {
+      background-color: transparent !important;
+    }
+
+    &.md-dynamic-height .md-tabs-content {
+      transition: height .35s $md-transition-stand-timing;
+    }
+
+    &.md-alignment-left .md-tabs-navigation {
+      justify-content: flex-start;
+    }
+
+    &.md-alignment-right .md-tabs-navigation {
+      justify-content: flex-end;
+    }
+
+    &.md-alignment-centered .md-tabs-navigation {
+      justify-content: center;
+    }
+
+    &.md-alignment-fixed .md-tabs-navigation {
+      justify-content: center;
+
+      .md-button {
+        max-width: 264px;
+        min-width: 160px;
+        flex: 1;
+
+        @include md-layout-small {
+          min-width: 72px;
+        }
       }
     }
-  };
-</script>
+
+    .md-toolbar & {
+      padding-left: 48px;
+
+      @include md-layout-small {
+        margin: 0 -8px;
+        padding-left: 0px;
+      }
+    }
+  }
+
+  .md-tabs-navigation {
+    display: flex;
+    position: relative;
+
+    .md-button {
+      max-width: 264px;
+      min-width: 72px;
+      height: 48px;
+      margin: 0;
+      cursor: pointer;
+      border-radius: 0;
+      font-size: 13px;
+    }
+
+    .md-button-content {
+      position: static;
+    }
+
+    .md-icon-label {
+      height: 72px;
+
+      .md-button-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .md-tab-icon + .md-tab-label {
+        margin-top: 10px;
+      }
+    }
+
+    .md-ripple {
+      padding: 0 24px;
+
+      @include md-layout-small {
+        padding: 0 12px;
+      }
+    }
+  }
+
+  .md-tabs-indicator {
+    height: 2px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transform: translateZ(0);
+    will-change: left, right;
+
+    &.md-tabs-indicator-left {
+      transition: left .3s $md-transition-default-timing,
+                  right .35s $md-transition-default-timing;
+    }
+
+    &.md-tabs-indicator-right {
+      transition: right .3s $md-transition-default-timing,
+                  left .35s $md-transition-default-timing;
+    }
+  }
+
+  .md-tabs-content {
+    overflow: hidden;
+    transition: none;
+    will-change: height;
+  }
+
+  .md-tabs-container {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    transform: translateZ(0);
+    transition: transform .35s $md-transition-default-timing;
+    will-change: transform;
+  }
+
+  .md-tab {
+    width: 100%;
+    flex: 1 0 100%;
+    padding: 16px;
+
+    @include md-layout-small {
+      padding: 8px;
+    }
+  }
+</style>

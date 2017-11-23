@@ -1,9 +1,9 @@
-import mdTabs from './mdTabs.vue';
-import mdTab from './mdTab.vue';
-import mdTabsTheme from './mdTabs.theme';
-export default function install(Vue) {
-  Vue.component('md-tabs', mdTabs);
-  Vue.component('md-tab', mdTab);
+import material from 'vue-material/material'
+import MdTabs from './MdTabs'
+import MdTab from './MdTab'
 
-  Vue.material.styles.push(mdTabsTheme);
+export default Vue => {
+  material(Vue)
+  Vue.component(MdTabs.name, MdTabs)
+  Vue.component(MdTab.name, MdTab)
 }

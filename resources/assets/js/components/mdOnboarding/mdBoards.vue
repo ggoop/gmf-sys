@@ -1,5 +1,5 @@
 <template>
-  <div class="md-boards" :class="[themeClass, boardClasses]">
+  <div class="md-boards" :class="[$mdActiveTheme,boardClasses]">
 
     <div class="md-boards-content flex" ref="boardsContent">
       <div class="md-boards-wrapper" :style="{ transform: `translate3D(-${contentWidth}, 0, 0)` }">
@@ -53,10 +53,10 @@
   </div>
 </template>
 <script>
-  import theme from '../../core/components/mdTheme/mixin';
-  import throttle from '../../core/utils/throttle';
+import MdComponent from 'core/MdComponent'
+  import throttle from 'core/utils/throttle';
 
-  export default {
+  export default new MdComponent({
     props: {
       mdFixed: Boolean,
       mdCentered: Boolean,
@@ -91,7 +91,6 @@
         default: 100
       }
     },
-    mixins: [theme],
     data: () => ({
       boardList: {},
       activeBoard: null,
@@ -355,5 +354,108 @@
       }
 
     }
-  };
+  });
 </script>
+<style lang="scss">
+@import "~components/MdAnimation/variables";
+$board-width: 24px;
+$board-max-width: 24px;
+
+.md-boards {
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  position: relative;
+
+  &.md-transition-off * {
+    transition: none !important;
+  }
+
+  &.md-dynamic-height {
+    .md-boards-content {
+      transition: height $swift-ease-out-duration $swift-ease-out-timing-function;
+    }
+  }
+
+  .md-boards-navigation {
+    bottom: 0;
+    width: 100%;
+    height: 48px;
+    min-height: 48px;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    transition: $swift-ease-out;
+    justify-content: space-between;
+  }
+
+  .md-board-header {
+    min-width: $board-width;
+    max-width: $board-max-width;
+    margin: 0;
+    padding: 0 12px;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    border: 0;
+    background: none;
+    transition: $swift-ease-out;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+
+    &.md-disabled {
+      cursor: default;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+  }
+
+  .md-board-header-container {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+
+    .md-icon {
+      margin: 0;
+    }
+
+    .md-icon:not(.md-control) {
+      width: 16px;
+      min-width: 16px;
+      height: 16px;
+      min-height: 16px;
+      font-size: 16px;
+    }
+  }
+
+  .md-boards-content {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .md-boards-wrapper {
+    width: 9999em;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translate3d(0, 0, 0);
+    transition: transform $swift-ease-out-duration $swift-ease-out-timing-function;
+  }
+
+  .md-board {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}
+
+</style>

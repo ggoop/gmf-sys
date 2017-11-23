@@ -1,4 +1,4 @@
-import mdEnum from './mdEnum.vue';
+import MdEnum from './MdEnum.vue';
 export default function install(Vue) {
-  Vue.component('md-enum', mdEnum);
+  Vue.component(MdEnum.name, MdEnum);
 }

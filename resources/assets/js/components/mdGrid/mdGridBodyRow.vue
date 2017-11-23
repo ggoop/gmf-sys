@@ -9,7 +9,7 @@
 <script>
 import mdGridCell from './mdGridCell';
 import { classList } from './helpers';
-import getClosestVueParent from '../../core/utils/getClosestVueParent';
+import getClosestVueParent from 'core/utils/getClosestVueParent';
 export default {
   props: ['columns', 'row', 'rowIndex'],
 

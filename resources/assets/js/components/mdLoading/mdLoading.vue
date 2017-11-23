@@ -16,3 +16,14 @@
     }
   };
 </script>
+<style lang="scss">
+  .md-loading{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    background: rgba(0,0,0,0.2);
+    left: 0px;
+    z-index: 500;
+}
+</style>

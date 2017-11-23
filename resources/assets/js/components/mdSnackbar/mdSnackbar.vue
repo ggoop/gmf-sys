@@ -1,131 +1,140 @@
 <template>
-  <div class="md-snackbar" :class="[themeClass, classes]" :id="snackbarId" @mouseenter="pauseTimeout" @mouseleave="resumeTimeout">
-    <div class="md-snackbar-container" ref="container">
-      <div class="md-snackbar-content">
-        <slot></slot>
-      </div>
-    </div>
-  </div>
+  <md-portal v-if="mdPersistent && mdDuration !== Infinity">
+    <keep-alive>
+      <md-snackbar-content :md-classes="[snackbarClasses, $mdActiveTheme]" v-if="mdActive">
+        <slot />
+      </md-snackbar-content>
+    </keep-alive>
+  </md-portal>
+
+  <md-portal v-else>
+    <md-snackbar-content :md-classes="[snackbarClasses, $mdActiveTheme]" v-if="mdActive">
+      <slot />
+    </md-snackbar-content>
+  </md-portal>
 </template>
 
 <script>
-  import uniqueId from '../../core/utils/uniqueId';
-  import transitionEndEventName from '../../core/utils/transitionEndEventName';
-  import theme from '../../core/components/mdTheme/mixin';
-  import manager from './manager';
+  import MdComponent from 'core/MdComponent'
+  import MdPropValidator from 'core/utils/MdPropValidator'
+  import MdPortal from 'components/MdPortal/MdPortal'
+  import MdSnackbarContent from './MdSnackbarContent'
+  import { createSnackbar, destroySnackbar } from './MdSnackbarQueue'
 
-  export default {
+  export default new MdComponent({
+    name: 'MdSnackbar',
+    components: {
+      MdPortal,
+      MdSnackbarContent
+    },
     props: {
-      id: [String, Number],
+      mdActive: Boolean,
+      mdPersistent: Boolean,
+      mdDuration: {
+        type: Number,
+        default: 4000
+      },
       mdPosition: {
         type: String,
-        default: 'bottom center'
-      },
-      mdDuration: {
-        type: [String, Number],
-        default: 4000
+        default: 'center',
+      ...MdPropValidator('md-position', ['center', 'left'])
       }
     },
-    mixins: [theme],
-    data() {
-      return {
-        snackbarId: this.id || 'snackbar-' + uniqueId(),
-        active: false,
-        rootElement: {},
-        snackbarElement: {},
-        directionClass: null,
-        closeTimeout: null
-      };
-    },
     computed: {
-      classes() {
-        let cssClasses = {
-          'md-active': this.active
-        };
-
-        this.directionClass = this.mdPosition.replace(/ /g, '-');
-
-        cssClasses['md-position-' + this.directionClass] = true;
-
-        return cssClasses;
+      snackbarClasses () {
+        return {
+          ['md-position-' + this.mdPosition]: true
+        }
       }
     },
     watch: {
-      active(active) {
-        const directionClass = 'md-has-toast-' + this.directionClass;
-        const toastClass = 'md-has-toast';
+      async mdActive (isActive) {
+        if (isActive) {
+          await createSnackbar(this.mdDuration, this)
 
-        if (active) {
-          document.body.classList.add(directionClass);
-          document.body.classList.add(toastClass);
+          this.$emit('update:mdActive', false)
+          this.$emit('md-opened')
         } else {
-          document.body.classList.remove(directionClass);
-          document.body.classList.remove(toastClass);
+          destroySnackbar()
+          this.$emit('md-closed')
         }
       }
-    },
-    methods: {
-      removeElement() {
-        if (document.body.contains(this.snackbarElement)) {
-          const activeRipple = this.snackbarElement.querySelector('.md-ripple.md-active');
-
-          if (activeRipple) {
-            activeRipple.classList.remove('md-active');
-          }
-
-          document.body.removeChild(this.snackbarElement);
-        }
-      },
-      open() {
-        if (manager.current) {
-          //manager.current.close();
-        }
-
-        manager.current = this;
-        document.body.appendChild(this.snackbarElement);
-        window.getComputedStyle(this.$refs.container).backgroundColor;
-        this.active = true;
-        this.$emit('open');
-        this.closeTimeout = window.setTimeout(this.close, this.mdDuration);
-        this.timeoutStartedAt = Date.now();
-      },
-      close() {
-        if (this.$refs.container) {
-          const removeElement = () => {
-            this.$refs.container.removeEventListener(transitionEndEventName, removeElement);
-            this.removeElement();
-          };
-
-          manager.current = null;
-          this.active = false;
-          this.$emit('close');
-          this.$refs.container.removeEventListener(transitionEndEventName, removeElement);
-          this.$refs.container.addEventListener(transitionEndEventName, removeElement);
-          window.clearTimeout(this.closeTimeout);
-          this.pendingDuration = this.mdDuration;
-        }
-      },
-      pauseTimeout() {
-        this.pendingDuration = this.pendingDuration - (Date.now() - this.timeoutStartedAt);
-        this.timeoutStartedAt = 0;
-        window.clearTimeout(this.closeTimeout);
-      },
-      resumeTimeout() {
-        this.timeoutStartedAt = Date.now();
-        this.closeTimeout = window.setTimeout(this.close, this.pendingDuration);
-      }
-    },
-    mounted() {
-      // this.$nextTick(() => {
-        this.snackbarElement = this.$el;
-        this.snackbarElement.parentNode.removeChild(this.snackbarElement);
-        this.timeoutStartedAt = 0;
-        this.pendingDuration = this.mdDuration;
-      // });
-    },
-    beforeDestroy() {
-      window.clearTimeout(this.closeTimeout);
-      this.removeElement();
     }
-  };
+  })
 </script>
+
+<style lang="scss">
+  @import "~components/MdAnimation/variables";
+  @import "~components/MdLayout/mixins";
+  @import "~components/MdElevation/mixins";
+
+  .md-snackbar {
+    @include md-elevation(6);
+    min-width: 288px;
+    max-width: 568px;
+    min-height: 48px;
+    max-height: 80px;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    z-index: 1000;
+    border-radius: 2px;
+    transition: .4s $md-transition-default-timing;
+    will-change: background-color, color, opacity, transform;
+
+    &.md-position-center {
+      margin: 0 auto;
+      right: 0;
+      bottom: 0;
+      left: 0;
+
+      &.md-snackbar-enter,
+      &.md-snackbar-leave-active {
+        transform: translate3D(0, calc(100% + 8px), 0);
+      }
+    }
+
+    &.md-position-left {
+      bottom: 24px;
+      left: 24px;
+
+      &.md-snackbar-enter,
+      &.md-snackbar-leave-active {
+        transform: translate3D(0, calc(100% + 32px), 0);
+      }
+    }
+
+    @include md-layout-xsmall {
+      left: 0;
+      transform: none;
+      border-radius: 0;
+    }
+  }
+
+  .md-snackbar-enter,
+  .md-snackbar-leave-active {
+    opacity: 0;
+
+    .md-snackbar-content {
+      opacity: 0;
+    }
+  }
+
+  .md-snackbar-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: opacity .38s $md-transition-drop-timing;
+
+    .md-button {
+      min-width: 0;
+      margin: -8px -8px -8px 36px;
+
+      @include md-layout-xsmall {
+        margin-left: 12px;
+      }
+    }
+  }
+</style>

@@ -1,5 +1,5 @@
-import mdEditor from './mdEditor.vue';
+import MdEditor from './MdEditor.vue';
 
 export default function install(Vue) {
-  Vue.component('md-editor', mdEditor);
+  Vue.component(MdEditor.name, MdEditor);
 }

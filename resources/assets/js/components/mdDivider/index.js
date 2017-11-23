@@ -1,5 +1,7 @@
-import mdDivider from './mdDivider.vue';
+import material from 'vue-material/material'
+import MdDivider from './MdDivider'
 
-export default function install(Vue) {
-  Vue.component('md-divider', mdDivider);
+export default Vue => {
+  material(Vue)
+  Vue.component(MdDivider.name, MdDivider)
 }

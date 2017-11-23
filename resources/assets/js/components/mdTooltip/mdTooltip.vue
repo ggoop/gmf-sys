@@ -1,160 +1,142 @@
 <template>
-  <span class="md-tooltip" :class="classes" :style="style">
-    <slot></slot>
-  </span>
+  <md-popover :md-settings="popperSettings" :md-active="shouldRender">
+    <transition name="md-tooltip" v-if="shouldRender">
+      <div class="md-tooltip" :class="[tooltipClasses, $mdActiveTheme]" :style="tooltipStyles">
+        <slot />
+      </div>
+    </transition>
+  </md-popover>
 </template>
 
 <script>
-  import transitionEndEventName from '../../core/utils/transitionEndEventName';
+  import MdComponent from 'core/MdComponent'
+  import MdPropValidator from 'core/utils/MdPropValidator'
+  import MdPopover from 'components/MdPopover/MdPopover'
 
-  export default {
+  export default new MdComponent({
+    name: 'MdTooltip',
+    components: {
+      MdPopover
+    },
     props: {
+      mdActive: Boolean,
+      mdDelay: {
+        type: [String, Number],
+        default: 0
+      },
       mdDirection: {
         type: String,
-        default: 'bottom'
-      },
-      mdDelay: {
-        type: String,
-        default: '0'
+        default: 'bottom',
+        ...MdPropValidator('md-direction', ['top', 'right', 'bottom', 'left'])
       }
     },
     data: () => ({
-      active: false,
-      parentClass: null,
-      transitionOff: false,
-      topPosition: false,
-      leftPosition: false
+      shouldRender: false,
+      targetEl: null
     }),
     computed: {
-      classes() {
-        const cssClasses = {
-          'md-active': this.active,
-          'md-transition-off': this.transitionOff,
-          'md-tooltip-top': this.mdDirection === 'top',
-          'md-tooltip-right': this.mdDirection === 'right',
-          'md-tooltip-bottom': this.mdDirection === 'bottom',
-          'md-tooltip-left': this.mdDirection === 'left'
-        };
-
-        if (this.parentClass) {
-          cssClasses[this.parentClass] = true;
-        }
-
-        return cssClasses;
+      tooltipClasses () {
+        return 'md-tooltip-' + this.mdDirection
       },
-      style() {
+      tooltipStyles () {
+        return `transition-delay: ${this.mdDelay}ms`
+      },
+      popperSettings () {
         return {
-          'transition-delay': this.mdDelay + 'ms',
-          top: this.topPosition + 'px',
-          left: this.leftPosition + 'px'
-        };
+          placement: this.mdDirection,
+          modifiers: {
+            offset: {
+              offset: '0, 16'
+            }
+          }
+        }
       }
     },
     watch: {
-      mdDirection() {
-        this.calculateTooltipPosition();
+      mdActive () {
+        this.shouldRender = this.mdActive
       }
     },
     methods: {
-      removeTooltips() {
-        if (this.tooltipElement.parentNode) {
-          this.tooltipElement.removeEventListener(transitionEndEventName, this.removeTooltips);
-          this.tooltipElement.parentNode.removeChild(this.tooltipElement);
-        }
+      show () {
+        this.shouldRender = true
       },
-      calculateTooltipPosition() {
-        let position = this.parentElement.getBoundingClientRect();
-        let cssPosition = {};
-
-        switch (this.mdDirection) {
-          case 'top':
-            cssPosition.top = position.top - this.$el.offsetHeight;
-            cssPosition.left = position.left + position.width / 2;
-
-            break;
-
-          case 'right':
-            cssPosition.top = position.top;
-            cssPosition.left = position.left + position.width;
-
-            break;
-
-          case 'bottom':
-            cssPosition.top = position.bottom;
-            cssPosition.left = position.left + position.width / 2;
-
-            break;
-
-          case 'left':
-            cssPosition.top = position.top;
-            cssPosition.left = position.left - this.$el.offsetWidth;
-
-            break;
-
-          default:
-            console.warn(`Invalid ${this.mdDirection} option to md-direction option`);
-        }
-
-        this.topPosition = cssPosition.top;
-        this.leftPosition = cssPosition.left;
-      },
-      generateTooltipClasses() {
-        let classes = [];
-
-        [...this.parentElement.classList].forEach((cssClass) => {
-          if (cssClass.indexOf('md-') >= 0 && cssClass !== 'md-active') {
-            classes.push(cssClass + '-tooltip');
-          }
-        });
-
-        this.parentClass = classes.join(' ');
-      },
-      open() {
-        this.removeTooltips();
-
-        this.$nextTick(() => {
-          document.body.appendChild(this.tooltipElement);
-          getComputedStyle(this.tooltipElement).top;
-          this.transitionOff = true;
-          this.generateTooltipClasses();
-          this.calculateTooltipPosition();
-
-          window.setTimeout(() => {
-            this.transitionOff = false;
-            this.active = true;
-          }, 10);
-        });
-      },
-      close() {
-        this.active = false;
-        this.tooltipElement.removeEventListener(transitionEndEventName, this.removeTooltips);
-        this.tooltipElement.addEventListener(transitionEndEventName, this.removeTooltips);
+      hide () {
+        this.$emit('update:mdActive', false)
+        this.shouldRender = false
       }
     },
-    mounted() {
-      this.$nextTick(() => {
-        this.tooltipElement = this.$el;
-        this.parentElement = this.tooltipElement.parentNode;
+    async mounted () {
+      await this.$nextTick()
 
-        this.$el.parentNode.removeChild(this.$el);
+      this.shouldRender = this.mdActive
+      this.targetEl = this._vnode.componentInstance.originalParentEl
 
-        this.parentElement.addEventListener('mouseenter', this.open);
-        this.parentElement.addEventListener('focus', this.open);
-        this.parentElement.addEventListener('mouseleave', this.close);
-        this.parentElement.addEventListener('blur', this.close);
-      });
+      if (this.targetEl) {
+        this.targetEl.addEventListener('mouseenter', this.show, false)
+        this.targetEl.addEventListener('mouseleave', this.hide, false)
+      }
     },
-    beforeDestroy() {
-      this.active = false;
-
-      this.removeTooltips();
-
-      if (this.parentElement) {
-        this.parentElement.removeEventListener('mouseenter', this.open);
-        this.parentElement.removeEventListener('focus', this.open);
-        this.parentElement.removeEventListener('mouseleave', this.close);
-        this.parentElement.removeEventListener('blur', this.close);
+    beforeDestroy () {
+      if (this.targetEl) {
+        this.targetEl.removeEventListener('mouseenter', this.show)
+        this.targetEl.removeEventListener('mouseleave', this.hide)
       }
     }
-  };
+  })
 </script>
+
+<style lang="scss">
+  @import "~components/MdAnimation/variables";
+  @import "~components/MdLayout/mixins";
+
+  $md-tooltip-height: 22px;
+  $md-tooltip-height-mobile: 32px;
+
+  .md-tooltip {
+    height: $md-tooltip-height;
+    padding: 0 8px;
+    position: fixed;
+    z-index: 60;
+    pointer-events: none;
+    border-radius: 2px;
+    transition: .15s $md-transition-enter-timing;
+    transition-property: opacity, transform;
+    will-change: opacity, transform, top, left !important;
+    font-size: 10px;
+    line-height: $md-tooltip-height;
+    text-transform: none;
+    white-space: nowrap;
+
+    @include md-layout-small {
+      height: $md-tooltip-height-mobile;
+      font-size: 14px;
+      line-height: $md-tooltip-height-mobile;
+    }
+
+    &.md-tooltip-leave-active {
+      transition-timing-function: $md-transition-leave-timing;
+    }
+
+    &.md-tooltip-enter,
+    &.md-tooltip-leave-active {
+      opacity: 0;
+
+      &.md-tooltip-top {
+        transform: translate3d(0, 4px, 0) scale(.95);
+      }
+
+      &.md-tooltip-right {
+        transform: translate3d(-4px, 0, 0) scale(.95);
+      }
+
+      &.md-tooltip-bottom {
+        transform: translate3d(0, -4px, 0) scale(.95);
+      }
+
+      &.md-tooltip-left {
+        transform: translate3d(4px, 0, 0) scale(.95);
+      }
+    }
+  }
+</style>

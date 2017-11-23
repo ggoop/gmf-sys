@@ -96,3 +96,23 @@ export default {
   }
 };
 </script>
+
+
+<style lang="scss">
+.md-pagination {
+  color: #404040;
+  .md-select {
+    width: auto;
+    min-width: .36rem;
+    margin: 0 .1rem;
+  }
+  .md-pagination-info {
+    min-width: .7rem;
+    text-align: center;
+  }
+  .md-button {
+    min-width: .3rem;
+    margin: 0px;
+  }
+}
+</style>

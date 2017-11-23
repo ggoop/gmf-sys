@@ -1,110 +1,115 @@
-<template>
-  <div class="md-tab" :id="tabId" :style="styles">
-    <slot></slot>
-  </div>
-</template>
-
 <script>
-  import uniqueId from '../../core/utils/uniqueId';
-  import getClosestVueParent from '../../core/utils/getClosestVueParent';
+  import MdUuid from 'core/utils/MdUuid'
+  import MdObserveElement from 'core/utils/MdObserveElement'
+  import MdRouterLinkProps from 'core/utils/MdRouterLinkProps'
 
   export default {
+    name: 'MdTab',
     props: {
-      id: [String, Number],
+      id: {
+        type: String,
+        default: () => 'md-tab-' + MdUuid()
+      },
+      href: [String, Number],
+      to: null,
+      mdDisabled: Boolean,
       mdLabel: [String, Number],
       mdIcon: String,
-      mdActive: Boolean,
-      mdDisabled: Boolean,
-      mdTooltip: String,
-      mdTag: String,
-      mdTooltipDelay: {
-        type: String,
-        default: '0'
-      },
-      mdTooltipDirection: {
-        type: String,
-        default: 'bottom'
+      mdTemplateData: {
+        type: Object,
+        default: () => ({})
       }
     },
-    data() {
-      return {
-        mounted: false,
-        tabId: this.id || 'tab-' + uniqueId(),
-        width: '0px',
-        left: '0px'
-      };
-    },
+    inject: ['MdTabs'],
+    data: () => ({
+      observer: null
+    }),
     watch: {
-      mdActive() {
-        this.updateTabData();
+      $props: {
+        deep: true,
+        handler () {
+          this.setTabData()
+        }
       },
-      mdDisabled() {
-        this.updateTabData();
-      },
-      mdIcon() {
-        this.updateTabData();
-      },
-      mdLabel() {
-        this.updateTabData();
-      },
-      mdTooltip() {
-        this.updateTabData();
-      },
-      mdTooltipDelay() {
-        this.updateTabData();
-      },
-      mdTooltipDirection() {
-        this.updateTabData();
-      },
-      mdTag() {
-        this.updateTabData();
-      },
-    },
-    computed: {
-      styles() {
-        return {
-          width: this.width,
-          left: this.left
-        };
+      $attrs: {
+        deep: true,
+        handler () {
+          this.setTabData()
+        }
       }
     },
     methods: {
-      getTabData() {
-        return {
-          id: this.tabId,
+      setTabContent () {
+        this.$set(this.MdTabs.items[this.id], 'hasContent', !!this.$slots.default)
+      },
+      setupObserver () {
+        this.observer = MdObserveElement(this.$el, {
+          childList: true
+        }, this.setTabContent)
+      },
+      setTabData () {
+        this.$set(this.MdTabs.items, this.id, {
+          hasContent: !!this.$slots.default,
           label: this.mdLabel,
           icon: this.mdIcon,
-          active: this.mdActive,
           disabled: this.mdDisabled,
-          tooltip: this.mdTooltip,
-          tooltipDelay: this.mdTooltipDelay,
-          tooltipDirection: this.mdTooltipDirection,
-          tag:this.mdTag,
-          ref: this
-        };
+          data: this.mdTemplateData,
+          props: this.getPropValues(),
+          events: this.$listeners
+        })
       },
-      updateTabData() {
-        this.parentTabs.updateTab(this.getTabData());
+      getPropValues () {
+        const propNames = Object.keys(this.$options.props)
+        const ignoredProps = ['id', 'mdLabel', 'mdDisabled', 'mdTemplateData']
+        let values = {}
+
+        propNames.forEach(prop => {
+          if (!ignoredProps.includes(prop)) {
+            if (this[prop]) {
+              values[prop] = this[prop]
+            } else if (this.$attrs.hasOwnProperty(prop)) {
+              if (prop) {
+                values[prop] = this.$attrs[prop]
+              } else {
+                values[prop] = true
+              }
+            }
+          }
+        })
+
+        return values
       }
     },
-    mounted() {
-      let tabData = this.getTabData();
-
-      this.parentTabs = getClosestVueParent(this.$parent, 'md-tabs');
-
-      if (!this.parentTabs) {
-        throw new Error('You must wrap the md-tab in a md-tabs');
-      }
-
-      this.mounted = true;
-      this.parentTabs.updateTab(tabData);
-
-      if (this.mdActive) {
-        this.parentTabs.setActiveTab(tabData);
-      }
+    mounted () {
+      this.setupObserver()
+      this.setTabData()
     },
-    beforeDestroy() {
-      this.parentTabs.unregisterTab(this.getTabData());
+    beforeDestroy () {
+      if (this.observer) {
+        this.observer.disconnect()
+      }
+
+      this.$delete(this.MdTabs.items, this.id)
+    },
+    render (createElement) {
+      let tabAttrs = {
+        staticClass: 'md-tab',
+        attrs: {
+          ...this.$attrs,
+          id: this.id
+        },
+        on: this.$listeners
+      }
+
+      if (this.href) {
+        this.buttonProps = this.$options.props
+      } else if (this.$router && this.to) {
+        this.$options.props = MdRouterLinkProps(this, this.$options.props)
+
+        tabAttrs.props = this.$props
+      }
+
+      return createElement('div', tabAttrs, this.$slots.default)
     }
-  };
+  }
 </script>

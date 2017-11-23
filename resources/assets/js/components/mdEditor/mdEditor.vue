@@ -8,7 +8,7 @@
 import Quill from 'quill'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
-import uniqueId from '../../core/utils/uniqueId';
+import uniqueId from 'core/utils/uniqueId';
 var defaultToolbar = [
   [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
   [{ 'size': ['small', false, 'large', 'huge'] }],
@@ -21,7 +21,7 @@ var defaultToolbar = [
 ];
 
 export default {
-  name: 'vue-editor',
+  name: 'MdEditor',
   props: {
     value: String,
     mdInputId: String,
@@ -119,3 +119,10 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+  @import "~components/MdAnimation/variables";
+ .md-editor-wrapper {
+    margin:0px;
+  }
+  
+</style>

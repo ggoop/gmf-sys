@@ -1,6 +1,7 @@
-import mdRadio from './mdRadio.vue';
-import mdRadioTheme from './mdRadio.theme';
-export default function install(Vue) {
-  Vue.component('md-radio', mdRadio);
-  Vue.material.styles.push(mdRadioTheme);
+import material from 'vue-material/material'
+import MdRadio from './MdRadio'
+
+export default Vue => {
+  material(Vue)
+  Vue.component(MdRadio.name, MdRadio)
 }

@@ -14,3 +14,6 @@
     }
 };
 </script>
+<style lang="scss">
+  @import "~components/MdAnimation/variables";
+</style>

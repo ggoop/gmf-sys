@@ -1,10 +1,9 @@
-import mdChips from './mdChips.vue';
-import mdChip from './mdChip.vue';
-import mdChipsTheme from './mdChips.theme';
+import material from 'vue-material/material'
+import MdChips from './MdChips'
+import MdChip from './MdChip'
 
-export default function install(Vue) {
-  Vue.component('md-chips', mdChips);
-  Vue.component('md-chip', mdChip);
-
-  Vue.material.styles.push(mdChipsTheme);
+export default Vue => {
+  material(Vue)
+  Vue.component(MdChips.name, MdChips)
+  Vue.component(MdChip.name, MdChip)
 }

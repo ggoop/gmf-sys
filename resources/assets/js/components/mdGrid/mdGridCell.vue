@@ -31,7 +31,7 @@
   </td>
 </template>
 <script>
-import getClosestVueParent from '../../core/utils/getClosestVueParent';
+import getClosestVueParent from 'core/utils/getClosestVueParent';
 import mdGridCellShow from './mdGridCellShow';
 import mdGridCellEdit from './mdGridCellEdit';
 export default {

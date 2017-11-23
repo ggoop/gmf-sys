@@ -1,6 +1,7 @@
-import mdIcon from './mdIcon.vue';
-import mdIconTheme from './mdIcon.theme';
-export default function install(Vue) {
-  Vue.component('md-icon', mdIcon);
-  Vue.material.styles.push(mdIconTheme);
+import material from 'vue-material/material'
+import MdIcon from './MdIcon'
+
+export default Vue => {
+  material(Vue)
+  Vue.component(MdIcon.name, MdIcon)
 }

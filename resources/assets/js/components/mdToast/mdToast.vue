@@ -1,5 +1,5 @@
 <template>
-  <div class="md-snackbar md-toast" :class="[themeClass, classes]" :id="snackbarId">
+  <div class="md-snackbar md-toast" :class="[classes]" :id="snackbarId">
     <transition-group name="list" tag="p">
       <div v-for="(item,itemInd) in toastList" class="md-snackbar-container" :key="item.id" @mouseenter="pauseTimeout(item)" @mouseleave="resumeTimeout(item)">
         <div class="md-snackbar-content">
@@ -13,8 +13,7 @@
   </div>
 </template>
 <script>
-import transitionEndEventName from '../../core/utils/transitionEndEventName';
-import theme from '../../core/components/mdTheme/mixin';
+import transitionEndEventName from 'core/utils/transitionEndEventName';
 
 export default {
   props: {
@@ -28,7 +27,6 @@ export default {
       default: 10000
     }
   },
-  mixins: [theme],
   data() {
     return {
       snackbarId: this.id || 'snackbar-' + this._.uniqueId(),
@@ -140,3 +138,24 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+  @import "~components/MdAnimation/variables";
+  .md-toast {
+    .md-snackbar-container {
+        position: relative;
+        overflow: hidden;
+    }
+    .md-snackbar-content{
+        overflow: auto;
+        max-height: 3rem;
+    }
+    .md-toast-close {
+        position: absolute;
+        right: 2px;
+        top: 2px;
+    }
+}
+
+
+</style>

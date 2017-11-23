@@ -1,47 +1,40 @@
 <template>
-  <div class="md-table-alternate-header" :class="[themeClass, classes]">
-    <md-toolbar>
-      <div class="md-counter">
-        <span ref="counter">{{ tableInstance.numberOfSelected }}</span>
-        <span>{{ mdSelectedLabel }}</span>
-      </div>
-
-      <slot></slot>
-    </md-toolbar>
-  </div>
+  <transition name="md-table-alternate-header">
+    <div class="md-table-alternate-header">
+      <slot />
+    </div>
+  </transition>
 </template>
 
 <script>
-  import theme from '../../core/components/mdTheme/mixin';
-  import getClosestVueParent from '../../core/utils/getClosestVueParent';
-
   export default {
-    props: {
-      mdSelectedLabel: {
-        type: String,
-        default: 'selected'
-      }
-    },
-    mixins: [theme],
-    data() {
-      return {
-        classes: {},
-        tableInstance: {}
-      };
-    },
-    mounted() {
-      this.parentCard = getClosestVueParent(this.$parent, 'md-table-card');
-
-      this.$nextTick(() => {
-        this.tableInstance = this.parentCard.tableInstance;
-
-        this.$watch('tableInstance.numberOfSelected', () => {
-          this.$refs.counter.textContent = this.tableInstance.numberOfSelected;
-          this.classes = {
-            'md-active': this.tableInstance.numberOfSelected > 0
-          };
-        });
-      });
-    }
-  };
+    name: 'MdTableAlternateHeader'
+  }
 </script>
+
+<style lang="scss">
+  @import "~components/MdAnimation/variables";
+
+  .md-table-alternate-header {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 2;
+    will-change: opacity, transform;
+  }
+
+  .md-table-alternate-header-enter,
+  .md-table-alternate-header-leave-active {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+
+  .md-table-alternate-header-enter-active {
+    transition: .3s $md-transition-default-timing;
+  }
+
+  .md-table-alternate-header-leave-active {
+    transition: .2s $md-transition-leave-timing;
+  }
+</style>

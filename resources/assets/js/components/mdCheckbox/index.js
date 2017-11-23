@@ -1,8 +1,7 @@
-import mdCheckbox from './mdCheckbox.vue';
-import mdCheckboxTheme from './mdCheckbox.theme';
+import material from 'vue-material/material'
+import MdCheckbox from './MdCheckbox'
 
-export default function install(Vue) {
-  Vue.component('md-checkbox', mdCheckbox);
-
-  Vue.material.styles.push(mdCheckboxTheme);
+export default Vue => {
+  material(Vue)
+  Vue.component(MdCheckbox.name, MdCheckbox)
 }

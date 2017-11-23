@@ -1,33 +1,97 @@
 <template>
-  <td class="md-table-cell" :class="classes">
+  <td class="md-table-cell" :class="cellClasses">
     <div class="md-table-cell-container">
-      <slot></slot>
+      <slot />
     </div>
   </td>
 </template>
 
 <script>
   export default {
+    name: 'MdTableCell',
     props: {
+      mdLabel: String,
       mdNumeric: Boolean,
-      mdIsTool:Boolean
+      mdTooltip: String,
+      mdSortBy: String
     },
+    inject: ['MdTable'],
     data: () => ({
-      hasAction: false
+      index: null
     }),
     computed: {
-      classes() {
+      cellClasses () {
         return {
-          'md-numeric': this.mdNumeric,
-          'md-has-action': this.hasAction,
-          'md-table-cell-tool':this.mdIsTool
-        };
+          'md-numeric': this.mdNumeric
+        }
       }
     },
-    mounted() {
-      if (this.$children.length > 0) {
-        this.hasAction = true;
+    watch: {
+      mdSortBy () {
+        this.setCellData()
+      },
+      mdNumeric () {
+        this.setCellData()
+      },
+      mdLabel () {
+        this.setCellData()
+      },
+      mdTooltip () {
+        this.setCellData()
       }
+    },
+    methods: {
+      setCellData ($vm = this) {
+        this.$set(this.MdTable.items, $vm.index, {
+          label: $vm.mdLabel,
+          numeric: $vm.mdNumeric,
+          tooltip: $vm.mdTooltip,
+          sortBy: $vm.mdSortBy
+        })
+      },
+      updateAllCellData () {
+        const cells = Array.from(this.$el.parentNode.childNodes).filter(({ tagName, classList }) => {
+          const isSelection = classList && classList.contains('md-table-cell-selection')
+          const isTd = tagName && tagName.toLowerCase() === 'td'
+
+          return isTd && !isSelection
+        })
+
+        cells.forEach((cell, index) => {
+          const $vm = cell.__vue__
+
+          $vm.index = index
+
+          this.setCellData($vm)
+        })
+      }
+    },
+    mounted () {
+      this.updateAllCellData()
     }
-  };
+  }
 </script>
+
+<style lang="scss">
+  @import "~components/MdAnimation/variables";
+
+  .md-table-cell {
+    height: 48px;
+    position: relative;
+    transition: .3s $md-transition-default-timing;
+    font-size: 13px;
+    line-height: 18px;
+
+    &.md-numeric {
+      text-align: right;
+    }
+
+    &:last-child .md-table-cell-container {
+      padding-right: 24px;
+    }
+  }
+
+  .md-table-cell-container {
+    padding: 6px 32px 6px 24px;
+  }
+</style>

@@ -1,6 +1,7 @@
-import mdSnackbar from './mdSnackbar.vue';
-import mdSnackbarTheme from './mdSnackbar.theme';
-export default function install(Vue) {
-  Vue.component('md-snackbar', mdSnackbar);
-  Vue.material.styles.push(mdSnackbarTheme);
+import material from 'vue-material/material'
+import MdSnackbar from './MdSnackbar'
+
+export default Vue => {
+  material(Vue)
+  Vue.component(MdSnackbar.name, MdSnackbar)
 }

@@ -1,154 +1,186 @@
 <template>
-  <div class="md-dialog-container" :class="[themeClass, classes]" @keyup.esc.stop="closeOnEsc" tabindex="0">
-    <div class="md-dialog" ref="dialog" :style="styles" :class="dialogClasses">
-      <slot></slot>
-    </div>
+  <md-portal>
+    <transition name="md-dialog">
+      <div class="md-dialog" :class="[dialogClasses, $mdActiveTheme]" v-on="$listeners" @keydown.esc="onEsc" v-if="mdActive">
+        <md-focus-trap>
+          <div class="md-dialog-container">
+            <slot />
 
-    <md-backdrop class="md-dialog-backdrop" :class="classes" v-if="mdBackdrop" ref="backdrop" @close="mdClickOutsideToClose && close()"></md-backdrop>
-  </div>
+            <keep-alive>
+              <md-overlay :class="mdBackdropClass" md-fixed :md-active="mdActive" @click="onClick" v-if="mdBackdrop" />
+            </keep-alive>
+          </div>
+        </md-focus-trap>
+      </div>
+    </transition>
+  </md-portal>
 </template>
 
 <script>
-  import theme from '../../core/components/mdTheme/mixin';
-  import transitionEndEventName from '../../core/utils/transitionEndEventName';
+  import MdComponent from 'core/MdComponent'
+  import MdPortal from 'components/MdPortal/MdPortal'
+  import MdOverlay from 'components/MdOverlay/MdOverlay'
+  import MdFocusTrap from 'components/MdFocusTrap/MdFocusTrap'
 
-  export default {
+  export default new MdComponent({
+    name: 'MdDialog',
+    components: {
+      MdPortal,
+      MdOverlay,
+      MdFocusTrap
+    },
     props: {
-      mdClickOutsideToClose: {
-        type: Boolean,
-        default: true
-      },
-      mdEscToClose: {
-        type: Boolean,
-        default: true
-      },
+      mdActive: Boolean,
       mdBackdrop: {
         type: Boolean,
         default: true
       },
-      mdOpenFrom: String,
-      mdCloseTo: String,
+      mdBackdropClass: {
+        type: String,
+        default: 'md-dialog-overlay'
+      },
+      mdCloseOnEsc: {
+        type: Boolean,
+        default: true
+      },
+      mdClickOutsideToClose: {
+        type: Boolean,
+        default: true
+      },
       mdFullscreen: {
         type: Boolean,
-        default: false
+        default: true
+      },
+      mdAnimateFromSource: Boolean
+    },
+    computed: {
+      dialogClasses () {
+        return {
+          'md-dialog-fullscreen': this.mdFullscreen
+        }
       }
     },
-    mixins: [theme],
-    data: () => ({
-      active: false,
-      transitionOff: false,
-      dialogTransform: ''
-    }),
-    computed: {
-      classes() {
-        return {
-          'md-active': this.active
-        };
-      },
-      dialogClasses() {
-        return {
-          'md-fullscreen': this.mdFullscreen,
-          'md-transition-off': this.transitionOff,
-          'md-reference': this.mdOpenFrom || this.mdCloseTo
-        };
-      },
-      styles() {
-        return {
-          transform: this.dialogTransform
-        };
+    watch: {
+      async mdActive (isActive) {
+        await this.$nextTick()
+
+        if (isActive) {
+          this.$emit('md-opened')
+        } else {
+          this.$emit('md-closed')
+        }
       }
     },
     methods: {
-      removeDialog() {
-        if (document.body.contains(this.dialogElement)) {
-          this.$el.parentNode.removeChild(this.$el);
+      closeDialog () {
+        this.$emit('update:mdActive', false)
+      },
+      onClick () {
+        if (this.mdClickOutsideToClose) {
+          this.closeDialog()
         }
       },
-      calculateDialogPos(ref) {
-        const reference = document.querySelector(ref);
-
-        if (reference) {
-          const openFromRect = reference.getBoundingClientRect();
-          const dialogRect = this.dialogInnerElement.getBoundingClientRect();
-          const widthInScale = openFromRect.width / dialogRect.width;
-          const heightInScale = openFromRect.height / dialogRect.height;
-          let distance = {
-            top: -(dialogRect.top - openFromRect.top),
-            left: -(dialogRect.left - openFromRect.left + openFromRect.width)
-          };
-
-          if (openFromRect.top > dialogRect.top + dialogRect.height) {
-            distance.top = openFromRect.top - dialogRect.top;
-          }
-
-          if (openFromRect.left > dialogRect.left + dialogRect.width) {
-            distance.left = openFromRect.left - dialogRect.left - openFromRect.width;
-          }
-
-          this.dialogTransform = `translate3D(${distance.left}px, ${distance.top}px, 0) scale(${widthInScale}, ${heightInScale})`;
-        }
-      },
-      open() {
-        document.body.appendChild(this.dialogElement);
-        this.transitionOff = true;
-        this.calculateDialogPos(this.mdOpenFrom);
-
-        window.setTimeout(() => {
-          this.dialogElement.focus();
-          this.transitionOff = false;
-          this.active = true;
-        });
-
-        this.$emit('open');
-      },
-      closeOnEsc() {
-        if (this.mdEscToClose) {
-          this.close();
-        }
-      },
-      close() {
-        if (document.body.contains(this.dialogElement)) {
-          this.$nextTick(() => {
-            let cleanElement = () => {
-              let activeRipple = this.dialogElement.querySelector('.md-ripple.md-active');
-
-              if (activeRipple) {
-                activeRipple.classList.remove('md-active');
-              }
-
-              this.dialogInnerElement.removeEventListener(transitionEndEventName, cleanElement);
-              document.body.removeChild(this.dialogElement);
-              this.dialogTransform = '';
-            };
-
-            this.transitionOff = true;
-            this.dialogTransform = '';
-            this.calculateDialogPos(this.mdCloseTo);
-
-            window.setTimeout(() => {
-              this.transitionOff = false;
-              this.active = false;
-              this.dialogInnerElement.addEventListener(transitionEndEventName, cleanElement);
-            });
-
-            this.$emit('close');
-          });
+      onEsc () {
+        if (this.mdCloseOnEsc) {
+          this.closeDialog()
         }
       }
-    },
-    mounted() {
-      this.dialogElement = this.$el;
-        this.dialogInnerElement = this.$refs.dialog;
-        this.removeDialog();
-        
-      // this.$nextTick(() => {
-      //   this.dialogElement = this.$el;
-      //   this.dialogInnerElement = this.$refs.dialog;
-      //   this.removeDialog();
-      // });
-    },
-    beforeDestroy() {
-      this.removeDialog();
     }
-  };
+  })
 </script>
+
+<style lang="scss">
+  @import "~components/MdAnimation/variables";
+  @import "~components/MdLayout/mixins";
+  @import "~components/MdElevation/mixins";
+
+  .md-dialog {
+    @include md-elevation(24);
+    min-width: 280px;
+    max-width: 80%;
+    max-height: 80%;
+    margin: auto;
+    display: flex;
+    flex-flow: column;
+    overflow: hidden;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 110;
+    border-radius: 2px;
+    backface-visibility: hidden;
+    pointer-events: auto;
+    transform: translate(-50%, -50%);
+    transform-origin: center center;
+    transition: opacity .15s $md-transition-stand-timing,
+                transform .2s $md-transition-stand-timing;
+    will-change: opacity, transform, left, top;
+
+    > .md-dialog-tabs,
+    > .md-dialog-title,
+    > .md-dialog-content,
+    > .md-dialog-actions {
+      transition: opacity .3s $md-transition-default-timing,
+                  transform .25s $md-transition-default-timing;
+      will-change: opacity, transform;
+    }
+  }
+
+.md-dialog-enter-active,
+  .md-dialog-leave-active {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(.9);
+
+    > .md-dialog-tabs,
+    > .md-dialog-title,
+    > .md-dialog-content,
+    > .md-dialog-actions {
+      opacity: 0;
+      transform: scale(.95) translate3D(0, 10%, 0);
+    }
+  }
+
+  .md-dialog-container {
+    display: flex;
+    flex-flow: column;
+    flex: 1;
+
+    .md-tabs {
+      flex: 1;
+    }
+
+    .md-tabs-navigation {
+      padding: 0 12px;
+    }
+
+    .md-tab {
+      @include md-layout-xsmall {
+        padding: 12px;
+      }
+    }
+  }
+
+  .md-dialog-fullscreen {
+    @include md-layout-xsmall {
+      max-width: 100%;
+      max-height: 100%;
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      border-radius: 0;
+      transform: none;
+
+      &.md-dialog-enter {
+        opacity: 0;
+        transform: translate3D(0, 30%, 0);
+      }
+
+      &.md-dialog-leave-active {
+        opacity: 0;
+        transform: translate3D(0, 0, 0);
+      }
+    }
+  }
+</style>

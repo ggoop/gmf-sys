@@ -1,6 +1,7 @@
-import MdButton from './mdButton.vue';
-import MdButtonTheme from './mdButton.theme';
-export default function install(Vue) {
-  Vue.component('md-button', MdButton);
-  Vue.material.styles.push(MdButtonTheme);
+import material from 'vue-material/material'
+import MdButton from './MdButton'
+
+export default Vue => {
+  material(Vue)
+  Vue.component(MdButton.name, MdButton)
 }

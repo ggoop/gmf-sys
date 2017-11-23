@@ -1,116 +1,127 @@
 <template>
-    <md-input-container class="md-chips" :class="[themeClass, classes]" @click.native="applyInputFocus">
-      <md-chip
-        v-for="chip in selectedChips"
-        :md-deletable="!mdStatic"
-        :disabled="disabled"
-        :key="chip"
-        @delete="deleteChip(chip)">
-        <slot :value="chip">{{ chip }}</slot>
-      </md-chip>
-      <md-input
-        v-show="!mdStatic"
-        v-model="currentChip"
-        :type="mdInputType"
-        :placeholder="mdInputPlaceholder"
-        :id="inputId"
-        :name="mdInputName"
-        :disabled="disabled"
-        @keydown.native.delete="deleteLastChip"
-        @keydown.native.prevent.enter="addChip"
-        @keydown.native.prevent.186="addChip"
-        @dblclick.native="onQuery()"
-        tabindex="0"
-        ref="input">
-      </md-input>
-      <md-button v-if="showQuery" class="md-icon-button md-filter" @click.native="onQuery">
-        <md-icon>search</md-icon>
-      </md-button>
-    </md-input-container>
+  <md-field class="md-chips" :class="[$mdActiveTheme, chipsClasses]">
+    <slot v-if="!mdStatic" />
+
+    <md-chip
+      v-for="(chip, key) in value"
+      :key="key"
+      :md-deletable="!mdStatic"
+      :md-clickable="!mdStatic"
+      @keydown.enter="$emit('md-click', chip, key)"
+      @click.native="$emit('md-click', chip, key)"
+      @md-delete.stop="removeChip(chip)">
+      <slot name="md-chip" :chip="chip" v-if="$scopedSlots['md-chip']">{{ chip }}</slot>
+      <template v-else>{{ chip }}</template>
+    </md-chip>
+
+    <md-input
+      ref="input"
+      v-model.trim="inputValue"
+      v-if="!mdStatic && modelRespectLimit"
+      :type="mdInputType"
+      :id="id"
+      :placeholder="mdPlaceholder"
+      @keydown.enter="insertChip"
+      @keydown.8="handleBackRemove">
+    </md-input>
+  </md-field>
 </template>
 
 <script>
-  import theme from '../../core/components/mdTheme/mixin';
-  import uniqueId from '../../core/utils/uniqueId';
+  import MdComponent from 'core/MdComponent'
+  import MdField from 'components/MdField/MdField'
+  import MdInput from 'components/MdField/MdInput/MdInput'
+  import MdUuid from 'core/utils/MdUuid'
+  import MdPropValidator from 'core/utils/MdPropValidator'
 
-  export default {
+  export default new MdComponent({
+    name: 'MdChips',
+    components: {
+      MdField,
+      MdInput
+    },
     props: {
       value: Array,
-      disabled: Boolean,
-      mdInputId: String,
-      mdInputName: String,
-      mdInputPlaceholder: String,
+      id: {
+        type: [String, Number],
+        default: () => 'md-chips-' + MdUuid()
+      },
       mdInputType: {
-        type: String,
-        default: 'text'
+        type: [String, Number],
+        ...MdPropValidator('md-input-type', ['email', 'number', 'password', 'search', 'tel', 'text', 'url'])
       },
+      mdPlaceholder: [String, Number],
       mdStatic: Boolean,
-      mdMax: {
-        type: Number,
-        default: Infinity
-      },
-      showQuery:Boolean
+      mdLimit: Number
     },
-    mixins: [theme],
-    data() {
-      return {
-        currentChip: null,
-        selectedChips: this.value,
-        inputId: this.mdInputId || 'chips-' + uniqueId()
-      };
-    },
-    watch: {
-      value(value) {
-        this.selectedChips = value;
-      }
-    },
+    data: () => ({
+      inputValue: ''
+    }),
     computed: {
-      classes() {
+      chipsClasses () {
         return {
-          'md-static': this.mdStatic,
-          'md-disabled': this.disabled
-        };
+          'md-has-value': this.value && this.value.length
+        }
+      },
+
+      modelRespectLimit () {
+        return !this.mdLimit || this.value.length < this.mdLimit
       }
     },
     methods: {
-      applyInputFocus() {
-        this.$nextTick(() => {
-          this.$refs.input.$el.focus();
-        });
-      },
-      addChip() {
-        if (this.currentChip && this.selectedChips.length < this.mdMax) {
-          const value = this.currentChip.trim();
-
-          if (this.selectedChips.indexOf(value) < 0) {
-            this.selectedChips.push(value);
-            this.currentChip = null;
-            this.$emit('input', this.selectedChips);
-            this.$emit('change', this.selectedChips);
-            this.applyInputFocus();
-          }
+      insertChip ({ target }) {
+        if (
+          !this.inputValue ||
+          this.value.includes(this.inputValue) ||
+          !this.modelRespectLimit
+        ) {
+          return
         }
+        this.value.push(this.inputValue)
+        this.$emit('input', this.value)
+        this.$emit('md-insert', this.inputValue)
+        this.inputValue = ''
       },
-      onQuery(){
-        this.$emit('query', this.selectedChips);
-      },
-      deleteChip(chip) {
-        let index = this.selectedChips.indexOf(chip);
+      removeChip (chip) {
+        const index = this.value.indexOf(chip)
 
-        if (index >= 0) {
-          this.selectedChips.splice(index, 1);
-        }
-
-        this.$emit('change', this.selectedChips);
-        this.applyInputFocus();
+        this.value.splice(index, 1)
+        this.$emit('input', this.value)
+        this.$emit('md-delete', chip, index)
+        this.$nextTick(() => this.$refs.input.$el.focus())
       },
-      deleteLastChip() {
-        if (!this.currentChip) {
-          this.selectedChips.pop();
-          this.$emit('change', this.selectedChips);
-          this.applyInputFocus();
+      handleBackRemove () {
+        if (!this.inputValue) {
+          this.removeChip(this.value[this.value.length - 1])
         }
       }
     }
-  };
+  })
 </script>
+
+<style lang="scss">
+  @import "~components/MdAnimation/variables";
+
+  .md-chips.md-field {
+    padding-top: 12px;
+    flex-wrap: wrap;
+
+    &.md-has-value {
+      label {
+        top: -6px;
+      }
+    }
+
+    .md-chip {
+      margin-bottom: 4px;
+
+      &:last-of-type {
+        margin-right: 8px;
+      }
+    }
+
+    .md-input {
+      min-width: 128px;
+    }
+  }
+</style>
