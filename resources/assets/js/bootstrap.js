@@ -29,7 +29,6 @@ const start = {
 
 let VueMaterial = Vue => {
   material(Vue)
-  Vue.use(MdCss);
   Object.values(MdComponents).forEach((MdComponent) => {
     Vue.use(MdComponent)
   })
