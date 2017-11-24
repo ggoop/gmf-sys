@@ -2,7 +2,7 @@ const { join } = require('path')
 const { mix } = require('laravel-mix');
 
 const resolvePath = (...args) => {
-  const path = [__dirname, '/resources/assets/js/vendor/gmf-material', ...args]
+  const path = [__dirname, '/resources/assets/js/vendor', ...args]
 
   return join.apply(null, path)
 }
@@ -27,11 +27,12 @@ mix.options({
 mix.webpackConfig({
   resolve: {
     alias: {
-      'vue-material': resolvePath('src'),
-      theme: resolvePath('src/theme'),
-      base: resolvePath('src/base'),
-      core: resolvePath('src/core'),
-      components: resolvePath('src/components')
+      'gmf': resolvePath('gmf-sys'),
+      'vue-material': resolvePath('gmf-sys'),
+      'theme': resolvePath('gmf-sys/theme'),
+      'base': resolvePath('gmf-sys/base'),
+      'core': resolvePath('gmf-sys/core'),
+      'components': resolvePath('gmf-sys/components')
     }
   },
 });
