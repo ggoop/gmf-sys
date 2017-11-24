@@ -156,11 +156,15 @@
     height: 200px;
     margin: 4px;
     padding:4px;
-    img{
+
+    img,.md-image{
       width: auto;  
       height: auto;  
       max-width: 100%;  
       max-height:100%; 
+    }
+    div.md-image{
+      height:190px;
     }
     .file{
       width:120px;

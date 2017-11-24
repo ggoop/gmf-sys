@@ -42,10 +42,10 @@ import MdOnboarding from './MdOnboarding'
 // import MdPart from './MdPart'
 // import MdQuery from './MdQuery'
 // import MdRef from './MdRef'
-// import MdToast from './MdToast'
+import MdToast from './MdToast'
 // import MdTree from './MdTree'
 // import MdWrap from './MdWrap'
-// import MdLoading from './MdLoading'
+import MdLoading from './MdLoading'
 // import MdGrid from './MdGrid'
 // import MdEnum from './MdEnum'
 // import MdEditor from './MdEditor'
@@ -98,10 +98,10 @@ export {
   // MdPart,
   // MdQuery,
   // MdRef,
-  // MdToast,
+  MdToast,
   // MdTree,
   // MdWrap,
-  // MdLoading,
+  MdLoading,
   // MdGrid,
   // MdEnum,
   // MdEditor,

@@ -1,11 +1,11 @@
 @import "~components/MdAnimation/variables";
-
+$materialIcon-font-path: "../fonts/materialIcon/";
 /**
  * Structure - The main styles for html and body tags
  */
 
 html {
-  height: 100%;
+  min-height: 100%;
   box-sizing: border-box;
   transition: background-color .3s $md-transition-stand-timing;
 
@@ -30,6 +30,43 @@ body {
   @extend .md-body-1;
 }
 
+/*material-icons*/
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url("#{$materialIcon-font-path}MaterialIcons-Regular.eot"); /* For IE6-8 */
+  src: local('Material Icons'),
+       local('MaterialIcons-Regular'),
+       url("#{$materialIcon-font-path}MaterialIcons-Regular.woff2") format('woff2'),
+       url("#{$materialIcon-font-path}MaterialIcons-Regular.woff") format('woff'),
+       url("#{$materialIcon-font-path}MaterialIcons-Regular.ttf") format('truetype');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
 
 /**
  * Overrides - Default buttons
@@ -73,3 +110,71 @@ iframe {
 [tabindex="-1"]:focus {
   outline: none !important;
 }
+
+//scrollbar
+::-webkit-scrollbar-track {
+  background-clip: padding-box;
+  border: solid transparent;
+  border-width: 0 0 0 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  background-clip: padding-box;
+  border: solid transparent;
+  border-width: 0px;
+  min-height: 28px;
+  padding: 100px 0 0;
+  -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.07);
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.07);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+::-webkit-scrollbar {
+  height: 8px;
+  overflow: visible;
+  width: 8px;
+  background-color: transparent
+}
+
+:focus {
+  outline: none;
+}
+.clearfix {
+  clear: both;
+}
+.hide {
+  display: none !important;
+}
+.circle {
+  border-radius: 50%;
+}
+.truncate {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.no-padding {
+  padding: 0 !important;
+}
+@mixin md-indent-mixin($ind) {
+  .md-indent-#{$ind} {
+    padding-left: (0.25*$ind)-0rem;
+  }
+}
+
+@include md-indent-mixin(0);
+@include md-indent-mixin(1);
+@include md-indent-mixin(2);
+@include md-indent-mixin(3);
+@include md-indent-mixin(4);
+@include md-indent-mixin(5);
+@include md-indent-mixin(6);
+@include md-indent-mixin(7);
+@include md-indent-mixin(8);
+@include md-indent-mixin(9);

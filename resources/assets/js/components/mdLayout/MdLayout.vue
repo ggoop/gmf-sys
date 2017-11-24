@@ -51,13 +51,13 @@
     computed: {
       classes() {
         let classes = {
-          'md-row': this.mdRow,
+          'md-layout-column': this.mdRow,
           'md-row-xsmall': this.mdRowXsmall,
           'md-row-small': this.mdRowSmall,
           'md-row-medium': this.mdRowMedium,
           'md-row-large': this.mdRowLarge,
           'md-row-xlarge': this.mdRowXlarge,
-          'md-column': this.mdColumn,
+          'md-layout-column': this.mdColumn,
           'md-column-xsmall': this.mdColumnXsmall,
           'md-column-small': this.mdColumnSmall,
           'md-column-medium': this.mdColumnMedium,

@@ -22,9 +22,7 @@ window._ = window._ || lodash;
 
 window.Vue = window.Vue || Vue;
 window.$modelMixin = model;
-const start = {
-  configs: []
-};
+
 
 
 let VueMaterial = Vue => {
@@ -41,6 +39,11 @@ VueMaterial.version = '__VERSION__'
 function getEntId() {
   return window.gmfEntID;
 }
+
+const start = {
+  configs: []
+};
+
 start.run = function(elID) {
   elID = elID || '#gmfApp';
   var rootData = {
@@ -181,4 +184,4 @@ function baseConfig() {
     this.$root.title = title;
   };
 };
-export default {start,VueMaterial};
+export {start,VueMaterial};

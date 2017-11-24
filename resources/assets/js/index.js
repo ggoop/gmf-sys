@@ -1,3 +1,5 @@
-import start from './bootstrap';
+import {start,VueMaterial} from './bootstrap';
 
-export default start
+export default VueMaterial
+
+export {start,VueMaterial}

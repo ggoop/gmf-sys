@@ -60,7 +60,7 @@
         }
       }
     }
-  })
+  });
 </script>
 
 <style lang="scss">

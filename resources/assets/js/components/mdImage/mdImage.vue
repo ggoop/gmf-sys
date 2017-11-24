@@ -1,6 +1,8 @@
 <template>
   <div class="md-image" :class="[$mdActiveTheme]">
-    <slot />
+    <slot>
+      <img :src="mdSrc">
+    </slot>
   </div>
 </template>
 

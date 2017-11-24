@@ -42,7 +42,6 @@ class ServiceProvider extends BaseServiceProvider {
 			$this->publishes([
 				__DIR__ . '/../resources/assets/fonts' => resource_path('assets/fonts/vendor/gmf-sys'),
 				__DIR__ . '/../resources/assets/js' => resource_path('assets/js/vendor/gmf-sys'),
-				__DIR__ . '/../resources/assets/sass' => resource_path('assets/sass/vendor/gmf-sys'),
 			], $publishes);
 
 			$this->publishes([

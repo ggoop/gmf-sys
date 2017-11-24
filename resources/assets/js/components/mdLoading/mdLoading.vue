@@ -1,6 +1,6 @@
 <template>
   <div class="md-loading layout layout-align-center-center" v-if="loading">
-    <md-spinner md-indeterminate></md-spinner>
+    <md-progress-spinner md-mode="indeterminate"></md-progress-spinner>
   </div>
 </template>
 
