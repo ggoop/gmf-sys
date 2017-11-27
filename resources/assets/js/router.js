@@ -1,5 +1,6 @@
 import VueRouter from 'vue-router';
 import Vue from 'vue';
+import common from 'gmf/core/utils/common';
 Vue.use(VueRouter);
 
 const wrapApp = {
@@ -23,7 +24,9 @@ const wrapModule = {
   template: '<md-wrap :name="wrap"></md-wrap>',
   computed: {
     wrap: function() {
-      return this.$route.params.module;
+      var app = common.snakeCase(this.$route.params.app);
+      var module = common.snakeCase(this.$route.params.module);
+      return module;
     }
   },
   beforeRouteEnter(to, from, next) {
