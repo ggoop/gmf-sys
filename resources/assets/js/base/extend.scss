@@ -44,6 +44,7 @@
     }
   }
 }
+
 .md-dialog {
   overflow: inherit!important;
   .md-dialog-button-close {
@@ -64,7 +65,7 @@
       flex: 1;
       box-sizing: border-box;
       max-width: 100%;
-      .md-tabs-container{
+      .md-tabs-container {
         max-width: 100%;
       }
       .md-tab {
@@ -81,4 +82,13 @@
 
 .md-select-menu.md-menu-content {
   z-index: 131;
+}
+
+
+.md-list-item.md-active {
+  >.md-list-item-expand .md-list-expand {
+    height: auto;
+    opacity: 1;
+    transform: translate3D(0, 0, 0);
+  }
 }

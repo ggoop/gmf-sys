@@ -132,9 +132,10 @@ export default new MdComponent({
       return this.selectedValues;
     },
     openRef() {
-      if (!this.mdRefId) return;
-      this.$emit('init', this.options);
-      this.$refs.ref.open();
+      this.$emit('mdPick', this.options);
+      if (this.mdRefId){
+        this.$refs.ref.open();
+      }
     },
     onRefConfirm(data) {
       if (!data || data.length == 0) return;

@@ -4,6 +4,7 @@
     <md-button class="md-icon-button md-mini">
       <md-icon>{{ mdIcon }}</md-icon>
     </md-button>
+    <md-tooltip md-direction="bottom" v-if="mdTooltip">{{mdTooltip}}</md-tooltip>
   </md-field>
 </template>
 <script>
@@ -18,6 +19,7 @@ export default {
       default:'filter_list'
     },
     mdMaxlength: [String, Number],
+    mdTooltip:String,
     mdPlaceholder: {
       type: [String, Number],
       default: '搜索...'
