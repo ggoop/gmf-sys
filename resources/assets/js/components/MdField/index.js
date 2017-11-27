@@ -8,7 +8,7 @@ import MdTextarea from './MdTextarea/MdTextarea'
 //news
 import MdFileImport from './MdFileImport/MdFileImport'
 import MdFileUpload from './MdFileUpload/MdFileUpload'
-import MdInputRef from './MdInputRef/MdInputRef'
+
 
 export default Vue => {
   material(Vue)
@@ -21,5 +21,4 @@ export default Vue => {
   //news
   Vue.component(MdFileImport.name,MdFileImport)
   Vue.component(MdFileUpload.name,MdFileUpload)
-  Vue.component(MdInputRef.name,MdInputRef)
 }

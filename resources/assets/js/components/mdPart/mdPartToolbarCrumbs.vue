@@ -1,5 +1,5 @@
 <template>
-  <div class="md-part-toolbar-crumbs layout layout-align-center-center">
+  <div class="md-part-toolbar-crumbs md-body-1 md-caption layout layout-align-center-center">
     <slot></slot>
   </div>
 </template>

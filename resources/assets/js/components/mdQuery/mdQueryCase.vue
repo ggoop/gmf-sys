@@ -1,9 +1,12 @@
 <template>
   <div class="md-query-case">
     <slot></slot>
-    <md-dialog ref="caseDialog" :md-click-outside-to-close="false" @open="onOpen" @close="onClose" class="md-query-case-dialog">
+    <md-dialog :md-active.sync="showDialog" :md-click-outside-to-close="false" @md-opened="onOpen" @md-closed="onClose" class="md-query-case-dialog">
+      <md-button class="md-icon-button md-dialog-button-close" @click.native="cancel()">
+        <md-icon>close</md-icon>
+      </md-button>
       <md-dialog-content class="no-padding layout-column layout-fill">
-        <md-tabs class="md-accent layout-column layout-fill flex" :md-swipeable="true" md-right :md-dynamic-height="false">
+        <md-tabs class="md-primary layout-column layout-fill flex" :md-swipeable="true" md-right :md-dynamic-height="false">
           <md-tab md-label="条件" md-icon="filter_list" v-if="mdShowWhere">
             <md-layout md-gutter class="layout-fill">
               <md-query-case-where :md-entity-id="options.entity_id" :md-items="options.wheres"></md-query-case-where>
@@ -21,21 +24,20 @@
           </md-tab>
           <md-tab md-label="设置" md-icon="build">
             <md-layout md-gutter class="layout-fill">
-              
             </md-layout>
           </md-tab>
         </md-tabs>
       </md-dialog-content>
       <md-dialog-actions>
         <div class="layout layour-row">
-          <md-input-container class="layout-align-center-center query-cases">
+          <md-field class="layout-align-center-center query-cases">
             <md-select v-model="options.case_id">
-              <md-option value="">新方案</md-option>
-              <md-option :value="false">不使用方案</md-option>
+              <md-option value="0">新方案</md-option>
+              <md-option value="-1">不使用方案</md-option>
               <md-option :value="item.id" v-for="item in cases" :key="item.id">{{ item.name }}</md-option>
             </md-select>
-          </md-input-container>
-          <md-button v-if="options.case_id!==false" class="md-icon-button md-warn" @click.native="onSaveCase">
+          </md-field>
+          <md-button v-if="options.case_id!='-1'" class="md-icon-button md-warn" @click.native="onSaveCase">
             <md-icon>save</md-icon>
           </md-button>
         </div>
@@ -44,7 +46,7 @@
         <md-button class="md-warn" @click.native="cancel">取消</md-button>
       </md-dialog-actions>
       <md-loading :loading="loading"></md-loading>
-      <md-dialog-prompt md-title="输入方案名称" md-ok-text="确认" md-cancel-text="取消" @close="onNewCaseSave" v-model="options.case_name" ref="diaNewCaseName">
+      <md-dialog-prompt :md-active.sync="diaNewCaseNameShow" md-title="输入方案名称" md-confirm-text="确认" md-cancel-text="取消" @md-confirm="onNewCaseSave" v-model="options.case_name">
       </md-dialog-prompt>
     </md-dialog>
   </div>
@@ -54,8 +56,8 @@
   margin: 0px;
   padding: 0px;
   min-height: auto;
-  color: #f4f4f5;
 }
+
 </style>
 <script>
 export default {
@@ -80,8 +82,10 @@ export default {
     return {
       inited: false,
       loading: 0,
+      showDialog: false,
+      diaNewCaseNameShow: false,
       options: {
-        case_id: '',
+        case_id: '0',
         case_name: '',
         query_id: '',
         query_name: '',
@@ -95,7 +99,7 @@ export default {
   },
   watch: {
     'options.case_id' (val) {
-      if (val && val) {
+      if (val && val&&val.length>2) {
         this.fetchCase();
       }
     },
@@ -155,11 +159,11 @@ export default {
       }
     },
     async onSaveCase() {
-      if (this.options.case_id) {
+      if (this.options.case_id&&this.options.case_id.length>2) {
         await this.saveCase();
       } else {
         this.options.case_name = '';
-        this.$refs['diaNewCaseName'].open();
+        this.diaNewCaseNameShow = true;
       }
     },
     async saveCase() {
@@ -171,7 +175,7 @@ export default {
         orders: this.options.orders.filter(v => !v.sys_deleted).map(v => this._.omit(v, ['sys_deleted', 'sys_created', 'sys_updated', 'vueRowId'])),
         fields: this.options.fields.filter(v => !v.sys_deleted).map(v => this._.omit(v, ['sys_deleted', 'sys_created', 'sys_updated', 'vueRowId']))
       };
-      if (this.options.case_id) {
+      if (this.options.case_id&&this.options.case_id.length>2) {
         caseModel.id = this.options.case_id;
       }
       try {
@@ -186,16 +190,16 @@ export default {
     query() {
       var caseModel = this.getQueryCase();
       this.$emit('query', caseModel);
-      this.$refs.caseDialog.close();
+      this.showDialog = false;
     },
     async open() {
       await this.init();
       await this.fetchCases();
-      this.$refs.caseDialog.open();
+      this.showDialog = true;
     },
     cancel() {
       this.$emit('cancel', this.options);
-      this.$refs.caseDialog.close();
+      this.showDialog = false;
     },
     onOpen() {
       this.$emit('open', this.options);
@@ -212,10 +216,10 @@ export default {
         orders: [],
         fields: []
       };
-      if (this.options.case_id === false) {
+      if (this.options.case_id == '-1') {
         return qc;
       }
-      if (this.options.case_id) {
+      if (this.options.case_id&&this.options.case_id.length>2) {
         qc.id = this.options.case_id;
       }
       this._.each(this.options.wheres, (v) => {
@@ -302,4 +306,24 @@ export default {
   },
   mounted() {},
 };
+
 </script>
+<style lang="scss">
+.md-query-case {
+  >.md-button {
+    color: #34957a;
+  }
+}
+
+.md-query-case-dialog.md-dialog {
+  min-width: 7rem;
+  min-height: 70%;
+  max-width: 80%;
+  max-height: 90%;
+
+  .md-tabs .md-tab {
+    padding: 0px;
+  }
+}
+
+</style>

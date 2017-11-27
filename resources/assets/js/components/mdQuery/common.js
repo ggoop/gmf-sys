@@ -6,6 +6,7 @@ export default {
   },
   data() {
     return {
+      newItemDialogShow:false,
       loading: false
     };
   },
@@ -21,7 +22,7 @@ export default {
       return ind;
     },
     onItemAdd() {
-      this.$refs.newItemDialog.open();
+      this.newItemDialogShow=true;
     },
     onItemUp(item,event) {
       if (event) {
@@ -73,10 +74,10 @@ export default {
           this.mdItems.push(item);
         }
       });
-      this.$refs.newItemDialog.close();
+      this.newItemDialogShow=false;
     },
     onNewItemCancel() {
-      this.$refs.newItemDialog.close();
+      this.newItemDialogShow=false;
     },
     formatFieldToItem(field) {
       return {

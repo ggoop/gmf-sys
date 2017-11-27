@@ -10,6 +10,7 @@
 </template>
 <script>
 export default {
+  name: 'MdTree',
   props: {
     nodes: {
       type: Array,
@@ -24,7 +25,7 @@ export default {
   },
   methods: {},
   beforeCreate: function() {
-    this.$options.components.mdTree = require('./mdTree.vue');
+    this.$options.components.MdTree = require('./mdTree.vue');
   }
 };
 </script>
@@ -49,12 +50,12 @@ export default {
     padding: 0;
   }
   ul>li>ul {
-    padding-left: .22rem;
+    padding-left: 22px;
   }
   .md-tree-node {
     cursor: context-menu;
-    line-height: .30rem;
-    padding: 0 .08rem;
+    line-height: 30px;
+    padding: 0 8px;
     +ul {
       overflow: hidden;
       height: 0px;
@@ -76,7 +77,7 @@ export default {
       }
     }
     .md-checkbox {
-      margin: .04rem .08rem .04rem 0;
+      margin: 4px 8px 4px 0;
     }
   }
 }

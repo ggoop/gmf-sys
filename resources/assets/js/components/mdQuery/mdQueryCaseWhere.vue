@@ -69,7 +69,7 @@
         </template>
       </md-grid-column>
     </md-grid>
-    <md-dialog ref="newItemDialog">
+    <md-dialog :md-active.sync="newItemDialogShow">
       <md-toolbar>
         <h1 class="md-title">选择更多内容</h1>
       </md-toolbar>

@@ -1,17 +1,17 @@
 <template>
-  <md-dialog ref="dialog" :md-click-outside-to-close="false" @open="onRefOpen" @close="onRefClose" class="md-refs-dialog">
-    <md-toolbar>
-      <h1 class="md-title">{{refInfo.comment}}</h1>
-      <md-input-container class="md-flex md-header-search">
-        <md-input class="md-header-search-input" :fetch="autoFetch" placeholder="search" @keyup.enter.native="doSearch({isMana:true})"></md-input>
-        <md-button class="md-icon-button md-inset" @click.native="doSearch({isMana:true})">
-          <md-icon v-if="autoquery">filter_list</md-icon>
-          <md-icon v-else>search</md-icon>
-        </md-button>
-      </md-input-container>
-      <md-button class="md-icon-button" @click.native="onCancel()">
-        <md-icon>close</md-icon>
-      </md-button>
+  <md-dialog :md-active.sync="showDialog" :md-click-outside-to-close="false" @md-opened="onRefOpen" @md-closed="onRefClose" class="md-refs-dialog">
+    <md-toolbar md-elevation="0" class="md-primary">
+      <div class="md-toolbar-row">
+        <div class="md-toolbar-section-start">
+          <h1 class="md-title">{{refInfo.comment}}</h1>
+        </div>
+        <md-fetch class="search" :fetch="autoFetch"></md-fetch>
+        <div class="md-toolbar-section-end">
+          <md-button class="md-icon-button md-dialog-button-close" @click.native="onCancel()">
+            <md-icon>close</md-icon>
+          </md-button>
+        </div>
+      </div>
     </md-toolbar>
     <md-dialog-content class="no-padding layout flex">
       <md-grid :auto-select="true" ref="grid" :datas="fetchData" :multiple="multiple" showConfirm showCancel showQuery showDownload @select="onSelected" @dblclick="dblclick" @onQuery="openQueryCase" @onConfirm="onConfirm" @onCancel="onCancel">
@@ -23,10 +23,10 @@
   </md-dialog>
 </template>
 <script>
-
 import common from 'core/utils/common';
 
 export default {
+  name: 'MdRef',
   props: {
     value: {
       type: Object,
@@ -48,6 +48,7 @@ export default {
   },
   data() {
     return {
+      showDialog: false,
       currentQ: '',
       autoquery: true,
       selectedRows: [],
@@ -92,17 +93,14 @@ export default {
       this.$emit('close');
     },
     autoFetch(q) {
-      this.doSearch({ q: q });
+      this.doSearch(q);
     },
-    doSearch({ q, isMana }) {
-      if ((this.autoquery && this.currentQ != q) || isMana) {
+    doSearch(q) {
+      if ((this.autoquery && this.currentQ != q)) {
         this.currentQ = q;
         this.pagination();
       }
       this.currentQ = q;
-      if (isMana) {
-        this.autoquery = false;
-      }
     },
     formatFieldToColumn(field) {
       return {
@@ -145,18 +143,17 @@ export default {
       this.onConfirm();
     },
     open() {
+      this.showDialog = true;
       this.$emit('init', this.options);
-      this.$refs['dialog'].open();
-      this.$emit('open');
     },
     onCancel() {
       if (!this.canFireEvents) return;
-      this.$refs['dialog'].close();
+      this.showDialog = false;
       this.$emit('cancel', false);
     },
     onConfirm() {
       if (!this.canFireEvents) return;
-      this.$refs['dialog'].close();
+      this.showDialog = false;
       this.$emit('confirm', this.getReturnValue());
     }
   },
@@ -166,32 +163,21 @@ export default {
     });
   },
 };
-</script>
 
+</script>
 <style lang="scss">
 @import "~components/MdAnimation/variables";
-.md-refs-dialog{
-  .md-dialog-actions{
-    border-top: 0.01rem solid #e0e0e0;
-    .md-table-pagination{
-      border-top:none;
-    }
-  }
-  .md-dialog{
-      min-width: 50%;
-      height: 70%;
-  }
-  .md-dialog-content{
+.md-refs-dialog.md-dialog {
+  min-width: 50%;
+  height: 70%;
+  .md-dialog-content {
     background-attachment: inherit;
   }
-  .md-dialog-actions:before{
-    display: none;
-  }
-  .md-table-pagination .md-select{
-    margin: 0 .1rem;
-  }
-  .md-table-pagination .md-button{
-    min-width: .3rem;
+  .md-toolbar {
+    .search {
+      margin: 0 10px;
+    }
   }
 }
+
 </style>

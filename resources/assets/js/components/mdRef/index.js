@@ -1,6 +1,9 @@
+import material from 'vue-material/material'
+import MdRef from './MdRef.vue';
+import MdRefInput from './MdRefInput.vue';
 
-import mdRef from './mdRef.vue';
-
-export default function install(Vue) {
-  Vue.component('md-ref', mdRef);
+export default Vue => {
+  material(Vue)
+  Vue.component(MdRef.name, MdRef)
+  Vue.component(MdRefInput.name, MdRefInput)
 }

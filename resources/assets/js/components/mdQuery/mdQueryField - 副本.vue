@@ -1,6 +1,7 @@
 <template>
-  <md-tree-view ref="tree" md-label-field="comment" :nodes="node.childs" @expand="expandNode"></md-tree-view>
-  
+  <!-- <md-tree-view ref="tree" md-label-field="comment" :nodes="node.childs" @expand="expandNode"></md-tree-view> -->
+  <md-list>
+  </md-list>
 </template>
 <script>
 export default {
@@ -80,5 +81,4 @@ export default {
     this.loadAllNodes();
   },
 };
-
 </script>

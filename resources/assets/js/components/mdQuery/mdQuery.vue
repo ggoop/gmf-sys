@@ -100,30 +100,8 @@ export default {
     }
   },
 };
-</script>
 
+</script>
 <style lang="scss">
 .md-query {}
-
-.md-query-case {
-  >.md-button {
-    color: #34957a;
-  }
-}
-
-.md-query-case-dialog {
-  .md-dialog {
-    min-width: 7rem;
-    min-height: 70%;
-    max-width: 80%;
-    max-height: 90%;
-  }
-  .md-dialog-actions {
-    background: #075140;
-  }
-  .md-tabs .md-tab {
-    padding: 0px;
-  }
-}
-
 </style>

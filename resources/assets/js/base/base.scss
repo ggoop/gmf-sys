@@ -1,11 +1,13 @@
 @import "~components/MdAnimation/variables";
 $materialIcon-font-path: "../fonts/materialIcon/";
+
 /**
  * Structure - The main styles for html and body tags
  */
 
 html {
   min-height: 100%;
+  height: 100%;
   box-sizing: border-box;
   transition: background-color .3s $md-transition-stand-timing;
 
@@ -30,24 +32,28 @@ body {
   @extend .md-body-1;
 }
 
+
 /*material-icons*/
+
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: url("#{$materialIcon-font-path}MaterialIcons-Regular.eot"); /* For IE6-8 */
+  src: url("#{$materialIcon-font-path}MaterialIcons-Regular.eot");
+  /* For IE6-8 */
   src: local('Material Icons'),
-       local('MaterialIcons-Regular'),
-       url("#{$materialIcon-font-path}MaterialIcons-Regular.woff2") format('woff2'),
-       url("#{$materialIcon-font-path}MaterialIcons-Regular.woff") format('woff'),
-       url("#{$materialIcon-font-path}MaterialIcons-Regular.ttf") format('truetype');
+  local('MaterialIcons-Regular'),
+  url("#{$materialIcon-font-path}MaterialIcons-Regular.woff2") format('woff2'),
+  url("#{$materialIcon-font-path}MaterialIcons-Regular.woff") format('woff'),
+  url("#{$materialIcon-font-path}MaterialIcons-Regular.ttf") format('truetype');
 }
 
 .material-icons {
   font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
-  font-size: 24px;  /* Preferred icon size */
+  font-size: 24px;
+  /* Preferred icon size */
   display: inline-block;
   line-height: 1;
   text-transform: none;
@@ -68,6 +74,7 @@ body {
   font-feature-settings: 'liga';
 }
 
+
 /**
  * Overrides - Default buttons
  */
@@ -76,6 +83,7 @@ a:not(.md-button) {
   transition: .3s $md-transition-stand-timing;
   transition-property: color, background-color, opacity;
 }
+
 
 
 /**
@@ -99,11 +107,14 @@ iframe {
 }
 
 
+
 /**
  * Suppress the focus outline on links that cannot be accessed via keyboard.
  * This prevents an unwanted focus outline from appearing around elements that
  * might still respond to pointer events.
  */
+
+
 /*
    ========================================================================== */
 
@@ -143,15 +154,19 @@ iframe {
 :focus {
   outline: none;
 }
+
 .clearfix {
   clear: both;
 }
+
 .hide {
   display: none !important;
 }
+
 .circle {
   border-radius: 50%;
 }
+
 .truncate {
   display: block;
   white-space: nowrap;
@@ -162,6 +177,16 @@ iframe {
 .no-padding {
   padding: 0 !important;
 }
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.nowrap {
+  white-space: nowrap;
+  flex-wrap: nowrap;
+}
+
 @mixin md-indent-mixin($ind) {
   .md-indent-#{$ind} {
     padding-left: (0.25*$ind)-0rem;

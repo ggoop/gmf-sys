@@ -1,7 +1,8 @@
 <script>
-  import common from '../../core/utils/common';
+  import common from 'gmf/core/utils/common';
 
   export default {
+    name:'MdWrap',
     render: function(createElement) {
         var tag=common.snakeCase(this.name);
         return createElement(tag);

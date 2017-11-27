@@ -119,7 +119,7 @@
         this.MdField.highlighted = false
       }
     }
-  })
+  });
 </script>
 
 <style lang="scss">

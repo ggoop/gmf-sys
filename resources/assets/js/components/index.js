@@ -39,19 +39,19 @@ import MdTooltip from './MdTooltip'
 
 //news
 import MdOnboarding from './MdOnboarding'
-// import MdPart from './MdPart'
-// import MdQuery from './MdQuery'
-// import MdRef from './MdRef'
+import MdPart from './MdPart'
+import MdQuery from './MdQuery'
+import MdRef from './MdRef'
 import MdToast from './MdToast'
-// import MdTree from './MdTree'
-// import MdWrap from './MdWrap'
+import MdTree from './MdTree'
+import MdWrap from './MdWrap'
 import MdLoading from './MdLoading'
-// import MdGrid from './MdGrid'
-// import MdEnum from './MdEnum'
-// import MdEditor from './MdEditor'
-// import MdChart from './MdChart'
-// import MdBackground from './MdBackground'
-
+import MdGrid from './MdGrid'
+import MdEnum from './MdEnum'
+import MdEditor from './MdEditor'
+import MdChart from './MdChart'
+import MdBackground from './MdBackground'
+import MdFetch from './MdFetch'
 
 
 
@@ -95,17 +95,17 @@ export {
   MdTooltip,
   //news
   MdOnboarding,
-  // MdPart,
-  // MdQuery,
-  // MdRef,
+  MdPart,
+  MdQuery,
+  MdRef,
   MdToast,
-  // MdTree,
-  // MdWrap,
+  MdTree,
+  MdWrap,
   MdLoading,
-  // MdGrid,
-  // MdEnum,
-  // MdEditor,
-  // MdChart,
-  // MdBackground,
-
+  MdGrid,
+  MdEnum,
+  MdEditor,
+  MdChart,
+  MdBackground,
+  MdFetch,
 }

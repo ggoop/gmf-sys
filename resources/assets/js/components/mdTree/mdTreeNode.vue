@@ -1,5 +1,5 @@
 <template>
-  <div class="md-tree-node layout-row layout-align-start-center" :class="[classes]" v-wave @click="click">
+  <div class="md-tree-node layout-row layout-align-start-center" :class="[classes]"  @click="click">
     <md-checkbox v-model="checkbox" v-if="!!mdSelection" @change="select"></md-checkbox>
     <div class="md-tree-node-name flex">
       {{node[mdLabelField]}}
@@ -10,8 +10,9 @@
   </div>
 </template>
 <script>
-import getClosestVueParent from '../../core/utils/getClosestVueParent';
+import getClosestVueParent from 'gmf/core/utils/getClosestVueParent';
 export default {
+  name: 'MdTreeNode',
   props: {
     node: {
       type: Object,

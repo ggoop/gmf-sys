@@ -1,12 +1,13 @@
 <template>
-  <div class="md-tree-view" :class="[themeClass]">
+  <div class="md-tree-view" :class="[$mdActiveTheme]">
     <md-tree :md-selection="mdSelection" :md-label-field="mdLabelField" :md-auto-select="mdAutoSelect" :nodes="nodes">
     </md-tree>
   </div>
 </template>
 <script>
-import theme from '../../core/components/mdTheme/mixin';
-export default {
+import MdComponent from 'core/MdComponent'
+export default new MdComponent({
+  name: 'MdTreeView',
   props: {
     nodes: {
       type: Array,
@@ -25,7 +26,6 @@ export default {
       default: true
     }
   },
-  mixins: [theme],
   data() {
     return {
       selecteds: [],
@@ -70,5 +70,5 @@ export default {
       this.$emit('expand',node);
     },
   },
-};
+});
 </script>

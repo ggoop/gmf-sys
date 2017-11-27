@@ -40,3 +40,8 @@ components/index.js
 
 
 md-input-container =>md-field
+
+'../../gmf-sys/core/mixin/model'=>'gmf/core/mixins/MdModel/MdModel'
+'../../gmf-sys/core/mixin/modelGrid'=>'gmf/core/mixins/MdModel/MdModelGrid'
+
+'../../gmf-sys/core/utils/common'=>'gmf/core/utils/common'
