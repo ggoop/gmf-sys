@@ -1,7 +1,5 @@
-import VueRouter from 'vue-router';
-import Vue from 'vue';
 import common from 'gmf/core/utils/common';
-Vue.use(VueRouter);
+
 
 const wrapApp = {
   template: '<md-wrap :name="wrap"></md-wrap>',
@@ -24,8 +22,11 @@ const wrapModule = {
   template: '<md-wrap :name="wrap"></md-wrap>',
   computed: {
     wrap: function() {
-      var app = common.snakeCase(this.$route.params.app);
-      var module = common.snakeCase(this.$route.params.module);
+      const app = common.snakeCase(this.$route.params.app);
+      const module = common.snakeCase(this.$route.params.module);
+      if(!this._.startsWith(module,app)&&module.indexOf('-')<0){
+        return app+'-'+module;
+      }
       return module;
     }
   },
@@ -43,7 +44,12 @@ const wrapExtend = {
   template: '<md-wrap :name="wrap"></md-wrap>',
   computed: {
     wrap: function() {
-      return this.$route.params.module;
+      const app = common.snakeCase(this.$route.params.app);
+      const module = common.snakeCase(this.$route.params.module);
+      if(!this._.startsWith(module,app)&&module.indexOf('-')<0){
+        return app+'-'+module;
+      }
+      return module;
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -70,11 +76,4 @@ const routes = [{
     ]
   }]
 }];
-const router = new VueRouter({ mode: 'history', routes });
-router.beforeEach((to, from, next) => {
-  next();
-});
-router.afterEach(route => {
-  console.log('afterEachafterEach');
-});
-export default router;
+export default routes;

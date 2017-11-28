@@ -6,7 +6,13 @@ import * as MdComponents from './components'
 
 import lodash from 'lodash';
 
-import router from './router';
+import VueRouter from 'vue-router';
+
+import ga from 'vue-ga'
+import { sync } from 'vuex-router-sync'
+
+
+import routes from './routes';
 import lang from './lang';
 import validator from './validator';
 
@@ -30,7 +36,7 @@ let VueMaterial = Vue => {
   Object.values(MdComponents).forEach((MdComponent) => {
     Vue.use(MdComponent)
   })
-  
+
 }
 
 VueMaterial.version = '__VERSION__'
@@ -43,14 +49,25 @@ function getEntId() {
 const start = {
   configs: []
 };
-
-start.run = function(elID) {
-  elID = elID || '#gmfApp';
+/*
+options:{
+  elID,
+  routes:[]
+}
+*/
+start.run = function(options) {
+  options = options || {};
+  const elID = options.elID || '#gmfApp';
   var rootData = {
     title: '',
     userData: { ent: {}, entId: getEntId(), ents: [] },
     userConfig: window.gmfConfig
   };
+
+  const router = { mode: 'history', routes: options.routes && options.routes.length > 0 ? options.routes : routes };
+
+  // ga(router, 'UA-85823257-1')
+  // sync(store, router)
 
   baseConfig();
 
@@ -58,11 +75,11 @@ start.run = function(elID) {
   for (var i = 0; i < this.configs.length; i++) {
     this.configs[i] && this.configs[i](Vue);
   }
-
+  Vue.use(VueRouter);
   Vue.use(VueMaterial);
 
   const app = new Vue({
-    router: router,
+    router: new VueRouter(router),
     el: elID,
     data: rootData,
     watch: {
@@ -184,4 +201,4 @@ function baseConfig() {
     this.$root.title = title;
   };
 };
-export {start,VueMaterial};
+export { start, VueMaterial };
