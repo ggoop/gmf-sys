@@ -1,4 +1,3 @@
-import moment from 'moment';
 import get from 'lodash/get';
 import has from 'lodash/has';
 import set from 'lodash/set';
@@ -62,7 +61,7 @@ export default class Row {
     if (dataType.startsWith('date')) {
       const format = dataType.replace('date:', '');
 
-      return moment(value, format).format('YYYYMMDDHHmmss');
+      return value;
     }
 
     if (dataType === 'numeric') {

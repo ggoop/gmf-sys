@@ -17,11 +17,11 @@ export default {
 @import "~components/MdAnimation/variables";
 .md-part-toolbar {
   background-color: #E0F2F1;
-  min-height: 36px;
+  min-height: 40px;
   z-index: 1;
   position: relative;
-  &.md-toolbar.md-dense{
-    min-height: 36px;
+  &.md-toolbar.md-dense {
+    min-height: 40px;
   }
   .md-part-toolbar-crumbs {
     padding: 0 16px;
@@ -41,18 +41,30 @@ export default {
       margin: 0;
       min-width: 0;
     }
-    .md-input-container {
+    .md-field {
       padding: 0px;
-      min-height: 36px;
-      background: rgba(255, 255, 255, 0.88);
-      &.md-inset {
-        label {
-          font-size: inherit;
-        }
-        >.label {
-          min-width: inherit;
-        }
+      min-height: 40px;
+      margin: 0px;
+      flex-flow: row nowrap;
+
+      .md-chip {
+        padding-top: 10px;
+        font-size: 16px;
+        height: 38px;
       }
+      .md-input {
+        line-height: 40px;
+        height: 40px;
+        padding-top: 10px;
+        min-width: auto;
+      }
+      label {
+        top: 15px;
+      }
+    }
+    .md-field.md-focused label,
+    .md-field.md-has-value label {
+      top: 0px;
     }
   }
   .md-part-toolbar-group+.md-part-toolbar-group:before {
