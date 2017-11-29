@@ -92,3 +92,18 @@
     transform: translate3D(0, 0, 0);
   }
 }
+
+
+.md-card {
+  .md-card-header {
+    .md-card-media {
+      margin-left: 0px;
+    }
+    .md-card-media+.md-card-header-text {
+      margin-left: 16px;
+    }
+    .md-card-header-text+.md-card-media {
+      margin-left: 16px;
+    }
+  }
+}
