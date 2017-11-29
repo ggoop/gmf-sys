@@ -40,6 +40,8 @@ export default {
     .md-button {
       margin: 0;
       min-width: 0;
+      line-height: 40px;
+      height: 40px;
     }
     .md-field {
       padding: 0px;
