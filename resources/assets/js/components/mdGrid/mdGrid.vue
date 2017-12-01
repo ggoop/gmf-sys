@@ -482,7 +482,7 @@ export default {
   max-width: 100%;
   overflow: hidden;
   .md-grid-cell-container {
-    padding: 0.04rem;
+    padding: 4px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -504,9 +504,9 @@ export default {
         height: 100%;
         min-height: auto;
         margin: 0px;
-        width: .3rem;
+        width:30px;
         min-width: auto;
-        height: .3rem;
+        height:30px;
       }
     }
   }
@@ -571,10 +571,10 @@ export default {
     border-bottom: 2px solid #53abe6;
     position: relative;
     .md-grid-cell-container {
-      padding-right: .07rem;
-      padding-left: .08rem;
-      padding-top: .08rem;
-      padding-bottom: .07rem;
+      padding-right:7px;
+      padding-left:8px;
+      padding-top:8px;
+      padding-bottom:7px;
     }
     td,
     th {
@@ -588,7 +588,7 @@ export default {
         text-decoration: underline;
         &:after {
           position: absolute;
-          left: 0.01rem;
+          left:1px;
           display: flex;
           align-items: center;
           align-content: center;
@@ -692,13 +692,13 @@ export default {
     overflow: hidden;
     background-color: #fafafa;
     border-top: 1px solid #dfdfdf;
-    min-height: .4rem;
+    min-height:40px;
     position: relative;
   }
   .md-grid-actions {
     background-color: #fafafa;
     border-top: 1px solid #dfdfdf;
-    min-height: .4rem;
+    min-height:40px;
     color: #666;
     >div>.md-icon-button {
       margin: 0px;

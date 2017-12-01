@@ -1,7 +1,9 @@
 <template>
-  <md-toolbar class="md-part-toolbar md-dense" md-elevation="1">
-    <slot></slot>
-  </md-toolbar>
+  <div class="md-part-toolbar">
+    <md-toolbar class="md-dense" md-elevation="1">
+      <slot></slot>
+    </md-toolbar>
+  </div>
 </template>
 <script>
 export default {
@@ -37,7 +39,7 @@ export default {
     }
   }
   .md-part-toolbar-group {
-    .md-button {
+    .md-button:not(.md-icon-button) {
       margin: 0;
       min-width: 0;
       line-height: 40px;
@@ -50,15 +52,23 @@ export default {
       flex-flow: row nowrap;
 
       .md-chip {
-        padding-top: 10px;
-        font-size: 16px;
-        height: 38px;
+        margin: 0px;
+        margin-top: 16px;
+        line-height: 24px;
+        height: 24px;
       }
       .md-input {
         line-height: 40px;
         height: 40px;
-        padding-top: 10px;
         min-width: auto;
+      }
+      &.md-ref-input {
+        .md-input {
+          padding-top: 10px;
+        }
+        .md-ref-filter {
+          margin-top: 5px;
+        }
       }
       label {
         top: 15px;

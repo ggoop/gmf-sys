@@ -133,7 +133,7 @@ export default new MdComponent({
     },
     openRef() {
       this.$emit('mdPick', this.options);
-      if (this.mdRefId){
+      if (this.mdRefId) {
         this.$refs.ref.open();
       }
     },
@@ -184,11 +184,11 @@ export default new MdComponent({
 </script>
 <style lang="scss">
 @import "~components/MdAnimation/variables";
-.md-ref-input {
-  .md-chip.md-theme-default {
+.md-ref-input.md-field {
+  .md-chip {
+    font-size: 16px;
     border-radius: 0 10px 10px 0px;
     margin-bottom: 1px;
-    background-color: transparent;
     overflow: hidden;
     .md-ripple {
       padding-left: 0px;
@@ -202,14 +202,19 @@ export default new MdComponent({
       }
     }
   }
-  .md-ref-filter{
+  .md-chip.md-theme-default {
+    background-color: transparent;
+  }
+  .md-ref-filter {
     min-height: auto;
-    height: auto;
+    min-width: 32px;
+    height: 32px;
+    width: 32px;
     margin: 0px;
     padding: 0px;
   }
   .md-input {
-    min-width: 128px;
+    min-width:auto;
   }
 }
 

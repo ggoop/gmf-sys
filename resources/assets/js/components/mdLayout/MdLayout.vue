@@ -7,6 +7,10 @@
         default: 'div'
       },
       mdRow: Boolean,
+      mdWrap:{
+        type:Boolean,
+        default:true
+      },
       mdRowXsmall: Boolean,
       mdRowSmall: Boolean,
       mdRowMedium: Boolean,
@@ -28,14 +32,14 @@
       mdHideMediumAndUp: Boolean,
       mdHideLargeAndUp: Boolean,
       mdHideXlargeAndUp: Boolean,
-      mdGutter: [String, Number, Boolean],
+      mdGutter: Boolean,
       mdAlign: String,
       mdAlignXsmall: String,
       mdAlignSmall: String,
       mdAlignMedium: String,
       mdAlignLarge: String,
       mdAlignXlarge: String,
-      mdFlex: [String, Number, Boolean],
+      mdFlex:Boolean,
       mdFlexXsmall: [String, Number, Boolean],
       mdFlexSmall: [String, Number, Boolean],
       mdFlexMedium: [String, Number, Boolean],
@@ -51,7 +55,8 @@
     computed: {
       classes() {
         let classes = {
-          'md-layout-column': this.mdRow,
+          'md-layout-row': this.mdRow,
+          'md-layout-wrap': this.mdWrap,
           'md-row-xsmall': this.mdRowXsmall,
           'md-row-small': this.mdRowSmall,
           'md-row-medium': this.mdRowMedium,
@@ -76,11 +81,7 @@
         };
 
         if (this.mdGutter) {
-          if (typeof this.mdGutter === 'boolean') {
-            classes['md-gutter'] = true;
-          } else if (this.mdGutter) {
-            classes['md-gutter-' + this.mdGutter] = true;
-          }
+          classes['md-gutter'] = true;
         }
 
         /* Flex */
