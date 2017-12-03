@@ -1,31 +1,27 @@
 <template>
   <td @click="handleClick" :class="[objClass]">
-    <md-grid-cell-edit v-if="status=='editor'" class="md-grid-cell-container" :column="column" :row="row">
+    <md-grid-cell-edit v-if="status=='editor'" :class="[containerClass]" class="md-grid-cell-container" :column="column" :row="row">
       <template v-if="column&&column.templateEditor">
         <slot name="editor"></slot>
       </template>
       <template v-else-if="column&&column.dataType=='entity'">
-        <md-input-container>
-          <md-input-ref :md-ref-id="column.refId||column.refType" @init="on_init_ref" v-model="row.data[column.field]"></md-input-ref>
-        </md-input-container>
+        <md-ref-input :md-ref-id="column.refId||column.refType" @init="on_init_ref" v-model="row.data[column.field]"></md-ref-input>
       </template>
       <template v-else-if="column&&column.dataType=='enum'">
-        <md-input-container>
+        <md-field>
           <md-enum :md-enum-id="column.refId||column.refType" v-model="row.data[column.field]"></md-enum>
-        </md-input-container>
+        </md-field>
       </template>
       <template v-else-if="column&&column.dataType=='date'">
-        <md-input-container>
-          <md-date v-model="row.data[column.field]"></md-date>
-        </md-input-container>
+        <md-datepicker v-model="row.data[column.field]"></md-datepicker>
       </template>
       <template v-else>
-        <md-input-container>
+        <md-field>
           <md-input v-model="row.data[column.field]"></md-input>
-        </md-input-container>
+        </md-field>
       </template>
     </md-grid-cell-edit>
-    <md-grid-cell-show v-else class="md-grid-cell-container" :column="column" :row="row">
+    <md-grid-cell-show v-else class="md-grid-cell-container" :class="[containerClass]" :column="column" :row="row">
       <slot></slot>
     </md-grid-cell-show>
   </td>
@@ -41,6 +37,7 @@ export default {
   },
   props: {
     column: { type: Object },
+    containerClass:String,
     row: { type: Object },
     selection: { default: false, type: Boolean },
     type: { default: 'td', type: String },
@@ -133,4 +130,5 @@ export default {
     });
   },
 };
+
 </script>

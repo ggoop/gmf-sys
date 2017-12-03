@@ -78,8 +78,8 @@
           </div>
 
           <md-dialog-actions class="md-datepicker-body-footer">
-            <md-button class="md-primary" @click="onCancel">Cancel</md-button>
-            <md-button class="md-primary" @click="onConfirm">Ok</md-button>
+            <md-button class="md-primary" @click="onCancel">取消</md-button>
+            <md-button class="md-primary" @click="onConfirm">确定</md-button>
           </md-dialog-actions>
         </div>
       </div>
@@ -127,6 +127,7 @@
     },
     props: {
       mdDate: Date,
+      mdAutoSelect:Boolean,
       mdDisabledDates: [Array, Function]
     },
     data: () => ({
@@ -291,7 +292,10 @@
       },
       selectDate (day) {
         this.currentDate = setDate(this.currentDate, day)
-        this.selectedDate = this.currentDate
+        this.selectedDate = this.currentDate;
+        if(this.mdAutoSelect){
+          this.onConfirm();
+        }
       },
       closeDialog () {
         this.$emit('md-closed')

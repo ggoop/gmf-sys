@@ -8,7 +8,11 @@ export default {
     model: [String, Number, Boolean, Array],
     value: {
       type: [String, Number, Boolean],
-      default: 'on'
+      default: '1'
+    },
+    falseValue:{
+      type:[String,Number,Boolean],
+      default:'0'
     },
     name: [String, Number],
     required: Boolean,
@@ -27,11 +31,16 @@ export default {
         return this.model.includes(this.value)
       }
 
-      if (this.isModelBoolean && this.value === 'on') {
+      if (this.isModelBoolean && this.value === '1') {
         return this.model
       }
-
-      return this.model === this.value
+      if(this.model === this.value){
+        return true;
+      }
+      if(this.model&&this.value&&this.model.toString() == this.value.toString()){
+        return true;
+      }
+      return false;
     },
     isModelArray () {
       return Array.isArray(this.model)
@@ -70,7 +79,7 @@ export default {
       if (!this.isSelected) {
         this.$emit('change', this.value)
       } else {
-        this.$emit('change', null)
+        this.$emit('change', this.falseValue)
       }
     },
     handleBooleanCheckbox () {

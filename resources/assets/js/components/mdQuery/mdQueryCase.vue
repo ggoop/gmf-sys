@@ -129,7 +129,7 @@ export default {
         const response = await this.$http.get('sys/queries/' + this.mdQueryId, { params: { case_id: this.options.case_id } });
         this.options.query_id = response.data.data.query_id;
         this.options.query_name = response.data.data.query_name;
-        this.options.case_id = response.data.data.case_id || '';
+        this.options.case_id = response.data.data.case_id || '0';
         this.options.case_name = response.data.data.case_name || '';
         this.options.size = response.data.data.size;
         this.options.entity_id = response.data.data.entity_id;

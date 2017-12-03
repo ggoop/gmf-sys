@@ -474,7 +474,7 @@ export default {
 </script>
 
 <style lang="scss">
-
+@import "~components/MdAnimation/variables";
 .md-grid {
   border: 1px solid #c7c7c7;
   background: #fff;
@@ -483,10 +483,11 @@ export default {
   overflow: hidden;
   .md-grid-cell-container {
     padding: 4px;
+    min-height: 32px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    .md-input-container {
+    .md-field {
       position: absolute;
       top: 0;
       left: 0;
@@ -568,7 +569,7 @@ export default {
   .md-grid-head {
     overflow: hidden;
     background-color: #f4f4f4;
-    border-bottom: 2px solid #53abe6;
+    border-bottom: 2px solid rgba(15, 157, 88, 1);
     position: relative;
     .md-grid-cell-container {
       padding-right:7px;
@@ -650,7 +651,7 @@ export default {
         background-color: #f9f9f9;
       }
       &.selected {
-        background-color: #80cbc4;
+        background-color: rgba(15, 157, 88, 0.37);
       }
     }
     tr:hover>:first-child:before,
@@ -658,7 +659,7 @@ export default {
       content: " ";
       position: absolute;
       left: 0;
-      background: #009688;
+      background:rgba(15, 157, 88, 0.8);
       width: 3px;
       height: 100%;
       top: 0;
@@ -675,16 +676,16 @@ export default {
         left: 0;
         width: 100%;
         height: 100%;
-        border: 2px solid #53abe6;
+        border: 2px solid rgba(15, 157, 88, 1);
       }
     }
 
     tr.focused.row-focused {
-      background: #009688;
+      background-color: rgba(15, 157, 88, 0.8);
       color: #fff;
       td,
       th {
-        border-right-color: #009688;
+        border-right-color: rgba(15, 157, 88, 0.8);
       }
     }
   }

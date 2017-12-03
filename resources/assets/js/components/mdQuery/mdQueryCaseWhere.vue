@@ -5,9 +5,9 @@
       <md-grid-column field="comment" label="名称"></md-grid-column>
       <md-grid-column field="operator_enum" label="操作符" width="100px">
         <template slot-scope="row">
-          <md-input-container>
+          <md-field>
             <md-enum v-model="row.operator_enum" :items="row.operators" md-enum-id="gmf.sys.query.operator.enum"></md-enum>
-          </md-input-container>
+          </md-field>
         </template>
       </md-grid-column>
       <md-grid-column label="条件值" width="200px">
@@ -15,40 +15,42 @@
           <template v-if="row.operator_enum&&row.operator_enum.indexOf('null')>=0">
           </template>
           <template v-else-if="row.operator_enum&&row.operator_enum.indexOf('like')>=0">
-            <md-input-container>
+            <md-field>
               <md-input v-model="row.value"></md-input>
-            </md-input-container>
+            </md-field>
           </template>
           <template v-else-if="row.operator_enum&&row.operator_enum.indexOf('between')>=0">
             <template v-if="row.type_enum=='date'">
-              <md-input-container>
-                <md-date v-model="row.value"></md-date>
-              </md-input-container>
+                <md-datepicker v-model="row.value"></md-datepicker>
             </template>
             <template v-else>
-              <md-input-container>
+              <md-field>
                 <md-input v-model="row.value"></md-input>
-              </md-input-container>
+              </md-field>
             </template>
           </template>
           <template v-else>
-            <md-input-container>
-              <template v-if="row.type_enum=='value'">
+            <template v-if="row.type_enum=='value'">
+              <md-field>
                 <md-input v-model="row.value"></md-input>
-              </template>
-              <template v-else-if="row.type_enum=='ref'">
-                <md-input-ref v-model="row.value" :md-ref-id="row.ref_id"></md-input-ref>
-              </template>
-              <template v-else-if="row.type_enum=='enum'">
+              </md-field>
+            </template>
+            <template v-else-if="row.type_enum=='ref'">
+              <md-ref-input v-model="row.value" :md-ref-id="row.ref_id"></md-ref-input>
+            </template>
+            <template v-else-if="row.type_enum=='enum'">
+              <md-field>
                 <md-enum v-model="row.value" :md-enum-id="row.ref_id"></md-enum>
-              </template>
-              <template v-else-if="row.type_enum=='date'">
-                <md-date v-model="row.value"></md-date>
-              </template>
-              <template v-else>
+              </md-field>
+            </template>
+            <template v-else-if="row.type_enum=='date'">
+              <md-datepicker v-model="row.value"></md-datepicker>
+            </template>
+            <template v-else>
+              <md-field>
                 <md-input v-model="row.value"></md-input>
-              </template>
-            </md-input-container>
+              </md-field>
+            </template>
           </template>
         </template>
       </md-grid-column>
@@ -56,14 +58,12 @@
         <template slot-scope="row">
           <template v-if="row.operator_enum&&row.operator_enum.indexOf('between')>=0">
             <template v-if="row.type_enum=='date'">
-              <md-input-container>
-                <md-date v-model="row.value2"></md-date>
-              </md-input-container>
+              <md-datepicker v-model="row.value2"></md-datepicker>
             </template>
             <template v-else>
-              <md-input-container>
+              <md-field>
                 <md-input v-model="row.value2"></md-input>
-              </md-input-container>
+              </md-field>
             </template>
           </template>
         </template>

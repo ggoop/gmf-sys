@@ -2,13 +2,13 @@
   <md-field class="md-chips md-ref-input" ref="MdField" @blur="onBlur" :class="[$mdActiveTheme]">
     <label v-if="mdLabel">{{mdLabel}}</label>
     <slot v-if="!mdStatic" />
-    <md-chip v-for="(chip, key) in selectedValues" :key="chip.id" :md-deletable="!mdStatic" :md-clickable="!mdStatic" @keydown.enter="$emit('md-click', chip, key)" @click.native="$emit('md-click', chip, key)" @md-delete.stop="removeChip(chip)">
+    <md-chip v-for="(chip, key) in selectedValues" :key="chip.id" :md-deletable="!mdStatic&&!disabled" :md-clickable="!mdStatic&&!disabled" @keydown.enter="!disabled&&$emit('md-click', chip, key)" @click.native="!disabled&&$emit('md-click', chip, key)" @md-delete.stop="!disabled&&removeChip(chip)">
       <slot name="md-chip" :chip="chip" v-if="$scopedSlots['md-chip']">{{ chip }}</slot>
       <template v-else>{{ chip.name }}</template>
     </md-chip>
-    <md-input ref="input" v-model.trim="inputValue" v-if="!mdDisabled&&!mdStatic && modelRespectLimit" :type="mdInputType" :id="id" :placeholder="mdPlaceholder" @keydown.enter="insertChip" @keydown.8="handleBackRemove" @dblclick.native="openRef()">
+    <md-input ref="input" v-model.trim="inputValue" :disabled="disabled" v-show="!disabled&&!mdStatic && modelRespectLimit" :type="mdInputType" :id="id" :placeholder="mdPlaceholder" @keydown.enter="insertChip" @keydown.8="handleBackRemove" @dblclick.native="openRef()">
     </md-input>
-    <md-button v-if="!mdDisabled" class="md-dense md-icon-button md-ref-filter" @click.native="openRef()">
+    <md-button v-if="!disabled" class="md-dense md-icon-button md-ref-filter" @click.native="openRef()">
       <md-icon>search</md-icon>
     </md-button>
     <md-ref v-if="mdRefId" ref="ref" @confirm="onRefConfirm" :md-ref-id="mdRefId" :options="options"></md-ref>
@@ -29,7 +29,7 @@ export default new MdComponent({
   },
   props: {
     value: [Array, Object],
-    mdDisabled: Boolean,
+    disabled: Boolean,
     mdMultiple: Boolean,
     mdRefId: String,
     id: {
@@ -132,6 +132,7 @@ export default new MdComponent({
       return this.selectedValues;
     },
     openRef() {
+      if(this.disabled)return;
       this.$emit('mdPick', this.options);
       if (this.mdRefId) {
         this.$refs.ref.open();
@@ -145,6 +146,7 @@ export default new MdComponent({
       });
     },
     insertChip({ target }) {
+      if(this.disabled)return;
       if (!this.inputValue ||
         this.getValueIndex(this.inputValue) >= 0 ||
         !this.modelRespectLimit
@@ -189,8 +191,9 @@ export default new MdComponent({
     font-size: 16px;
     border-radius: 0 10px 10px 0px;
     margin-bottom: 1px;
+    padding-left: 0px;
     overflow: hidden;
-    .md-ripple {
+    .md-ripple, {
       padding-left: 0px;
     }
     &:last-of-type {

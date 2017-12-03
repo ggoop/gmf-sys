@@ -177,7 +177,9 @@ iframe {
 .no-padding {
   padding: 0 !important;
 }
-
+.no-margin {
+  margin: 0 !important;
+}
 .wrap {
   flex-wrap: wrap;
 }
@@ -189,7 +191,7 @@ iframe {
 
 @mixin md-indent-mixin($ind) {
   .md-indent-#{$ind} {
-    padding-left: (0.25*$ind)-0rem;
+    padding-left: (20*$ind)-0px;
   }
 }
 

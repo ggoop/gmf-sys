@@ -47,8 +47,8 @@
     >.md-navigation {
       display: none;
       position: absolute;
-      top: 38%;
-      right: -0.13rem;
+      top: 38px;
+      right:-12px;
       z-index: 1;
       margin: 0;
       padding: 0;
@@ -56,10 +56,10 @@
     &.md-active {
       display: block;
       overflow: hidden;
-      min-width: 1.9rem;
+      min-width: 190px;
       max-width: 100%;
       >.md-navigation {
-        right: -0.38rem;
+        right:38px;
       }
     }
   }

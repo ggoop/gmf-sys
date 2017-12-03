@@ -112,3 +112,8 @@
 .md-checkbox .md-checkbox-label {
   font-size: 16px;
 }
+
+
+.md-field.md-theme-default.md-disabled:after {
+  background-color: transparent;
+}

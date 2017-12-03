@@ -1,9 +1,7 @@
 <template>
-  <div class="md-part-toolbar">
-    <md-toolbar class="md-dense" md-elevation="1">
-      <slot></slot>
-    </md-toolbar>
-  </div>
+  <md-toolbar class="md-part-toolbar md-dense" md-elevation="1">
+    <slot></slot>
+  </md-toolbar>
 </template>
 <script>
 export default {
@@ -18,12 +16,11 @@ export default {
 <style lang="scss">
 @import "~components/MdAnimation/variables";
 .md-part-toolbar {
-  background-color: #E0F2F1;
-  min-height: 40px;
-  z-index: 1;
-  position: relative;
   &.md-toolbar.md-dense {
     min-height: 40px;
+    z-index: 1;
+    position: relative;
+    padding: 0px 10px;
   }
   .md-part-toolbar-crumbs {
     padding: 0 16px;
@@ -50,7 +47,16 @@ export default {
       min-height: 40px;
       margin: 0px;
       flex-flow: row nowrap;
-
+      label {
+        top: 10px;
+      }
+      &:after {
+        background-color: transparent;
+      }
+      >.md-icon {
+        margin: 0px;
+        margin-top: 10px;
+      }
       .md-chip {
         margin: 0px;
         margin-top: 16px;
@@ -62,16 +68,25 @@ export default {
         height: 40px;
         min-width: auto;
       }
+      label+.md-input {
+        padding-top: 16px;
+      }
       &.md-ref-input {
-        .md-input {
+        label+.md-input {
           padding-top: 10px;
         }
         .md-ref-filter {
           margin-top: 5px;
         }
       }
-      label {
-        top: 15px;
+      &.md-autocomplete.md-fetch {
+        height: 38px;
+        min-height: 38px;
+        border-radius: 2px;
+        .md-input {
+          -webkit-text-fill-color: #4b4747;
+          color: #4b4747;
+        }
       }
     }
     .md-field.md-focused label,

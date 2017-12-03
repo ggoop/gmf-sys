@@ -39,7 +39,7 @@
       mdAlignMedium: String,
       mdAlignLarge: String,
       mdAlignXlarge: String,
-      mdFlex:Boolean,
+      mdFlex:[String, Number, Boolean],
       mdFlexXsmall: [String, Number, Boolean],
       mdFlexSmall: [String, Number, Boolean],
       mdFlexMedium: [String, Number, Boolean],
