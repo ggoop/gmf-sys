@@ -513,8 +513,8 @@ export default {
   }
   td,
   th {
-    border-bottom: 1px solid #ededed;
-    border-right: 1px solid #ededed;
+    border-bottom: 1px solid rgba(15, 157, 88, 0.3);
+    border-right: 1px solid rgba(15, 157, 88, 0.3);
     overflow: hidden;
     position: relative;
   }
@@ -648,10 +648,10 @@ export default {
         }
       }
       &:nth-child(even) {
-        background-color: #f9f9f9;
+        background-color:#c8e6c9;
       }
       &.selected {
-        background-color: rgba(15, 157, 88, 0.37);
+        background-color:#a5d6a7;
       }
     }
     tr:hover>:first-child:before,
