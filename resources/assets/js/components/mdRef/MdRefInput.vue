@@ -11,7 +11,7 @@
     <md-button v-if="!disabled" class="md-dense md-icon-button md-ref-filter" @click.native="openRef()">
       <md-icon>search</md-icon>
     </md-button>
-    <md-ref v-if="mdRefId" ref="ref" @confirm="onRefConfirm" :md-ref-id="mdRefId" :options="options"></md-ref>
+    <md-ref v-if="mdRefId" :multiple="multiple" ref="ref" @confirm="onRefConfirm" :md-ref-id="mdRefId" :options="options"></md-ref>
   </md-field>
 </template>
 <script>
@@ -30,7 +30,7 @@ export default new MdComponent({
   props: {
     value: [Array, Object],
     disabled: Boolean,
-    mdMultiple: Boolean,
+    multiple: Boolean,
     mdRefId: String,
     id: {
       type: [String, Number],
@@ -95,10 +95,10 @@ export default new MdComponent({
       if (!value || !value.id) {
         return;
       }
-      if (this.mdMultiple && this.mdLimit > 0 && this.selectedValues.length >= this.mdLimit) {
+      if (this.multiple && this.mdLimit > 0 && this.selectedValues.length >= this.mdLimit) {
         return;
       }
-      if (!this.mdMultiple && this.selectedValues.length > 0) {
+      if (!this.multiple && this.selectedValues.length > 0) {
         return;
       }
       const index = this.getValueIndex(value);
@@ -126,7 +126,7 @@ export default new MdComponent({
       return -1;
     },
     formatValue() {
-      if (!this.mdMultiple) {
+      if (!this.multiple) {
         return this.selectedValues.length ? this.selectedValues[0] : null;
       }
       return this.selectedValues;
@@ -140,7 +140,7 @@ export default new MdComponent({
     },
     onRefConfirm(data) {
       if (!data || data.length == 0) return;
-      if (!this.mdMultiple) this.selectedValues = [];
+      if (!this.multiple) this.selectedValues = [];
       data && data.forEach((row, index) => {
         this.addValue(row);
       });

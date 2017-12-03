@@ -651,7 +651,7 @@ export default {
         background-color:#c8e6c9;
       }
       &.selected {
-        background-color:#a5d6a7;
+        background-color:#66bb6a;
       }
     }
     tr:hover>:first-child:before,

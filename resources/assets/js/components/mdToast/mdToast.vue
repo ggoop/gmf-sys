@@ -1,26 +1,26 @@
 <template>
-  <div class="md-snackbar md-toast" :class="[classes]" :id="snackbarId">
-    <transition-group name="list" tag="p">
-      <div v-for="(item,itemInd) in toastList" class="md-snackbar-container" :key="item.id" @mouseenter="pauseTimeout(item)" @mouseleave="resumeTimeout(item)">
-        <div class="md-snackbar-content">
-          <span v-html="item.text"></span>
-        </div>
-        <md-button class="md-icon-button md-toast-close" @click.native="closeItem(item)">
-          <md-icon>clear</md-icon>
-        </md-button>
+  <div class="md-toast-wrap">
+    <md-snackbar class="md-toast" :md-position="mdPosition" @md-closed="cleanAll" :md-duration="isInfinity ? Infinity : mdDuration" :md-active.sync="showSnackbar" md-persistent>
+      <md-button class="md-icon-button md-primary md-button-lock" @click="toggleLock">
+        <md-icon v-if="isInfinity">lock</md-icon>
+        <md-icon v-else>lock_open</md-icon>
+      </md-button>
+      <div class="flex main">
+        <p v-for="(item,itemInd) in toastList" :key="item.id" v-html="item.text"></p>
       </div>
-    </transition-group>
+      <md-button class="md-icon-button md-primary md-button-close" @click="cleanAll">
+        <md-icon>clear</md-icon>
+      </md-button>
+    </md-snackbar>
   </div>
 </template>
 <script>
-import transitionEndEventName from 'core/utils/transitionEndEventName';
-
 export default {
   props: {
     id: [String, Number],
     mdPosition: {
       type: String,
-      default: 'bottom center'
+      default: 'center'
     },
     mdDuration: {
       type: [String, Number],
@@ -29,43 +29,34 @@ export default {
   },
   data() {
     return {
-      snackbarId: this.id || 'snackbar-' + this._.uniqueId(),
-      active: false,
-      snackbarElement: {},
-      directionClass: null,
+      showSnackbar: false,
+      isInfinity: false,
       toastList: [],
+      timeout: false
     };
   },
-  computed: {
-    classes() {
-      let cssClasses = { 'md-active': this.active && this.toastList.length > 0 };
-      this.directionClass = this.mdPosition.replace(/ /g, '-');
-      cssClasses['md-position-' + this.directionClass] = true;
-      cssClasses['layout-column'] = true;
-      cssClasses['layout-align-center-center'] = true;
-      return cssClasses;
-    }
-  },
   watch: {
-    active(active) {
-      const directionClass = 'md-has-toast-' + this.directionClass;
-      const toastClass = 'md-has-toast';
-
-      if (active) {
-        document.body.classList.add(directionClass);
-        document.body.classList.add(toastClass);
-      } else {
-        document.body.classList.remove(directionClass);
-        document.body.classList.remove(toastClass);
-      }
-    },
-    toastList(toastList) {
-      if (toastList.length == 0) {
-        this.active = false;
-      }
+    toastList() {
+      this.showSnackbar = this.toastList.length > 0;
     }
   },
   methods: {
+    toggleLock() {
+      this.isInfinity = !this.isInfinity;
+
+      window.clearTimeout(this.timeout);
+
+      var list = this.toastList.map(item => { return { id: item.id, text: item.text } });
+      var infinity = this.isInfinity;
+      this.toastList.splice(0, this.toastList.length);
+      this.showSnackbar = this.toastList.length > 0;
+
+      this.timeout = window.setTimeout(() => {
+        this.isInfinity = infinity;
+        this.toastList = list;
+        this.showSnackbar = this.toastList.length > 0;
+      }, 200);
+    },
     toast: function(toastInfo) {
       const toast = { id: this._.uniqueId() };
       if (this._.isString(toastInfo)) {
@@ -87,75 +78,54 @@ export default {
       if (!toast.text) {
         toast.text = toastInfo;
       }
-
-      this.initToast(toast);
-      this.toastList.push(toast);
-
-      this.active = true;
+      this.toastList.splice(0, 0, toast);
     },
-    initToast(toast) {
-      if (!this.active) {
-        this.open();
-      }
-      toast.duration = toast.duration || this.mdDuration;
-      toast.timeoutStartedAt = Date.now();
-      toast.pendingDuration = toast.duration;
-      toast.closeTimeout = this._.delay(this.closeItem, toast.duration, toast);
-    },
-    closeItem(toast) {
-      window.clearTimeout(toast.closeTimeout);
-      toast.pendingDuration = toast.duration;
-      this.toastList.splice(this.toastList.indexOf(toast), 1);
-    },
-    pauseTimeout(toast) {
-      toast.pendingDuration = toast.pendingDuration - (Date.now() - toast.timeoutStartedAt);
-      toast.timeoutStartedAt = 0;
-      window.clearTimeout(toast.closeTimeout);
-    },
-    resumeTimeout(toast) {
-      toast.timeoutStartedAt = Date.now();
-      toast.closeTimeout = this._.delay(this.closeItem, toast.pendingDuration, toast);
-    },
-    removeElement() {
-      if (document.body.contains(this.snackbarElement)) {
-        document.body.removeChild(this.snackbarElement);
-      }
-    },
-    open() {
-      this.active = true;
-      document.body.appendChild(this.snackbarElement);
-    },
-    close() {
-      this.active = false;
+    cleanAll() {
+      this.isInfinity = false;
+      this.toastList.splice(0, this.toastList.length);
     },
   },
   mounted() {
-    this.snackbarElement = this.$el;
-    this.snackbarElement.parentNode.removeChild(this.snackbarElement);
+
   },
   beforeDestroy() {
-    this.removeElement();
+
   }
 };
-</script>
 
+</script>
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
-  .md-toast {
-    .md-snackbar-container {
-        position: relative;
-        overflow: hidden;
-    }
-    .md-snackbar-content{
-        overflow: auto;
-        max-height: 3rem;
-    }
-    .md-toast-close {
-        position: absolute;
-        right: 2px;
-        top: 2px;
-    }
+@import "~components/MdAnimation/variables";
+.md-toast-wrap {
+  height: 0;
+  width: 0;
+  max-height: 0px;
 }
 
+.md-toast.md-snackbar {
+  max-height: initial;
+  .md-snackbar-content {
+    position: relative;
+  }
+  .md-button-lock {
+    position: absolute;
+    left: -30px;
+    top: -18px;
+    margin: 0;
+  }
+  .md-button-close {
+    position: absolute;
+    right: -10px;
+    top: 0;
+  }
+  .main {
+    margin-left: 16px;
+    max-height: 400px;
+    overflow: auto;
+    >p {
+      margin-top: 0px;
+    }
+  }
+}
 
 </style>
