@@ -103,9 +103,11 @@ export default {
 
 </script>
 <style lang="scss">
-.md-menu-content.md-select-menu.md-pagination-menu{
+@import "~gmf/components/MdLayout/mixins";
+.md-menu-content.md-select-menu.md-pagination-menu {
   width: auto;
 }
+
 .md-pagination {
   color: #404040;
   .md-select {
@@ -113,7 +115,12 @@ export default {
     min-width: 20px;
     margin: 0 1px;
   }
-
+  @include md-layout-xsmall {
+    .md-pagination-label,
+    .md-pagination-select {
+      display: none;
+    }
+  }
   .md-field {
 
     margin: 0px 10px;

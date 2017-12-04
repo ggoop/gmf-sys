@@ -167,9 +167,18 @@ export default {
 </script>
 <style lang="scss">
 @import "~components/MdAnimation/variables";
-.md-refs-dialog.md-dialog {
+@import "~gmf/components/MdLayout/mixins";
+.md-refs-dialog {
   min-width: 50%;
-  height: 70%;
+  min-height: 70%;
+  @include md-layout-xsmall {
+    min-width: 100%;
+    min-height: 100%;
+
+    .md-pagination {
+      display: none;
+    }
+  }
   .md-dialog-content {
     background-attachment: inherit;
   }

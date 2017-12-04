@@ -15,7 +15,7 @@
         default: 4
       }
     }
-  })
+  });
 </script>
 
 <style lang="scss">

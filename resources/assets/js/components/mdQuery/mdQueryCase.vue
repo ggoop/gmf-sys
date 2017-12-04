@@ -5,7 +5,7 @@
       <md-button class="md-icon-button md-dialog-button-close" @click.native="cancel()">
         <md-icon>close</md-icon>
       </md-button>
-      <md-dialog-content class="no-padding layout-column layout-fill">
+      <md-dialog-content class="no-padding layout-column">
         <md-tabs class="md-primary layout-column layout-fill flex" :md-swipeable="true" md-right :md-dynamic-height="false">
           <md-tab md-label="条件" md-icon="filter_list" v-if="mdShowWhere">
             <md-layout md-gutter class="layout-fill">
@@ -99,7 +99,7 @@ export default {
   },
   watch: {
     'options.case_id' (val) {
-      if (val && val&&val.length>2) {
+      if (val && val && val.length > 2) {
         this.fetchCase();
       }
     },
@@ -159,7 +159,7 @@ export default {
       }
     },
     async onSaveCase() {
-      if (this.options.case_id&&this.options.case_id.length>2) {
+      if (this.options.case_id && this.options.case_id.length > 2) {
         await this.saveCase();
       } else {
         this.options.case_name = '';
@@ -175,7 +175,7 @@ export default {
         orders: this.options.orders.filter(v => !v.sys_deleted).map(v => this._.omit(v, ['sys_deleted', 'sys_created', 'sys_updated', 'vueRowId'])),
         fields: this.options.fields.filter(v => !v.sys_deleted).map(v => this._.omit(v, ['sys_deleted', 'sys_created', 'sys_updated', 'vueRowId']))
       };
-      if (this.options.case_id&&this.options.case_id.length>2) {
+      if (this.options.case_id && this.options.case_id.length > 2) {
         caseModel.id = this.options.case_id;
       }
       try {
@@ -219,7 +219,7 @@ export default {
       if (this.options.case_id == '-1') {
         return qc;
       }
-      if (this.options.case_id&&this.options.case_id.length>2) {
+      if (this.options.case_id && this.options.case_id.length > 2) {
         qc.id = this.options.case_id;
       }
       this._.each(this.options.wheres, (v) => {
@@ -309,17 +309,24 @@ export default {
 
 </script>
 <style lang="scss">
+@import "~gmf/components/MdLayout/mixins";
 .md-query-case {
   >.md-button {
     color: #34957a;
   }
 }
 
-.md-query-case-dialog.md-dialog {
-  min-width: 7rem;
+.md-query-case-dialog {
   min-height: 70%;
-  max-width: 80%;
-  max-height: 90%;
+  min-width: 80%;
+  @include md-layout-xsmall {
+    min-width: 100%;
+    min-height: 100%;
+
+    .md-pagination {
+      display: none;
+    }
+  }
 
   .md-tabs .md-tab {
     padding: 0px;

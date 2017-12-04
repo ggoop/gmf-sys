@@ -1,3 +1,4 @@
+@import "~gmf/components/MdLayout/mixins";
 .md-speed-dial {
   justify-content: center;
   align-items: center;
@@ -53,12 +54,23 @@
     color: #fff;
     margin-left: 30px!important;
     top: 6px;
-
     .md-icon {
       color: rgba(255, 255, 255, 0.83)!important;
       font-size: 30px;
     }
   }
+
+  .md-toolbar {
+    @include md-layout-xsmall {
+      .md-dialog-button-close {
+        position: relative;
+        left: auto;
+        top: auto;
+        margin-left: 10px !important;
+      }
+    }
+  }
+
   .md-dialog-content .md-tabs {
     .md-tabs-content {
       display: flex;

@@ -73,7 +73,7 @@
       <md-toolbar>
         <h1 class="md-title">选择更多内容</h1>
       </md-toolbar>
-      <md-dialog-content class="no-padding layout-column layout-fill">
+      <md-dialog-content class="no-padding layout-column flex">
         <md-query-field ref="onNewItemTree" :md-entity-id="mdEntityId"></md-query-field>
       </md-dialog-content>
       <md-dialog-actions>
