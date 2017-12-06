@@ -60,12 +60,11 @@ export default {
   computed: {
     contentStyles () {
       const drawer = this.MdApp.drawer
-
+      let styles = {}
       if (drawer.active && drawer.mode === 'persistent' && drawer.submode === 'full') {
-        return {
-          'padding-left': drawer.width
-        }
+        styles['padding-'+drawer.direction]=drawer.width;
       }
+      return styles;
     },
     containerStyles () {
       const drawer = this.MdApp.drawer
@@ -76,7 +75,7 @@ export default {
       }
 
       if (drawer.mode === 'persistent' && drawer.submode === 'mini') {
-        styles['padding-left'] = !drawer.active ? drawer.initialWidth + 'px' : 0
+        styles['padding-'+drawer.direction] = !drawer.active ? drawer.initialWidth + 'px' : 0
       }
 
       return styles

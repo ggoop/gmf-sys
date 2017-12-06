@@ -55,6 +55,7 @@
       this.MdApp.drawer.mode = this.mode
       this.MdApp.drawer.submode = this.submode
       this.MdApp.drawer.initialWidth = this.$el.offsetWidth
+      this.MdApp.drawer.direction=this.$el.classList.contains('md-right')?'right':'left';
     }
   }
 </script>
