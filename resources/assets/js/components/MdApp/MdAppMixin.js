@@ -62,7 +62,7 @@ export default {
       const drawer = this.MdApp.drawer
       let styles = {}
       if (drawer.active && drawer.mode === 'persistent' && drawer.submode === 'full') {
-        styles['padding-'+drawer.direction]=drawer.width;
+        styles['margin-'+drawer.direction]=drawer.width;
       }
       return styles;
     },
@@ -75,7 +75,7 @@ export default {
       }
 
       if (drawer.mode === 'persistent' && drawer.submode === 'mini') {
-        styles['padding-'+drawer.direction] = !drawer.active ? drawer.initialWidth + 'px' : 0
+        styles['margin-'+drawer.direction] = !drawer.active ? drawer.initialWidth + 'px' : 0
       }
 
       return styles
