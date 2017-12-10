@@ -1,5 +1,5 @@
+import Vue from 'vue';
 import common from 'gmf/core/utils/common';
-
 
 const wrapApp = {
   template: '<md-wrap :name="wrap"></md-wrap>',
@@ -24,8 +24,8 @@ const wrapModule = {
     wrap: function() {
       const app = common.snakeCase(this.$route.params.app);
       const module = common.snakeCase(this.$route.params.module);
-      if(!this._.startsWith(module,app)&&module.indexOf('-')<0){
-        return app+'-'+module;
+      if (!this._.startsWith(module, app) && module.indexOf('-') < 0) {
+        return app + '-' + module;
       }
       return module;
     }
@@ -46,8 +46,8 @@ const wrapExtend = {
     wrap: function() {
       const app = common.snakeCase(this.$route.params.app);
       const module = common.snakeCase(this.$route.params.module);
-      if(!this._.startsWith(module,app)&&module.indexOf('-')<0){
-        return app+'-'+module;
+      if (!this._.startsWith(module, app) && module.indexOf('-') < 0) {
+        return app + '-' + module;
       }
       return module;
     }
@@ -62,7 +62,7 @@ const wrapExtend = {
     next();
   }
 };
-const routes = [{
+const defaultRoutes = [{
   path: '/:app',
   component: wrapApp,
   name: 'app',
@@ -76,4 +76,26 @@ const routes = [{
     ]
   }]
 }];
-export default routes;
+
+class gmfConfig {
+  constructor() {
+    this.routes = [];
+    this.defaultRoutes = defaultRoutes;
+  }
+  route(routes) {
+    if (_.isArray(routes)) {
+      routes.forEach((item) => {
+        this.routes.push(item);
+      });
+    } else {
+      this.routes.push(routes);
+    }
+  }
+}
+
+if (!Vue.gmfConfig) {
+  Vue.gmfConfig = new gmfConfig()
+  Vue.prototype.$gmfConfig = Vue.gmfConfig;
+}
+const config = Vue.gmfConfig;
+export default config;
