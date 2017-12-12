@@ -104,6 +104,9 @@ export default {
 
 .md-toast.md-snackbar {
   max-height: initial;
+  width: 1000px;
+  max-width: 100%;
+
   .md-snackbar-content {
     position: relative;
   }
@@ -124,6 +127,8 @@ export default {
     overflow: auto;
     >p {
       margin-top: 0px;
+      word-wrap: break-word;
+      word-break: break-all;
     }
   }
 }
