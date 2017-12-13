@@ -278,7 +278,14 @@
       left: 16px;
     }
   }
-
+  .md-autocomplete-box-content{
+    @include md-layout-xsmall {
+      max-width: 100%!important;
+      left: 0px!important;
+      right: 0px!important;
+      width: 100%!important;
+    }
+  }
   .md-autocomplete-box-content:after {
     height: 6px;
     position: absolute;
