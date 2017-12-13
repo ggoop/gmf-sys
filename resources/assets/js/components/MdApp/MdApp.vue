@@ -46,7 +46,7 @@
   export default {
     name: 'MdApp',
     functional: true,
-    render (createElement, { children, props }) {
+    render (createElement, { children, props, data }) {
       let appComponent = MdAppSideDrawer
       const { context, functionalContext, componentOptions } = createElement(appComponent)
       const slots = buildSlots(children, context, functionalContext, componentOptions)
@@ -58,8 +58,18 @@
         }
       })
 
+      const staticClass = {}
+      if (data.staticClass) {
+        data.staticClass.split(/\s+/).forEach(name => {
+          if (name.length === 0) return
+          staticClass[name] = true
+        })
+      }
+
       return createElement(appComponent, {
-        attrs: props
+        attrs: props,
+        class: {...staticClass, ...data.class},
+        style: {...data.staticStyle, ...data.style},
       }, slots)
     }
   }
@@ -70,6 +80,7 @@
   @import "~components/MdLayout/mixins";
 
   .md-app {
+    display: flex;
     overflow: hidden;
     position: relative;
 
@@ -122,9 +133,17 @@
       }
 
       .md-app-content {
-        margin-top: -64px;
+        margin: -64px 24px 24px;
         position: relative;
         z-index: 2;
+
+        @include md-layout-small {
+          margin: -64px 16px 16px;
+        }
+
+        @include md-layout-xsmall {
+          margin: -64px 8px 8px;
+        }
       }
     }
   }
@@ -157,9 +176,15 @@
   }
 
   .md-app-container {
+    flex: 1;
+    display: flex;
     overflow: auto;
     transform: translate3D(0, 0, 0);
     transition: padding-left .4s $md-transition-default-timing;
     will-change: padding-left;
+  }
+
+  .md-app-scroller {
+    flex: 1;
   }
 </style>

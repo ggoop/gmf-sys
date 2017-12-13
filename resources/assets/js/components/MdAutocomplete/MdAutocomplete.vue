@@ -75,13 +75,15 @@
       mdInputMaxlength: [String, Number],
       mdInputPlaceholder: [String, Number]
     },
-    data: () => ({
-      searchTerm: null,
-      showMenu: false,
-      triggerPopover: false,
-      isPromisePending: false,
-      filteredAsyncOptions: []
-    }),
+    data () {
+      return {
+        searchTerm: this.value,
+        showMenu: false,
+        triggerPopover: false,
+        isPromisePending: false,
+        filteredAsyncOptions: []
+      }
+    },
     computed: {
       isBoxLayout () {
         return this.mdLayout === 'box'
@@ -131,6 +133,10 @@
             this.isPromisePending = false
           }
         }
+      },
+
+      value (val) {
+        this.searchTerm = val
       }
     },
     methods: {
@@ -278,7 +284,7 @@
       left: 16px;
     }
   }
-  .md-autocomplete-box-content{
+.md-autocomplete-box-content{
     @include md-layout-xsmall {
       max-width: 100%!important;
       left: 0px!important;

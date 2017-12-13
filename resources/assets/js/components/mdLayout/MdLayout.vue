@@ -6,133 +6,182 @@
         type: String,
         default: 'div'
       },
-      mdRow: Boolean,
       mdWrap:{
         type:Boolean,
         default:true
       },
-      mdRowXsmall: Boolean,
-      mdRowSmall: Boolean,
-      mdRowMedium: Boolean,
-      mdRowLarge: Boolean,
-      mdRowXlarge: Boolean,
-      mdColumn: Boolean,
-      mdColumnXsmall: Boolean,
-      mdColumnSmall: Boolean,
-      mdColumnMedium: Boolean,
-      mdColumnLarge: Boolean,
-      mdColumnXlarge: Boolean,
-      mdHideXsmall: Boolean,
-      mdHideSmall: Boolean,
-      mdHideMedium: Boolean,
-      mdHideLarge: Boolean,
-      mdHideXlarge: Boolean,
-      mdHideXsmallAndUp: Boolean,
-      mdHideSmallAndUp: Boolean,
-      mdHideMediumAndUp: Boolean,
-      mdHideLargeAndUp: Boolean,
-      mdHideXlargeAndUp: Boolean,
-      mdGutter: Boolean,
-      mdAlign: String,
-      mdAlignXsmall: String,
-      mdAlignSmall: String,
-      mdAlignMedium: String,
-      mdAlignLarge: String,
-      mdAlignXlarge: String,
-      mdFlex:[String, Number, Boolean],
-      mdFlexXsmall: [String, Number, Boolean],
-      mdFlexSmall: [String, Number, Boolean],
-      mdFlexMedium: [String, Number, Boolean],
-      mdFlexLarge: [String, Number, Boolean],
-      mdFlexXlarge: [String, Number, Boolean],
-      mdFlexOffset: [String, Number, Boolean],
-      mdFlexOffsetXsmall: [String, Number, Boolean],
-      mdFlexOffsetSmall: [String, Number, Boolean],
-      mdFlexOffsetMedium: [String, Number, Boolean],
-      mdFlexOffsetLarge: [String, Number, Boolean],
-      mdFlexOffsetXlarge: [String, Number, Boolean]
+      mdNowrap: Boolean,
+      //Row
+      mdRow:Boolean,
+      mdXsRow:Boolean,
+      mdGtXsRow:Boolean,
+      mdSmRow:Boolean,
+      mdGtSmRow:Boolean,
+      mdMdRow:Boolean,
+      mdGtMdRow:Boolean,
+      mdLgRow:Boolean,
+      mdGtLgRow:Boolean,
+      mdXlRow:Boolean,
+      //Column
+      mdColumn:Boolean,
+      mdXsColumn:Boolean,
+      mdGtXsColumn:Boolean,
+      mdSmColumn:Boolean,
+      mdGtSmColumn:Boolean,
+      mdMdColumn:Boolean,
+      mdGtMdColumn:Boolean,
+      mdLgColumn:Boolean,
+      mdGtLgColumn:Boolean,
+      mdXlColumn:Boolean,
+      //Align
+      mdAlign:String,
+      mdXsAlign:String,
+      mdGtXsAlign:String,
+      mdSmAlign:String,
+      mdGtSmAlign:String,
+      mdMdAlign:String,
+      mdGtMdAlign:String,
+      mdLgAlign:String,
+      mdGtLgAlign:String,
+      mdXlAlign:String,
+      //Flex
+      mdFlex:String,
+      mdFlexXs:String,
+      mdFlexGtXs:String,
+      mdFlexSm:String,
+      mdFlexGtSm:String,
+      mdFlexMd:String,
+      mdFlexGtMd:String,
+      mdFlexLg:String,
+      mdFlexGtLg:String,
+      mdFlexXl:String,
+      //Order
+      mdOrder:String,
+      mdOrderXs:String,
+      mdOrderGtXs:String,
+      mdOrderSm:String,
+      mdOrderGtSm:String,
+      mdOrderMd:String,
+      mdOrderGtMd:String,
+      mdOrderLg:String,
+      mdOrderGtLg:String,
+      mdOrderXl:String,
+      //Hide
+      mdHide:Boolean,
+      mdHideXs:Boolean,
+      mdHideGtXs:Boolean,
+      mdHideSm:Boolean,
+      mdHideGtSm:Boolean,
+      mdHideMd:Boolean,
+      mdHideGtMd:Boolean,
+      mdHideLg:Boolean,
+      mdHideGtLg:Boolean,
+      mdHideXl:Boolean,
+
+      //Show
+      mdShow:Boolean,
+      mdShowXs:Boolean,
+      mdShowGtXs:Boolean,
+      mdShowSm:Boolean,
+      mdShowGtSm:Boolean,
+      mdShowMd:Boolean,
+      mdShowGtMd:Boolean,
+      mdShowLg:Boolean,
+      mdShowGtLg:Boolean,
+      mdShowXl:Boolean,
     },
+    data: () => ({
+      layout: ['Xs','GtXs','Sm','GtSm','Md','GtMd','Lg','GtLg','Xl'],
+    }),
     computed: {
       classes() {
         let classes = {
-          'md-layout-row': this.mdRow,
-          'md-layout-wrap': this.mdWrap,
-          'md-row-xsmall': this.mdRowXsmall,
-          'md-row-small': this.mdRowSmall,
-          'md-row-medium': this.mdRowMedium,
-          'md-row-large': this.mdRowLarge,
-          'md-row-xlarge': this.mdRowXlarge,
-          'md-layout-column': this.mdColumn,
-          'md-column-xsmall': this.mdColumnXsmall,
-          'md-column-small': this.mdColumnSmall,
-          'md-column-medium': this.mdColumnMedium,
-          'md-column-large': this.mdColumnLarge,
-          'md-column-xlarge': this.mdColumnXlarge,
-          'md-hide-xsmall': this.mdHideXsmall,
-          'md-hide-small': this.mdHideSmall,
-          'md-hide-medium': this.mdHideMedium,
-          'md-hide-large': this.mdHideLarge,
-          'md-hide-xlarge': this.mdHideXlarge,
-          'md-hide-xsmall-and-up': this.mdHideXsmallAndUp,
-          'md-hide-small-and-up': this.mdHideSmallAndUp,
-          'md-hide-medium-and-up': this.mdHideMediumAndUp,
-          'md-hide-large-and-up': this.mdHideLargeAndUp,
-          'md-hide-xlarge-and-up': this.mdHideXlargeAndUp
+          'layout-wrap': this.mdWrap,
+          'layout-nowrap': this.mdNowrap,
         };
 
         if (this.mdGutter) {
-          classes['md-gutter'] = true;
+          classes['layout-gutter'] = true;
         }
+        /*layout-row*/
+        this.generateLayoutClasses(classes,'Row','layout-');
+        this.layout.forEach(item=>{
+          this.generateLayoutClasses(classes,item+'Row','layout-');
+        });
+        /*layout-column*/
+        this.generateLayoutClasses(classes,'Column','layout-');
+        this.layout.forEach(item=>{
+          this.generateLayoutClasses(classes,item+'Column','layout-');
+        });
 
-        /* Flex */
-        this.generatePropClasses('md-flex', '', 'mdFlex', classes);
-        this.generatePropClasses('md-flex', 'xsmall', 'mdFlexXsmall', classes);
-        this.generatePropClasses('md-flex', 'small', 'mdFlexSmall', classes);
-        this.generatePropClasses('md-flex', 'medium', 'mdFlexMedium', classes);
-        this.generatePropClasses('md-flex', 'large', 'mdFlexLarge', classes);
-        this.generatePropClasses('md-flex', 'xlarge', 'mdFlexXlarge', classes);
+        /*align   layout-align-center-center,*/
+        this.generateAlignClasses(classes,'Align','layout-');
+        this.layout.forEach(item=>{
+          this.generateAlignClasses(classes,item+'Align','layout-');
+        });
 
-        /* Flex Offset */
-        this.generatePropClasses('md-flex-offset', '', 'mdFlexOffset', classes);
-        this.generatePropClasses('md-flex-offset', 'xsmall', 'mdFlexOffsetXsmall', classes);
-        this.generatePropClasses('md-flex-offset', 'small', 'mdFlexOffsetSmall', classes);
-        this.generatePropClasses('md-flex-offset', 'medium', 'mdFlexOffsetMedium', classes);
-        this.generatePropClasses('md-flex-offset', 'large', 'mdFlexOffsetLarge', classes);
-        this.generatePropClasses('md-flex-offset', 'xlarge', 'mdFlexOffsetXlarge', classes);
+        /*flex*/
+        this.generateFlexClasses(classes,'Flex','');
+        this.layout.forEach(item=>{
+          this.generateFlexClasses(classes,'Flex'+item,'');
+        });
 
-        /* Alignment */
-        this.generatePropClasses('md-align', '', 'mdAlign', classes);
-        this.generatePropClasses('md-align', 'xsmall', 'mdAlignXsmall', classes);
-        this.generatePropClasses('md-align', 'small', 'mdAlignSmall', classes);
-        this.generatePropClasses('md-align', 'medium', 'mdAlignMedium', classes);
-        this.generatePropClasses('md-align', 'large', 'mdAlignLarge', classes);
-        this.generatePropClasses('md-align', 'xlarge', 'mdAlignXlarge', classes);
+        /*order*/
+        this.generateFlexClasses(classes,'Order','flex-');
+        this.layout.forEach(item=>{
+          this.generateFlexClasses(classes,'Order'+item,'flex-');
+        });
 
+        /*hide*/
+        this.generateLayoutClasses(classes,'Hide','');
+        this.layout.forEach(item=>{
+          this.generateLayoutClasses(classes,'Hide'+item,'');
+        });
+
+        /*Show*/
+        this.generateLayoutClasses(classes,'Show','');
+        this.layout.forEach(item=>{
+          this.generateLayoutClasses(classes,'Show'+item,'');
+        });
         return classes;
       }
     },
     methods: {
-      generatePropClasses(prop, size, name, object) {
-        if (size) {
-          size = '-' + size;
+      generateLayoutClasses(object,prop,pre) {
+        if (this['md'+prop]) {
+         object[pre+this.snakeCase(prop)]=true;
         }
-
-        if (this[name]) {
-          if (typeof this[name] === 'boolean') {
-            if (!this[name]) {
-              object[prop + size + '-none'] = true;
-            } else {
-              object[prop + size] = true;
-            }
-          } else {
-            object[prop + size + '-' + this[name]] = true;
-          }
+      },
+      generateFlexClasses(object,prop,pre) {
+        var v=this['md'+prop];
+        if(!v)return;
+        //v=none,grow,nogrow,initial,auto,noshrink,0~100
+        object[pre+this.snakeCase(prop)+'-'+v]=true;
+      },
+      generateAlignClasses(object,prop,pre) {
+        var v=this['md'+prop];
+        if(!v)return;
+        if(v=='none'){
+          v='none none';
         }
+        const align=v.split(' ');
+        if(align.length<2){
+          align.push('none');
+        }
+        if(align[0]==''||align[0]=='none')align[0]='start';
+        if(align[1]==''||align[1]=='none')align[1]='stretch';
+        object[pre+this.snakeCase(prop)+'-'+align[0]+'-'+align[1]]=true;
+      },
+      snakeCase(name) {
+          name = name.replace(/[A-Z.]/g, function(letter, pos) {
+              return (pos ? '-' : '') + letter.toLowerCase();
+          });
+          return name.replace(/\./g, '');
       }
     },
     render(createElement) {
       return createElement(this.mdTag, {
-        staticClass: 'md-layout',
+        staticClass: 'layout',
         class: this.classes
       }, this.$slots.default);
     }

@@ -170,7 +170,11 @@
         return getDaysInMonth(this.currentDate)
       },
       currentDay () {
-        return getDate(this.selectedDate)
+        if (this.selectedDate) {
+          return getDate(this.selectedDate)
+        }
+
+        return getDate(this.currentDate)
       },
       currentMonth () {
         return getMonth(this.currentDate)
@@ -292,7 +296,7 @@
       },
       selectDate (day) {
         this.currentDate = setDate(this.currentDate, day)
-        this.selectedDate = this.currentDate;
+        this.selectedDate = this.currentDate
         if(this.mdAutoSelect){
           this.onConfirm();
         }

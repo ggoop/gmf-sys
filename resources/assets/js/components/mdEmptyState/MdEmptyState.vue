@@ -109,6 +109,7 @@
     font-size: 26px;
     font-weight: 500;
     line-height: 40px;
+    word-break: break-all;
   }
 
   .md-empty-state-description {

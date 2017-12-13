@@ -60,7 +60,7 @@
         }
       }
     }
-  });
+  })
 </script>
 
 <style lang="scss">
@@ -134,6 +134,10 @@
 
       @include md-layout-xsmall {
         margin-left: 12px;
+      }
+
+      + .md-button {
+        margin-left: 16px;
       }
     }
   }
