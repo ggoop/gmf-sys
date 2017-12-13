@@ -6,7 +6,7 @@
       </thead>
       <tbody>
         <tr>
-          <md-grid-cell v-if="multiple" :selection="true" container-class="md-layout md-align-center-center">
+          <md-grid-cell v-if="multiple" :selection="true" container-class="layout layout-align-center-center">
             <md-checkbox class="md-primary" v-model="selected" @change="handleSelected"></md-checkbox>
           </md-grid-cell>
           <md-grid-cell v-for="column in visibleColumns" :key="column.field" @click="clicked(column)" :class="headerClass(column)">
