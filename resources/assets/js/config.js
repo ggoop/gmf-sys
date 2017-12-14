@@ -80,6 +80,7 @@ const defaultRoutes = [{
 class gmfConfig {
   constructor() {
     this.routes = [];
+    this.stores=[];
     this.defaultRoutes = defaultRoutes;
   }
   route(routes) {
@@ -90,6 +91,10 @@ class gmfConfig {
     } else {
       this.routes.push(routes);
     }
+  }
+  store(store){
+    if(!store.name)return;
+    this.stores.push(store);
   }
 }
 

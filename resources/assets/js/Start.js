@@ -1,12 +1,15 @@
 import Vue from 'vue';
+import Vuex from 'vuex';
 import http from './core/utils/http';
 import VueRouter from 'vue-router';
 import validator from './validator';
 import common from './core/utils/common';
 import lang from './lang';
 import lodash from 'lodash';
-import sysConfig from './config';
+import gmfConfig from './config';
 import enumCache from './core/utils/enumCache';
+import storeConfig from './store';
+
 export default class Start {
   constructor(columnComponent) {
     this.routes = [];
@@ -22,20 +25,34 @@ export default class Start {
       userData: { ent: {}, entId: this.getEntId(), ents: [] },
       userConfig: window.gmfConfig
     };
-    var routes=sysConfig.routes;
+    /*routes*/
+    Vue.use(VueRouter);
+
+    var routes=gmfConfig.routes;
     this.init();
     if(options.routes){
       routes=routes.concat(options.routes);
     }
-    if(sysConfig.defaultRoutes){
-      routes=routes.concat(sysConfig.defaultRoutes);
+    if(!!options.defaultRoutes){
+      routes=routes.concat(gmfConfig.defaultRoutes);
     }
     const router = { mode: 'history', routes: routes };
-    Vue.use(VueRouter);
+
+    /*store*/
+    Vue.use(Vuex);
+    if(gmfConfig.stores&&gmfConfig.stores.length>0){
+      storeConfig.modules={};
+      gmfConfig.stores.forEach(item=>{
+        storeConfig.modules[item.name]=item;
+      });
+    }
+    const store=new Vuex.Store(storeConfig);
+    
     const app = new Vue({
       router: new VueRouter(router),
       el: elID,
       data: rootData,
+      store:store,
       watch: {
         "userData.ent": function(v, o) {
           this.userData.entId = v ? v.id : "";
