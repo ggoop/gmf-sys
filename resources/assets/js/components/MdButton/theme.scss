@@ -2,9 +2,11 @@
   .md-icon-font {
     @include md-theme-property(color, $state, $type);
   }
-
   .md-icon-image {
     @include md-theme-property(fill, $state, $type);
+    svg {
+      @include md-theme-property(fill, $state, $type);
+    }
   }
 }
 
