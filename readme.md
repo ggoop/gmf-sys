@@ -69,3 +69,9 @@ protected $middlewareGroups = [
 ```shell
  php artisan gmf:install --seed --force
 ```
+
+
+7 - storage:link 来创建符号链接：
+```shell
+php artisan storage:link
+```
