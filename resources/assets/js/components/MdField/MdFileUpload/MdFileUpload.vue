@@ -1,10 +1,10 @@
 <template>
   <div class="md-file md-file-upload layout layout-row layout-align-start-start layout-wrap">
     <div v-for="(file,ind) in files" :key="ind" class="md-files-item layout layout-align-center-center">
-       <md-image v-if="file.image&&file.url" :md-src="file.url"></md-image>
-       <md-image v-else-if="file.image&&file.base64" :md-src="file.base64"></md-image>
+       <md-image v-if="isImage(file)&&file.url" :md-src="file.url"></md-image>
+       <md-image v-else-if="isImage(file)&&file.data" :md-src="file.data"></md-image>
        <div v-else class="file">
-         {{file.name}}
+         {{file.title}}
        </div>
        <div class="md-delete">
         <md-button class="md-icon-button md-accent md-raised" @click.native="onItemDelete(ind)">
@@ -49,6 +49,7 @@
         //100 * 1024表示100kb
         default: 100 * 1024
       },
+      mdUpload:Boolean
     },
     data() {
       return {
@@ -73,6 +74,9 @@
       },
     },
     methods: {
+      isImage(file){
+        return file&&file.type&&file.type.indexOf('image/')==0;
+      },
       openPicker() {
         if (!this.disabled) {
           this.resetFile();
@@ -88,22 +92,43 @@
         if(file.type&&file.type.indexOf('image/')==0){
           compressImage(file.file,{maxSize:this.maxSize})
           .then((data)=>{
-            file.base64=data.base64;
-            file.image=true;
-            this.files.push(file);
-            this.setInputValue();
+            file.data=data.base64;
+
+            if(this.mdUpload){
+              this.uploadFile(file);
+            }else{
+              this.files.push(file);
+              this.setInputValue();
+            }
+            
           },(e)=>{
             console.log(e);
           });
         }else{
           const reader = new window.FileReader();
           reader.onload = (e)=> {
-            file.base64= e.target.result;
-            this.files.push(file);
-            this.setInputValue();
+            file.data= e.target.result;
+            if(this.mdUpload){
+              this.uploadFile(file);
+            }else{
+              this.files.push(file);
+              this.setInputValue();
+            }
           }
           reader.readAsDataURL(file.file);
         }
+      },
+      uploadFile(file){      
+        const options={};
+        options.files=[file];
+        this.$http.post('sys/files', options).then(response=>{
+          response.data.data.forEach(item=>{
+            this.files.push(item);
+          });          
+          this.setInputValue();
+        }).catch(err=>{
+          this.$toast(err);
+        });      
       },
       resetFile() {
         this.$refs.fileInput.value = '';
@@ -122,7 +147,7 @@
         if (files) {
           for (var i = 0; i < files.length; i++) {
             let file=files[i];
-            let fileInfo={file:file,name:file.name,size:file.size,type:file.type};            
+            let fileInfo={file:file,title:file.name,size:file.size,type:file.type};            
             fileInfo.ext=file.name.substr(file.name.lastIndexOf(".")+1); 
             this.onFileToData(fileInfo);
           }          

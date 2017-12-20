@@ -6,6 +6,7 @@ use Gmf\Sys\Builder;
 use Illuminate\Container\Container;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 
@@ -29,10 +30,12 @@ class APIResult {
 			$data = $data->items();
 		} else if ($data instanceof ResourceCollection) {
 			$pager = new Builder;
-			$pager->page($data->resource->currentPage())
-				->size($data->resource->perPage())
-				->total($data->resource->total())
-				->lastPage($data->resource->lastPage());
+			if ($data->resource instanceof AbstractPaginator) {
+				$pager->page($data->resource->currentPage())
+					->size($data->resource->perPage())
+					->total($data->resource->total())
+					->lastPage($data->resource->lastPage());
+			}
 			$res = $data->toArray(Container::getInstance()->make('request'));
 			if (isset($res['data'])) {
 				$data = $res['data'];

@@ -49,7 +49,7 @@ class File {
 		if (is_a($file, UploadedFile::class)) {
 			return $this->storageFile($file, $path, $disk);
 		}
-		if (!empty($file->name) && !empty($file->base64)) {
+		if (!empty($file->title) && !empty($file->data)) {
 			return $this->storageBase64($file, $path, $disk);
 		}
 		return false;
@@ -102,7 +102,7 @@ class File {
 		}
 		$builder->user_id(Auth::id());
 		$builder->code(Uuid::generate(1, 'gmf', Uuid::NS_DNS, ""));
-		$builder->title($file->name);
+		$builder->title($file->title);
 		if (!empty($file->size)) {
 			$builder->size($file->size);
 		}
@@ -123,8 +123,8 @@ class File {
 		}
 		$builder->path($name);
 
-		if (!empty($file->base64)) {
-			$builder->data($file->base64);
+		if (!empty($file->data)) {
+			$builder->data($file->data);
 		}
 		if (preg_match('/^(data:)/', $builder->data, $result)) {
 			$base64_body = substr(strstr($builder->data, ','), 1);

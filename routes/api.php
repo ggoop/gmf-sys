@@ -36,7 +36,7 @@ Route::prefix('api/sys')->middleware(['api', 'auth:api', 'ent_check'])->namespac
 	Route::post('/profiles/batch', 'ProfileController@batchStore');
 	Route::resource('profiles', 'ProfileController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 
-	//Route::resource('files', 'FileController', ['only' => ['index', 'show']]);
+	Route::resource('files', 'FileController', ['only' => ['store', 'show']]);
 
 	Route::get('/ents/my', 'EntController@getMyEnts');
 	Route::any('/ents/seed/{id}', 'EntController@seedDatas');
