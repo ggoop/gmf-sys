@@ -122,7 +122,6 @@
     .md-display-1,
     .md-title {
       margin: 0;
-      margin-left: 8px;
       overflow: hidden;
       font-weight: 400;
       letter-spacing: .02em;
