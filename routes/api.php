@@ -2,11 +2,13 @@
 $ns = 'Gmf\Sys\Http\Controllers';
 Route::prefix('api/sys')->middleware(['api'])->namespace($ns)->group(function () {
 	Route::post('/token', 'AuthController@issueToken');
-
 	Route::get('uid', 'DataController@issueUid');
 	Route::resource('datas', 'DataController', ['only' => ['index', 'show']]);
 	Route::resource('components', 'ComponentController', ['only' => ['index', 'show']]);
 
+});
+Route::prefix('api/sys')->middleware(['web', 'ent_check'])->namespace($ns)->group(function () {
+	Route::get('auth', 'DataController@authInfo');
 });
 Route::prefix('api/sys')->middleware(['api', 'auth:api', 'ent_check'])->namespace($ns)->group(function () {
 

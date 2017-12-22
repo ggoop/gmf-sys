@@ -201,6 +201,10 @@
       }
     }
 
+    &.md-button-full{
+      width:100%;
+    }
+
     + .md-button {
       margin-left: 0;
     }

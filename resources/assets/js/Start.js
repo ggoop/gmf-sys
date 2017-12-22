@@ -22,66 +22,68 @@ export default class Start {
     const elID = options.elID || '#gmfApp';
     var rootData = {
       title: '',
-      userData: { ent: {}, entId: this.getEntId(), ents: [] },
-      userConfig: window.gmfConfig
+      $rootData: { ent:false, user: false, token: false,configUrl:options.configUrl||'sys/auth'},
+      userConfig: {}
     };
     /*routes*/
     Vue.use(VueRouter);
 
-    var routes=gmfConfig.routes;
+    var routes = gmfConfig.routes;
     this.init();
-    if(options.routes){
-      routes=routes.concat(options.routes);
+    if (options.routes) {
+      routes = routes.concat(options.routes);
     }
-    if(!!options.defaultRoutes){
-      routes=routes.concat(gmfConfig.defaultRoutes);
+    if (!!options.defaultRoutes) {
+      routes = routes.concat(gmfConfig.defaultRoutes);
     }
     const router = { mode: 'history', routes: routes };
 
     /*store*/
     Vue.use(Vuex);
-    if(gmfConfig.stores&&gmfConfig.stores.length>0){
-      storeConfig.modules={};
-      gmfConfig.stores.forEach(item=>{
-        storeConfig.modules[item.name]=item;
+    if (gmfConfig.stores && gmfConfig.stores.length > 0) {
+      storeConfig.modules = {};
+      gmfConfig.stores.forEach(item => {
+        storeConfig.modules[item.name] = item;
       });
     }
-    const store=new Vuex.Store(storeConfig);
-    
+    const store = new Vuex.Store(storeConfig);
+
     const app = new Vue({
       router: new VueRouter(router),
       el: elID,
       data: rootData,
-      store:store,
+      store: store,
       watch: {
-        "userData.ent": function(v, o) {
-          this.userData.entId = v ? v.id : "";
+        "userConfig.ent": function(v, o) {
+          this.changedConfig();
         },
-        "userData.entId": function(v, o) {
-          this.setHttpConfig();
-          window.gmfEntID = v;
+        "userConfig.user": function(v, o) { 
+          this.changedConfig();
         },
-        "userConfig": function(v, o) {
-          window.gmfConfig = v;
+        "userConfig.token": function(v, o) {
+          this.changedConfig();
         }
       },
-      computed: {
-
-      },
       methods: {
-        setHttpConfig() {
-          this.$http.defaults.headers.common.Ent = this.userData.entId;
+        changedConfig() {
+          this.$rootData.ent=this.userConfig.ent;
+          this.$rootData.user=this.userConfig.user;
+          this.$rootData.token=this.userConfig.token;
+
+          this.$http.defaults.headers.common.Ent = this.$rootData.ent?this.$rootData.ent.id;
+          if(this.$rootData.token){
+            this.$http.defaults.headers.common.Authorization=this.$rootData.token.token_type+" "+this.$rootData.token.access_token;
+          }
         },
-        loadEnums() {
-          this.$http.get('sys/enums/all').then(response => {
-            if (response.data && response.data.data) {
+        async loadEnums() {
+          try {
+            const response = await this.$http.get('sys/enums/all');
+            if (response && response.data && response.data.data) {
               response.data.data.forEach((item) => {
                 this.setCacheEnum(item);
               });
             }
-          }, response => {
-            console.log(response);
-          });
+          } catch (error) {}
         },
         setCacheEnum(item) {
           enumCache.set(item);
@@ -92,29 +94,19 @@ export default class Start {
         getCacheEnumName(type, item) {
           return enumCache.getEnumName(type, item);
         },
-        loadEnts() {
-          this.$http.get('sys/ents/my').then(response => {
-            this.userData.ents = response.data.data || [];
-            var ent = false;
-            _.forEach(this.userData.ents, (value, key) => {
-              if (value.id == this.userData.entId) {
-                ent = value;
-              }
-            });
-            if (!ent) {
-              _.forEach(this.userData.ents, function(value, key) {
-                if (value.is_default) {
-                  ent = value;
-                }
-              });
+        async loadConfigs() {
+          //接口返回，至少需要返回{ent:{},user:{},token:{}}字段
+          try {
+            if(!this.$rootData.configUrl)return;
+            const response = await this.$http.get(this.$rootData.configUrl);
+            if(response.data&&response.data.data){
+              this.userConfig=response.data.data;
+
+              this.changedConfig();
             }
-            if (!ent && this.userData.ents && this.userData.ents.length > 0) {
-              ent = this.userData.ents[0];
-            }
-            this.userData.ent = ent;
-          }, response => {
-            console.log(response);
-          });
+          } catch (error) {
+            return false;
+          }
         },
         async issueUid(node, num) {
           try {
@@ -126,21 +118,16 @@ export default class Start {
           return false;
         },
       },
-      created: function() {
-        this.loadEnts();
-        this.loadEnums();
+      async created: function() {
+        await this.loadConfigs();
+        await this.loadEnts();
+        await this.loadEnums();
       }
     });
   }
-
-
-  getEntId() {
-    return window.gmfEntID;
-  }
   init() {
-
     http.defaults.baseURL = '/api';
-    http.defaults.headers = { common: { Ent: this.getEntId() } };
+    http.defaults.headers = { common: { Ent: false } };
     Vue.prototype.$http = http;
 
     Vue.prototype._ = lodash;
@@ -151,7 +138,7 @@ export default class Start {
     Vue.prototype.$validate = function(input, rules, customMessages) {
       return new validator(input, rules, customMessages);
     };
-	Vue.prototype.$go = function(options, isReplace) {
+    Vue.prototype.$go = function(options, isReplace) {
       this.$router && this.$router[isReplace ? 'replace' : 'push'](options);
     };
     Vue.prototype.$goID = function(id, options, isReplace) {

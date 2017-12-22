@@ -1,8 +1,10 @@
 <?php
 
 namespace Gmf\Sys\Http\Controllers;
+use Auth;
 use DB;
 use Ent;
+use Gmf\Sys\Builder;
 use Gmf\Sys\Uuid;
 use Illuminate\Http\Request;
 
@@ -18,6 +20,21 @@ class DataController extends Controller {
 		return Ent::id();
 
 		$datas = Uuid::generate(1, 'gmf', Uuid::NS_DNS, "");
+		return $this->toJson($datas);
+	}
+	public function authInfo(Request $request) {
+		$datas = new Builder;
+		$user = Auth::user();
+		$datas->user($user);
+		$datas->end(Ent::ent());
+		if ($user) {
+			$token = $user->createToken('web');
+			$rtn = new Builder;
+			$rtn->access_token($token->accessToken);
+			$rtn->expires_in(strtotime($token->token->expires_at));
+			$rtn->token_type('Bearer');
+			$datas->token($rtn);
+		}
 		return $this->toJson($datas);
 	}
 	public function issueUid(Request $request) {
