@@ -129,6 +129,7 @@ export default {
 
     async importData(file){
       try {
+        this.loading++;
         var response = await this.$http.post(this.route+'/import',{files:file});
         this.$toast('导入成功!');
         this.loading--;

@@ -2,7 +2,7 @@
 
 namespace Gmf\Sys\Http\Controllers;
 
-use Auth;
+use GAuth;
 use Gmf\Sys\Builder;
 use Gmf\Sys\Models;
 use Gmf\Sys\Query\QueryCase;
@@ -29,8 +29,8 @@ class QueryCaseController extends Controller {
 			$input['size'] = 0;
 		}
 
-		$input['ent_id'] = $request->oauth_ent_id;
-		$input['user_id'] = Auth::id();
+		$input['ent_id'] = GAuth::entId();
+		$input['user_id'] = GAuth::userId();
 
 		$content = new Builder;
 		$content->wheres($request->input('wheres'));

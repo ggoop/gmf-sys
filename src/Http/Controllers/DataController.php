@@ -2,7 +2,7 @@
 
 namespace Gmf\Sys\Http\Controllers;
 use DB;
-use Ent;
+use GAuth;
 use Gmf\Sys\Uuid;
 use Illuminate\Http\Request;
 
@@ -15,7 +15,7 @@ class DataController extends Controller {
 		return $this->toJson($datas);
 	}
 	public function show(Request $request) {
-		return Ent::id();
+		return GAuth::entId();
 
 		$datas = Uuid::generate(1, 'gmf', Uuid::NS_DNS, "");
 		return $this->toJson($datas);

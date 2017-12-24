@@ -1,6 +1,7 @@
 <?php
 namespace Gmf\Sys\Http\Controllers;
 
+use GAuth;
 use Gmf\Sys\Models;
 use Illuminate\Http\Request;
 use Validator;
@@ -49,7 +50,7 @@ class ProfileController extends Controller {
 		if ($validator->fails()) {
 			return $this->toError($validator->errors());
 		}
-		$entId = $request->oauth_ent_id;
+		$entId = GAuth::entId();
 		//增加
 		$datas = $request->input('datas');
 

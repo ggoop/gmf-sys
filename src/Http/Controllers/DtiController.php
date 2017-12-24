@@ -1,6 +1,7 @@
 <?php
 namespace Gmf\Sys\Http\Controllers;
 
+use GAuth;
 use Gmf\Sys\Libs\InputHelper;
 use Gmf\Sys\Models;
 use Illuminate\Http\Request;
@@ -10,12 +11,12 @@ class DtiController extends Controller {
 	public function index(Request $request) {
 		$size = $request->input('size', 10);
 		$query = Models\Dti::with('category', 'local');
-		$query->where('ent_id', $request->oauth_ent_id);
+		$query->where('ent_id', GAuth::entId());
 		$data = $query->paginate($size);
 		return $this->toJson($data);
 	}
 	public function show(Request $request, string $id) {
-		$query = Models\Dti::with('category', 'local')->where('ent_id', $request->oauth_ent_id);
+		$query = Models\Dti::with('category', 'local')->where('ent_id', GAuth::entId());
 		$data = $query->where('id', $id)->orWhere('code', $id)->first();
 		return $this->toJson($data);
 	}
@@ -31,7 +32,7 @@ class DtiController extends Controller {
 		}
 		$input = InputHelper::fillEntity($input, $request, ['category', 'local']);
 
-		$input['ent_id'] = $request->oauth_ent_id;
+		$input['ent_id'] = GAuth::entId();
 		$data = Models\Dti::create($input);
 		return $this->show($request, $data->id);
 	}
@@ -52,7 +53,7 @@ class DtiController extends Controller {
 			return $this->toError($validator->errors());
 		}
 		$input = InputHelper::fillEntity($input, $request, ['category', 'local']);
-		$entId = $request->oauth_ent_id;
+		$entId = GAuth::entId();
 		$data = Models\Dti::updateOrCreate(['id' => $id], $input);
 		return $this->show($request, $data->id);
 	}

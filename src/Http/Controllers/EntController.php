@@ -2,15 +2,15 @@
 namespace Gmf\Sys\Http\Controllers;
 
 use Artisan;
-use Auth;
 use DB;
+use GAuth;
 use Gmf\Sys\Models;
 use Illuminate\Http\Request;
 use Validator;
 
 class EntController extends Controller {
 	public function index(Request $request) {
-		$userID = Auth::id();
+		$userID = GAuth::userId();
 		$query = DB::table('gmf_sys_ents as l')->join('gmf_sys_ent_users as u', 'l.id', '=', 'u.ent_id');
 		$query->addSelect('l.id', 'l.name', 'l.avatar', 'l.dc_host', 'u.is_default', 'u.type_enum as type');
 		$query->where('u.user_id', $userID);
@@ -39,7 +39,7 @@ class EntController extends Controller {
 		}
 		$data = Models\Ent::create($input);
 
-		Models\Ent::addUser($data->id, Auth::id(), 'create');
+		Models\Ent::addUser($data->id, GAuth::userId(), 'create');
 		return $this->show($request, $data->id);
 	}
 	/**
@@ -70,7 +70,7 @@ class EntController extends Controller {
 		return $this->toJson(true);
 	}
 	public function getMyEnts(Request $request) {
-		$userID = Auth::id();
+		$userID = GAuth::userId();
 		$query = DB::table('gmf_sys_ents as l')->join('gmf_sys_ent_users as u', 'l.id', '=', 'u.ent_id');
 		$query->addSelect('l.id', 'l.name', 'l.avatar', 'l.dc_host', 'u.is_default', 'u.type_enum as type');
 		$query->where('u.user_id', $userID);

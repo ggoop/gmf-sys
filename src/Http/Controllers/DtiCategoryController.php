@@ -1,13 +1,14 @@
 <?php
 namespace Gmf\Sys\Http\Controllers;
 
+use GAuth;
 use Gmf\Sys\Models;
 use Illuminate\Http\Request;
 use Validator;
 
 class DtiCategoryController extends Controller {
 	public function index(Request $request) {
-		$query = Models\DtiCategory::with('params')->where('ent_id', $request->oauth_ent_id);
+		$query = Models\DtiCategory::with('params')->where('ent_id', GAuth::entId());
 		if ($request->has('is_revoked')) {
 			$query->where('is_revoked', $request->is_revoked);
 		}
@@ -16,7 +17,7 @@ class DtiCategoryController extends Controller {
 		return $this->toJson($data);
 	}
 	public function show(Request $request, string $id) {
-		$query = Models\DtiCategory::with('params')->where('ent_id', $request->oauth_ent_id);
+		$query = Models\DtiCategory::with('params')->where('ent_id', GAuth::entId());
 		$data = $query->where('id', $id)->first();
 		return $this->toJson($data);
 	}
@@ -33,7 +34,7 @@ class DtiCategoryController extends Controller {
 		if ($validator->fails()) {
 			return $this->toError($validator->errors());
 		}
-		$entId = $request->oauth_ent_id;
+		$entId = GAuth::entId();
 		$data = Models\DtiCategory::updateOrCreate(['ent_id' => $entId, 'code' => $input['code']], $input);
 		return $this->show($request, $data->id);
 	}

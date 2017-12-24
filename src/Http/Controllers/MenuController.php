@@ -1,8 +1,8 @@
 <?php
 
 namespace Gmf\Sys\Http\Controllers;
-use Auth;
 use DB;
+use GAuth;
 use Gmf\Sys\Libs\TreeBuilder;
 use Gmf\Sys\Models;
 use Illuminate\Http\Request;
@@ -50,7 +50,10 @@ class MenuController extends Controller {
 		return $this->toJson($result);
 	}
 	public function all(Request $request, $menuID = '') {
-		$datas = DB::select('call sp_gmf_sys_menus(?,?,?)', [$request->oauth_ent_id, Auth::id(), $request->input('tag')]);
+		$datas = DB::select('call sp_gmf_sys_menus(?,?,?)', [
+			GAuth::entId(),
+			GAuth::userId(),
+			$request->input('tag')]);
 
 		$tree = TreeBuilder::create($datas);
 		return $this->toJson($tree);

@@ -3,6 +3,7 @@
 namespace Gmf\Sys\Http\Controllers;
 
 use DB;
+use GAuth;
 use Gmf\Sys\Builder;
 use Gmf\Sys\Models;
 use Illuminate\Http\Request;
@@ -93,7 +94,7 @@ class EntityController extends Controller {
 			}
 		}
 		if ($entity->is_ent) {
-			$query->where('ent_id', $request->oauth_ent_id);
+			$query->where('ent_id', GAuth::entId());
 		}
 		if ($request->filter) {
 			$query->whereRaw($request->filter);
