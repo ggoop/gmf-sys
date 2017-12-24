@@ -1,10 +1,10 @@
 <?php
 
-namespace Gmf\Sys\Ent;
+namespace Gmf\Sys\GAuth;
 use Gmf\Sys\Models;
 use Illuminate\Http\Request;
 
-class EntManager {
+class GAuthManager {
 
 	protected $callback;
 
@@ -32,7 +32,7 @@ class EntManager {
 		$this->app = $app;
 		$this->callback = $callback;
 		$this->request = $app['request'];
-		$this->guards[] = new EntGuard;
+		$this->guards[] = new GAuthGuard;
 		$this->resolveEntUsing();
 	}
 	public function guard() {

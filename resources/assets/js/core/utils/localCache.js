@@ -17,7 +17,9 @@ class localCache {
 
         return cached.value;
     }
-
+    remove(key) {
+        localStorage.removeItem(key);
+    }
     has(key) {
         return this.get(key) !== null;
     }

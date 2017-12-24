@@ -72,8 +72,9 @@ class ServiceProvider extends BaseServiceProvider {
 		$this->registerEnt();
 	}
 	protected function registerEnt() {
-		$this->app->singleton('ent', function ($app) {
-			return new Ent\EntManager($app);
+
+		$this->app->singleton('gauth', function ($app) {
+			return new GAuth\GAuthManager($app);
 		});
 	}
 	/**

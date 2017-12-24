@@ -17,14 +17,9 @@ export default class Start {
   use(component) {
     Vue.use(component);
   }
-  run(options) {
+  run(options, mixin) {
     options = options || {};
     const elID = options.elID || '#gmfApp';
-    var rootData = {
-      title: '',
-      $rootData: { ent:false, user: false, token: false,configUrl:options.configUrl||'sys/auth'},
-      userConfig: {}
-    };
     /*routes*/
     Vue.use(VueRouter);
 
@@ -48,16 +43,28 @@ export default class Start {
     }
     const store = new Vuex.Store(storeConfig);
 
+    const rootData = {
+      'title': '',
+      'configs': { ent: false, user: false, token: false },
+      'userConfig': {}
+    };
+    if (window.gmfConfig) {
+      rootData.configs.ent = window.gmfConfig.ent;
+      rootData.configs.user = window.gmfConfig.user;
+      rootData.configs.token = window.gmfConfig.token;
+    }
+
     const app = new Vue({
       router: new VueRouter(router),
       el: elID,
       data: rootData,
       store: store,
+      mixins: [mixin],
       watch: {
         "userConfig.ent": function(v, o) {
           this.changedConfig();
         },
-        "userConfig.user": function(v, o) { 
+        "userConfig.user": function(v, o) {
           this.changedConfig();
         },
         "userConfig.token": function(v, o) {
@@ -66,13 +73,15 @@ export default class Start {
       },
       methods: {
         changedConfig() {
-          this.$rootData.ent=this.userConfig.ent;
-          this.$rootData.user=this.userConfig.user;
-          this.$rootData.token=this.userConfig.token;
+          if (this.userConfig && this.userConfig.ent) this.configs.ent = this.userConfig.ent;
+          if (this.userConfig && this.userConfig.user) this.configs.user = this.userConfig.user;
+          if (this.userConfig && this.userConfig.token) this.configs.token = this.userConfig.token;
 
-          this.$http.defaults.headers.common.Ent = this.$rootData.ent?this.$rootData.ent.id;
-          if(this.$rootData.token){
-            this.$http.defaults.headers.common.Authorization=this.$rootData.token.token_type+" "+this.$rootData.token.access_token;
+          this.$http.defaults.headers.common.Ent = this.configs.ent ? this.configs.ent.id : false;
+          if (this.configs.token) {
+            this.$http.defaults.headers.common.Authorization = this.configs.token.token_type + " " + this.configs.token.access_token;
+          } else {
+            this.$http.defaults.headers.common.Authorization = false;
           }
         },
         async loadEnums() {
@@ -94,20 +103,6 @@ export default class Start {
         getCacheEnumName(type, item) {
           return enumCache.getEnumName(type, item);
         },
-        async loadConfigs() {
-          //接口返回，至少需要返回{ent:{},user:{},token:{}}字段
-          try {
-            if(!this.$rootData.configUrl)return;
-            const response = await this.$http.get(this.$rootData.configUrl);
-            if(response.data&&response.data.data){
-              this.userConfig=response.data.data;
-
-              this.changedConfig();
-            }
-          } catch (error) {
-            return false;
-          }
-        },
         async issueUid(node, num) {
           try {
             const response = await this.$http.get('sys/uid', { params: { node: node, num: num } });
@@ -118,10 +113,16 @@ export default class Start {
           return false;
         },
       },
-      async created: function() {
-        await this.loadConfigs();
-        await this.loadEnts();
+      async created() {
+        if (this.beforeCreated) {
+          await this.beforeCreated();
+        }
         await this.loadEnums();
+      },
+      async mounted() {
+        if (this.beforeMounted) {
+          await this.beforeMounted();
+        }
       }
     });
   }
@@ -133,6 +134,11 @@ export default class Start {
     Vue.prototype._ = lodash;
     Vue.prototype.$toast = function(toast) {
       this.$root.$refs.rootToast && this.$root.$refs.rootToast.toast(toast);
+    }
+    Vue.prototype.$setConfigs = function(configs) {
+      //至少需要{ent:{},user:{},token:{}}字段
+      this.$root.userConfig = configs;
+      this.$root.changedConfig();
     }
     Vue.prototype.$lang = lang;
     Vue.prototype.$validate = function(input, rules, customMessages) {
