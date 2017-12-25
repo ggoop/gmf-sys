@@ -19,7 +19,7 @@ export default {
   block_formats: "Paragraph=p;Heading 1=h1;Heading 2=h2;Heading 3=h3;Heading 4=h4;Heading 5=h5;Heading 6=h6;",
   toolbar1: "formatselect | bold italic strikethrough forecolor backcolor | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent | link image",
   external_plugins: {},
-  language_url: '/js/vendor/gmf-sys/tinymce/langs/zh_CN.js',
+  language_url: '/assets/vendor/gmf-sys/js/tinymce/langs/zh_CN.js',
   content_css: [
     '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
     '//www.tinymce.com/css/codepen.min.css'

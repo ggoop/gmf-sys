@@ -75,7 +75,7 @@ export default {
     openQueryCase() {
       this.canQueryCaseOpen = true;
       this.$nextTick(() => {
-        this.$refs.queryCase.open();
+        this.$refs.queryCase&&this.$refs.queryCase.open();
       });
     },
     initQueryCase(options, promise) {
@@ -111,7 +111,7 @@ export default {
     },
     pagination() {
       this.selectedRows = [];
-      this.$refs.grid.refresh();
+      this.$refs.grid&&this.$refs.grid.refresh();
     },
     async fetchData({ pager, filter, sort }) {
       var options = this._.extend({}, { q: this.currentQ }, this.options, this.caseModel, pager);
@@ -124,7 +124,7 @@ export default {
       const response = await this.$http.post('sys/queries/query/' + this.mdRefId, options);
 
       this.refInfo = response.data.schema;
-      this.$refs.grid.setColumns(this.refInfo.fields.map(col => this.formatFieldToColumn(col)));
+      this.$refs.grid&&this.$refs.grid.setColumns(this.refInfo.fields.map(col => this.formatFieldToColumn(col)));
       return response;
     },
     onSelected({ data }) {
