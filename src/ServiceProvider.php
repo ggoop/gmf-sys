@@ -46,7 +46,7 @@ class ServiceProvider extends BaseServiceProvider {
 
 			$this->publishes([
 				__DIR__ . '/../resources/public/js' => public_path('js/vendor/gmf-sys'),
-				__DIR__ . '/../resources/public/img' => public_path('img/vendor/gmf-sys'),
+				__DIR__ . '/../resources/public/images' => public_path('images/vendor/gmf-sys'),
 			], $publishes);
 
 			$this->publishes([
