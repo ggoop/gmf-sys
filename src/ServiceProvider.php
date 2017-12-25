@@ -40,12 +40,13 @@ class ServiceProvider extends BaseServiceProvider {
 			], $publishes);
 
 			$this->publishes([
-				__DIR__ . '/../resources/assets/fonts' => resource_path('assets/fonts/vendor/gmf-sys'),
+				// __DIR__ . '/../resources/assets/fonts' => resource_path('assets/fonts/vendor/gmf-sys'),
 				__DIR__ . '/../resources/assets/js' => resource_path('assets/js/vendor/gmf-sys'),
 			], $publishes);
 
 			$this->publishes([
-				__DIR__ . '/../resources/assets/img' => public_path('img/vendor/gmf-sys'),
+				__DIR__ . '/../resources/public/js' => public_path('js/vendor/gmf-sys'),
+				__DIR__ . '/../resources/public/img' => public_path('img/vendor/gmf-sys'),
 			], $publishes);
 
 			$this->publishes([
