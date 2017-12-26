@@ -2,10 +2,11 @@
 namespace Gmf\Sys\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
 
-class EntCheck {
+class GAuth {
 
-	public function handle($request, Closure $next) {
+	public function handle(Request $request, Closure $next) {
 		if ($request->hasHeader('Ent')) {
 			$request->oauth_ent_id = $request->header('Ent');
 		}

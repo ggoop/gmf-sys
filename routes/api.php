@@ -1,13 +1,20 @@
 <?php
 $ns = 'Gmf\Sys\Http\Controllers';
-Route::prefix('api/sys')->middleware(['api'])->namespace($ns)->group(function () {
+
+Route::prefix('api/sys')->middleware(['web'])->namespace($ns)->group(function () {
 	Route::post('/token', 'AuthController@issueToken');
+	Route::post('/login', 'AuthController@issueLogin');
+	Route::any('/logout', 'AuthController@issueLogout');
+});
+
+Route::prefix('api/sys')->middleware(['api'])->namespace($ns)->group(function () {
+
 	Route::get('uid', 'DataController@issueUid');
 	Route::resource('datas', 'DataController', ['only' => ['index', 'show']]);
 	Route::resource('components', 'ComponentController', ['only' => ['index', 'show']]);
-
 });
-Route::prefix('api/sys')->middleware(['api', 'auth:api', 'ent_check'])->namespace($ns)->group(function () {
+
+Route::prefix('api/sys')->middleware(['api', 'auth:api'])->namespace($ns)->group(function () {
 
 	Route::post('/lns/request', 'LnsController@issueRequest');
 	Route::post('/lns/answer', 'LnsController@issueAnswer');
@@ -47,7 +54,7 @@ Route::prefix('api/sys')->middleware(['api', 'auth:api', 'ent_check'])->namespac
 
 });
 
-Route::prefix('api/sys/authority')->middleware(['api', 'auth:api', 'ent_check'])->namespace($ns)->group(function () {
+Route::prefix('api/sys/authority')->middleware(['api', 'auth:api'])->namespace($ns)->group(function () {
 	Route::post('/roles/batch', 'Authority\RoleController@batchStore');
 	Route::resource('roles', 'Authority\RoleController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 

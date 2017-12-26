@@ -1,14 +1,24 @@
 <?php
 
 namespace Gmf\Sys\GAuth;
+use Auth;
 
 class GAuthGuard {
 	protected $m_ent;
 	protected $m_user;
 	protected $m_client;
 
-	public function login($user, $ent) {
+	protected $m_forged = false;
 
+	public function setForged($forged = true) {
+		$this->m_forged = $forged;
+	}
+	public function forged() {
+		return $this->m_forged;
+	}
+
+	public function id() {
+		return $this->userId();
 	}
 
 	public function check() {
@@ -41,9 +51,14 @@ class GAuthGuard {
 		$this->m_client = $client;
 		return $this;
 	}
-
 	public function user() {
-		return $this->m_user;
+		if ($this->m_user) {
+			return $this->m_user;
+		}
+		if (!$this->forged()) {
+			return Auth::user();
+		}
+		return null;
 	}
 	public function userId() {
 		if ($this->user()) {
