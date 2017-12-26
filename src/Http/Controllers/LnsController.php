@@ -54,7 +54,6 @@ class LnsController extends Controller {
 		$req_code = Createor::issueRequestCode(['content' => $input['content']]);
 
 		$ans_code = Createor::issueAnswer($req_code);
-		$request->oauth_ent_id = $input['ent_id'];
 		Createor::issueRegist($req_code, $ans_code, $request);
 
 		return view('gmf::lns.regist', ['ent_id' => config('gmf.ent.id')]);

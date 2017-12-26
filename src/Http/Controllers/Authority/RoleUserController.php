@@ -6,12 +6,12 @@ use Gmf\Sys\Models\Authority\Role;
 use Gmf\Sys\Models\Authority\RoleUser;
 use Illuminate\Http\Request;
 use Validator;
-
+use GAuth;
 class RoleUserController extends Controller {
 	public function index(Request $request) {
 		$query = RoleUser::with(['role', 'user' => function ($query) {
 			$query->select('id', 'name');
-		}])->where('ent_id', $request->oauth_ent_id);
+		}])->where('ent_id', GAuth::entId());
 		$matchs = array_only($request->all(), ['role_id', 'user_id']);
 		if ($matchs && count($matchs)) {
 			$query->where($matchs);
@@ -32,7 +32,7 @@ class RoleUserController extends Controller {
 		if ($validator->fails()) {
 			return $this->toError($validator->errors());
 		}
-		$entId = $request->oauth_ent_id;
+		$entId = GAuth::entId();
 		$lines = $request->input('datas');
 
 		$fillable = ['is_revoked'];

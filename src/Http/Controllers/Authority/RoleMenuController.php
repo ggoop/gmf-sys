@@ -7,10 +7,10 @@ use Gmf\Sys\Models\Authority\RoleMenu;
 use Gmf\Sys\Models\Menu;
 use Illuminate\Http\Request;
 use Validator;
-
+use GAuth;
 class RoleMenuController extends Controller {
 	public function index(Request $request) {
-		$query = RoleMenu::with('role', 'menu')->where('ent_id', $request->oauth_ent_id);
+		$query = RoleMenu::with('role', 'menu')->where('ent_id', GAuth::entId());
 		$matchs = array_only($request->all(), ['role_id', 'menu_id', 'opinion_enum']);
 		if ($matchs && count($matchs)) {
 			$query->where($matchs);
@@ -26,7 +26,7 @@ class RoleMenuController extends Controller {
 		if ($validator->fails()) {
 			return $this->toError($validator->errors());
 		}
-		$entId = $request->oauth_ent_id;
+		$entId = GAuth::entId();
 		$lines = $request->input('datas');
 
 		$fillable = ['is_revoked', 'opinion_enum'];

@@ -4,10 +4,10 @@ use Gmf\Sys\Http\Controllers\Controller;
 use Gmf\Sys\Models\Authority\Role;
 use Illuminate\Http\Request;
 use Validator;
-
+use GAuth;
 class RoleController extends Controller {
 	public function show(Request $request, string $id) {
-		$query = Role::where('ent_id', $request->oauth_ent_id);
+		$query = Role::where('ent_id', GAuth::entId());
 		$data = $query->where('id', $id)->orWhere('code', $id)->first();
 		return $this->toJson($data);
 	}
@@ -21,7 +21,7 @@ class RoleController extends Controller {
 		if ($validator->fails()) {
 			return $this->toError($validator->errors());
 		}
-		$entId = $request->oauth_ent_id;
+		$entId = GAuth::entId();
 		$input['ent_id'] = $entId;
 		$data = Role::create($input);
 		return $this->show($request, $data->id);

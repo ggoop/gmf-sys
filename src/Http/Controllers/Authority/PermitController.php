@@ -5,10 +5,10 @@ use Gmf\Sys\Http\Controllers\Controller;
 use Gmf\Sys\Models\Authority\Permit;
 use Illuminate\Http\Request;
 use Validator;
-
+use GAuth;
 class PermitController extends Controller {
 	public function show(Request $request, string $id) {
-		$query = Permit::where('ent_id', $request->oauth_ent_id);
+		$query = Permit::where('ent_id', GAuth::entId());
 		$data = $query->where('id', $id)->orWhere('code', $id)->first();
 		return $this->toJson($data);
 	}
@@ -21,7 +21,7 @@ class PermitController extends Controller {
 		if ($validator->fails()) {
 			return $this->toError($validator->errors());
 		}
-		$entId = $request->oauth_ent_id;
+		$entId = GAuth::entId();
 		$input['ent_id'] = $entId;
 		$data = Permit::create($input);
 		return $this->show($request, $data->id);
@@ -41,7 +41,7 @@ class PermitController extends Controller {
 		if ($validator->fails()) {
 			return $this->toError($validator->errors());
 		}
-		$entId = $request->oauth_ent_id;
+		$entId = GAuth::entId();
 		$data = Permit::updateOrCreate(['id' => $id], $input);
 		return $this->show($request, $data->id);
 	}

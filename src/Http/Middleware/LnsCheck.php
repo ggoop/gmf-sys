@@ -5,18 +5,18 @@ use DB;
 use Exception;
 use Gmf\Sys\Builder;
 use Gmf\Sys\Models;
-
+use GAuth;
 class LnsCheck {
 
 	public function handle($request, Closure $next, $item = '') {
-		if (!$request->oauth_ent_id) {
+		if (!GAuth::entId()) {
 			throw new Exception("没有找到企业信息!" . $item, 8000);
 		}
-		if ($request->oauth_ent_id && $item) {
+		if (GAuth::entId()&& $item) {
 			$query = DB::table('gmf_sys_ent_lns as el');
 			$query->join('gmf_sys_lns as l', 'el.lns_id', '=', 'l.id');
 			$query->select('l.request_code', 'l.answer_code', 'l.content', 'l.fm_date', 'l.to_date');
-			$query->where('el.ent_id', $request->oauth_ent_id);
+			$query->where('el.ent_id', GAuth::entId());
 			$lns = $query->first();
 			if (empty($lns)) {
 				throw new Exception("没有许可!" . $item, 8000);

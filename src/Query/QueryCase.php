@@ -1,8 +1,8 @@
 <?php
 
 namespace Gmf\Sys\Query;
-use Auth;
 use Exception;
+use GAuth;
 use Gmf\Sys\Builder;
 use Gmf\Sys\Models;
 use Illuminate\Http\Request;
@@ -157,8 +157,8 @@ class QueryCase {
 	protected function parseContext(Request $request = null) {
 		$context = [];
 		if ($request) {
-			$context['entId'] = $request->oauth_ent_id;
-			$context['userId'] = Auth::id();
+			$context['entId'] = GAuth::entId();
+			$context['userId'] = GAuth::userId();
 		}
 		$this->context = $context;
 		return $this->context;

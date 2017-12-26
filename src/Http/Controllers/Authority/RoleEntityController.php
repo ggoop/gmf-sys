@@ -7,10 +7,10 @@ use Gmf\Sys\Models\Authority\RoleEntity;
 use Gmf\Sys\Models\Entity;
 use Illuminate\Http\Request;
 use Validator;
-
+use GAuth;
 class RoleEntityController extends Controller {
 	public function index(Request $request) {
-		$query = RoleEntity::with('role', 'entity')->where('ent_id', $request->oauth_ent_id);
+		$query = RoleEntity::with('role', 'entity')->where('ent_id', GAuth::entId());
 		$matchs = array_only($request->all(), ['role_id', 'entity_id', 'operation_enum']);
 		if ($matchs && count($matchs)) {
 			$query->where($matchs);
@@ -31,7 +31,7 @@ class RoleEntityController extends Controller {
 		if ($validator->fails()) {
 			return $this->toError($validator->errors());
 		}
-		$entId = $request->oauth_ent_id;
+		$entId = GAuth::entId();
 		$lines = $request->input('datas');
 
 		$fillable = ['operation_enum', 'filter'];

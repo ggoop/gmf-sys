@@ -7,7 +7,7 @@ use Gmf\Sys\Libs\Common;
 use Gmf\Sys\Models;
 use Gmf\Sys\Uuid;
 use Illuminate\Http\Request;
-
+use GAuth;
 class Createor {
 	public static function issueRequestCode(array $input, Closure $callback = null) {
 		//cpu+code+item[code,number];
@@ -94,9 +94,9 @@ class Createor {
 		];
 		$data = Models\Lns::updateOrCreate(['request_code' => $input['request_code']], $input);
 
-		if ($data && $request && $request->oauth_ent_id) {
+		if ($data && $request && GAuth::entId()) {
 			Models\EntLns::updateOrCreate(
-				['ent_id' => $request->oauth_ent_id],
+				['ent_id' => GAuth::entId()],
 				['revoked' => '0', 'lns_id' => $data->id]);
 		}
 		return true;

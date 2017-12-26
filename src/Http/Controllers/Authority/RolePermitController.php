@@ -7,10 +7,10 @@ use Gmf\Sys\Models\Authority\Role;
 use Gmf\Sys\Models\Authority\RolePermit;
 use Illuminate\Http\Request;
 use Validator;
-
+use GAuth;
 class RolePermitController extends Controller {
 	public function index(Request $request) {
-		$query = RolePermit::with('role', 'permit')->where('ent_id', $request->oauth_ent_id);
+		$query = RolePermit::with('role', 'permit')->where('ent_id', GAuth::entId());
 		$matchs = array_only($request->all(), ['role_id', 'permit_id', 'opinion_enum']);
 		if ($matchs && count($matchs)) {
 			$query->where($matchs);
@@ -31,7 +31,7 @@ class RolePermitController extends Controller {
 		if ($validator->fails()) {
 			return $this->toError($validator->errors());
 		}
-		$entId = $request->oauth_ent_id;
+		$entId = GAuth::entId();
 		$lines = $request->input('datas');
 
 		$fillable = ['is_revoked', 'opinion_enum'];
