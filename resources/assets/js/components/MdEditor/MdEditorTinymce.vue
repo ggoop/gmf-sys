@@ -53,8 +53,7 @@
     import 'tinymce/plugins/visualchars';
     import 'tinymce/plugins/wordcount';
     
-    import 'tinymce/skins/lightgray/skin.min.css'
-    import 'tinymce/skins/lightgray/content.min.css'
+    
    
     import MdUuid from 'core/utils/MdUuid';
     import TinymceSetting from './TinymceSetting';
@@ -115,6 +114,9 @@
                             editor.setContent(this.content);
                             this.$emit('input', this.content);
                         });
+                    },
+                    images_upload_handler:(blobInfo, success, failure)=>{
+                        this.images_upload_handler(blobInfo, success, failure);
                     }
                 };
                 
@@ -128,13 +130,33 @@
                         this.isTyping = false;
                     }, 300);
                 this.$emit('input', this.editor.getContent());
-            }
+            },
+            images_upload_handler(blobInfo, success, failure){
+                const formData = new FormData();
+                formData.append('files', blobInfo.blob(), blobInfo.filename());
+                let config = {
+                    headers:{'Content-Type':'multipart/form-data'}
+                };
+                this.$http.post('sys/files',formData,config).then(response=>{
+                    if(response.data.data){
+                      response.data.data.forEach(item=>{
+                        success(item.url);
+                      });
+                    }else{
+                       success(); 
+                    }
+                    
+                }).catch(err=>{
+                    this.$toast(err);
+                    failure('update image Error  ! ');
+                });
+            },
         }
     }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style lang="scss">
 .md-editor-tinymce{
     min-width: 100%;
     max-width: 100%;

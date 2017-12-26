@@ -28,10 +28,10 @@ class File extends Resource {
 			$rtn['created_at'] = $this->pivot->created_at . '';
 		}
 		if ($this->isImage()) {
-			$rtn['url'] = $this->getPathURL();
+			$rtn['url'] = $this->getPathURL($request);
 			$rtn['can_image'] = true;
 		} else if ($this->isPdf()) {
-			$rtn['url'] = $this->getPdfPathURL();
+			$rtn['url'] = $this->getPdfPathURL($request);
 			$rtn['can_pdf'] = true;
 		}
 		return $rtn;
@@ -42,15 +42,15 @@ class File extends Resource {
 	private function isPdf() {
 		return $this->pdf_disk && $this->pdf_path;
 	}
-	private function getPathURL() {
+	private function getPathURL($request) {
 		if ($this->path && $this->disk) {
-			return Storage::disk($this->disk)->url($this->path);
+			return config('app.url') . Storage::disk($this->disk)->url($this->path);
 		}
 		return '';
 	}
-	private function getPdfPathURL() {
+	private function getPdfPathURL($request) {
 		if ($this->pdf_path && $this->pdf_disk) {
-			return Storage::disk($this->pdf_disk)->url($this->pdf_path);
+			return config('app.url') . Storage::disk($this->pdf_disk)->url($this->pdf_path);
 		}
 		return '';
 	}

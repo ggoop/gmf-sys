@@ -14,20 +14,19 @@ class File {
 	public function __construct(Request $request) {
 		$this->request = $request;
 	}
-	public function storage($mdFiles, $path = '', $disk = 'public') {
+	public function storage($inputName, $path = '', $disk = 'public') {
 		$files = false;
-		if (is_string($mdFiles) && $this->request) {
-			if ($this->request->hasFile($mdFiles)) {
-				$files = $this->request->file($mdFiles);
-			}
-			if ($this->request->has($mdFiles)) {
-				$files = json_decode(json_encode($this->request->input($mdFiles)));
+		if (is_string($inputName) && $this->request) {
+			if ($this->request->hasFile($inputName)) {
+				$files = $this->request->file($inputName);
+			} else if ($this->request->has($inputName)) {
+				$files = json_decode(json_encode($this->request->input($inputName)));
 			}
 		} else {
-			if (is_a($mdFiles, UploadedFile::class)) {
-				$files = $mdFiles;
+			if (is_a($inputName, UploadedFile::class)) {
+				$files = $inputName;
 			} else {
-				$files = json_decode(json_encode($mdFiles));
+				$files = json_decode(json_encode($inputName));
 			}
 		}
 		if (!$files) {

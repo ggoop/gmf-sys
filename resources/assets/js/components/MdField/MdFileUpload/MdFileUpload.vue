@@ -118,17 +118,20 @@
           reader.readAsDataURL(file.file);
         }
       },
-      uploadFile(file){      
-        const options={};
-        options.files=[file];
-        this.$http.post('sys/files', options).then(response=>{
+      uploadFile(file){
+        const formData = new FormData();
+        formData.append('files', file.file, file.title);
+        let config = {
+          headers:{'Content-Type':'multipart/form-data'}
+        };
+        this.$http.post('sys/files',formData,config).then(response=>{
           response.data.data.forEach(item=>{
             this.files.push(item);
           });          
-          this.setInputValue();
+          this.setInputValue();         
         }).catch(err=>{
           this.$toast(err);
-        });      
+        });     
       },
       resetFile() {
         this.$refs.fileInput.value = '';

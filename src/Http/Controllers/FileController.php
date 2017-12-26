@@ -13,7 +13,11 @@ class FileController extends Controller {
 		return $this->toJson(new Resources\File($file));
 	}
 	public function store(Request $request) {
-		$files = File::storage($request, $request->input('files'), 'file');
-		return $this->toJson(Resources\File::collection($files));
+		$files = File::storage($request, $request->input('name', 'files'), 'file');
+		if ($files) {
+			return $this->toJson(Resources\File::collection($files));
+		} else {
+			return $this->toJson(false);
+		}
 	}
 }
