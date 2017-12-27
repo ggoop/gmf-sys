@@ -1,5 +1,5 @@
 <template>
-  <md-card md-theme="blue">
+  <md-card>
     <form novalidate @submit.prevent="validateUser">
       <md-card-header>
         <md-card-header-text>

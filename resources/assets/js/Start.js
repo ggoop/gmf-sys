@@ -28,9 +28,6 @@ export default class Start {
     if (options.routes) {
       routes = routes.concat(options.routes);
     }
-    if (!!options.defaultRoutes) {
-      routes = routes.concat(gmfConfig.defaultRoutes);
-    }
     const router = { mode: 'history', routes: routes };
 
     /*store*/
@@ -44,9 +41,9 @@ export default class Start {
     const store = new Vuex.Store(storeConfig);
 
     const rootData = {
-      'appName':'',
+      'appName': '',
       'title': '',
-      'configs': { ent: false, user: false, token: false },
+      'configs': { home: '/', ent: false, user: false, token: false },
       'userConfig': {}
     };
     if (window.gmfConfig) {
@@ -113,11 +110,26 @@ export default class Start {
           }
           return false;
         },
+        async $loadConfigs() {
+          if (this.loadConfigs) {
+            var res = await this.loadConfigs();
+            if (res && res.data) {
+              res = res.data;
+            }
+            if (res && res.data) {
+              res = res.data;
+            }
+            if (res) {
+              this.$setConfigs(res);
+            }
+          }
+        }
       },
       async created() {
         if (this.beforeCreated) {
           await this.beforeCreated();
         }
+        await this.$loadConfigs();
         await this.loadEnums();
       },
       async mounted() {

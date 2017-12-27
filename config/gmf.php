@@ -6,14 +6,14 @@ return [
 	'auth_redirect' => env('GMF_AUTH_REDIRECT', '/'),
 	'user' => [
 		//用户模型
-		'model' => env('GMF_USER_MODEL', Gmf\Ac\Models\User::class),
+		'model' => env('GMF_USER_MODEL', Gmf\Sys\Models\User::class),
 		//用户实体编码
-		'entity' => env('GMF_USER_ENTITY', 'gmf.ac.user'),
+		'entity' => env('GMF_USER_ENTITY', 'gmf.sys.user'),
 	],
 
 	'client' => [
 		'id' => env('GMF_OAUTH_CLIENT_ID', ''),
-		'name' => env('APP_TITLE', ''),
+		'name' => env('APP_NAME', ''),
 		'secret' => env('GMF_OAUTH_CLIENT_SECRET', ''),
 		'user' => env('GMF_OAUTH_CLIENT_USER', ''),
 	],

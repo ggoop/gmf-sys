@@ -1,5 +1,5 @@
 <template>
-  <md-card md-theme="blue">
+  <md-card>
     <form novalidate @submit.prevent="validateForm">
       <md-card-header>
         <md-card-header-text>
@@ -82,8 +82,8 @@ export default {
         const response = await this.$http.post('sys/auth/login', this.mainDatas);
         this.sending = false;
         this.$setConfigs({ user: response.data.data, token: response.data.token });
-        await this.$root.loadConfigs();
-        this.$go('/');
+        await this.$root.$loadConfigs();
+        this.$go(this.$root.configs.home);
       } catch (err) {
         this.sending = false;
         this.$toast(err);

@@ -1,5 +1,5 @@
 <template>
-  <md-card md-theme="blue">
+  <md-card>
     <md-card-header>
       <md-card-header-text>
         <div class="md-title">帐号帮助</div>
