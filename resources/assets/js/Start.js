@@ -44,6 +44,7 @@ export default class Start {
     const store = new Vuex.Store(storeConfig);
 
     const rootData = {
+      'appName':'',
       'title': '',
       'configs': { ent: false, user: false, token: false },
       'userConfig': {}

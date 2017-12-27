@@ -1,3 +1,4 @@
+@import "./base.css";
 .word-wrap {
   word-wrap: break-word;
   -ms-word-break: break-all;

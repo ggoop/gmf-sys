@@ -2,18 +2,26 @@
 $ns = 'Gmf\Sys\Http\Controllers';
 
 Route::prefix('api/sys/auth')->middleware(['web'])->namespace($ns)->group(function () {
-	Route::post('/token', 'AuthController@issueToken');
-	Route::post('/login', 'AuthController@issueLogin');
-	Route::any('/logout', 'AuthController@issueLogout');
+	Route::post('checker', 'AuthController@checker');
+	Route::post('show', 'AuthController@getUser');
+	Route::post('token', 'AuthController@issueToken');
+	Route::post('register', 'AuthController@register');
+	Route::post('login', 'AuthController@login');
+	Route::post('password-send-mail', 'AuthController@passwordSendMail');
+	Route::post('password-send-sms', 'AuthController@passwordSendSms');
 });
 Route::prefix('api/sys/auth')->middleware(['web', 'auth'])->namespace($ns)->group(function () {
 	Route::post('/entry-ent/{id}', 'AuthController@entryEnt');
+	Route::any('logout', 'AuthController@logout');
 });
 Route::prefix('api/sys')->middleware(['api'])->namespace($ns)->group(function () {
-
+	Route::get('editor/templates', 'EditorController@templates');
+});
+Route::prefix('api/sys')->middleware(['api'])->namespace($ns)->group(function () {
 	Route::get('uid', 'DataController@issueUid');
 	Route::resource('datas', 'DataController', ['only' => ['index', 'show']]);
 	Route::resource('components', 'ComponentController', ['only' => ['index', 'show']]);
+	Route::resource('images', 'ImageController', ['only' => ['show']]);
 });
 
 Route::prefix('api/sys')->middleware(['api', 'auth:api'])->namespace($ns)->group(function () {

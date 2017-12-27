@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import common from '../core/utils/common';
+import common from 'gmf/core/utils/common';
 
 /*!
  * @license Open source under BSD 2-clause (http://choosealicense.com/licenses/bsd-2-clause/)

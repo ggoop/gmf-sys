@@ -1,3 +1,4 @@
+@import "./base.css";
 .tinymce-mobile-unfocused-selections .tinymce-mobile-unfocused-selection {
   position: absolute;
   display: inline-block;

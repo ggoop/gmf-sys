@@ -28,7 +28,7 @@
     import 'tinymce/plugins/hr';
     import 'tinymce/plugins/image';
     import 'tinymce/plugins/imagetools';
-    import 'tinymce/plugins/importcss';
+    // import 'tinymce/plugins/importcss';
     import 'tinymce/plugins/insertdatetime';
     import 'tinymce/plugins/legacyoutput';
     import 'tinymce/plugins/link';
@@ -56,7 +56,7 @@
     
    
     import MdUuid from 'core/utils/MdUuid';
-    import TinymceSetting from './TinymceSetting';
+    import setting from './TinymceSetting';
     export default {
         name: 'mdEditorTinymce',
         props: { 
@@ -65,9 +65,13 @@
                     default: () => 'md-input-' + MdUuid()
                 },
                 value : { default : '' },
-                options:Object
-              
-                
+                mdMode:{
+                    type:String,
+                    //simple,full
+                    default:'simple'
+                },
+                placeholder:String,
+                mdOptions:Object
         },
         data(){
             return {
@@ -114,13 +118,13 @@
                             editor.setContent(this.content);
                             this.$emit('input', this.content);
                         });
+                        editor.iframeElement.contentDocument.firstElementChild.classList.add("md-theme-default");
                     },
                     images_upload_handler:(blobInfo, success, failure)=>{
                         this.images_upload_handler(blobInfo, success, failure);
                     }
                 };
-                
-                tinymce.init(this._.assignIn(TinymceSetting,options, this.options));
+                tinymce.init(this._.assignIn(setting[this.mdMode],options, this.mdOptions));
             },
             submitNewContent(){
                 this.isTyping = true;
