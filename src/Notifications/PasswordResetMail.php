@@ -4,22 +4,22 @@ namespace Gmf\Sys\Notifications;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ResetPasswordEmail extends Notification {
+class PasswordResetMail extends Notification {
 	/**
-	 * The password reset token.
+	 * The password reset vcode.
 	 *
 	 * @var string
 	 */
-	public $token;
+	public $vcode;
 
 	/**
 	 * Create a notification instance.
 	 *
-	 * @param  string  $token
+	 * @param  string  $vcode
 	 * @return void
 	 */
-	public function __construct($token) {
-		$this->token = $token;
+	public function __construct($vcode) {
+		$this->vcode = $vcode;
 	}
 
 	/**
@@ -41,7 +41,7 @@ class ResetPasswordEmail extends Notification {
 	public function toMail($notifiable) {
 		return (new MailMessage)->subject('HUB帐户密码重置')
 			->line('您在' . config('app.name') . '使用了密码重置功能, 本次请求的邮件验证码是:')
-			->action($this->token, '')
+			->action($this->vcode->token, '')
 			->line('此邮件30分钟内有效，如果你忽略这条信息，密码将不进行更改')
 			->salutation('祝使用愉快！')
 			->level('success')

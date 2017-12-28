@@ -6,9 +6,11 @@ use Carbon\Carbon;
 use Gmf\Sys\Builder;
 use Gmf\Sys\Http\Controllers\Controller as BPListener;
 use Gmf\Sys\Models;
+use Gmf\Sys\Notifications;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Notification;
 use Validator;
 
 class UserAuth {
@@ -90,45 +92,78 @@ class UserAuth {
 			'password' => 'required|confirmed|min:4|max:50',
 			'token' => 'required',
 		])->validate();
+
 		$user = $this->checker($observer, $input);
-		$this->checkVCode($user, 'password', $input['token']);
+
+		$vcode = ['id' => $user->id, 'type' => 'password', 'token' => $input['token']];
+
+		$this->checkVCode($observer, $vcode);
 
 		$user->password = Hash::make($input['password']);
 		$user->setRememberToken(Str::random(60));
 		$user->save();
 		event(new PasswordReset($user));
 
-		//Auth::logout();
 		Auth::login($user);
 
-		$this->deleteVCode($user);
+		$this->deleteVCode($observer, $vcode);
 		return $user;
 	}
-	public function createVCode($user, $type) {
+	public function createVCode(BPListener $observer, $input) {
 		$code = '';
 		for ($i = 0; $i < 6; $i++) {
 			$code .= rand(0, 9);
 		}
-		Models\Auth\VCode::create([
-			'user_id' => $user->id,
-			'type' => $type,
+		Validator::make($input, [
+			'id' => 'required', //用户ID
+			'type' => 'required',
+			'mode' => 'required|in:mail,phone',
+		])->validate();
+
+		$type = $input['type'];
+
+		$user = app('Gmf\Sys\Bp\UserAuth')->checker($observer, array_only($input, ['id', 'account']));
+		$vcode = Models\Auth\VCode::create([
+			'user_id' => $input['id'],
+			'type' => $input['type'],
 			'token' => $code,
 			'expire_time' => Carbon::now()->addMinutes(5),
 		]);
-		return $code;
+		if ($input['mode'] == 'phone') {
+			Notification::send([$user], new Notifications\PasswordResetSms($vcode));
+		} else {
+			if ($type == 'password') {
+				Notification::send([$user], new Notifications\PasswordResetMail($vcode));
+			} else if ($type == 'verify-mail') {
+				Notification::send([$user], new Notifications\VerifyMail($vcode));
+			}
+		}
+		return true;
 	}
-	public function deleteVCode($user, $type) {
+	public function deleteVCode(BPListener $observer, $input) {
+		Validator::make($input, [
+			'id' => 'required', //用户ID
+			'type' => 'required',
+			'token' => 'required',
+		])->validate();
 		Models\Auth\VCode::where([
-			'user_id' => $user->id,
-			'type' => $type,
+			'user_id' => $input['id'],
+			'type' => $input['type'],
+			'token' => $input['token'],
 		])->delete();
 		return true;
 	}
-	public function checkVCode($user, $type, $token) {
+	public function checkVCode(BPListener $observer, $input) {
+		Validator::make($input, [
+			'id' => 'required', //用户ID
+			'type' => 'required',
+			'token' => 'required',
+		])->validate();
+
 		$t = Models\Auth\VCode::where([
-			'user_id' => $user->id,
-			'type' => $type,
-			'token' => $token,
+			'user_id' => $input['id'],
+			'type' => $input['type'],
+			'token' => $input['token'],
 		])->first();
 		if (!$t) {
 			throw new \Exception("验证码无效");

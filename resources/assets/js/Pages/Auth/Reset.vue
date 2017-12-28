@@ -112,9 +112,8 @@ export default {
         const response = await this.$http.post('sys/auth/checker', { id: thId });
         const u = response.data.data;
         this.mainDatas = response.data.data;
-
-        this.mainDatas.token=this.$route.params.token;
-        await this.$http.post('sys/auth/vcode', this.mainDatas);
+        const options={id:this.mainDatas.id,type:'password',token:this.$route.params.token};
+        await this.$http.post('sys/auth/vcode-checker', options);
       } catch (err) {
         this.$toast(err);
         this.$go({ name: 'auth.identifier' });

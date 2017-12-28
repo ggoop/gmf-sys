@@ -7,10 +7,8 @@ Route::prefix('api/sys/auth')->middleware(['web'])->namespace($ns)->group(functi
 	Route::post('token', 'AuthController@issueToken');
 	Route::post('register', 'AuthController@register');
 	Route::post('login', 'AuthController@login');
-	Route::post('password-send-mail', 'AuthController@passwordSendMail');
-	Route::post('password-send-sms', 'AuthController@passwordSendSms');
-	Route::post('vcode-check', 'AuthController@checkVCode');
-	Route::post('vcode-create', 'AuthController@createVCode')
+	Route::post('vcode-checker', 'AuthController@checkVCode');
+	Route::post('vcode-create', 'AuthController@createVCode');
 	Route::post('reset', 'AuthController@resetPassword');
 });
 Route::prefix('api/sys/auth')->middleware(['web', 'auth'])->namespace($ns)->group(function () {

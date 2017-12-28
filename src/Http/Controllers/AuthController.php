@@ -7,9 +7,7 @@ use DB;
 use GAuth;
 use Gmf\Sys\Http\Resources;
 use Gmf\Sys\Models;
-use Gmf\Sys\Notifications;
 use Illuminate\Http\Request;
-use Notification;
 use Validator;
 
 class AuthController extends Controller {
@@ -108,53 +106,23 @@ class AuthController extends Controller {
 		}
 		return $this->toJson(false);
 	}
-
-	public function passwordSendMail(Request $request) {
-		$input = array_only($request->all(), ['account', 'id']);
-		Validator::make($input, [
-			'id' => 'required|min:4|max:50',
-		])->validate();
-		$user = app('Gmf\Sys\Bp\UserAuth')->checker($this, $input);
-
-		Notification::send([$user], new Notifications\ResetPasswordEmail(app('Gmf\Sys\Bp\UserAuth')->createVCode($user, 'password')));
-
-		$this->toJson(true);
-	}
-	public function passwordSendSms(Request $request) {
-		$input = array_only($request->all(), ['account', 'id']);
-		Validator::make($input, [
-			'id' => 'required',
-		])->validate();
-		$user = app('Gmf\Sys\Bp\UserAuth')->checker($this, $input);
-
-		Notification::send([$user], new Notifications\PasswordResetSms(app('Gmf\Sys\Bp\UserAuth')->createVCode($user, 'password')));
-
-		$this->toJson(true);
-	}
-	public function checkVCode(Request $request) {
-		$input = array_only($request->all(), [
-			'token', 'account', 'id',
-		]);
-		Validator::make($input, [
-			'id' => 'required', //用户ID
-			'token' => 'required|min:4|max:10',
-		])->validate();
-		$user = app('Gmf\Sys\Bp\UserAuth')->checker($this, $input);
-		app('Gmf\Sys\Bp\UserAuth')->checkVCode($user, $input['token']);
-		$this->toJson(true);
-	}
 	public function createVCode(Request $request) {
-		$input = array_only($request->all(), [
-			'type', 'account', 'id',
-		]);
+		$input = array_only($request->all(), ['type', 'account', 'id', 'mode']);
 		Validator::make($input, [
 			'id' => 'required', //用户ID
 			'type' => 'required',
+			'mode' => 'required|in:mail,sms',
 		])->validate();
-		$user = app('Gmf\Sys\Bp\UserAuth')->checker($this, $input);
-		$vcode = app('Gmf\Sys\Bp\UserAuth')->createVCode($user, $input['type']);
+
+		app('Gmf\Sys\Bp\UserAuth')->createVCode($this, $input);
 		$this->toJson(true);
 	}
+	public function checkVCode(Request $request) {
+		$input = array_only($request->all(), ['token', 'account', 'id', 'type']);
+		app('Gmf\Sys\Bp\UserAuth')->checkVCode($this, $input);
+		$this->toJson(true);
+	}
+
 	public function resetPassword(Request $request) {
 		$input = array_only($request->all(), [
 			'password', 'password_confirmation', 'token', 'account', 'id',

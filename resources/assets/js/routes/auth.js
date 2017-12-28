@@ -43,6 +43,11 @@ const routes = [{
       component:() => import('../Pages/Auth/Reset')
     },
     {
+      path: 'verify-mail',
+      name: 'auth.verify.mail',
+      component:() => import('../Pages/Auth/VerifyMail')
+    },
+    {
       path: 'chooser',
       name: 'auth.chooser',
       component:() => import('../Pages/Auth/Chooser')

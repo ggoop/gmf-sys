@@ -87,7 +87,8 @@ export default {
     },
     onSendCode() {
       this.sending = true;
-      this.$http.post('sys/auth/password-send-sms', this.mainDatas).then(response => {
+      const options = { id: this.mainDatas.id,account:this.mainDatas.account, type: 'password', mode: 'sms' };
+      this.$http.post('sys/auth/vcode-create', options).then(response => {
         this.isSended = true;
         this.sending = false;
         this.$toast('验证码已发送到您的手机上，请及时查收!');
@@ -112,7 +113,8 @@ export default {
     },
     submitPost() {
       this.sending = true;
-      this.$http.post('sys/auth/vcode-check', this.mainDatas).then(response => {
+      const options = { id: this.mainDatas.id,account:this.mainDatas.account, type: 'password', token: this.mainDatas.token };
+      this.$http.post('sys/auth/vcode-checker', options).then(response => {
         this.sending = false;
         this.$go({name:'auth.reset',params:{id:this.mainDatas.id,token:this.mainDatas.token}});
       }).catch(err => {

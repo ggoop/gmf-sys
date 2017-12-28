@@ -6,7 +6,8 @@
 @if ($level == 'error')
 # Whoops!
 @else
-# 你好!
+# 亲爱的用户：
+你好!
 @endif
 @endif
 

@@ -56,7 +56,7 @@ export default {
     return {
       mainDatas: {},
       loading: 0,
-      isSended:false,
+      isSended: false,
       sending: false,
     };
   },
@@ -70,14 +70,14 @@ export default {
     }
   },
   computed: {
-    disabledSendBtn(){
-      return this.sending||this.isSended||!!this.mainDatas.token;
+    disabledSendBtn() {
+      return this.sending || this.isSended || !!this.mainDatas.token;
     },
-    disabledConfirmBtn(){
-      return this.sending||!this.mainDatas.token;
+    disabledConfirmBtn() {
+      return this.sending || !this.mainDatas.token;
     },
-    tipLabel(){
-      return this.$root.appName+'会将验证码发送到 '+this.mainDatas.email;
+    tipLabel() {
+      return this.$root.appName + '会将验证码发送到 ' + this.mainDatas.email;
     }
   },
   methods: {
@@ -89,13 +89,14 @@ export default {
         }
       }
     },
-    onOtherClick(){
-      this.$go({ name: 'auth.password.find.word',params:{id:this.mainDatas.id} });
+    onOtherClick() {
+      this.$go({ name: 'auth.password.find.word', params: { id: this.mainDatas.id } });
     },
-    onSendCode(){
+    onSendCode() {
       this.sending = true;
-      this.$http.post('sys/auth/password-send-mail', this.mainDatas).then(response => {
-        this.isSended=true;
+      const options = { id: this.mainDatas.id,account:this.mainDatas.account, type: 'password', mode: 'mail' };
+      this.$http.post('sys/auth/vcode-create', options).then(response => {
+        this.isSended = true;
         this.sending = false;
         this.$toast('验证码已发送到您的邮件上，请及时查收!');
       }).catch(err => {
@@ -111,9 +112,10 @@ export default {
     },
     submitPost() {
       this.sending = true;
-      this.$http.post('sys/auth/vcode-check', this.mainDatas).then(response => {
+      const options = { id: this.mainDatas.id,account:this.mainDatas.account, type: 'password', token: this.mainDatas.token };
+      this.$http.post('sys/auth/vcode-checker', options).then(response => {
         this.sending = false;
-        this.$go({name:'auth.reset',params:{id:this.mainDatas.id,token:this.mainDatas.token}});
+        this.$go({ name: 'auth.reset', params: { id: this.mainDatas.id, token: this.mainDatas.token } });
       }).catch(err => {
         this.sending = false;
         this.$toast(err);
@@ -121,18 +123,18 @@ export default {
     },
     async fetchData() {
       try {
-        this.sending=true;
+        this.sending = true;
         const thId = this.$route.params.id;
         if (!thId) {
           this.$go({ name: 'auth.login' });
         }
         const response = await this.$http.post('sys/auth/checker', { id: thId });
-        this.mainDatas =response.data.data;
+        this.mainDatas = response.data.data;
       } catch (err) {
         this.$toast(err);
         this.$go({ name: 'auth.identifier' });
-      }finally{
-        this.sending=false;
+      } finally {
+        this.sending = false;
       }
     },
   },
@@ -140,4 +142,5 @@ export default {
     await this.fetchData();
   },
 };
+
 </script>

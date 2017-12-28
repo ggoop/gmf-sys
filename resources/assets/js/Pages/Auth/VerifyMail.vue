@@ -50,7 +50,7 @@
 import { validationMixin } from 'vuelidate';
 import { required, email, minLength, maxLength } from 'vuelidate/lib/validators';
 export default {
-  name: 'GmfPagesAuthPasswordFindMail',
+  name: 'GmfPagesAuthVerifyMail',
   mixins: [validationMixin],
   data() {
     return {
@@ -94,7 +94,7 @@ export default {
     },
     onSendCode(){
       this.sending = true;
-      const options={id:this.mainDatas.id,type:'verifiy-email'};
+      const options = { id: this.mainDatas.id,account:this.mainDatas.account, type: 'verify-mail', mode: 'mail' };
       this.$http.post('sys/auth/vcode-create', options).then(response => {
         this.isSended=true;
         this.sending = false;
@@ -112,7 +112,8 @@ export default {
     },
     submitPost() {
       this.sending = true;
-      this.$http.post('sys/auth/vcode-check', this.mainDatas).then(response => {
+      const options = { id: this.mainDatas.id,account:this.mainDatas.account, type: 'verify-mail', token: this.mainDatas.token };
+      this.$http.post('sys/auth/vcode-checker', options).then(response => {
         this.sending = false;
         this.$go({name:'auth.reset',params:{id:this.mainDatas.id,token:this.mainDatas.token}});
       }).catch(err => {
@@ -123,15 +124,11 @@ export default {
     async fetchData() {
       try {
         this.sending=true;
-        const thId = this.$route.params.id;
-        if (!thId) {
-          this.$go({ name: 'auth.login' });
-        }
-        const response = await this.$http.post('sys/auth/checker', { id: thId });
+        const response = await this.$http.post('sys/auth/checker', { id: this.$root.configs.user.id });
         this.mainDatas =response.data.data;
       } catch (err) {
         this.$toast(err);
-        this.$go({ name: 'auth.identifier' });
+        this.$go(this.$root.configs.home);
       }finally{
         this.sending=false;
       }
