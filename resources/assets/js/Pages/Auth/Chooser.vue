@@ -11,7 +11,8 @@
           <md-image :md-src="item.avatar"></md-image>
         </md-avatar>
         <div class="md-list-item-text">
-          {{ item.name }}
+          <span>{{ item.name }}</span>
+          <span>{{ item.account }}</span>
         </div>
       </md-list-item>
       <md-list-item :to="{name:'auth.identifier'}">
@@ -19,7 +20,8 @@
           <md-icon class="md-size-2x">account_circle</md-icon>
         </md-avatar>
         <div class="md-list-item-text">
-          使用其他帐号
+          <span>使用其他帐号</span>
+          <span>使用新的账号登录</span>
         </div>
       </md-list-item>
     </md-list>

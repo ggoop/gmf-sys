@@ -11,7 +11,8 @@
           <md-image :md-src="item.avatar"></md-image>
         </md-avatar>
         <div class="md-list-item-text">
-          {{ item.name }}
+          <span>{{ mainDatas.name }}</span>
+          <span>{{ mainDatas.account }}</span>
         </div>
         <md-button class="md-icon-button md-list-action" @click="removeItem(item)">
           <md-icon>clear</md-icon>

@@ -3,7 +3,7 @@
     <form novalidate @submit.prevent="validateForm">
       <md-card-header>
         <md-card-header-text>
-          <div class="md-title">欢迎</div>
+          <div class="md-title">重置密码</div>
         </md-card-header-text>
       </md-card-header>
       <md-list>
@@ -23,16 +23,22 @@
       <md-card-content>
         <md-layout>
           <md-field :class="getValidationClass('password')">
-            <label>输入您的密码</label>
+            <label>输入您的新密码</label>
             <md-input v-model="mainDatas.password" autocomplete="off" type="password" :disabled="sending"></md-input>
             <span class="md-error" v-if="!$v.mainDatas.password.required">请输入密码</span>
           </md-field>
         </md-layout>
+        <md-layout>
+          <md-field :class="getValidationClass('password_confirmation')">
+            <label>确认密码</label>
+            <md-input v-model="mainDatas.password_confirmation" autocomplete="off" type="password" :disabled="sending"></md-input>
+            <span class="md-error" v-if="!$v.mainDatas.password_confirmation.sameAsPassword">确认密码不符合要求</span>
+          </md-field>
+        </md-layout>
       </md-card-content>
       <md-card-actions>
-        <router-link :to="{name:'auth.password.find',params:{id:mainDatas.id}}">忘记了密码</router-link>
         <span class="flex"></span>
-        <md-button type="submit" class="md-primary md-raised" :disabled="sending">登 录</md-button>
+        <md-button type="submit" class="md-primary md-raised" :disabled="sending">设置</md-button>
       </md-card-actions>
       <md-progress-bar md-mode="indeterminate" v-if="sending" />
     </form>
@@ -40,7 +46,7 @@
 </template>
 <script>
 import { validationMixin } from 'vuelidate';
-import { required, email, minLength, maxLength } from 'vuelidate/lib/validators';
+import { required, sameAs, minLength, maxLength } from 'vuelidate/lib/validators';
 export default {
   name: 'GmfPagesAuthPassword',
   props: {},
@@ -56,8 +62,11 @@ export default {
     mainDatas: {
       password: {
         required,
-        minLength: minLength(3),
+        minLength: minLength(6),
         maxLength: maxLength(30)
+      },
+      password_confirmation:{
+        sameAsPassword:sameAs('password')
       }
     }
   },
@@ -82,7 +91,8 @@ export default {
     async submitPost() {
       try {
         this.sending = true;
-        const response = await this.$http.post('sys/auth/login', this.mainDatas);
+        this.mainDatas.token=this.$route.params.token;
+        const response = await this.$http.post('sys/auth/reset', this.mainDatas);
         this.sending = false;
         this.$setConfigs({ user: response.data.data, token: response.data.token });
         await this.$root.$loadConfigs();
@@ -102,6 +112,9 @@ export default {
         const response = await this.$http.post('sys/auth/checker', { id: thId });
         const u = response.data.data;
         this.mainDatas = response.data.data;
+
+        this.mainDatas.token=this.$route.params.token;
+        await this.$http.post('sys/auth/vcode', this.mainDatas);
       } catch (err) {
         this.$toast(err);
         this.$go({ name: 'auth.identifier' });

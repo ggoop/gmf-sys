@@ -38,6 +38,11 @@ const routes = [{
       component:() => import('../Pages/Auth/Password')
     },
     {
+      path: 'reset/:id/:token?',
+      name: 'auth.reset',
+      component:() => import('../Pages/Auth/Reset')
+    },
+    {
       path: 'chooser',
       name: 'auth.chooser',
       component:() => import('../Pages/Auth/Chooser')

@@ -13,11 +13,12 @@ export default {
     async fetchData() {
       try {
         const response = await this.$http.post('sys/auth/logout');
-      } catch (err) {
-      }finally{
-        this.sending=false;
         await this.$root.$loadConfigs();
         this.$go({name:'auth.login'});
+      } catch (err) {
+         this.$toast(err);
+      }finally{
+        this.sending=false;
       }
     },
   },

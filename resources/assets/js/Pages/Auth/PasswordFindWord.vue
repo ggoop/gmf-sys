@@ -11,7 +11,10 @@
         <md-avatar>
           <md-image :md-src="mainDatas.avatar"></md-image>
         </md-avatar>
-        <div class="md-list-item-text">{{ mainDatas.name }}</div>
+        <div class="md-list-item-text">
+          <span>{{ mainDatas.name }}</span>
+          <span>{{ mainDatas.account }}</span>
+        </div>
         <md-button class="md-icon-button md-list-action" :to="{name:'auth.chooser'}">
           <md-icon class="md-primary">expand_more</md-icon>
         </md-button>
@@ -63,9 +66,6 @@ export default {
     disabledConfirmBtn(){
       return this.sending||!this.mainDatas.vcode;
     },
-    tipLabel(){
-      return this.$root.appName+' 会将验证码发送到 ••• •••• ••';
-    }
   },
   methods: {
     onSendCode(){

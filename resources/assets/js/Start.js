@@ -43,7 +43,7 @@ export default class Start {
     const rootData = {
       'appName': '',
       'title': '',
-      'configs': { home: '/', ent: false, user: false, token: false },
+      'configs': { home: '/', ent: false, user: false, token: false, auth: {} },
       'userConfig': {}
     };
     if (window.gmfConfig) {

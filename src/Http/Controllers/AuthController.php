@@ -5,13 +5,10 @@ namespace Gmf\Sys\Http\Controllers;
 use Auth;
 use DB;
 use GAuth;
-use Gmf\Ac\Notifications\PasswordResetSms;
 use Gmf\Sys\Http\Resources;
 use Gmf\Sys\Models;
+use Gmf\Sys\Notifications;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Str;
 use Notification;
 use Validator;
 
@@ -19,8 +16,11 @@ class AuthController extends Controller {
 	public function checker(Request $request) {
 		return $this->toJson(new Resources\User(app('Gmf\Sys\Bp\UserAuth')->checker($this, $request->only('account', 'id'))));
 	}
+	public function getUser(Request $request) {
+		return $this->toJson(new Resources\User(app('Gmf\Sys\Bp\UserAuth')->checker($this, $request->only('account', 'id'))));
+	}
 	public function login(Request $request) {
-		$input = $request->only('account', 'password');
+		$input = $request->only('id', 'account', 'password');
 		try {
 			DB::beginTransaction();
 
@@ -69,7 +69,7 @@ class AuthController extends Controller {
 	}
 	public function issueToken(Request $request) {
 		$token = false;
-		$input = array_only($request->all(), ['account', 'password']);
+		$input = array_only($request->all(), ['id', 'account', 'password']);
 		$validator = Validator::make($input, [
 			'account' => [
 				'required',
@@ -114,37 +114,57 @@ class AuthController extends Controller {
 		Validator::make($input, [
 			'id' => 'required|min:4|max:50',
 		])->validate();
-		$user = app('Gmf\Ac\Bp\UserAuth')->checker($this, $input);
-		Password::broker()->sendResetLink([
-			'id' => $user->id,
-			'account' => $user->account, 'email' => $user->email,
-		]);
+		$user = app('Gmf\Sys\Bp\UserAuth')->checker($this, $input);
+
+		Notification::send([$user], new Notifications\ResetPasswordEmail(app('Gmf\Sys\Bp\UserAuth')->createVCode($user, 'password')));
+
 		$this->toJson(true);
 	}
 	public function passwordSendSms(Request $request) {
 		$input = array_only($request->all(), ['account', 'id']);
 		Validator::make($input, [
-			'id' => 'required|min:4|max:50',
+			'id' => 'required',
 		])->validate();
-		$user = app('Gmf\Ac\Bp\UserAuth')->checker($this, $input);
+		$user = app('Gmf\Sys\Bp\UserAuth')->checker($this, $input);
 
-		Notification::send([$user], new PasswordResetSms($user));
+		Notification::send([$user], new Notifications\PasswordResetSms(app('Gmf\Sys\Bp\UserAuth')->createVCode($user, 'password')));
 
 		$this->toJson(true);
 	}
-	public function passwordReset(Request $request) {
+	public function checkVCode(Request $request) {
+		$input = array_only($request->all(), [
+			'token', 'account', 'id',
+		]);
+		Validator::make($input, [
+			'id' => 'required', //用户ID
+			'token' => 'required|min:4|max:10',
+		])->validate();
+		$user = app('Gmf\Sys\Bp\UserAuth')->checker($this, $input);
+		app('Gmf\Sys\Bp\UserAuth')->checkVCode($user, $input['token']);
+		$this->toJson(true);
+	}
+	public function createVCode(Request $request) {
+		$input = array_only($request->all(), [
+			'type', 'account', 'id',
+		]);
+		Validator::make($input, [
+			'id' => 'required', //用户ID
+			'type' => 'required',
+		])->validate();
+		$user = app('Gmf\Sys\Bp\UserAuth')->checker($this, $input);
+		$vcode = app('Gmf\Sys\Bp\UserAuth')->createVCode($user, $input['type']);
+		$this->toJson(true);
+	}
+	public function resetPassword(Request $request) {
 		$input = array_only($request->all(), [
 			'password', 'password_confirmation', 'token', 'account', 'id',
 		]);
-		Validator::make($input, [
-			'id' => 'required|min:4|max:50',
-		])->validate();
-		$user = app('Gmf\Ac\Bp\UserAuth')->checker($this, $input);
-		Password::broker()->reset($input, function ($user, $pass) {
-			$user->password = Hash::make($password);
-			$user->setRememberToken(Str::random(60));
-			$user->save();
+		$user = app('Gmf\Sys\Bp\UserAuth')->resetPassword($this, $input);
+
+		$token = app('Gmf\Sys\Bp\UserAuth')->issueToken($user);
+
+		return $this->toJson(new Resources\User($user), function ($b) use ($token) {
+			$b->token($token);
 		});
-		$this->toJson(true);
 	}
 }

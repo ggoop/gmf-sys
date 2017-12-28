@@ -28,6 +28,9 @@ class CreateGmfSysUsersTable extends Migration {
 		$md->string('avatar', 500)->nullable();
 		$md->string('cover', 500)->nullable();
 		$md->string('memo', 500)->nullable()->comment('备注');
+
+		$md->boolean('email_verified')->default(false)->comment('邮件认证');
+		$md->boolean('mobile_verified')->default(false)->comment('手机认证');
 		$md->enum('status', 'gmf.sys.user.status.enum')->nullable();
 		$md->rememberToken();
 		$md->timestamps();

@@ -3,7 +3,7 @@
     <form novalidate @submit.prevent="validateForm">
       <md-card-header>
         <md-card-header-text>
-          <div class="md-title">创建您的 U9HUB 帐号</div>
+          <div class="md-title">创建新帐号</div>
         </md-card-header-text>
       </md-card-header>
       <md-card-content>
@@ -75,7 +75,7 @@ export default {
     }
   },
   computed: {
-
+    
   },
   methods: {
     getValidationClass(fieldName) {

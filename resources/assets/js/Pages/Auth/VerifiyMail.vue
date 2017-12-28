@@ -2,8 +2,8 @@
   <md-card>
     <md-card-header>
       <md-card-header-text>
-        <div class="md-title">帐号帮助</div>
-        <div class="md-body-1">获取验证码</div>
+        <div class="md-title">帐号认证</div>
+        <div class="md-body-1">电子邮件账号认证</div>
       </md-card-header-text>
     </md-card-header>
     <md-list>
@@ -38,9 +38,9 @@
         </md-layout>
       </md-card-content>
       <md-card-actions>
-        <md-button class="md-primary" @click="onOtherClick">试试其他方式</md-button>
+        <md-button class="md-primary" @click="onOtherClick">不想认证了</md-button>
         <span class="flex"></span>
-        <md-button type="submit" class="md-primary md-raised" :disabled="disabledConfirmBtn">下一步</md-button>
+        <md-button type="submit" class="md-primary md-raised" :disabled="disabledConfirmBtn">认证</md-button>
       </md-card-actions>
     </form>
     <md-progress-bar md-mode="indeterminate" v-if="sending" />
@@ -77,7 +77,7 @@ export default {
       return this.sending||!this.mainDatas.token;
     },
     tipLabel(){
-      return this.$root.appName+'会将验证码发送到 '+this.mainDatas.email;
+      return '验证码将发送到 '+this.mainDatas.email;
     }
   },
   methods: {
@@ -90,11 +90,12 @@ export default {
       }
     },
     onOtherClick(){
-      this.$go({ name: 'auth.password.find.word',params:{id:this.mainDatas.id} });
+       this.$go(this.$root.configs.home);
     },
     onSendCode(){
       this.sending = true;
-      this.$http.post('sys/auth/password-send-mail', this.mainDatas).then(response => {
+      const options={id:this.mainDatas.id,type:'verifiy-email'};
+      this.$http.post('sys/auth/vcode-create', options).then(response => {
         this.isSended=true;
         this.sending = false;
         this.$toast('验证码已发送到您的邮件上，请及时查收!');

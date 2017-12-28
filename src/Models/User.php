@@ -36,6 +36,9 @@ class User extends Authenticatable {
 	public function routeNotificationForNexmo() {
 		return $this->mobile;
 	}
+	public function routeNotificationForMail() {
+		return $this->email;
+	}
 	public function validateForPassportPasswordGrant($password) {
 		//var_dump($password);
 		return true;
