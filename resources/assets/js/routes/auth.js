@@ -45,7 +45,8 @@ const routes = [{
     {
       path: 'verify-mail',
       name: 'auth.verify.mail',
-      component:() => import('../Pages/Auth/VerifyMail')
+      component:() => import('../Pages/Auth/VerifyMail'),
+      meta: { requiresAuth: true },
     },
     {
       path: 'chooser',

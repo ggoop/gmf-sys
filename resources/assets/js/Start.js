@@ -43,7 +43,7 @@ export default class Start {
     const rootData = {
       'appName': '',
       'title': '',
-      'configs': { home: '/', ent: false, user: false, token: false, auth: {} },
+      'configs': { home: '/', ent: false, user: false, token: false, auth: {route:{name:'auth.login'}} },
       'userConfig': {}
     };
     if (window.gmfConfig) {
@@ -52,8 +52,16 @@ export default class Start {
       rootData.configs.token = window.gmfConfig.token;
     }
 
+    const vueRouter=new VueRouter(router) ;
+    vueRouter.beforeEach((to, from, next) => {
+      if(to.meta.requiresAuth&&!rootData.configs.user){
+        next(rootData.configs.auth.route);
+      }else{
+        next();
+      }
+    });
     const app = new Vue({
-      router: new VueRouter(router),
+      router: vueRouter,
       el: elID,
       data: rootData,
       store: store,
@@ -81,6 +89,9 @@ export default class Start {
           } else {
             this.$http.defaults.headers.common.Authorization = false;
           }
+
+          window.gmfConfig=this.userConfig;
+
         },
         async loadEnums() {
           try {

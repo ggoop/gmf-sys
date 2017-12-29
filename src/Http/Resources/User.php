@@ -33,12 +33,22 @@ class User extends Resource {
 			$rtn['email'] = $this->email;
 			$rtn['account'] = $this->account;
 		} else {
+			$rtn['is_me'] = false;
 			$rtn['mobile'] = $this->hidePhone($this->mobile);
 			$rtn['email'] = $this->hideEmail($this->email);
 			$rtn['account'] = $this->hideAccount($this->account);
 		}
 		if (!empty($this->pivot)) {
 			$rtn['created_at'] = $this->pivot->created_at . '';
+		}
+		if (empty($rtn['avatar'])) {
+			$rtn['avatar'] = '/assets/vendor/gmf-sys/avatar/1.jpg';
+		}
+		if (empty($rtn['cover'])) {
+			$rtn['cover'] = '/assets/vendor/gmf-sys/cover/1.jpg';
+		}
+		if (empty($rtn['nick_name'])) {
+			$rtn['nick_name'] = $rtn['name'];
 		}
 		return $rtn;
 	}
@@ -90,6 +100,7 @@ class User extends Resource {
 			'nick_name' => '匿名',
 			'memo' => '',
 			'avatar' => '/assets/vendor/gmf-sys/avatar/' . rand(1, 10) . '.jpg',
+			'cover' => '/assets/vendor/gmf-sys/cover/1.jpg',
 		];
 	}
 }
