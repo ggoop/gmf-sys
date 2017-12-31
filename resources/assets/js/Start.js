@@ -47,9 +47,10 @@ export default class Start {
       'userConfig': {}
     };
     if (window.gmfConfig) {
-      rootData.configs.ent = window.gmfConfig.ent;
-      rootData.configs.user = window.gmfConfig.user;
-      rootData.configs.token = window.gmfConfig.token;
+      _.extend(rootData.configs,window.gmfConfig);
+      // rootData.configs.ent = window.gmfConfig.ent;
+      // rootData.configs.user = window.gmfConfig.user;
+      // rootData.configs.token = window.gmfConfig.token;
     }
 
     const vueRouter=new VueRouter(router) ;
@@ -79,19 +80,13 @@ export default class Start {
       },
       methods: {
         changedConfig() {
-          if (this.userConfig && this.userConfig.ent) this.configs.ent = this.userConfig.ent;
-          if (this.userConfig && this.userConfig.user) this.configs.user = this.userConfig.user;
-          if (this.userConfig && this.userConfig.token) this.configs.token = this.userConfig.token;
-
+          _.extend(window.gmfConfig,this.configs);
           this.$http.defaults.headers.common.Ent = this.configs.ent ? this.configs.ent.id : false;
           if (this.configs.token) {
             this.$http.defaults.headers.common.Authorization = this.configs.token.token_type + " " + this.configs.token.access_token;
           } else {
             this.$http.defaults.headers.common.Authorization = false;
           }
-
-          window.gmfConfig=this.userConfig;
-
         },
         async loadEnums() {
           try {
@@ -160,8 +155,7 @@ export default class Start {
       this.$root.$refs.rootToast && this.$root.$refs.rootToast.toast(toast);
     }
     Vue.prototype.$setConfigs = function(configs) {
-      //至少需要{ent:{},user:{},token:{}}字段
-      this.$root.userConfig = configs;
+      _.extend(this.$root.configs,configs);
       this.$root.changedConfig();
     }
     Vue.prototype.$lang = lang;

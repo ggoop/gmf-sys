@@ -1,6 +1,7 @@
 <?php
 namespace Gmf\Sys\Http\Controllers;
 
+use GAuth;
 use Gmf\Sys\Http\Resources;
 use Gmf\Sys\Models\File;
 use Illuminate\Http\Request;
@@ -13,6 +14,7 @@ class FileController extends Controller {
 		return $this->toJson(new Resources\File($file));
 	}
 	public function store(Request $request) {
+		GAuth::check('user');
 		$files = File::storage($request, $request->input('name', 'files'), 'file');
 		if ($files) {
 			return $this->toJson(Resources\File::collection($files));

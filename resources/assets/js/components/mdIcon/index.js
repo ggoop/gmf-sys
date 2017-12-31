@@ -1,6 +1,7 @@
 import material from 'vue-material/material'
 import MdIcon from './MdIcon'
 
+import MdIconHome from './parts/MdIconHome'
 import MdIconAdd from './parts/MdIconAdd'
 import MdIconApp from './parts/MdIconApp'
 import MdIconClose from './parts/MdIconClose'
@@ -15,6 +16,7 @@ export default Vue => {
   material(Vue)
   Vue.component(MdIcon.name, MdIcon);
 
+  Vue.component(MdIconHome.name, MdIconHome)
   Vue.component(MdIconAdd.name, MdIconAdd)
   Vue.component(MdIconApp.name, MdIconApp)
   Vue.component(MdIconClose.name, MdIconClose)

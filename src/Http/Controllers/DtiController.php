@@ -21,6 +21,7 @@ class DtiController extends Controller {
 		return $this->toJson($data);
 	}
 	public function store(Request $request) {
+		GAuth::check('user');
 		$input = array_only($request->all(), ['code', 'name', 'host', 'path', 'method_enum',
 			'header', 'body', 'query', 'memo']);
 		$validator = Validator::make($input, [
@@ -52,6 +53,7 @@ class DtiController extends Controller {
 		if ($validator->fails()) {
 			return $this->toError($validator->errors());
 		}
+		GAuth::check('user');
 		$input = InputHelper::fillEntity($input, $request, ['category', 'local']);
 		$entId = GAuth::entId();
 		$data = Models\Dti::updateOrCreate(['id' => $id], $input);
@@ -59,6 +61,7 @@ class DtiController extends Controller {
 	}
 	public function destroy(Request $request, $id) {
 		$ids = explode(",", $id);
+		GAuth::check('user');
 		Models\Dti::destroy($ids);
 		return $this->toJson(true);
 	}

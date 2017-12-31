@@ -24,7 +24,7 @@ class DtiParamController extends Controller {
 	}
 	public function store(Request $request) {
 		$input = array_only($request->all(), ['id', 'code', 'name', 'category_id', 'dti_id', 'type_enum', 'value', 'is_revoked']);
-
+		GAuth::check('user');
 		$input = InputHelper::fillEntity($input, $request, ['category', 'dti']);
 		$validator = Validator::make($input, [
 			'code' => 'required',
@@ -40,7 +40,7 @@ class DtiParamController extends Controller {
 	}
 	public function update(Request $request, $id) {
 		$input = array_only($request->all(), ['id', 'code', 'name', 'category_id', 'dti_id', 'type_enum', 'value', 'is_revoked']);
-
+		GAuth::check('user');
 		$input = InputHelper::fillEntity($input, $request, ['category', 'dti']);
 		$validator = Validator::make($input, [
 			'code' => 'required',
@@ -54,6 +54,7 @@ class DtiParamController extends Controller {
 	}
 	public function destroy(Request $request, $id) {
 		$ids = explode(",", $id);
+		GAuth::check('user');
 		Models\DtiParam::destroy($ids);
 		return $this->toJson(true);
 	}

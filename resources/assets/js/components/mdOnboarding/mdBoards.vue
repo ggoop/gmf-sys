@@ -1,7 +1,7 @@
 <template>
   <div class="md-boards" :class="[$mdActiveTheme,boardClasses]">
 
-    <div class="md-boards-content flex" ref="boardsContent">
+    <div class="md-boards-content flex" ref="boardsContent" :style="{height:contentHeight}">
       <div class="md-boards-wrapper" :style="{ transform: `translate3D(-${contentWidth}, 0, 0)` }">
         <slot></slot>
       </div>
@@ -31,7 +31,7 @@
         @click="setActiveBoard(header, true)"
         ref="boardHeader">
         <div class="md-board-header-container">
-          <md-icon>fiber_manual_record</md-icon>
+          <md-icon :class="{'md-primary':activeBoard === header.id}">fiber_manual_record</md-icon>
         </div>
       </button>
 
@@ -204,8 +204,8 @@ import MdComponent from 'core/MdComponent'
       calculateContentHeight() {
         this.$nextTick(() => {
           if (Object.keys(this.boardList).length) {
-            let height = this.boardList[this.activeBoard].ref.$el.offsetHeight;
-
+            const el=this.boardList[this.activeBoard].ref.$el;
+            let height =el.firstChild.offsetHeight||el.offsetHeight;
             this.contentHeight = height + 'px';
           }
         });

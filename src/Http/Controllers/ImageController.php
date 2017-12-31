@@ -3,6 +3,7 @@ namespace Gmf\Sys\Http\Controllers;
 
 use Gmf\Sys\Models;
 use Illuminate\Http\Request;
+use Storage;
 
 class ImageController extends Controller {
 	public function show(Request $request, string $id) {
@@ -10,10 +11,14 @@ class ImageController extends Controller {
 		$w = $request->input('w', 200);
 		$h = $request->input('h', 200);
 		$file = Models\File::find($id);
-		if ($file) {
-			$base64 = substr(strstr($file->data, ','), 1);
+		$fileContent = Models\FileContent::where('file_id', $id)->first();
+		if ($file && $fileContent) {
+
+			$base64 = substr(strstr($fileContent->data, ','), 1);
 			$img = base64_decode($base64);
 			return response($img, 200, ['Content-Type' => $file->type]);
+		} else if ($file) {
+			return Storage::disk($file->disk)->get($file->path);
 		}
 		ob_clean();
 		ob_start();

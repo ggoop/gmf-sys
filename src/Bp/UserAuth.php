@@ -40,7 +40,7 @@ class UserAuth {
 			'password' => 'required|min:4|max:50',
 		])->validate();
 
-		$user = $this->checker($observer, $input);
+		$user = $this->checker($observer, array_only($input, ['id', 'account', 'email', 'type']));
 		$input['account'] = $user->account;
 		$credentials = array_only($input, ['account', 'password']);
 		if (Auth::attempt($credentials, true)) {

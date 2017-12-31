@@ -13,7 +13,7 @@ class File extends Model {
 	public $incrementing = false;
 	protected $fillable = [
 		'id', 'ent_id', 'user_id',
-		'disk', 'code', 'type', 'title', 'data',
+		'disk', 'code', 'type', 'title',
 		'ext', 'url', 'path', 'size', 'props', 'is_revoked'];
 	public static function storage(Request $request, $mdFiles, $path = '', $disk = 'public') {
 		$sv = new FileSv($request);

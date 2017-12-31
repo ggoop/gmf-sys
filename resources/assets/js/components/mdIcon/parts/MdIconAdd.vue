@@ -7,10 +7,9 @@
   </md-icon>
 </template>
 <script>
-
 export default {
   name: 'MdIconAdd',
-  
+
 }
 
 </script>

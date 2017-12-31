@@ -86,12 +86,15 @@ class File {
 
 		$contents = $disk->get($builder->path);
 		$contents = base64_encode($contents);
-
-		$builder->data('data:' . $builder->type . ';base64,' . $contents);
+		$contents = $builder->type . ';base64,' . $contents;
 
 		$builder->url($disk->url($url));
 
-		return Models\File::create($builder->toArray());
+		$fileItem = Models\File::create($builder->toArray());
+
+		Models\FileContent::create(['file_id' => $fileItem->id, 'data' => $contents]);
+
+		return $fileItem;
 	}
 	private function storageBase64($file, $path = '', $disk = 'public') {
 		$builder = new Builder;
@@ -122,9 +125,6 @@ class File {
 		}
 		$builder->path($name);
 
-		if (!empty($file->data)) {
-			$builder->data($file->data);
-		}
 		if (preg_match('/^(data:)/', $builder->data, $result)) {
 			$base64_body = substr(strstr($builder->data, ','), 1);
 			$type = $builder->type;
@@ -136,9 +136,10 @@ class File {
 			}
 			$builder->url($disk->url($builder->path));
 		}
-		if (empty($builder->data) || empty($builder->path) || empty($builder->code)) {
-			return false;
+		$fileItem = Models\File::create($builder->toArray());
+		if (!empty($file->data)) {
+			Models\FileContent::create(['file_id' => $fileItem->id, 'data' => $file->data]);
 		}
-		return Models\File::create($builder->toArray());
+		return $fileItem;
 	}
 }

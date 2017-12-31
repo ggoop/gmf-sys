@@ -55,12 +55,12 @@ class APIResult {
 		$builder = new Builder(compact('msg', 'code'));
 		return static::toResult($builder, $callback);
 	}
-	public static function error($msg, Closure $callback = null) {
+	public static function error($msg, Closure $callback = null, $statucCode = null) {
 		$code = 2000;
 		$builder = new Builder(compact('msg', 'code'));
-		return static::toResult($builder, $callback);
+		return static::toResult($builder, $callback, $statucCode);
 	}
-	private static function toResult(Builder $builder, Closure $callback = null) {
+	private static function toResult(Builder $builder, Closure $callback = null, $statucCode = null) {
 		if (empty($builder->code)) {
 			$builder->code = 0;
 		}
@@ -73,7 +73,7 @@ class APIResult {
 		//code,data,msg,error,meta
 		$data = $builder->toArray();
 		if ($builder->code) {
-			return response()->json($data, 400);
+			return response()->json($data, $statucCode ?: 400);
 		} else {
 			return response()->json($data);
 		}

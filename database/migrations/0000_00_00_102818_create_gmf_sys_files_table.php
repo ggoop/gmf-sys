@@ -24,7 +24,6 @@ class CreateGmfSysFilesTable extends Migration {
 
 		$md->string('type')->nullable()->comment('类型');
 		$md->string('title')->nullable()->comment('标题');
-		$md->longText('data')->nullable()->comment('内容');
 
 		$md->string('ext')->nullable()->comment('扩展名');
 		$md->string('path')->nullable()->comment('名称');

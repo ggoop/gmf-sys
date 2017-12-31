@@ -12,6 +12,13 @@
         <md-icon>clear</md-icon>
       </md-button>
     </md-snackbar>
+    <md-dialog :md-active.sync="showAuthDialog">
+      <md-dialog-title>快速安全登录</md-dialog-title>
+      <md-dialog-actions>
+        <md-button class="md-primary" @click="onLogin">去登录</md-button>
+        <md-button class="md-primary" @click="showAuthDialog = false">取消</md-button>
+      </md-dialog-actions>
+    </md-dialog>
   </div>
 </template>
 <script>
@@ -29,6 +36,7 @@ export default {
   },
   data() {
     return {
+      showAuthDialog:false,
       showSnackbar: false,
       isInfinity: false,
       toastList: [],
@@ -41,6 +49,10 @@ export default {
     }
   },
   methods: {
+    onLogin(){
+      this.showAuthDialog=false;
+      this.$go(this.$root.configs.auth.route);
+    },
     toggleLock() {
       this.isInfinity = !this.isInfinity;
 
@@ -63,6 +75,10 @@ export default {
         toast.text = toastInfo;
       }
       if (this._.isObject(toastInfo)) {
+        if(toastInfo.response&&toastInfo.response.status==401&&this.$root.configs.auth.route){
+          this.showAuthDialog=true;
+          return;
+        }
         if (toastInfo.response && toastInfo.config && toastInfo.request) {
           toastInfo = toastInfo.response;
         }

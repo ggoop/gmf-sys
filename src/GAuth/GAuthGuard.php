@@ -2,6 +2,7 @@
 
 namespace Gmf\Sys\GAuth;
 use Auth;
+use Illuminate\Auth\AuthenticationException;
 
 class GAuthGuard {
 	protected $m_ent;
@@ -25,8 +26,10 @@ class GAuthGuard {
 		return $this->userId();
 	}
 
-	public function check() {
-		return !is_null($this->ent());
+	public function check($scope = 'user') {
+		if (!$this->id()) {
+			throw new AuthenticationException();
+		}
 	}
 	public function ent() {
 		return $this->m_ent;
