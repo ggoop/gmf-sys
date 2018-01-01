@@ -27,6 +27,9 @@ class File extends Resource {
 			$rtn['post_id'] = $this->pivot->post_id;
 			$rtn['created_at'] = $this->pivot->created_at . '';
 		}
+		if (empty($this->ext)) {
+			$rtn['ext'] = substr(strrchr($this->title, "."), 1);
+		}
 		if ($this->isImage()) {
 			$rtn['url'] = $this->getPathURL($request);
 			$rtn['can_image'] = true;

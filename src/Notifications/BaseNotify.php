@@ -1,7 +1,7 @@
 <?php
 
 namespace Gmf\Sys\Notifications;
-use Ghub\Stage\Models\Notification;
+use Gmf\Sys\Models\Notification;
 
 class BaseNotify {
 	public function createNotify($type, $fm_user, $to_users, $src, $content) {

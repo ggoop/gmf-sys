@@ -21,6 +21,11 @@ class CreateGmfSysAccountsTable extends Migration {
 		$md->string('cover', 500)->nullable();
 		$md->string('mobile', 20)->nullable();
 		$md->string('email', 50)->nullable();
+
+		$md->string('client_id')->nullable()->comment('应用ID');
+		$md->string('client_type')->nullable()->comment('应用类型');
+		$md->string('client_name')->nullable()->comment('应用名称');
+
 		$md->string('src_id', 50)->nullable()->comment('第三方用户id');
 		$md->text('src_url')->nullable()->comment('账号来源地址');
 

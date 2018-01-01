@@ -14,6 +14,9 @@ class Account extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['id', 'name', 'nick_name', 'type', 'avatar', 'mobile', 'email',
+	protected $fillable = ['id',
+		'client_id', 'client_type', 'client_name',
+		'name', 'nick_name',
+		'type', 'avatar', 'mobile', 'email',
 		'src_id', 'src_url', 'token', 'expire_time', 'info'];
 }
