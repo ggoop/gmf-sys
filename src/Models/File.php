@@ -19,4 +19,7 @@ class File extends Model {
 		$sv = new FileSv($request);
 		return $sv->storage($mdFiles, $path, $disk);
 	}
+	public function user() {
+		return $this->belongsTo(config('gmf.user.model'));
+	}
 }

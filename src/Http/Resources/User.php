@@ -16,27 +16,26 @@ class User extends Resource {
 		if (empty($this->id)) {
 			return false;
 		}
-		$rtn = [
-			'id' => $this->id,
-			'name' => $this->name,
-			'nick_name' => $this->nick_name,
-			'avatar' => $this->avatar,
-			'cover' => $this->cover,
-			'type' => $this->type,
-			'email_verified' => boolval($this->email_verified),
-			'mobile_verified' => boolval($this->mobile_verified),
-			'memo' => $this->memo,
-		];
+		$rtn = [];
+		Common::toField($this, $rtn, ['id', 'name', 'nick_name', 'avatar', 'cover', 'type', 'memo']);
+
+		Common::toBooleanField($this, $rtn, ['email_verified', 'mobile_verified']);
 		if ($this->id == GAuth::id()) {
 			$rtn['is_me'] = true;
-			$rtn['mobile'] = $this->mobile;
-			$rtn['email'] = $this->email;
-			$rtn['account'] = $this->account;
+
+			Common::toField($this, $rtn, ['mobile', 'email', 'account']);
 		} else {
 			$rtn['is_me'] = false;
-			$rtn['mobile'] = $this->hidePhone($this->mobile);
-			$rtn['email'] = $this->hideEmail($this->email);
-			$rtn['account'] = $this->hideAccount($this->account);
+			if (!empty($this->mobile)) {
+				$rtn['mobile'] = $this->hidePhone($this->mobile);
+			}
+			if (!empty($this->email)) {
+				$rtn['email'] = $this->hideEmail($this->email);
+			}
+			if (!empty($this->account)) {
+				$rtn['account'] = $this->hideAccount($this->account);
+			}
+
 		}
 		if (!empty($this->pivot)) {
 			$rtn['created_at'] = $this->pivot->created_at . '';

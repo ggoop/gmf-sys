@@ -15,14 +15,10 @@ class File extends Resource {
 		if (empty($this->id)) {
 			return false;
 		}
-		$rtn = [
-			'id' => $this->id,
-			'title' => $this->title,
-			'type' => $this->type,
-			'ext' => $this->ext,
-			'size' => $this->size,
-			'created_at' => $this->created_at . '',
-		];
+		$rtn = [];
+		Common::toField($this, $rtn, ['id', 'title', 'type', 'ext', 'created_at']);
+		Common::toIntField($this, $rtn, ['size']);
+
 		if (!empty($this->pivot)) {
 			$rtn['post_id'] = $this->pivot->post_id;
 			$rtn['created_at'] = $this->pivot->created_at . '';
@@ -40,19 +36,19 @@ class File extends Resource {
 		return $rtn;
 	}
 	private function isImage() {
-		return starts_with($this->type, 'image/');
+		return !empty($this->type) && starts_with($this->type, 'image/');
 	}
 	private function isPdf() {
-		return $this->pdf_disk && $this->pdf_path;
+		return !empty($this->pdf_disk) && $this->pdf_disk && !empty($this->pdf_path) && $this->pdf_path;
 	}
 	private function getPathURL($request) {
-		if ($this->path && $this->disk) {
+		if (!empty($this->path) && !empty($this->disk)) {
 			return config('app.url') . Storage::disk($this->disk)->url($this->path);
 		}
 		return '';
 	}
 	private function getPdfPathURL($request) {
-		if ($this->pdf_path && $this->pdf_disk) {
+		if (!empty($this->pdf_path) && !empty($this->pdf_disk)) {
 			return config('app.url') . Storage::disk($this->pdf_disk)->url($this->pdf_path);
 		}
 		return '';
