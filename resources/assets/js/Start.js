@@ -136,7 +136,9 @@ export default class Start {
           await this.beforeCreated();
         }
         await this.$loadConfigs();
-        await this.loadEnums();
+        if(this.configs.loadEnum){
+          await this.loadEnums();
+        }
       },
       async mounted() {
         if (this.beforeMounted) {
