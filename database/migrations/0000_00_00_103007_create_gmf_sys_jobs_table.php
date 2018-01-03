@@ -14,7 +14,7 @@ class CreateGmfSysJobsTable extends Migration {
 		$md = Metadata::create($this->mdID);
 		$md->mdEntity('gmf.sys.job')->comment('任务')->tableName('gmf_sys_jobs');
 
-		$md->bigIncrements('id', 100)->primary();
+		$md->bigIncrements('id');
 		$md->string('queue')->index()->comment('类型');
 		$md->longText('payload')->nullable()->comment('来源ID');
 		$md->integer('attempts')->nullable()->comment('附加次数');
