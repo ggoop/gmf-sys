@@ -131,7 +131,9 @@ class User extends Authenticatable {
 			$user = $query->first();
 			if (!$user) {
 				$data = array_only($opts, ['account', 'password', 'name', 'nick_name', 'email', 'mobile', 'type', 'avatar']);
-
+				if (!empty($opts['user_id']) && $type == 'sys') {
+					$data['id'] = $opts['user_id'];
+				}
 				if (!empty($data['password'])) {
 					$data['secret'] = base64_encode($data['password']);
 					$data['password'] = bcrypt($data['password']);
