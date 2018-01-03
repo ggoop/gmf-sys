@@ -12,7 +12,7 @@
         <md-icon>clear</md-icon>
       </md-button>
     </md-snackbar>
-    <md-dialog :md-active.sync="showAuthDialog">
+    <md-dialog class="gmf-auth-dialog" :md-fullscreen="false" v-if="showAuthDialog" :md-active.sync="showAuthDialog">
       <md-dialog-title>快速安全登录</md-dialog-title>
       <md-dialog-actions>
         <md-button class="md-primary" @click="onLogin">去登录</md-button>
@@ -36,7 +36,7 @@ export default {
   },
   data() {
     return {
-      showAuthDialog:false,
+      showAuthDialog: false,
       showSnackbar: false,
       isInfinity: false,
       toastList: [],
@@ -49,8 +49,8 @@ export default {
     }
   },
   methods: {
-    onLogin(){
-      this.showAuthDialog=false;
+    onLogin() {
+      this.showAuthDialog = false;
       this.$go(this.$root.configs.auth.route);
     },
     toggleLock() {
@@ -75,8 +75,8 @@ export default {
         toast.text = toastInfo;
       }
       if (this._.isObject(toastInfo)) {
-        if(toastInfo.response&&toastInfo.response.status==401&&this.$root.configs.auth.route){
-          this.showAuthDialog=true;
+        if (toastInfo.response && toastInfo.response.status == 401 && this.$root.configs.auth.route) {
+          this.showAuthDialog = true;
           return;
         }
         if (toastInfo.response && toastInfo.config && toastInfo.request) {
@@ -93,6 +93,10 @@ export default {
       }
       if (!toast.text) {
         toast.text = toastInfo;
+      }
+      if (toast.text == 'Unauthenticated') {
+        this.showAuthDialog = true;
+        return;
       }
       this.toastList.splice(0, 0, toast);
     },

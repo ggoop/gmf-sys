@@ -70,6 +70,8 @@ class UserAuth {
 		if ($user) {
 			throw new \Exception('该账号已经被使用了，请换个账号，或者直接登录!');
 		}
+		$input['client_id'] = config('gmf.client.id');
+		$input['client_name'] = config('gmf.client.name');
 		$user = Models\User::registerByAccount('web', $input);
 		if (!$user) {
 			throw new \Exception('创建账号失败!');
