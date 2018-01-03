@@ -57,7 +57,7 @@ class MDInstaller {
 			}
 			if (!Schema::hasTable($entity->table_name)) {
 				$this->createDBTable();
-			} else {
+			} else if ($oldMD) {
 				$this->updateDBTable($oldMD);
 			}
 		}
