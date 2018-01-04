@@ -101,7 +101,7 @@ class User extends Authenticatable {
 			}
 		});
 
-		$acc = $query->first();
+		$acc = $query->orderBy('created_at', 'desc')->first();
 		if (!$acc) {
 			$acc = Account::create(array_only($opts, [
 				'client_id', 'client_type', 'client_name',
@@ -128,19 +128,22 @@ class User extends Authenticatable {
 					$query->orWhere('email', $opts['email']);
 				}
 			});
-			$user = $query->first();
+			$user = $query->orderBy('created_at', 'desc')->first();
 			if (!$user) {
 				$data = array_only($opts, ['account', 'password', 'name', 'nick_name', 'email', 'mobile', 'type', 'avatar']);
 				if (!empty($opts['user_id']) && $type == 'sys') {
 					$data['id'] = $opts['user_id'];
 				}
-				if (!empty($data['password'])) {
+				if (!empty($data['password']) && !in_array($type, ['sys', 'web'])) {
 					$data['secret'] = base64_encode($data['password']);
 					$data['password'] = bcrypt($data['password']);
+				} else {
+					unset($data['secret']);
+					unset($data['password']);
 				}
 				$user = User::create($data);
 			}
-			UserAccount::create(['user_id' => $user->id, 'account_id' => $acc->id]);
+			UserAccount::updateOrCreate(['user_id' => $user->id, 'account_id' => $acc->id]);
 		}
 		return $user;
 	}
