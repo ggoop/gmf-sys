@@ -21,7 +21,7 @@ class UserAuth {
 		if (!empty($input['id'])) {
 			$user = Models\User::find($input['id']);
 		} else {
-			$user = Models\User::where($input)->first();
+			$user = Models\User::where($input)->whereIn('type', ['sys', 'web'])->first();
 		}
 		if (!$user) {
 			throw new \Exception('当前用户不存在!');
@@ -43,6 +43,7 @@ class UserAuth {
 		$user = $this->checker($observer, array_only($input, ['id', 'account', 'email', 'type']));
 		$input['account'] = $user->account;
 		$credentials = array_only($input, ['account', 'password']);
+		$credentials['type'] = $user->type;
 		if (Auth::attempt($credentials, true)) {
 			if ($user->status_enum == 'locked') {
 				throw new \Exception('当前账号可能被锁定!');
@@ -63,10 +64,11 @@ class UserAuth {
 			'account' => 'required|min:4|max:50',
 			'password' => 'required|min:4|max:50',
 		])->validate();
-		$user = Models\User::where('account', $input['account'])
-			->orWhere('mobile', $input['account'])
-			->orWhere('email', $input['account'])
-			->first();
+		$user = Models\User::whereIn('type', ['sys', 'web'])->where(function ($query) use ($input) {
+			$query->where('account', $input['account'])
+				->orWhere('mobile', $input['account'])
+				->orWhere('email', $input['account']);
+		})->first();
 		if ($user) {
 			throw new \Exception('该账号已经被使用了，请换个账号，或者直接登录!');
 		}

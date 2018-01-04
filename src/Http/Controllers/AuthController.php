@@ -2,7 +2,6 @@
 
 namespace Gmf\Sys\Http\Controllers;
 
-use Auth;
 use DB;
 use GAuth;
 use Gmf\Sys\Http\Resources;
@@ -79,10 +78,9 @@ class AuthController extends Controller {
 		if ($validator->fails()) {
 			return $this->toError($validator->errors());
 		}
-		if (!Auth::attempt($input)) {
-			return $this->toError('授权失败!');
-		}
-		$token = app('Gmf\Sys\Bp\UserAuth')->issueToken(Auth::user());
+		$user = app('Gmf\Sys\Bp\UserAuth')->login($this, $input);
+
+		$token = app('Gmf\Sys\Bp\UserAuth')->issueToken($user);
 		return $this->toJson($token);
 	}
 	public function logout(Request $request) {
