@@ -27,10 +27,10 @@ class File extends Resource {
 			$rtn['ext'] = substr(strrchr($this->title, "."), 1);
 		}
 		if ($this->isImage()) {
-			$rtn['url'] = $this->getPathURL($request);
+			$rtn['image_url'] = $this->getImagePathURL($request);
 			$rtn['can_image'] = true;
 		} else if ($this->isPdf()) {
-			$rtn['url'] = $this->getPdfPathURL($request);
+			$rtn['pdf_url'] = $this->getPdfPathURL($request);
 			$rtn['can_pdf'] = true;
 		}
 		return $rtn;
@@ -39,17 +39,33 @@ class File extends Resource {
 		return !empty($this->type) && starts_with($this->type, 'image/');
 	}
 	private function isPdf() {
-		return !empty($this->pdf_disk) && $this->pdf_disk && !empty($this->pdf_path) && $this->pdf_path;
+		return !empty($this->pdf_path) && $this->pdf_path;
 	}
-	private function getPathURL($request) {
-		if (!empty($this->path) && !empty($this->disk)) {
-			return config('app.url') . Storage::disk($this->disk)->url($this->path);
+	private function getFullPath($disk, $path) {
+		$url = false;
+		if (!$disk) {
+			$disk = 'public';
+		}
+		if ($disk && $path && Storage::disk($disk)->exists($path)) {
+			$url = Storage::disk($disk)->path($path);
+		}
+		if (!$url && file_exists(public_path() . $path)) {
+			$url = $path;
+		}
+		if ($url) {
+			return config('app.url') . $url;
+		}
+		return $url;
+	}
+	private function getImagePathURL() {
+		if (!empty($this->path)) {
+			return $this->getFullPath($this->disk, $this->path);
 		}
 		return '';
 	}
-	private function getPdfPathURL($request) {
-		if (!empty($this->pdf_path) && !empty($this->pdf_disk)) {
-			return config('app.url') . Storage::disk($this->pdf_disk)->url($this->pdf_path);
+	private function getPdfPathURL() {
+		if (!empty($this->pdf_path)) {
+			return $this->getFullPath($this->pdf_disk, $this->pdf_path);
 		}
 		return '';
 	}
