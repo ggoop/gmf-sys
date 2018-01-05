@@ -9,6 +9,7 @@ class Scode {
 	public function generate($type, $content = []) {
 		$data = [
 			'user_id' => GAuth::id(),
+			'client_id' => GAuth::clientId(),
 			'type' => $type,
 			'content' => serialize($content),
 		];
@@ -17,5 +18,11 @@ class Scode {
 		$b->id($code->id)->code($code->code);
 		return $b;
 	}
-
+	public function parse($id) {
+		$c = Models\Scode::find($id);
+		if (empty($c)) {
+			return false;
+		}
+		return unserialize($c->content);
+	}
 }
