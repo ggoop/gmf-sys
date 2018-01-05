@@ -134,7 +134,7 @@ class User extends Authenticatable {
 				if (!empty($opts['user_id']) && $type == 'sys') {
 					$data['id'] = $opts['user_id'];
 				}
-				if (!empty($data['password']) && !in_array($type, ['sys', 'web'])) {
+				if (!empty($data['password']) && in_array($type, ['sys', 'web'])) {
 					$data['secret'] = base64_encode($data['password']);
 					$data['password'] = bcrypt($data['password']);
 				} else {
