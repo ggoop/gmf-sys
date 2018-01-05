@@ -5,6 +5,7 @@ namespace Gmf\Sys\Http\Controllers;
 use DB;
 use GAuth;
 use Gmf\Sys\Builder;
+use Gmf\Sys\Http\Resources;
 use Gmf\Sys\Models;
 use Illuminate\Http\Request;
 
@@ -102,45 +103,33 @@ class EntityController extends Controller {
 		return $query;
 	}
 	public function index(Request $request) {
-		$query = Models\Entity::select('id', 'name', 'comment', 'table_name', 'type');
-		$loadDetail = $request->input('d');
-		if ($loadDetail) {
-			$query->with([
-				'fields' => function ($query) {
-					$query->select('entity_id', 'id', 'name', 'comment', 'type_id', 'type_type', 'collection', 'default_value', 'sequence');
-				},
-				'fields.type' => function ($query) {
-					$query->select('id', 'name', 'comment', 'type');
-				}]);
+		$query = Models\Entity::where('id', '!=', '');
+		if ($request->input('d')) {
+			$query->with('fields.type');
 		}
-		if ($request->input('q')) {
-			$query->where('name', 'like', '%' . $request->input('q') . '%');
+		if ($pv = $request->input('q')) {
+			$query->where(function ($query) use ($pv) {
+				$query->orWhere('name', 'like', '%' . $pv . '%')
+					->orWhere('comment', 'like', '%' . $pv . '%')
+					->orWhere('id', $pv);
+			});
+		} else {
+			$query->where('name', 'not like', '%gmf%');
 		}
-		if ($request->input('t')) {
-			$query->where('type', $request->input('t'));
+		if ($pv = $request->input('t')) {
+			$query->whereIn('type', $pv);
+		} else {
+			$query->whereIn('type', ['enum', 'entity']);
 		}
-		$data = $query->get();
-		if ($data && $loadDetail) {
-			foreach ($data as $d) {
-				$d->fields && $d->fields->makeHidden(['entity_id', 'type_id', 'type_type']);
-			}
-		}
-		return $this->toJson($data);
+		return $this->toJson(Resources\MdEntity::collection($query->paginate($request->input('size', 10))));
 	}
 	public function show(Request $request, string $entityId) {
-		$query = Models\Entity::select('id', 'name', 'comment', 'table_name', 'type');
-		$query->with([
-			'fields' => function ($query) {
-				$query->select('entity_id', 'id', 'name', 'comment', 'type_id', 'type_type', 'collection', 'default_value', 'sequence');
-			},
-			'fields.type' => function ($query) {
-				$query->select('id', 'name', 'comment', 'type');
-			}]);
-		$data = $query->where('id', $entityId)->orWhere('name', $entityId)->first();
-		if ($data) {
-			$data->fields && $data->fields->makeHidden(['entity_id', 'type_id', 'type_type']);
-		}
-		return $this->toJson($data);
+		$query = Models\Entity::with('fields.type');
+		$query->where(function ($query) use ($entityId) {
+			$query->orWhere('name', $entityId)
+				->orWhere('id', $entityId);
+		});
+		return $this->toJson(new Resources\MdEntity($query->first()));
 	}
 	public function getEnum(Request $request, string $enum = '') {
 		$query = Models\Entity::select('id', 'name', 'comment');

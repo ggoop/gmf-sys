@@ -78,7 +78,9 @@ body {
 /**
  * Overrides - Default buttons
  */
-
+a {
+  cursor: pointer;
+}
 a:not(.md-button) {
   transition: .3s $md-transition-stand-timing;
   transition-property: color, background-color, opacity;

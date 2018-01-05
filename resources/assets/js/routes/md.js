@@ -10,7 +10,7 @@ const routes = [{
         import ('../Pages/Md/Home')
     },
     {
-      path: 'search/?q',
+      path: 'search/:q?',
       name: 'md.search',
       component: () =>
         import ('../Pages/Md/Search')
