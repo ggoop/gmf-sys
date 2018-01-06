@@ -1,7 +1,7 @@
 <template>
   <div class="md-boards" :class="[$mdActiveTheme,boardClasses]">
 
-    <div class="md-boards-content flex" ref="boardsContent" :style="{height:contentHeight}">
+    <div class="md-boards-content flex" ref="boardsContent" :style="{minHeight:contentHeight}">
       <div class="md-boards-wrapper" :style="{ transform: `translate3D(-${contentWidth}, 0, 0)` }">
         <slot></slot>
       </div>

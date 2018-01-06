@@ -28,7 +28,20 @@ export default class Start {
     if (options.routes) {
       routes = routes.concat(options.routes);
     }
-    const router = { mode: 'history', routes: routes };
+    const router = {
+      mode: 'history',
+      routes: routes,
+      scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) {
+          return savedPosition
+        } else {
+          if (from.meta.keepAlive) {
+            from.meta.savedPosition = document.body.scrollTop
+          }
+          return { x: 0, y: to.meta.savedPosition || 0 }
+        }
+      },
+    };
 
     /*store*/
     Vue.use(Vuex);
@@ -43,21 +56,21 @@ export default class Start {
     const rootData = {
       'appName': '',
       'title': '',
-      'configs': { home: '/', ent: false, user: false, token: false, auth: {route:{name:'auth.login'}} },
+      'configs': { home: '/', ent: false, user: false, token: false, auth: { route: { name: 'auth.login' } } },
       'userConfig': {}
     };
     if (window.gmfConfig) {
-      _.extend(rootData.configs,window.gmfConfig);
+      _.extend(rootData.configs, window.gmfConfig);
       // rootData.configs.ent = window.gmfConfig.ent;
       // rootData.configs.user = window.gmfConfig.user;
       // rootData.configs.token = window.gmfConfig.token;
     }
 
-    const vueRouter=new VueRouter(router) ;
+    const vueRouter = new VueRouter(router);
     vueRouter.beforeEach((to, from, next) => {
-      if(to.meta.requiresAuth&&!rootData.configs.user){
+      if (to.meta.requiresAuth && !rootData.configs.user) {
         next(rootData.configs.auth.route);
-      }else{
+      } else {
         next();
       }
     });
@@ -80,7 +93,7 @@ export default class Start {
       },
       methods: {
         changedConfig() {
-          _.extend(window.gmfConfig,this.configs);
+          _.extend(window.gmfConfig, this.configs);
           this.$http.defaults.headers.common.Ent = this.configs.ent ? this.configs.ent.id : false;
           if (this.configs.token) {
             this.$http.defaults.headers.common.Authorization = this.configs.token.token_type + " " + this.configs.token.access_token;
@@ -136,7 +149,7 @@ export default class Start {
           await this.beforeCreated();
         }
         await this.$loadConfigs();
-        if(this.configs.loadEnum){
+        if (this.configs.loadEnum) {
           await this.loadEnums();
         }
       },
@@ -157,7 +170,7 @@ export default class Start {
       this.$root.$refs.rootToast && this.$root.$refs.rootToast.toast(toast);
     }
     Vue.prototype.$setConfigs = function(configs) {
-      _.extend(this.$root.configs,configs);
+      _.extend(this.$root.configs, configs);
       this.$root.changedConfig();
     }
     Vue.prototype.$lang = lang;
