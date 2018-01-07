@@ -60,8 +60,7 @@ export default {
         }
       }
     },
-    onNewItemConfirm() {
-      var selectedItems = this.$refs.onNewItemTree.getItems();
+    onNewItemConfirm(selectedItems) {
       this._.forEach(selectedItems, (v, k) => {
         var need = false,
           item = this.formatFieldToItem(v);
@@ -74,10 +73,6 @@ export default {
           this.mdItems.push(item);
         }
       });
-      this.newItemDialogShow=false;
-    },
-    onNewItemCancel() {
-      this.newItemDialogShow=false;
     },
     formatFieldToItem(field) {
       return {

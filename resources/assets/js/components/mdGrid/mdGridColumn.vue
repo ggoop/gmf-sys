@@ -1,12 +1,11 @@
 <template>
-  <!-- Never render the contents -->
-  <!-- The scoped slot won't have the required data -->
   <div v-if="false">
     <slot></slot>
   </div>
 </template>
 <script>
 export default {
+  name: 'MdGridColumn',
   props: {
     field: { required: false, type: String },
     label: { default: null, type: String },
@@ -34,4 +33,5 @@ export default {
     width: { default: '150px' },
   },
 };
+
 </script>

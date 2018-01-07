@@ -1,8 +1,8 @@
 <template>
   <div class="layout layout-full flex md-query">
-    <md-grid :title="gridTitle" ref="grid" :datas="fetchData" :multiple="multiple" showQuery showDownload @select="onSelected" @dblclick="dblclick" @onQuery="openQueryCase">
+    <md-grid :title="gridTitle" :autoLoad="!!mdQueryId" ref="grid" :datas="fetchData" :multiple="multiple" showQuery showDownload @select="onSelected" @dblclick="dblclick" @onQuery="openQueryCase">
     </md-grid>
-    <md-query-case :md-query-id="mdQueryId" ref="queryCase" @init="initQueryCase" @query="queryQueryCase">
+    <md-query-case :md-query-id="mdQueryId" :md-active.sync="showCase" @init="initQueryCase" @query="queryQueryCase">
     </md-query-case>
     <md-loading :loading="loading"></md-loading>
   </div>
@@ -40,12 +40,13 @@ export default {
       selectedRows: [],
       refInfo: {},
       loading: 0,
+      showCase:false,
       caseModel: {}
     };
   },
   methods: {
     openQueryCase() {
-      this.$refs.queryCase&&this.$refs.queryCase.open();
+      this.showCase=true;
     },
     initQueryCase(options, promise) {
       promise && promise.resolve(true);
@@ -70,7 +71,7 @@ export default {
     },
     pagination(page) {
       this.selectedRows = [];
-      this.$refs.grid&&this.$refs.grid.refresh();
+      this.$refs.grid && this.$refs.grid.refresh();
     },
     async fetchData({ pager, filter, sort }) {
       this.loading++;
@@ -85,7 +86,7 @@ export default {
       const response = await this.$http.post('sys/queries/query/' + this.mdQueryId, options);
 
       this.refInfo = response.data.schema;
-      this.$refs.grid&&this.$refs.grid.setColumns(this.refInfo.fields.map(col => this.formatFieldToColumn(col)));
+      this.$refs.grid && this.$refs.grid.setColumns(this.refInfo.fields.map(col => this.formatFieldToColumn(col)));
 
       this.loading--;
       return response;
@@ -95,13 +96,11 @@ export default {
     },
   },
   mounted() {
-    if (this.mdQueryId) {
-      this.pagination();
-    }
   },
 };
 
 </script>
 <style lang="scss">
 .md-query {}
+
 </style>

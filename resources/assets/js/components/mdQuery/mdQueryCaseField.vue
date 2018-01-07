@@ -1,6 +1,6 @@
 <template>
   <md-layout md-flex="100">
-    <md-grid :datas="mdItems" :row-focused="false"  ref="grid" :showRemove="true" :showReload="false" :showAdd="true" @onAdd="onItemAdd" @onRemove="onItemRemove" class="flex">>
+    <md-grid :datas="mdItems" :row-focused="false" :showRemove="true" :showReload="false" :showAdd="true" @onAdd="onItemAdd" @onRemove="onItemRemove" class="flex">>
       <md-grid-column field="id" label="id" :hidden="true"></md-grid-column>
       <md-grid-column field="comment" label="名称"></md-grid-column>
       <md-grid-column field="comment" label="显示名称"></md-grid-column>
@@ -15,25 +15,19 @@
         </template>
       </md-grid-column>
     </md-grid>
-    <md-dialog :md-active.sync="newItemDialogShow">
-      <md-toolbar>
-        <h1 class="md-title">选择更多内容</h1>
-      </md-toolbar>
-      <md-dialog-content class="no-padding layout-column flex">
-        <md-query-field ref="onNewItemTree" :md-entity-id="mdEntityId"></md-query-field>
-      </md-dialog-content>
-      <md-dialog-actions>
-        <span class="flex"></span>
-        <md-button class="md-accent md-raised" @click.native="onNewItemConfirm">确定</md-button>
-        <md-button class="md-warn" @click.native="onNewItemCancel">取消</md-button>
-      </md-dialog-actions>
-    </md-dialog>
+    <md-query-field :md-active.sync="newItemDialogShow" @confirm="onNewItemConfirm" :md-entity-id="mdEntityId"></md-query-field>
   </md-layout>
 </template>
 <script>
 import commonMixin from './common';
 export default {
+  name: 'mdQueryCaseField',
   mixins: [commonMixin],
+  watch: {
+    mdItems(v) {
+      const aaa = v;
+    },
+  },
   methods: {
     formatFieldToItem(field) {
       return {
@@ -46,8 +40,11 @@ export default {
     },
   },
   created() {
+    const aa = this.mdItems;
+  },
+  mounted() {
 
   },
-  mounted() {},
 };
+
 </script>

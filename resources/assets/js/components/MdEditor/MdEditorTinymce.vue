@@ -57,11 +57,11 @@ import 'tinymce/plugins/wordcount';
 import MdUuid from 'core/utils/MdUuid';
 import setting from './TinymceSetting';
 export default {
-  name: 'mdEditorTinymce',
+  name: 'MdEditorTinymce',
   props: {
     id: {
       type: String,
-      default: () => 'md-input-' + MdUuid()
+      default: () => 'md-input-tinymce' + MdUuid()
     },
     value: { default: '' },
     mdMode: {
@@ -83,7 +83,7 @@ export default {
   },
   mounted() {
     this.content = this.value;
-    this.init();
+    this.initEdit();
   },
   beforeDestroy() {
     this.editor && this.editor.destroy();
@@ -100,11 +100,14 @@ export default {
     }
   },
   methods: {
-    init() {
+    initEdit() {
       let options = {
         selector: '#' + this.id,
         init_instance_callback: (editor) => {
           this.editor = editor;
+          if(!editor){
+            this.$toast('编辑器初始化失败');
+          }
           editor.on('KeyUp', (e) => {
             this.submitNewContent();
           });

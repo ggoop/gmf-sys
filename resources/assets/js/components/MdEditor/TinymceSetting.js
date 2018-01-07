@@ -43,6 +43,6 @@ const simple = _.assignIn({},base, {
     "visualchars charmap media code hr tabfocus",
     "image noneditable table",
   ],
-  toolbar1: "formatselect | styleselect | bold italic forecolor backcolor | alignleft aligncenter alignright | numlist bullist outdent indent blockquote| removeformat | template link image",
+  toolbar1: "formatselect styleselect bold italic forecolor backcolor numlist bullist blockquote template link image | removeformat",
 });
 export default { full, simple };

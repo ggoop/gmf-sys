@@ -11,12 +11,10 @@ import 'quill/dist/quill.snow.css'
 import uniqueId from 'core/utils/uniqueId';
 var defaultToolbar = [
   [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-  [{ 'size': ['small', false, 'large', 'huge'] }],
-  ['bold', 'italic', 'underline', 'strike'],
-  [{ 'color': [] }, { 'background': [] }],
-  [{ 'script': 'sub' }, { 'script': 'super' }, 'blockquote', 'code-block'],
-  [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }, { 'align': [] }],
-  ['link', 'image', 'video', 'formula'],
+  ['bold', 'italic'],
+  ['blockquote', 'code-block'],
+  [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'align': [] }],
+  ['link', 'image', 'formula'],
   ['clean']
 ];
 
@@ -32,7 +30,7 @@ export default {
       type: Boolean,
       default: false
     },
-    height:Number
+    height: Number
   },
 
   data() {
@@ -81,13 +79,14 @@ export default {
 
     setEditorElement() {
       this.editor = document.querySelector(`#${this.inputId} .ql-editor`);
-      if(this.height&&this.height>10){
-        this.editor.style.minHeight=this.height+'px';
+      if (this.height && this.height > 10 && this.editor) {
+        this.editor.style.minHeight = this.height + 'px';
       }
     },
 
     checkForInitialContent() {
-      this.editor.innerHTML = this.value || ''
+      if (this.editor)
+        this.editor.innerHTML = this.value || '';
     },
 
     checkForCustomImageHandler() {
@@ -118,11 +117,12 @@ export default {
     }
   }
 }
+
 </script>
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
- .md-editor-wrapper {
-    margin:0px;
-  }
-  
+@import "~components/MdAnimation/variables";
+.md-editor-wrapper {
+  margin: 0px;
+}
+
 </style>

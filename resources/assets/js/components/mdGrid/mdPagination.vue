@@ -17,6 +17,7 @@
 </template>
 <script>
 export default {
+  name: 'MdPagination',
   props: {
     pager: Object,
     options: {

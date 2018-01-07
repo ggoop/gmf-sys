@@ -1,55 +1,52 @@
 <template>
-  <div class="md-query-case">
-    <slot></slot>
-    <md-dialog :md-active.sync="showDialog" :md-click-outside-to-close="false" @md-opened="onOpen" @md-closed="onClose" class="md-query-case-dialog">
-      <md-button class="md-icon-button md-dialog-button-close" @click.native="cancel()">
-        <md-icon>close</md-icon>
-      </md-button>
-      <md-dialog-content class="no-padding layout-column">
-        <md-tabs class="md-primary layout-column layout-fill flex" :md-swipeable="true" md-right :md-dynamic-height="false">
-          <md-tab md-label="条件" md-icon="filter_list" v-if="mdShowWhere">
-            <md-layout md-gutter class="layout-fill">
-              <md-query-case-where :md-entity-id="options.entity_id" :md-items="options.wheres"></md-query-case-where>
-            </md-layout>
-          </md-tab>
-          <md-tab md-label="栏目" md-icon="more_horiz" v-if="mdShowField">
-            <md-layout md-gutter class="layout-fill">
-              <md-query-case-field :md-entity-id="options.entity_id" :md-items="options.fields"></md-query-case-field>
-            </md-layout>
-          </md-tab>
-          <md-tab md-label="排序" md-icon="sort" v-if="mdShowOrder">
-            <md-layout md-gutter class="layout-fill">
-              <md-query-case-order :md-entity-id="options.entity_id" :md-items="options.orders"></md-query-case-order>
-            </md-layout>
-          </md-tab>
-          <md-tab md-label="设置" md-icon="build">
-            <md-layout md-gutter class="layout-fill">
-            </md-layout>
-          </md-tab>
-        </md-tabs>
-      </md-dialog-content>
-      <md-dialog-actions>
-        <div class="layout layour-row">
-          <md-field class="layout-align-center-center query-cases">
-            <md-select v-model="options.case_id">
-              <md-option value="0">新方案</md-option>
-              <md-option value="-1">不使用方案</md-option>
-              <md-option :value="item.id" v-for="item in cases" :key="item.id">{{ item.name }}</md-option>
-            </md-select>
-          </md-field>
-          <md-button v-if="options.case_id!='-1'" class="md-icon-button md-warn" @click.native="onSaveCase">
-            <md-icon>save</md-icon>
-          </md-button>
-        </div>
-        <span class="flex"></span>
-        <md-button class="md-accent md-raised" @click.native="query">确定</md-button>
-        <md-button class="md-warn" @click.native="cancel">取消</md-button>
-      </md-dialog-actions>
-      <md-loading :loading="loading"></md-loading>
-      <md-dialog-prompt :md-active.sync="diaNewCaseNameShow" md-title="输入方案名称" md-confirm-text="确认" md-cancel-text="取消" @md-confirm="onNewCaseSave" v-model="options.case_name">
-      </md-dialog-prompt>
-    </md-dialog>
-  </div>
+  <md-dialog :md-active.sync="mdActive" :md-click-outside-to-close="false" @md-opened="onOpen" @md-closed="closeDialog" class="md-query-case-dialog">
+    <md-button class="md-icon-button md-dialog-button-close" @click.native="closeDialog()">
+      <md-icon>close</md-icon>
+    </md-button>
+    <md-dialog-content class="no-padding layout-column">
+      <md-tabs class="md-primary layout-column layout-fill flex" :md-swipeable="true" md-right :md-dynamic-height="false">
+        <md-tab md-label="条件" md-icon="filter_list" v-if="mdShowWhere">
+          <md-layout md-gutter class="layout-fill">
+            <md-query-case-where :md-entity-id="options.entity_id" :md-items="options.wheres"></md-query-case-where>
+          </md-layout>
+        </md-tab>
+        <md-tab md-label="栏目" md-icon="more_horiz" v-if="mdShowField">
+          <md-layout md-gutter class="layout-fill">
+            <md-query-case-field :md-entity-id="options.entity_id" :md-items="options.fields"></md-query-case-field>
+          </md-layout>
+        </md-tab>
+        <md-tab md-label="排序" md-icon="sort" v-if="mdShowOrder">
+          <md-layout md-gutter class="layout-fill">
+            <md-query-case-order :md-entity-id="options.entity_id" :md-items="options.orders"></md-query-case-order>
+          </md-layout>
+        </md-tab>
+        <md-tab md-label="设置" md-icon="build">
+          <md-layout md-gutter class="layout-fill">
+          </md-layout>
+        </md-tab>
+      </md-tabs>
+    </md-dialog-content>
+    <md-dialog-actions>
+      <div class="layout layour-row">
+        <md-field class="layout-align-center-center query-cases">
+          <md-select v-model="options.case_id">
+            <md-option value="0">新方案</md-option>
+            <md-option value="-1">不使用方案</md-option>
+            <md-option :value="item.id" v-for="item in cases" :key="item.id">{{ item.name }}</md-option>
+          </md-select>
+        </md-field>
+        <md-button v-if="options.case_id!='-1'" class="md-icon-button md-warn" @click.native="onSaveCase">
+          <md-icon>save</md-icon>
+        </md-button>
+      </div>
+      <span class="flex"></span>
+      <md-button class="md-accent md-raised" @click.native="query">确定</md-button>
+      <md-button class="md-warn" @click.native="closeDialog">取消</md-button>
+    </md-dialog-actions>
+    <md-loading :loading="loading"></md-loading>
+    <md-dialog-prompt :md-active.sync="diaNewCaseNameShow" md-title="输入方案名称" md-confirm-text="确认" md-cancel-text="取消" @md-confirm="onNewCaseSave" v-model="options.case_name">
+    </md-dialog-prompt>
+  </md-dialog>
 </template>
 <style scoped>
 .query-cases {
@@ -76,13 +73,13 @@ export default {
       type: Boolean,
       default: true
     },
+    mdActive: Boolean
   },
 
   data() {
     return {
       inited: false,
       loading: 0,
-      showDialog: false,
       diaNewCaseNameShow: false,
       options: {
         case_id: '0',
@@ -96,16 +93,6 @@ export default {
       },
       cases: []
     }
-  },
-  watch: {
-    'options.case_id' (val) {
-      if (val && val && val.length > 2) {
-        this.fetchCase();
-      }
-    },
-  },
-  computed: {
-
   },
   methods: {
     async init() {
@@ -190,22 +177,14 @@ export default {
     query() {
       var caseModel = this.getQueryCase();
       this.$emit('query', caseModel);
-      this.showDialog = false;
+      this.closeDialog();
     },
-    async open() {
+    async onOpen() {
       await this.init();
       await this.fetchCases();
-      this.showDialog = true;
     },
-    cancel() {
-      this.$emit('cancel', this.options);
-      this.showDialog = false;
-    },
-    onOpen() {
-      this.$emit('open', this.options);
-    },
-    onClose() {
-      this.$emit('close', this.options);
+    closeDialog () {
+      this.$emit('update:mdActive', false);
     },
     getQueryCase() {
       var qc = {
@@ -301,20 +280,11 @@ export default {
       return value;
     },
   },
-  created() {
-
-  },
-  mounted() {},
 };
 
 </script>
 <style lang="scss">
 @import "~gmf/components/MdLayout/mixins";
-.md-query-case {
-  >.md-button {
-    color: #34957a;
-  }
-}
 
 .md-query-case-dialog {
   min-height: 70%;

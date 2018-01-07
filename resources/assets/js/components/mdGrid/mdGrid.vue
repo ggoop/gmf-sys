@@ -29,6 +29,7 @@ import { classList } from './helpers';
 import mdGridCell from './mdGridCell';
 
 export default {
+  name:'MdGrid',
   components: {
     mdGridHead,
     mdGridBody,
@@ -41,7 +42,7 @@ export default {
     datas: { default: () => [], type: [Array, Function] },
     readonly: { default: false, type: Boolean },
     autoSelect: { default: false, type: Boolean },
-    autoLoad: { default: false, type: Boolean },
+    autoLoad: { default: true, type: Boolean },
     multiple: { default: true, type: Boolean },
     showFilter: { default: false, type: Boolean },
     showSum: { default: false, type: Boolean },
@@ -471,8 +472,8 @@ export default {
     });
   },
 };
-</script>
 
+</script>
 <style lang="scss">
 @import "~components/MdAnimation/variables";
 .md-grid {
@@ -505,9 +506,9 @@ export default {
         height: 100%;
         min-height: auto;
         margin: 0px;
-        width:30px;
+        width: 30px;
         min-width: auto;
-        height:30px;
+        height: 30px;
       }
     }
   }
@@ -572,10 +573,10 @@ export default {
     border-bottom: 2px solid rgba(15, 157, 88, 1);
     position: relative;
     .md-grid-cell-container {
-      padding-right:7px;
-      padding-left:8px;
-      padding-top:8px;
-      padding-bottom:7px;
+      padding-right: 7px;
+      padding-left: 8px;
+      padding-top: 8px;
+      padding-bottom: 7px;
     }
     td,
     th {
@@ -589,7 +590,7 @@ export default {
         text-decoration: underline;
         &:after {
           position: absolute;
-          left:1px;
+          left: 1px;
           display: flex;
           align-items: center;
           align-content: center;
@@ -648,10 +649,10 @@ export default {
         }
       }
       &:nth-child(even) {
-        background-color:#c8e6c9;
+        background-color: #c8e6c9;
       }
       &.selected {
-        background-color:#66bb6a;
+        background-color: #66bb6a;
       }
     }
     tr:hover>:first-child:before,
@@ -659,7 +660,7 @@ export default {
       content: " ";
       position: absolute;
       left: 0;
-      background:rgba(15, 157, 88, 0.8);
+      background: rgba(15, 157, 88, 0.8);
       width: 3px;
       height: 100%;
       top: 0;
@@ -693,13 +694,13 @@ export default {
     overflow: hidden;
     background-color: #fafafa;
     border-top: 1px solid #dfdfdf;
-    min-height:40px;
+    min-height: 40px;
     position: relative;
   }
   .md-grid-actions {
     background-color: #fafafa;
     border-top: 1px solid #dfdfdf;
-    min-height:40px;
+    min-height: 40px;
     color: #666;
     >div>.md-icon-button {
       margin: 0px;
@@ -710,4 +711,5 @@ export default {
     }
   }
 }
+
 </style>

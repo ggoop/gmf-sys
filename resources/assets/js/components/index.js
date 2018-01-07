@@ -40,16 +40,19 @@ import MdTooltip from './MdTooltip'
 //news
 import MdOnboarding from './MdOnboarding'
 import MdPart from './MdPart'
-import MdQuery from './MdQuery'
-import MdRef from './MdRef'
+
 import MdToast from './MdToast'
 import MdTree from './MdTree'
 import MdWrap from './MdWrap'
 import MdLoading from './MdLoading'
-import MdGrid from './MdGrid'
-import MdEnum from './MdEnum'
-import MdEditor from './MdEditor'
-import MdChart from './MdChart'
+
+// import MdGrid from './MdGrid'
+// import MdQuery from './MdQuery'
+// import MdRef from './MdRef'
+// import MdEnum from './MdEnum'
+// import MdEditor from './MdEditor'
+// import MdChart from './MdChart'
+
 import MdBackground from './MdBackground'
 import MdFetch from './MdFetch'
 
@@ -96,16 +99,17 @@ export {
   //news
   MdOnboarding,
   MdPart,
-  MdQuery,
-  MdRef,
+  
   MdToast,
   MdTree,
   MdWrap,
   MdLoading,
-  MdGrid,
-  MdEnum,
-  MdEditor,
-  MdChart,
+  // MdGrid,
+  // MdQuery,
+  // MdRef,
+  // MdEnum,
+  // MdEditor,
+  // MdChart,
   MdBackground,
   MdFetch,
 }
