@@ -45,13 +45,14 @@ import MdToast from './MdToast'
 import MdTree from './MdTree'
 import MdWrap from './MdWrap'
 import MdLoading from './MdLoading'
+import MdEditor from './MdEditor'
 
-// import MdGrid from './MdGrid'
-// import MdQuery from './MdQuery'
-// import MdRef from './MdRef'
-// import MdEnum from './MdEnum'
-// import MdEditor from './MdEditor'
-// import MdChart from './MdChart'
+import MdGrid from './MdGrid'
+import MdQuery from './MdQuery'
+import MdRef from './MdRef'
+import MdEnum from './MdEnum'
+
+import MdChart from './MdChart'
 
 import MdBackground from './MdBackground'
 import MdFetch from './MdFetch'
@@ -104,12 +105,12 @@ export {
   MdTree,
   MdWrap,
   MdLoading,
-  // MdGrid,
-  // MdQuery,
-  // MdRef,
-  // MdEnum,
-  // MdEditor,
-  // MdChart,
+  MdGrid,
+  MdQuery,
+  MdRef,
+  MdEnum,
+  MdEditor,
+  MdChart,
   MdBackground,
   MdFetch,
 }

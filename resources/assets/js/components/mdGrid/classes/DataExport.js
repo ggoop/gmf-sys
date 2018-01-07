@@ -1,7 +1,7 @@
-import XLSX from 'xlsx';
 import Row from './Row';
 
 import saveAs from './FileSaver';
+import LoadScript from 'gmf/core/utils/LoadScript';
 export default class DataExport {
   constructor(datas, columns) {
     if (datas && datas.length)
@@ -11,19 +11,22 @@ export default class DataExport {
     this.columns = columns;
   }
   toExcel(title) {
-    title = title || 'Sheet1';
-    var wb = {
-      SheetNames: [],
-      Sheets: {},
-      Props: {}
-    };
-    var ws = this.sheet_from_array_of_arrays(this.rows, this.columns);
+    LoadScript('/assets/vendor/gmf-sys/xlsx/xlsx.full.min.js').then(() => {
+      title = title || 'Sheet1';
+      var wb = {
+        SheetNames: [],
+        Sheets: {},
+        Props: {}
+      };
+      var ws = this.sheet_from_array_of_arrays(this.rows, this.columns);
 
-    /* add worksheet to workbook */
-    wb.SheetNames.push(title);
-    wb.Sheets[title] = ws;
-    var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'binary' });
-    saveAs(new Blob([this.s2ab(wbout)], { type: "application/octet-stream" }), title + ".xlsx")
+      /* add worksheet to workbook */
+      wb.SheetNames.push(title);
+      wb.Sheets[title] = ws;
+      var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'binary' });
+      saveAs(new Blob([this.s2ab(wbout)], { type: "application/octet-stream" }), title + ".xlsx")
+    })
+
   }
   s2ab(s) {
     var buf = new ArrayBuffer(s.length);
@@ -44,7 +47,7 @@ export default class DataExport {
 
         var cell = { v: column.label || column.field, t: 's' };
         if (cell.v == null) return;
-        cell.s = { fill: { bgColor: '#ff89dd'} };
+        cell.s = { fill: { bgColor: '#ff89dd' } };
         var cell_ref = XLSX.utils.encode_cell({ c: C, r: HR });
         ws[cell_ref] = cell;
       });

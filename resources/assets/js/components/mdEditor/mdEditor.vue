@@ -1,128 +1,131 @@
 <template>
-  <div class="md-editor-wrapper layout layout-column layout-fill">
-    <div ref="quillContainer" :id="inputId"></div>
-    <input v-if="useCustomImageHandler" @change="emitImageInfo($event)" ref="fileInput" id="file-upload" type="file" style="display:none;">
+  <div class="md-editor">
+    <textarea :id="id">{{ content }}</textarea>
   </div>
 </template>
 <script>
-import Quill from 'quill'
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import uniqueId from 'core/utils/uniqueId';
-var defaultToolbar = [
-  [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-  ['bold', 'italic'],
-  ['blockquote', 'code-block'],
-  [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'align': [] }],
-  ['link', 'image', 'formula'],
-  ['clean']
-];
+import MdUuid from 'core/utils/MdUuid';
+import setting from './setting';
 
+import LoadScript from 'gmf/core/utils/LoadScript';
 export default {
   name: 'MdEditor',
   props: {
-    value: String,
-    mdInputId: String,
-    placeholder: String,
-    disabled: Boolean,
-    editorToolbar: Array,
-    useCustomImageHandler: {
-      type: Boolean,
-      default: false
+    id: {
+      type: String,
+      default: () => 'md-editor-input-' + MdUuid()
     },
-    height: Number
+    value: { default: '' },
+    mdMode: {
+      type: String,
+      //simple,full
+      default: 'simple'
+    },
+    placeholder: String,
+    mdOptions: Object
   },
-
   data() {
     return {
-      inputId: this.mdInputId || 'quill-' + uniqueId(),
-      quill: null,
+      content: '',
       editor: null,
-      toolbar: this.editorToolbar ? this.editorToolbar : defaultToolbar,
-    }
+      cTinyMce: null,
+      checkerTimeout: null,
+      isTyping: false
+    };
   },
-
+  created() {
+    this.content = this.value;
+    LoadScript('/assets/vendor/gmf-sys/tinymce/tinymce.js').then((s) => {
+      this.initEdit();
+    }).catch(e => {
+      this.$toast('tinymce加载失败!');
+    });
+  },
   mounted() {
-    this.initializeEditor()
-    this.handleUpdatedEditor()
+    
   },
-
+  beforeDestroy() {
+    this.editor && this.editor.destroy();
+    this.editor && this.editor.remove();
+  },
   watch: {
-    value(val) {
-      if (val != this.editor.innerHTML && !this.quill.hasFocus()) {
-        this.editor.innerHTML = val
+    value: function(newValue) {
+      if (!this.isTyping) {
+        if (this.editor !== null)
+          this.editor.setContent(newValue);
+        else
+          this.content = newValue;
       }
-    },
-    disabled(status) {
-      this.quill.enable(!status);
     }
   },
-
   methods: {
-    initializeEditor() {
-      this.setQuillElement()
-      this.setEditorElement()
-      this.checkForInitialContent()
-    },
-
-    setQuillElement() {
-      this.quill = new Quill(this.$refs.quillContainer, {
-        modules: {
-          toolbar: this.toolbar
+    initEdit() {
+      let options = {
+        selector: '#' + this.id,
+        init_instance_callback: (editor) => {
+          this.editor = editor;
+          if (!editor) {
+            this.$toast('编辑器初始化失败');
+          }
+          editor.on('KeyUp', (e) => {
+            this.submitNewContent();
+          });
+          editor.on('input change undo redo execCommand', (e) => {
+            if (this.editor.getContent() !== this.value) {
+              this.submitNewContent();
+            }
+          });
+          editor.on('init', (e) => {
+            editor.setContent(this.content);
+            this.$emit('input', this.content);
+          });
+          editor.iframeElement.contentDocument &&
+            editor.iframeElement.contentDocument.firstElementChild &&
+            editor.iframeElement.contentDocument.firstElementChild.classList.add("md-theme-default");
         },
-        placeholder: this.placeholder ? this.placeholder : '',
-        theme: 'snow',
-        readOnly: this.disabled ? this.disabled : false,
-      })
-      this.checkForCustomImageHandler()
+        images_upload_handler: (blobInfo, success, failure) => {
+          this.images_upload_handler(blobInfo, success, failure);
+        }
+      };
+      tinymce && tinymce.init(this._.assignIn(setting[this.mdMode], options, this.mdOptions));
     },
-
-    setEditorElement() {
-      this.editor = document.querySelector(`#${this.inputId} .ql-editor`);
-      if (this.height && this.height > 10 && this.editor) {
-        this.editor.style.minHeight = this.height + 'px';
-      }
+    submitNewContent() {
+      this.isTyping = true;
+      if (this.checkerTimeout !== null)
+        clearTimeout(this.checkerTimeout);
+      this.checkerTimeout = setTimeout(() => {
+        this.isTyping = false;
+      }, 300);
+      this.$emit('input', this.editor.getContent());
     },
+    images_upload_handler(blobInfo, success, failure) {
+      const formData = new FormData();
+      formData.append('files', blobInfo.blob(), blobInfo.filename());
+      let config = {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      };
+      this.$http.post('sys/files', formData, config).then(response => {
+        if (response.data.data) {
+          response.data.data.forEach(item => {
+            success(item.url);
+          });
+        } else {
+          success();
+        }
 
-    checkForInitialContent() {
-      if (this.editor)
-        this.editor.innerHTML = this.value || '';
+      }).catch(err => {
+        this.$toast(err);
+        failure('update image Error  ! ');
+      });
     },
-
-    checkForCustomImageHandler() {
-      this.useCustomImageHandler === true ? this.setupCustomImageHandler() : ''
-    },
-
-    setupCustomImageHandler() {
-      let toolbar = this.quill.getModule('toolbar');
-      toolbar.addHandler('image', this.customImageHandler);
-    },
-
-    handleUpdatedEditor() {
-      this.quill.on('text-change', () => {
-        this.$emit('input', this.editor.innerHTML)
-      })
-    },
-
-    customImageHandler(image, callback) {
-      this.$refs.fileInput.click();
-    },
-
-    emitImageInfo($event) {
-      let file = $event.target.files[0]
-      let Editor = this.quill
-      let range = Editor.getSelection();
-      let cursorLocation = range.index
-      this.$emit('imageAdded', file, Editor, cursorLocation)
-    }
   }
 }
 
 </script>
 <style lang="scss">
-@import "~components/MdAnimation/variables";
-.md-editor-wrapper {
-  margin: 0px;
+.md-editor {
+  min-width: 100%;
+  max-width: 100%;
 }
 
 </style>
