@@ -1,10 +1,10 @@
 <?php
 namespace Gmf\Sys\Http\Middleware;
 
-use Auth;
 use Carbon\Carbon;
 use Closure;
 use Exception;
+use GAuth;
 use Gmf\Sys\Models\Visitor;
 use Log;
 
@@ -21,7 +21,7 @@ class VisitorMiddleware {
 		$inData['url'] = $request->url();
 		$inData['method'] = $request->method();
 
-		$inData['user_id'] = Auth::id();
+		$inData['user_id'] = GAuth::id();
 
 		if ($request->hasHeader('Ent')) {
 			$inData['ent_id'] = $request->header('Ent');
