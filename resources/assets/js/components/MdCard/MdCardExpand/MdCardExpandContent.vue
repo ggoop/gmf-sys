@@ -25,8 +25,10 @@
     watch: {
       expand (expand) {
         if (!expand) {
+          this.$emit('md-closed');
           this.marginTop = this.$el.children[0].offsetHeight
         } else {
+          this.$emit('md-opened');
           this.marginTop = 0
         }
       }

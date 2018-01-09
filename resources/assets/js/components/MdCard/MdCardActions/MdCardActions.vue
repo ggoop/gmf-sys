@@ -22,8 +22,10 @@
 </script>
 
 <style lang="scss">
+@import "~components/MdAnimation/variables";
+@import "~components/MdLayout/mixins";
   .md-card-actions {
-    padding: 8px;
+    padding: 8px 16px;
     display: flex;
     align-items: center;
 
@@ -53,6 +55,10 @@
       + .md-button {
         margin-left: 4px;
       }
+    }
+    @include md-layout-small {
+      padding-left: 8px;
+      padding-right: 8px;
     }
   }
 </style>
