@@ -14,12 +14,12 @@ export default {
     value: {
       type: null
     },
-    mdIcon:{
-      type:String,
-      default:'filter_list'
+    mdIcon: {
+      type: String,
+      default: 'filter_list'
     },
     mdMaxlength: [String, Number],
-    mdTooltip:String,
+    mdTooltip: String,
     mdPlaceholder: {
       type: [String, Number],
       default: '搜索...'
@@ -32,11 +32,13 @@ export default {
       default: 1E2
     },
   },
-  data: () => ({
-    searchTerm: null,
-    timeout: 0,
-    loading: false
-  }),
+  data() {
+    return {
+      searchTerm: this.value,
+      timeout: 0,
+      loading: false
+    }
+  },
   computed: {
     isBoxLayout() {
       return true
@@ -47,7 +49,11 @@ export default {
       }
     },
   },
-  watch: {},
+  watch: {
+    value(val) {
+      this.searchTerm = val
+    }
+  },
   methods: {
     onInput() {
       this.debounceUpdate();

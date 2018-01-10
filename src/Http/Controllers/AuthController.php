@@ -133,4 +133,20 @@ class AuthController extends Controller {
 			$b->token($token);
 		});
 	}
+
+	public function verifyMail(Request $request) {
+		$input = array_only($request->all(), ['token', 'account', 'id']);
+
+		Validator::make($input, [
+			'id' => 'required',
+			'token' => 'required',
+			'account' => 'required',
+		])->validate();
+
+		$user = app('Gmf\Sys\Bp\UserAuth')->checker($this, $request->only('account', 'id'));
+		if (!$user || $input['account'] != $user->account || $input['id'] != $user->id) {
+			throw new \Exception("非法用户...");
+		}
+		$this->toJson(app('Gmf\Sys\Bp\UserAuth')->verifyMail($this, $user, $input['token']));
+	}
 }

@@ -3,6 +3,7 @@
 namespace Gmf\Sys\Bp;
 use Auth;
 use Carbon\Carbon;
+use DB;
 use Gmf\Sys\Builder;
 use Gmf\Sys\Http\Controllers\Controller as BPListener;
 use Gmf\Sys\Models;
@@ -174,6 +175,25 @@ class UserAuth {
 		}
 		if ($t < Carbon::now()) {
 			throw new \Exception("验证码已过期");
+		}
+		return true;
+	}
+	public function verifyMail(BPListener $observer, $user, $token) {
+		try {
+			DB::beginTransaction();
+			$input = ['token' => $token, 'account' => $user->account, 'id' => $user->id, 'type' => 'verify-mail'];
+			$this->checkVCode($observer, $input);
+
+			Models\UserInfo::create(['user_id', 'type' => 'verify-mail', 'content' => json_encode(['email' => $user->email, 'token' => $token])]);
+			$user->email_verified = true;
+			Models\User::where('id', $user->id)->update(['email_verified' => 1]);
+
+			$this->deleteVCode($observer, $input);
+
+			DB::commit();
+		} catch (Exception $e) {
+			DB::rollBack();
+			throw $e;
 		}
 		return true;
 	}

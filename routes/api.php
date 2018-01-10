@@ -9,10 +9,12 @@ Route::prefix('api/sys/auth')->middleware(['web'])->namespace($ns)->group(functi
 	Route::post('login', 'AuthController@login');
 	Route::post('vcode-checker', 'AuthController@checkVCode');
 	Route::post('vcode-create', 'AuthController@createVCode');
+
 	Route::post('reset', 'AuthController@resetPassword');
 });
 Route::prefix('api/sys/auth')->middleware(['web', 'auth'])->namespace($ns)->group(function () {
 	Route::post('/entry-ent/{id}', 'AuthController@entryEnt');
+	Route::post('verify-mail', 'AuthController@verifyMail');
 	Route::any('logout', 'AuthController@logout');
 });
 Route::prefix('api/sys')->middleware(['api'])->namespace($ns)->group(function () {

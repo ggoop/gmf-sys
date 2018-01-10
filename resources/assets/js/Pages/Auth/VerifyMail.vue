@@ -112,10 +112,10 @@ export default {
     },
     submitPost() {
       this.sending = true;
-      const options = { id: this.mainDatas.id,account:this.mainDatas.account, type: 'verify-mail', token: this.mainDatas.token };
-      this.$http.post('sys/auth/vcode-checker', options).then(response => {
+      const options = { id: this.mainDatas.id,account:this.mainDatas.account, token: this.mainDatas.token };
+      this.$http.post('sys/auth/verify-mail', options).then(response => {
         this.sending = false;
-        this.$go({name:'auth.reset',params:{id:this.mainDatas.id,token:this.mainDatas.token}});
+        this.$go(this.$root.configs.home);
       }).catch(err => {
         this.sending = false;
         this.$toast(err);
