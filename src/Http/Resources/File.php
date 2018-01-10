@@ -28,6 +28,7 @@ class File extends Resource {
 		}
 		if ($this->isImage()) {
 			$rtn['image_url'] = $this->getImagePathURL($request);
+			$rtn['url'] = $this->getImagePathURL($request);
 			$rtn['can_image'] = true;
 		} else if ($this->isPdf()) {
 			$rtn['pdf_url'] = $this->getPdfPathURL($request);
@@ -47,12 +48,12 @@ class File extends Resource {
 			$disk = 'public';
 		}
 		if ($disk && $path && Storage::disk($disk)->exists($path)) {
-			$url = Storage::disk($disk)->path($path);
+			$url = Storage::disk($disk)->url($path);
 		}
 		if (!$url && file_exists(public_path() . $path)) {
 			$url = $path;
 		}
-		if ($url) {
+		if ($url && !starts_with(strtolower($url), 'http')) {
 			return config('app.url') . $url;
 		}
 		return $url;
