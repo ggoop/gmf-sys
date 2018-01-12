@@ -5,7 +5,7 @@ use Gmf\Sys\Models\Authority\Role;
 use Illuminate\Database\Seeder;
 
 class SysRolePreSeeder extends Seeder {
-	private $role = 'suite.role.sys.super';
+	private $role = 'gmf.role.sys.super';
 	public $entId = '';
 	/**
 	 * Run the migrations.

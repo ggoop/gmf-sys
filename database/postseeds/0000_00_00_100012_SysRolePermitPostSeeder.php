@@ -7,7 +7,7 @@ use Gmf\Sys\Models\Menu;
 use Illuminate\Database\Seeder;
 
 class SysRolePermitPostSeeder extends Seeder {
-	private $role = 'suite.role.sys.super';
+	private $role = 'gmf.role.sys.super';
 	public $entId = '';
 	/**
 	 * Run the migrations.
