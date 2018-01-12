@@ -2,6 +2,7 @@
 
 namespace Gmf\Sys\GAuth;
 use Auth;
+use DB;
 use Illuminate\Auth\AuthenticationException;
 
 class GAuthGuard {
@@ -30,6 +31,56 @@ class GAuthGuard {
 		if (!$this->id()) {
 			throw new AuthenticationException();
 		}
+	}
+	public function checkRole($roles) {
+		if (!$this->hasRole($roles)) {
+			throw new \Exception('没有角色!');
+		}
+	}
+	public function hasRole($roles) {
+		if ($this->id()) {
+			if (is_string($roles)) {
+				$roles = explode(',', $roles);
+			}
+			if (DB::table('gmf_sys_authority_role_users as ru')
+				->join('gmf_sys_authority_roles as r', 'ru.role_id', '=', 'r.id')
+				->select('r.id')
+				->where('ru.user_id', $this->id())
+				->whereIn('r.code', $roles)
+				->where('ru.is_revoked', '0')
+				->where('r.is_revoked', '0')
+				->first()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	public function checkPermit($permits) {
+		if (!$this->canPermit($permits)) {
+			throw new \Exception('没有权限!');
+		}
+	}
+	public function canPermit($permits) {
+		if ($this->id()) {
+			if (is_string($permits)) {
+				$permits = explode(',', $permits);
+			}
+			if (DB::table('gmf_sys_authority_role_users as ru')
+				->join('gmf_sys_authority_roles as r', 'ru.role_id', '=', 'r.id')
+				->join('gmf_sys_authority_role_permits as rp', 'rp.role_id', '=', 'r.id')
+				->join('gmf_sys_authority_permits as p', 'rp.permit_id', '=', 'p.id')
+				->select('p.id')
+				->where('ru.user_id', $this->id())
+				->whereIn('p.code', $permits)
+				->where('ru.is_revoked', '0')
+				->where('rp.is_revoked', '0')
+				->where('p.is_revoked', '0')
+				->where('r.is_revoked', '0')
+				->first()) {
+				return true;
+			}
+		}
+		return false;
 	}
 	public function ent() {
 		return $this->m_ent;
