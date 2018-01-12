@@ -23,7 +23,7 @@
         }
       }
 
-      .md-toolbar & {
+      .md-toolbar:not(.md-transparent) & {
         @include md-theme-property(background-color, background, "", .12);
 
         label,

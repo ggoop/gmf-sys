@@ -35,7 +35,11 @@ class User extends Resource {
 			if (!empty($this->account)) {
 				$rtn['account'] = $this->hideAccount($this->account);
 			}
-
+		}
+		if (!empty($this->email_verified) || !empty($this->mobile_verified)) {
+			$rtn['verified'] = true;
+		} else {
+			$rtn['verified'] = false;
 		}
 		if (!empty($this->pivot)) {
 			$rtn['created_at'] = $this->pivot->created_at . '';
