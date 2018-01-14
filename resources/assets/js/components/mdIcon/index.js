@@ -13,6 +13,9 @@ import MdIconUser from './parts/MdIconUser'
 import MdIconSave from './parts/MdIconSave'
 import MdIconSetting from './parts/MdIconSetting'
 import MdIconBack from './parts/MdIconBack'
+import MdIconMore from './parts/MdIconMore'
+import MdIconDelete from './parts/MdIconDelete'
+
 export default Vue => {
   material(Vue)
   Vue.component(MdIcon.name, MdIcon);
@@ -29,4 +32,6 @@ export default Vue => {
   Vue.component(MdIconSave.name, MdIconSave)
   Vue.component(MdIconSetting.name, MdIconSetting)
   Vue.component(MdIconBack.name, MdIconBack)
+  Vue.component(MdIconMore.name, MdIconMore)
+  Vue.component(MdIconDelete.name, MdIconDelete)
 }

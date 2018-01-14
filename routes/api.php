@@ -21,7 +21,8 @@ Route::prefix('api/sys')->middleware(['api'])->namespace($ns)->group(function ()
 	Route::get('editor/templates', 'EditorController@templates');
 });
 Route::prefix('api/sys')->middleware(['api'])->namespace($ns)->group(function () {
-	Route::get('uid', 'DataController@issueUid');
+	Route::get('datas/uid', 'DataController@issueUid');
+	Route::get('datas/sn', 'DataController@issueSn');
 	Route::resource('datas', 'DataController', ['only' => ['index', 'show']]);
 	Route::resource('components', 'ComponentController', ['only' => ['index', 'show']]);
 	Route::resource('images', 'ImageController', ['only' => ['show']]);

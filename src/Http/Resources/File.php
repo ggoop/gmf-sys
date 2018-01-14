@@ -1,10 +1,17 @@
 <?php
 namespace Gmf\Sys\Http\Resources;
-
+use Closure;
+use Gmf\Sys\Builder;
 use Illuminate\Http\Resources\Json\Resource;
 use Storage;
 
 class File extends Resource {
+	private $callback;
+
+	public function withCallback(Closure $callback = null) {
+		$this->callback = $callback;
+		return $this;
+	}
 	/**
 	 * Transform the resource into an array.
 	 *
@@ -15,7 +22,7 @@ class File extends Resource {
 		if (empty($this->id)) {
 			return false;
 		}
-		$rtn = [];
+		$rtn = new Builder;
 		Common::toField($this, $rtn, ['id', 'title', 'type', 'ext', 'created_at']);
 		Common::toIntField($this, $rtn, ['size']);
 
@@ -33,6 +40,12 @@ class File extends Resource {
 		} else if ($this->isPdf()) {
 			$rtn['pdf_url'] = $this->getPdfPathURL($request);
 			$rtn['can_pdf'] = true;
+		}
+		if (!is_null($this->callback)) {
+			$flag = call_user_func($this->callback, $rtn, $this);
+			if ($flag === 0) {
+				return false;
+			}
 		}
 		return $rtn;
 	}

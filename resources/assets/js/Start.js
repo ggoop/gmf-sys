@@ -120,9 +120,18 @@ export default class Start {
         getCacheEnumName(type, item) {
           return enumCache.getEnumName(type, item);
         },
-        async issueUid(node, num) {
+        async issueUid() {
           try {
-            const response = await this.$http.get('sys/uid', { params: { node: node, num: num } });
+            const response = await this.$http.get('sys/datas/uid');
+            return response.data.data;
+          } catch (error) {
+            return false;
+          }
+          return false;
+        },
+        async issueSn(node, num) {
+          try {
+            const response = await this.$http.get('sys/datas/sn', { params: { node: node, num: num } });
             return response.data.data;
           } catch (error) {
             return false;

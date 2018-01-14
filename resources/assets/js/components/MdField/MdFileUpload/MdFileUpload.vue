@@ -6,14 +6,14 @@
       <div v-else class="file">
         {{file.title}}
       </div>
-      <div class="md-delete">
+      <div class="md-delete" v-if="!disabled">
         <md-button class="md-icon-button md-accent md-raised" @click.native="onItemDelete(ind)">
           <md-icon>delete</md-icon>
         </md-button>
       </div>
     </div>
     <div v-show="showPicker" @click="openPicker" class="md-picker layout layout-column layout-align-center-center flex">
-      <md-icon>{{ mdIcon }}</md-icon>
+      <md-icon v-if="!disabled">{{ mdIcon }}</md-icon>
       <p v-if="placeholder">{{placeholder}}</p>
     </div>
     <div v-if="loading>0" class="md-file-upload-progress">
@@ -165,7 +165,6 @@ export default {
 </script>
 <style lang="scss">
 .md-file-upload {
-  background: #f7f8f9;
   color: #808080;
   position: relative;
   z-index: 2;

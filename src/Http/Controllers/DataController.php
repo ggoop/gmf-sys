@@ -21,6 +21,9 @@ class DataController extends Controller {
 		return $this->toJson($datas);
 	}
 	public function issueUid(Request $request) {
+		return $this->toJson(Uuid::generate(1, 'gmf', Uuid::NS_DNS, ""));
+	}
+	public function issueSn(Request $request) {
 		$num = $request->input('num', 1);
 		$num = intval($num);
 		$num = $num > 0 ? $num : 1;
