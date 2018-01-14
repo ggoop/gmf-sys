@@ -23,7 +23,7 @@ class File extends Resource {
 			return false;
 		}
 		$rtn = new Builder;
-		Common::toField($this, $rtn, ['id', 'title', 'type', 'ext', 'created_at']);
+		Common::toField($this, $rtn, ['id', 'title', 'type', 'url', 'ext', 'created_at']);
 		Common::toIntField($this, $rtn, ['size']);
 
 		if (!empty($this->pivot)) {
@@ -75,7 +75,7 @@ class File extends Resource {
 		if (!empty($this->path)) {
 			return $this->getFullPath($this->disk, $this->path);
 		}
-		return '';
+		return config('app.url') . '/api/sys/images/' . $this->id;
 	}
 	private function getPdfPathURL() {
 		if (!empty($this->pdf_path)) {
