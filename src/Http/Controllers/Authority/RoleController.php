@@ -1,11 +1,20 @@
 <?php
 namespace Gmf\Sys\Http\Controllers\Authority;
+use GAuth;
 use Gmf\Sys\Http\Controllers\Controller;
 use Gmf\Sys\Models\Authority\Role;
 use Illuminate\Http\Request;
 use Validator;
-use GAuth;
+
 class RoleController extends Controller {
+	public function index(Request $request) {
+		$query = Role::where('ent_id', GAuth::entId());
+		$matchs = array_only($request->all(), ['code', 'name']);
+		if ($matchs && count($matchs)) {
+			$query->where($matchs);
+		}
+		return $this->toJson($query->paginate($request->input('size', 10)));
+	}
 	public function show(Request $request, string $id) {
 		$query = Role::where('ent_id', GAuth::entId());
 		$data = $query->where('id', $id)->orWhere('code', $id)->first();

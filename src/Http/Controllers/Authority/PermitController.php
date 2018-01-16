@@ -1,12 +1,21 @@
 <?php
 namespace Gmf\Sys\Http\Controllers\Authority;
 
+use GAuth;
 use Gmf\Sys\Http\Controllers\Controller;
 use Gmf\Sys\Models\Authority\Permit;
 use Illuminate\Http\Request;
 use Validator;
-use GAuth;
+
 class PermitController extends Controller {
+	public function index(Request $request) {
+		$query = Permit::where('ent_id', GAuth::entId());
+		$matchs = array_only($request->all(), ['code', 'name']);
+		if ($matchs && count($matchs)) {
+			$query->where($matchs);
+		}
+		return $this->toJson($query->paginate($request->input('size', 10)));
+	}
 	public function show(Request $request, string $id) {
 		$query = Permit::where('ent_id', GAuth::entId());
 		$data = $query->where('id', $id)->orWhere('code', $id)->first();
