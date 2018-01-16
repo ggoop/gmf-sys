@@ -1,5 +1,5 @@
 const base = {
-  height: 500,
+  min_height: 500,
   branding: false,
   // statusbar: false,
   skin: "lightgray",
@@ -30,6 +30,10 @@ const base = {
     { title: 'Accent', selector: 'p,h1,h2,h3,h4,h5,h6,span,div,ol,li', inline: 'span', classes: 'md-accent md-theme-default' },
     { title: 'Chip', inline: 'span', classes: 'md-chip md-theme-default' },
   ],
+  mobile: {
+    theme: 'mobile',
+    toolbar: ['undo', 'bold', 'italic', 'bullist', 'image', 'removeformat']
+  }
 };
 const full = _.assignIn({}, base, {
   toolbar1: "bold italic blockquote hr numlist bullist table link image media | alignleft aligncenter alignright | formatselect styleselect  forecolor backcolor | template code removeformat",

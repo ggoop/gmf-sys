@@ -18,7 +18,7 @@ export default {
     value: { default: '' },
     mdMode: {
       type: String,
-      //simple,full
+      //simple,full,mobile,small
       default: 'simple'
     },
     placeholder: String,
@@ -42,7 +42,7 @@ export default {
     });
   },
   mounted() {
-    
+
   },
   beforeDestroy() {
     this.editor && this.editor.destroy();
@@ -126,6 +126,14 @@ export default {
 .md-editor {
   min-width: 100%;
   max-width: 100%;
+  .tinymce-mobile-fullscreen-maximized.tinymce-mobile-edit-mode {
+    .tinymce-mobile-editor-socket {
+      overflow: hidden!important;
+      bottom: 0px!important;
+    }
+  }
 }
-
+[data-ephox-mobile-fullscreen-style]{
+  bottom: 0px;
+}
 </style>
