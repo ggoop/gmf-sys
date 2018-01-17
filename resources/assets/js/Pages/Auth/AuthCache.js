@@ -8,19 +8,19 @@ class AuthCache {
   has(user) {
     return false;
   }
-  remove(user){
+  remove(user) {
     if (!user) return;
-    const users = this.get();
-    var ind=-1;
+    var users = this.get();
+    var ind = -1;
     for (var i = 0; i < users.length; i++) {
       if (users[i].id == user.id) {
-        ind=i;
+        ind = i;
       }
     }
-    if(i>=0){
-      users.slice(i,1);
+    if (i >= 0) {
+      users=users.splice(i, 1);
       localStorage.setItem(this.storageKey, JSON.stringify(users));
-    }    
+    }
   }
   add(user) {
     if (!user) return;

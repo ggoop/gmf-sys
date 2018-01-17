@@ -11,8 +11,8 @@
           <md-image :md-src="item.avatar"></md-image>
         </md-avatar>
         <div class="md-list-item-text">
-          <span>{{ mainDatas.name }}</span>
-          <span>{{ mainDatas.account }}</span>
+          <span>{{ item.name }}</span>
+          <span>{{ item.account }}</span>
         </div>
         <md-button class="md-icon-button md-list-action" @click="removeItem(item)">
           <md-icon>clear</md-icon>
@@ -56,6 +56,7 @@ export default {
   methods: {
     removeItem(item) {
       authCache.remove(item);
+      this.fetchData();
     },
     fetchData() {
       this.mainDatas = authCache.get() || [];
