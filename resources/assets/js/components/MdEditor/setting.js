@@ -1,5 +1,6 @@
 const base = {
   min_height: 500,
+  max_height:800,
   branding: false,
   // statusbar: false,
   skin: "lightgray",
@@ -9,6 +10,7 @@ const base = {
   language: 'zh_CN',
   templates: "/api/sys/editor/templates",
   toolbar_items_size: false,
+  body_class: 'md-editor-content-body',
   plugins: [
     "advlist colorpicker imagetools template anchor paste textcolor",
     "autolink directionality insertdatetime textpattern",
@@ -36,17 +38,17 @@ const base = {
   }
 };
 const full = _.assignIn({}, base, {
-  toolbar1: "bold italic blockquote hr numlist bullist table link image media | alignleft aligncenter alignright | formatselect styleselect  forecolor backcolor | template code removeformat",
+  toolbar1: "bold italic blockquote hr numlist bullist outdent indent table link image media | alignleft aligncenter alignright | formatselect styleselect  forecolor backcolor | template code removeformat",
 });
 
 const simple = _.assignIn({}, base, {
   menubar: false,
-  toolbar1: "bold italic blockquote hr numlist bullist table link image media | formatselect styleselect  forecolor backcolor | template code removeformat",
+  toolbar1: "bold italic blockquote hr numlist bullist outdent indent table link image media | formatselect styleselect  forecolor backcolor | template code removeformat",
 });
 
 const small = _.assignIn({}, base, {
   menubar: false,
   statusbar: false,
-  toolbar1: "bold italic blockquote hr numlist bullist table link image | formatselect styleselect | template removeformat",
+  toolbar1: "bold italic blockquote hr numlist bullist outdent indent table link image | formatselect styleselect | template removeformat",
 });
 export default { small, simple, full };
