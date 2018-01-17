@@ -155,7 +155,12 @@ export default {
     }
   },
   mounted() {
-
+    if (common.isArray(this.value)) {
+      this.files = this.value;
+    } else {
+      this.files = [];
+      this.value && this.files.push(this.value);
+    }
   },
   beforeDestroy() {
 
