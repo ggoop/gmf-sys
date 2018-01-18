@@ -61,7 +61,7 @@ export default {
   computed: {
     canRegister(){
       if(!this.$root.configs.auth||!this.$root.configs.auth.register)return false;
-      return !!this.$root.configs.auth.register;
+      return this.$root.configs.auth.register;
     },
   },
   methods: {

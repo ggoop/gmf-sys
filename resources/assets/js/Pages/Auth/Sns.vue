@@ -31,7 +31,7 @@ export default {
   computed: {
     canSns(){
       if(!this.$root.configs.auth||!this.$root.configs.auth.sns)return false;
-      return !!this.$root.configs.auth.sns;
+      return this.$root.configs.auth.sns;
     },
   },
   methods: {
