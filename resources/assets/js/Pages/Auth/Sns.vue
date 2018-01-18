@@ -1,5 +1,5 @@
 <template>
-  <md-card-content class="login-sns">
+  <md-card-content class="login-sns" v-if="canSns">
     <div class="md-body-1">使用合作账号登录</div>
     <div class="layout-row">
       <md-avatar class="md-avatar-icon">
@@ -27,6 +27,12 @@ export default {
     return {
       sending: false,
     };
+  },
+  computed: {
+    canSns(){
+      if(!this.$root.configs.auth||!this.$root.configs.auth.sns)return false;
+      return !!this.$root.configs.auth.sns;
+    },
   },
   methods: {
     fetchData() {

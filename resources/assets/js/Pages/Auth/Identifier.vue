@@ -20,7 +20,7 @@
         </md-layout>
       </md-card-content>
       <md-card-actions>
-        <router-link :to="{name:'auth.register'}">免费注册</router-link>
+        <router-link v-if="canRegister" :to="{name:'auth.register'}">免费注册</router-link>
         <span class="flex"></span>
         <md-button type="submit" class="md-primary md-raised" :disabled="sending">下一步</md-button>
       </md-card-actions>
@@ -59,7 +59,10 @@ export default {
     }
   },
   computed: {
-
+    canRegister(){
+      if(!this.$root.configs.auth||!this.$root.configs.auth.register)return false;
+      return !!this.$root.configs.auth.register;
+    },
   },
   methods: {
     getValidationClass(fieldName) {
