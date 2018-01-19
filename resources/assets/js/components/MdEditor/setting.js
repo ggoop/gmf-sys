@@ -12,7 +12,7 @@ const base = {
   toolbar_items_size: false,
   body_class: 'md-editor-content-body',
   plugins: [
-    "advlist colorpicker imagetools template anchor paste textcolor",
+    "codesample advlist colorpicker imagetools template anchor paste textcolor",
     "autolink directionality insertdatetime textpattern",
     "autoresize legacyoutput toc autosave link save visualblocks fullscreen lists",
     "visualchars charmap media code hr tabfocus",
@@ -38,12 +38,12 @@ const base = {
   }
 };
 const full = _.assignIn({}, base, {
-  toolbar1: "bold italic blockquote hr numlist bullist outdent indent table link image media | alignleft aligncenter alignright | formatselect styleselect  forecolor backcolor | template code removeformat",
+  toolbar1: "bold italic blockquote hr numlist bullist outdent indent table link image media | alignleft aligncenter alignright | formatselect styleselect  forecolor backcolor | template codesample code removeformat",
 });
 
 const simple = _.assignIn({}, base, {
   menubar: false,
-  toolbar1: "bold italic blockquote hr numlist bullist outdent indent table link image media | formatselect styleselect  forecolor backcolor | template code removeformat",
+  toolbar1: "bold italic blockquote hr numlist bullist outdent indent table link image media | formatselect styleselect  forecolor backcolor | template codesample code removeformat",
 });
 
 const small = _.assignIn({}, base, {
