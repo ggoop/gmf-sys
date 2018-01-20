@@ -66,7 +66,8 @@ const routes = [{
     {
       path: 'logout',
       name: 'auth.logout',
-      component:() => import('../Pages/Auth/Logout')
+      component:() => import('../Pages/Auth/Logout'),
+      meta: { requiresAuth: true },
     },
   ]
 }];

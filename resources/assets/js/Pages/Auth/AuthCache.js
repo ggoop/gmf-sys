@@ -15,10 +15,11 @@ class AuthCache {
     for (var i = 0; i < users.length; i++) {
       if (users[i].id == user.id) {
         ind = i;
+        break;
       }
     }
     if (i >= 0) {
-      users=users.splice(i, 1);
+      users.splice(i, 1);
       localStorage.setItem(this.storageKey, JSON.stringify(users));
     }
   }

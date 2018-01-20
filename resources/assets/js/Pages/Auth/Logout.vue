@@ -1,5 +1,7 @@
 <template>
-  <md-progress-bar md-mode="indeterminate" v-if="sending" />
+  <div>
+    <md-progress-bar md-mode="indeterminate" v-if="sending" />
+  </div>
 </template>
 <script>
 export default {
