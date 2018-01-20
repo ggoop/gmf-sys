@@ -125,8 +125,8 @@ class File {
 		}
 		$builder->path($name);
 
-		if (preg_match('/^(data:)/', $builder->data, $result)) {
-			$base64_body = substr(strstr($builder->data, ','), 1);
+		if (preg_match('/^(data:)/', $file->data, $result)) {
+			$base64_body = substr(strstr($file->data, ','), 1);
 			$type = $builder->type;
 			$fileCode = base64_decode($base64_body);
 			$disk = Storage::disk($builder->disk);
