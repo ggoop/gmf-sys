@@ -2,10 +2,13 @@
 
 namespace Gmf\Sys\Models;
 use Closure;
+use GAuth;
 use Gmf\Sys\Builder;
+use Gmf\Sys\Libs\InputHelper;
 use Gmf\Sys\Traits\HasGuard;
 use Gmf\Sys\Traits\Snapshotable;
 use Illuminate\Database\Eloquent\Model;
+use Validator;
 
 class DtiParam extends Model {
 	use Snapshotable, HasGuard;
@@ -21,6 +24,39 @@ class DtiParam extends Model {
 	public function dti() {
 		return $this->belongsTo('Gmf\Sys\Models\Dti');
 	}
+
+	public static function fromImport($datas) {
+		return $datas->map(function ($row) {
+			$entId = GAuth::entId();
+			$data = array_only($row, [
+				'code', 'name', 'type_enum', 'value', 'category', 'dti',
+			]);
+
+			$data = InputHelper::fillEntity($data, $row, [
+				'category' => function ($v, $data) use ($entId) {
+					return DtiCategory::where('ent_id', $entId)->where(function ($query) use ($v) {
+						$query->where('code', $v)->orWhere('name', $v);
+					})->value('id');
+				},
+				'dti' => function ($v, $data) use ($entId) {
+					return Dti::where('ent_id', $entId)->where(function ($query) use ($v) {
+						$query->where('code', $v)->orWhere('name', $v);
+					})->where('category_id', $data['category_id'])->value('id');
+				},
+			]);
+			$data = InputHelper::fillEnum($data, $row, [
+				'type' => 'gmf.sys.dti.param.type.enum',
+			]);
+			Validator::make($data, [
+				'code' => 'required',
+				'name' => 'required',
+				'type_enum' => 'required',
+			])->validate();
+			return static::updateOrCreate(['ent_id' => $entId, 'code' => $data['code']], $data);
+		});
+
+	}
+
 	public static function build(Closure $callback) {
 		tap(new Builder, function ($builder) use ($callback) {
 			$callback($builder);

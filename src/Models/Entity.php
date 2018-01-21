@@ -26,8 +26,7 @@ class Entity extends Model {
 			->where(function ($query) use ($name) {
 				$query->where('el.name', $name)->orWhere('el.default_value', $name);
 			});
-		$p = $query->first();
-		return $p;
+		return $query->value('el.name');
 	}
 	public static function getEnumItem($type, $name, $opts = []) {
 		$query = DB::table('gmf_sys_entities as e')

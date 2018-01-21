@@ -2,10 +2,13 @@
 
 namespace Gmf\Sys\Models;
 use Closure;
+use GAuth;
 use Gmf\Sys\Builder;
+use Gmf\Sys\Libs\InputHelper;
 use Gmf\Sys\Traits\HasGuard;
 use Gmf\Sys\Traits\Snapshotable;
 use Illuminate\Database\Eloquent\Model;
+use Validator;
 
 class Dti extends Model {
 	use Snapshotable, HasGuard;
@@ -28,16 +31,36 @@ class Dti extends Model {
 	public function params() {
 		return $this->hasMany('Gmf\Sys\Models\DtiParam', 'dti_id');
 	}
-	public static function run($code, $opts = []) {
-		$v = '';
-		$query = Dti::where('code', $code);
-		if (!empty($opts['ent_id'])) {
-			$query->where('ent_id', $opts['ent_id']);
-		}
-		$p = $query->first();
 
-		return true;
+	public static function fromImport($datas) {
+		$datas->map(function ($row) {
+			$entId = GAuth::entId();
+			$data = array_only($row, [
+				'code', 'name', 'method_enum', 'path', 'header', 'body', 'query',
+			]);
+			$data = InputHelper::fillEntity($data, $row, [
+				'category' => function ($v, $data) use ($entId) {
+					return DtiCategory::where('ent_id', $entId)->where(function ($query) use ($v) {
+						$query->where('code', $v)->orWhere('name', $v);
+					})->value('id');
+				},
+				'local' => function ($v, $data) {
+					return DtiLocal::where('code', $v)->orWhere('name', $v)->value('id');
+				},
+			]);
+			$data = InputHelper::fillEnum($data, $row, [
+				'method' => 'gmf.sys.dti.method.enum',
+			]);
+			Validator::make($data, [
+				'code' => 'required',
+				'name' => 'required',
+				'category_id' => 'required',
+				'local_id' => 'required',
+			])->validate();
+			return static::updateOrCreate(['ent_id' => $entId, 'category_id' => $data['category_id'], 'code' => $data['code']], $data);
+		});
 	}
+
 	public static function build(Closure $callback) {
 		tap(new Builder, function ($builder) use ($callback) {
 			$callback($builder);

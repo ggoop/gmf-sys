@@ -32,4 +32,7 @@ class DataController extends Controller {
 		$datas = DB::select('select @num as sn');
 		return $this->toJson($datas && count($datas) ? $datas[0]->sn : false);
 	}
+	public function dataImport(Request $request) {
+		return $this->toJson(app('Gmf\Sys\Bp\DataImport')->create($request));
+	}
 }

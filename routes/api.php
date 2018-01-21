@@ -29,6 +29,7 @@ Route::prefix('api/sys')->middleware(['api'])->namespace($ns)->group(function ()
 });
 
 Route::prefix('api/sys')->middleware(['api', 'auth:api'])->namespace($ns)->group(function () {
+	Route::post('datas/import', 'DataController@dataImport');
 
 	Route::post('/lns/request', 'LnsController@issueRequest');
 	Route::post('/lns/answer', 'LnsController@issueAnswer');
