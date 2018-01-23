@@ -59,14 +59,16 @@ class InputHelper {
 			if (empty($vValue) && !empty($vObj) && !empty($vObj->{$vFieldName})) {
 				$vValue = $vObj->{$vFieldName};
 			}
-			if (empty($vValue) && !empty($vObj) && !empty($vObj[$vFieldName])) {
+			if (empty($vValue) && !empty($vObj) && is_array($vObj) && !empty($vObj[$vFieldName])) {
 				$vValue = $vObj[$vFieldName];
 			}
 			if (empty($vValue) && !empty($vObj) && is_array($vObj)) {
 				$vids = [];
 				foreach ($vObj as $vk => $vv) {
-					if (!empty($vv) && !empty($vv->{$vFieldName})) {
+					if (!empty($vv) && is_object($vv) && !empty($vv->{$vFieldName})) {
 						$vids[] = $vv->{$vFieldName};
+					} else if (!empty($vv) && is_array($vv) && !empty($vv[$vFieldName])) {
+						$vids[] = $vv[$vFieldName];
 					}
 				}
 				if ($vids && count($vids)) {
