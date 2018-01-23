@@ -132,7 +132,7 @@
 
   .md-drawer {
     @include md-drawer-temporary;
-    width: 400px;
+    width:280px;
     max-width: calc(100vw - 56px);
     overflow-x: hidden;
     overflow-y: auto;
