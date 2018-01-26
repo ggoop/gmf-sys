@@ -16,7 +16,7 @@ class Controller extends BaseController {
 	public function errorParam($paramName, Closure $callback = null) {
 		return APIResult::errorParam($paramName);
 	}
-	public function toError($msg, Closure $callback = null) {
-		return APIResult::error($msg, $callback);
+	public function toError($msg, Closure $callback = null, $statucCode = null) {
+		return APIResult::error($msg, $callback,$statucCode);
 	}
 }
