@@ -133,7 +133,7 @@ class Uuid {
 	 * @return Uuid
 	 * @throws Exception
 	 */
-	public static function generate($ver = 1, $node = null, $ns = null, $space = '-') {
+	public static function generate($ver = 1, $node = null, $ns = null, $space = '') {
 		/* Create a new UUID based on provided data. */
 		switch ((int) $ver) {
 		case 1:

@@ -194,7 +194,7 @@
     &.md-permanent-clipped,
     &.md-permanent-card {
       @include md-layout-small-and-up {
-        z-index: 1;
+        z-index: 2;
       }
     }
 
@@ -202,7 +202,7 @@
       @include md-layout-small-and-up {
         @include md-card;
         margin: 8px;
-        z-index: 1;
+        z-index: 2;
       }
 
       @include md-layout-medium-and-up {

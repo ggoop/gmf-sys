@@ -7,7 +7,7 @@
 <script>
   import MdPropValidator from 'core/utils/MdPropValidator'
 
-  const alignments = ['left', 'right', 'space-between']
+  const alignments = ['left', 'right', 'space-between','center']
 
   export default {
     name: 'MdCardActions',
@@ -35,6 +35,9 @@
 
     &.md-alignment-left {
       justify-content: flex-start;
+    }
+    &.md-alignment-center {
+      justify-content:center;
     }
 
     &.md-alignment-space-between {
