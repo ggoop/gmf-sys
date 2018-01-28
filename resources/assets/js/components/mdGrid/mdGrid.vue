@@ -29,7 +29,7 @@ import { classList } from './helpers';
 import mdGridCell from './mdGridCell';
 
 export default {
-  name:'MdGrid',
+  name: 'MdGrid',
   components: {
     mdGridHead,
     mdGridBody,
@@ -86,7 +86,6 @@ export default {
     focusCell: false,
     selectedRows: {}, //选择的数据
     cacheRows: {},
-    width: '',
     scrollLeft: 0,
     isSelectedPage: false,
     pageCacheKey: 'p1'
@@ -108,9 +107,7 @@ export default {
         this.mapDataToRows();
       }
     },
-    columns() {
-      this.width = this.getWidth();
-    },
+
     rows() {
       this.refreshDisplayRow();
     }
@@ -128,7 +125,14 @@ export default {
         `md-grid.${this.cacheKey}` :
         `md-grid.${window.location.host}${window.location.pathname}${this.cacheKey}`;
     },
-
+    width() {
+      var w = 40;
+      this.columns.forEach((c) => {
+        if (!c.hidden)
+          w += (parseInt(c.width) || 0);
+      });
+      return w + "px";
+    }
   },
   methods: {
     onConfirm() {
@@ -366,14 +370,6 @@ export default {
     getColumn(columnName) {
       return this.columns.find(column => column.field === columnName);
     },
-    getWidth() {
-      var w = 40;
-      this.columns.forEach((c) => {
-        if (!c.hidden)
-          w += (parseInt(c.width) || 0);
-      });
-      return w + "px";
-    },
     getSelectedDatas(isAll) {
       const rows = [];
       if (isAll) {
@@ -461,7 +457,6 @@ export default {
         );
       });
     }
-    this.width = this.getWidth();
     this.pager.size = this.pagerSize;
     if (this.autoLoad) {
       await this.mapDataToRows();
@@ -586,7 +581,6 @@ export default {
       text-align: left;
       position: relative;
       &.has-sort {
-        cursor: pointer;
         text-decoration: underline;
         &:after {
           position: absolute;
@@ -604,6 +598,14 @@ export default {
         &.sort-desc:after {
           content: '↓';
         }
+      }
+      &.is-sorting,
+      &.can-sorting {
+        cursor: s-resize;
+      }
+      &.is-resizing,
+      &.can-resizing {
+        cursor: col-resize;
       }
     }
   }

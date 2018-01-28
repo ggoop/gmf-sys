@@ -9,9 +9,9 @@
           <md-grid-cell v-if="multiple" :selection="true" container-class="layout layout-align-center-center">
             <md-checkbox class="md-primary" v-model="selected" @change="handleSelected"></md-checkbox>
           </md-grid-cell>
-          <md-grid-cell v-for="column in visibleColumns" :key="column.field" @click="clicked(column)" :class="headerClass(column)">
+          <md-grid-head-cell v-for="column in visibleColumns" :key="column.field" :column="column">
             {{ column.label||column.field }}
-          </md-grid-cell>
+          </md-grid-head-cell>
         </tr>
       </tbody>
     </table>
@@ -19,6 +19,8 @@
 </template>
 <script>
 import mdGridCell from './mdGridCell';
+import mdGridHeadCell from './mdGridHeadCell';
+
 import mdGridEmptyRow from './mdGridEmptyRow';
 import { classList } from './helpers';
 import getClosestVueParent from 'core/utils/getClosestVueParent';
@@ -27,17 +29,14 @@ export default {
 
   components: {
     mdGridCell,
+    mdGridHeadCell,
     mdGridEmptyRow
   },
   data() {
     return {
       parentTable: {},
-      sort: {
-        field: '',
-        order: '',
-      },
       selected: false,
-      multiple: false
+      multiple: false,
     };
   },
   watch: {
@@ -56,35 +55,6 @@ export default {
     },
   },
   methods: {
-    headerClass(column) {
-      if (!column.isSortable()) {
-        return classList(column.headerClass);
-      }
-
-      if (column.field !== this.sort.field) {
-        return classList('has-sort', column.headerClass);
-      }
-      return classList(`has-sort sort-${this.sort.order}`, column.headerClass);
-    },
-    emitSort(column) {
-      if (!this.canFireEvents) return;
-      if (this.sort.field !== column.field) {
-        this.sort.field = column.field;
-        this.sort.order = 'asc';
-      } else if (this.sort.order === 'desc') {
-        this.sort.field = '';
-      } else {
-        this.sort.order = (this.sort.order === 'asc' ? 'desc' : 'asc');
-      }
-      this.$emit('sort', this.sort);
-    },
-    clicked(column) {
-      if (!this.canFireEvents) return;
-      if (column.isSortable()) {
-        this.emitSort(column);
-      }
-      this.$emit('click', column);
-    },
     handleSelected(value) {
       if (this.multiple) {
         this.parentTable.$children.forEach((body, index) => {
@@ -102,14 +72,12 @@ export default {
   },
   mounted() {
     this.parentTable = getClosestVueParent(this.$parent, 'md-grid');
-    if (this.parentTable.sort) {
-      this.sort.field = this.parentTable.sort.field;
-      this.sort.order = this.parentTable.sort.order;
-    }
+
     this.multiple = this.parentTable.multiple;
     this.$nextTick(() => {
       this.canFireEvents = true;
     });
   },
 };
+
 </script>
