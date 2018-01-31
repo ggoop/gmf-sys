@@ -183,6 +183,8 @@ iframe {
 }
 .wrap {
   flex-wrap: wrap;
+  white-space: normal;
+  word-break: break-all;
 }
 
 .nowrap {
