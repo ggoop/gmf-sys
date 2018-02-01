@@ -40,6 +40,11 @@ class Common {
 		}
 		return $topData;
 	}
+	public static function trimAll($str) {
+		$qian = array(" ", "　", "\t", "\n", "\r");
+		$str = str_replace($qian, '', $str);
+		return $str
+	}
 	public static function EncryptDES($data, $key) {
 		$cipher = "DES-ECB";
 		$key_size = 8;
