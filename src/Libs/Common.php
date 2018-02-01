@@ -43,7 +43,7 @@ class Common {
 	public static function trimAll($str) {
 		$qian = array(" ", "　", "\t", "\n", "\r");
 		$str = str_replace($qian, '', $str);
-		return $str
+		return $str;
 	}
 	public static function EncryptDES($data, $key) {
 		$cipher = "DES-ECB";
