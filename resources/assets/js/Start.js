@@ -61,9 +61,6 @@ export default class Start {
     };
     if (window.gmfConfig) {
       _.extend(rootData.configs, window.gmfConfig);
-      // rootData.configs.ent = window.gmfConfig.ent;
-      // rootData.configs.user = window.gmfConfig.user;
-      // rootData.configs.token = window.gmfConfig.token;
     }
 
     const vueRouter = new VueRouter(router);
@@ -74,99 +71,96 @@ export default class Start {
         next();
       }
     });
-    const app = new Vue({
-      router: vueRouter,
-      el: elID,
-      data: rootData,
-      store: store,
-      mixins: [mixin],
-      watch: {
-        "userConfig.ent": function(v, o) {
-          this.changedConfig();
-        },
-        "userConfig.user": function(v, o) {
-          this.changedConfig();
-        },
-        "userConfig.token": function(v, o) {
-          this.changedConfig();
-        }
-      },
-      methods: {
-        changedConfig() {
-          _.extend(window.gmfConfig, this.configs);
-          this.$http.defaults.headers.common.Ent = this.configs.ent ? this.configs.ent.id : false;
-          if (this.configs.token) {
-            this.$http.defaults.headers.common.Authorization = this.configs.token.token_type + " " + this.configs.token.access_token;
-          } else {
-            this.$http.defaults.headers.common.Authorization = false;
-          }
-        },
-        async loadEnums() {
-          try {
-            const response = await this.$http.get('sys/enums/all');
-            if (response && response.data && response.data.data) {
-              response.data.data.forEach((item) => {
-                this.setCacheEnum(item);
-              });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      Promise.all(_.values(options)).then(function(values) {
+
+        const app = new Vue({
+          router: vueRouter,
+          data: rootData,
+          store: store,
+          mixins: [mixin],
+          methods: {
+            changedConfig() {
+              _.extend(window.gmfConfig, this.configs);
+              this.$http.defaults.headers.common.Ent = this.configs.ent ? this.configs.ent.id : false;
+              if (this.configs.token) {
+                this.$http.defaults.headers.common.Authorization = this.configs.token.token_type + " " + this.configs.token.access_token;
+              } else {
+                this.$http.defaults.headers.common.Authorization = false;
+              }
+            },
+            async loadEnums() {
+              try {
+                const response = await this.$http.get('sys/enums/all');
+                if (response && response.data && response.data.data) {
+                  response.data.data.forEach((item) => {
+                    this.setCacheEnum(item);
+                  });
+                }
+              } catch (error) {}
+            },
+            setCacheEnum(item) {
+              enumCache.set(item);
+            },
+            getCacheEnum(type) {
+              return enumCache.get(type);
+            },
+            getCacheEnumName(type, item) {
+              return enumCache.getEnumName(type, item);
+            },
+            async issueUid() {
+              try {
+                const response = await this.$http.get('sys/datas/uid');
+                return response.data.data;
+              } catch (error) {
+                return false;
+              }
+              return false;
+            },
+            async issueSn(node, num) {
+              try {
+                const response = await this.$http.get('sys/datas/sn', { params: { node: node, num: num } });
+                return response.data.data;
+              } catch (error) {
+                return false;
+              }
+              return false;
+            },
+            async $loadConfigs() {
+              if (this.loadConfigs) {
+                var res = await this.loadConfigs();
+                if (res && res.data) {
+                  res = res.data;
+                }
+                if (res && res.data) {
+                  res = res.data;
+                }
+                if (res) {
+                  this.$setConfigs(res);
+                }
+              }
             }
-          } catch (error) {}
-        },
-        setCacheEnum(item) {
-          enumCache.set(item);
-        },
-        getCacheEnum(type) {
-          return enumCache.get(type);
-        },
-        getCacheEnumName(type, item) {
-          return enumCache.getEnumName(type, item);
-        },
-        async issueUid() {
-          try {
-            const response = await this.$http.get('sys/datas/uid');
-            return response.data.data;
-          } catch (error) {
-            return false;
-          }
-          return false;
-        },
-        async issueSn(node, num) {
-          try {
-            const response = await this.$http.get('sys/datas/sn', { params: { node: node, num: num } });
-            return response.data.data;
-          } catch (error) {
-            return false;
-          }
-          return false;
-        },
-        async $loadConfigs() {
-          if (this.loadConfigs) {
-            var res = await this.loadConfigs();
-            if (res && res.data) {
-              res = res.data;
+          },
+          async created() {
+            if (this.beforeCreated) {
+              await this.beforeCreated();
             }
-            if (res && res.data) {
-              res = res.data;
+            await this.$loadConfigs();
+            if (this.configs.loadEnum) {
+              await this.loadEnums();
             }
-            if (res) {
-              this.$setConfigs(res);
+          },
+          async mounted() {
+            if (this.beforeMounted) {
+              await this.beforeMounted();
             }
           }
-        }
-      },
-      async created() {
-        if (this.beforeCreated) {
-          await this.beforeCreated();
-        }
-        await this.$loadConfigs();
-        if (this.configs.loadEnum) {
-          await this.loadEnums();
-        }
-      },
-      async mounted() {
-        if (this.beforeMounted) {
-          await this.beforeMounted();
-        }
-      }
+        });
+        vueRouter.onReady(() => {
+          app.$mount(elID);
+        });
+      });
     });
   }
   init() {
