@@ -57,6 +57,9 @@ export default {
         margin: 0px;
         margin-top: 10px;
       }
+      >.md-select>.md-input{
+        padding-top: 16px;
+      }
       .md-chip {
         margin: 0px;
         margin-top: 16px;
