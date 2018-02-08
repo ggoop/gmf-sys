@@ -23,7 +23,7 @@
   </div>
 </template>
 <script>
-import compressImage from 'core/utils/compressImage';
+import compressImage from 'core/utils/MdCompressImage';
 import common from 'core/utils/common';
 export default {
   name: 'MdFileUpload',

@@ -54,7 +54,6 @@
 </template>
 <script>
 import MdComponent from 'core/MdComponent'
-  import throttle from 'core/utils/throttle';
 
   export default new MdComponent({
     props: {
@@ -164,7 +163,7 @@ import MdComponent from 'core/MdComponent'
         }
       },
       observeElementChanges() {
-        this.parentObserver = new MutationObserver(throttle(this.calculateOnWatch, 50));
+        this.parentObserver = new MutationObserver(_.throttle(this.calculateOnWatch, 50));
         this.parentObserver.observe(this.$refs.boardsContent, {
           childList: true,
           attributes: true,

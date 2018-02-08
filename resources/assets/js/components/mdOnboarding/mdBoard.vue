@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import uniqueId from 'core/utils/uniqueId';
+  import MdUuid from 'core/utils/MdUuid';
   import getClosestVueParent from 'core/utils/getClosestVueParent';
 
   export default {
@@ -28,7 +28,7 @@
     data() {
       return {
         mounted: false,
-        boardId: this.id || 'board-' + uniqueId(),
+        boardId: this.id || 'board-' + MdUuid(),
         width: '0px',
         left: '0px'
       };
