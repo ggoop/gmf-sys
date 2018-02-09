@@ -38,7 +38,7 @@ import MdTooltip from './MdTooltip'
 
 
 //news
-import MdOnboarding from './MdOnboarding'
+import MdBoard from './MdBoard'
 import MdPart from './MdPart'
 
 import MdToast from './MdToast'
@@ -98,7 +98,7 @@ export {
   MdToolbar,
   MdTooltip,
   //news
-  MdOnboarding,
+  MdBoard,
   MdPart,
   
   MdToast,
