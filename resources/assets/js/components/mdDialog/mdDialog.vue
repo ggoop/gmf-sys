@@ -61,14 +61,14 @@
       }
     },
     watch: {
-      async mdActive (isActive) {
-        await this.$nextTick()
-
-        if (isActive) {
-          this.$emit('md-opened')
-        } else {
-          this.$emit('md-closed')
-        }
+      mdActive (isActive) {
+        this.$nextTick().then(() => {
+          if (isActive) {
+            this.$emit('md-opened')
+          } else {
+            this.$emit('md-closed')
+          }
+        })
       }
     },
     methods: {
@@ -102,6 +102,7 @@
     margin: auto;
     display: flex;
     flex-flow: column;
+    flex-direction: row;
     overflow: hidden;
     position: fixed;
     top: 50%;

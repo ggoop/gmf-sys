@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import raf from 'raf'
 
 export default {
   name: 'MdPortal',
@@ -63,30 +64,23 @@ export default {
   },
   methods: {
     getTransitionDuration (el) {
-      const duration = getComputedStyle(el).transitionDuration
+      const duration = window.getComputedStyle(el).transitionDuration
       const num = parseFloat(duration, 10)
       let unit = duration.match(/m?s/)
-      let milliseconds = null
 
       if (unit) {
         unit = unit[0]
       }
 
-      switch (unit) {
-        case 's':
-          milliseconds = num * 1000
-          break
-
-        case 'ms':
-          milliseconds = num
-          break
-
-        default:
-          milliseconds = 0
-          break
+      if (unit === 's') {
+        return num * 1000
       }
 
-      return milliseconds
+      if (unit === 'ms') {
+        return num
+      }
+
+      return 0
     },
     killGhostElement (el) {
       if (el.parentNode) {
@@ -95,25 +89,27 @@ export default {
         el.parentNode.removeChild(el)
       }
     },
-    async initDestroy (manualCall) {
+    initDestroy (manualCall) {
       let el = this.$el
 
-      if (manualCall && this.$el.constructor.name.toLowerCase() === 'comment') {
+      if (manualCall && this.$el.nodeType === Node.COMMENT_NODE) {
         el = this.$vnode.elm
       }
 
       el.classList.add(this.leaveClass)
       el.classList.add(this.leaveActiveClass)
-      await this.$nextTick()
-      el.classList.add(this.leaveToClass)
 
-      clearTimeout(this.leaveTimeout)
-      this.leaveTimeout = setTimeout(() => {
-        this.destroyElement(el)
-      }, this.getTransitionDuration(el))
+      this.$nextTick().then(() => {
+        el.classList.add(this.leaveToClass)
+
+        clearTimeout(this.leaveTimeout)
+        this.leaveTimeout = setTimeout(() => {
+          this.destroyElement(el)
+        }, this.getTransitionDuration(el))
+      })
     },
     destroyElement (el) {
-      requestAnimationFrame(() => {
+      raf(() => {
         el.classList.remove(this.leaveClass)
         el.classList.remove(this.leaveActiveClass)
         el.classList.remove(this.leaveToClass)

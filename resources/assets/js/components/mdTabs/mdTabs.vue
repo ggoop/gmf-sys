@@ -1,6 +1,6 @@
 <template>
   <div class="md-tabs" :class="[tabsClasses, $mdActiveTheme]">
-    <div class="md-tabs-navigation" :class="navigationClasses">
+    <div class="md-tabs-navigation" :class="navigationClasses" ref="navigation">
       <md-button
         v-for="({ label, props, icon, disabled, data, events }, index) in MdTabs.items"
         :key="index"
@@ -35,6 +35,7 @@
 </template>
 
 <script>
+  import raf from 'raf'
   import MdComponent from 'core/MdComponent'
   import MdAssetIcon from 'core/mixins/MdAssetIcon/MdAssetIcon'
   import MdPropValidator from 'core/utils/MdPropValidator'
@@ -101,19 +102,16 @@
           this.setHasContent()
         }
       },
-      async activeTab () {
-        await this.$nextTick()
-        this.setIndicatorStyles()
-        this.setActiveTabIndex()
-        this.calculateTabPos()
+      activeTab () {
+        this.$nextTick().then(() => {
+          this.setIndicatorStyles()
+          this.setActiveTabIndex()
+          this.calculateTabPos()
+        })
       },
       mdActiveTab (tab) {
         this.activeTab = tab
         this.$emit('md-changed', tab)
-      },
-      async mdAlignment () {
-        await this.$nextTick()
-        this.setIndicatorStyles()
       }
     },
     methods: {
@@ -173,27 +171,27 @@
         this.hasContent = keys.some(key => items[key].hasContent)
       },
       setIndicatorStyles () {
-        window.requestAnimationFrame(async () => {
-          await this.$nextTick()
+        raf(() => {
+          this.$nextTick().then(() => {
+            const activeButton = this.$el.querySelector('.md-button.md-active')
 
-          const activeButton = this.$el.querySelector('.md-button.md-active')
+            if (activeButton && this.$refs.indicator) {
+              const buttonWidth = activeButton.offsetWidth
+              const buttonLeft = activeButton.offsetLeft
+              const indicatorLeft = this.$refs.indicator.offsetLeft
 
-          if (activeButton && this.$refs.indicator) {
-            const buttonWidth = activeButton.offsetWidth
-            const buttonLeft = activeButton.offsetLeft
-            const indicatorLeft = this.$refs.indicator.offsetLeft
+              if (indicatorLeft < buttonLeft) {
+                this.indicatorClass = 'md-tabs-indicator-right'
+              } else {
+                this.indicatorClass = 'md-tabs-indicator-left'
+              }
 
-            if (indicatorLeft < buttonLeft) {
-              this.indicatorClass = 'md-tabs-indicator-right'
-            } else {
-              this.indicatorClass = 'md-tabs-indicator-left'
+              this.indicatorStyles = {
+                left: `${buttonLeft}px`,
+                width: `${buttonWidth}px`
+              }
             }
-
-            this.indicatorStyles = {
-              left: `${buttonLeft}px`,
-              right: `calc(100% - ${buttonWidth + buttonLeft}px)`
-            }
-          }
+          })
         })
       },
       calculateTabPos () {
@@ -243,25 +241,27 @@
       this.setHasContent()
       this.activeTab = this.mdActiveTab
     },
-    async mounted () {
-      await this.$nextTick()
+    mounted () {
+      this.$nextTick().then(() => {
+        if (this.mdSyncRoute) {
+          this.setActiveTabByRoute()
+        } else {
+          this.setActiveTabByIndex(0)
+        }
 
-      if (this.mdSyncRoute) {
-        this.setActiveTabByRoute()
-      } else {
-        this.setActiveTabByIndex(0)
-      }
+        return this.$nextTick()
+      }).then(() => {
+        this.setActiveTabIndex()
+        this.calculateTabPos()
 
-      await this.$nextTick()
+        window.setTimeout(() => {
+          this.noTransition = false
+          this.setupObservers()
+          this.setupWatchers()
+        }, 100)
+      })
 
-      this.setActiveTabIndex()
-      this.calculateTabPos()
-
-      window.setTimeout(() => {
-        this.noTransition = false
-        this.setupObservers()
-        this.setupWatchers()
-      }, 100)
+      this.$refs.navigation.addEventListener('transitionend', this.setIndicatorStyles)
     },
     beforeDestroy () {
       if (this.resizeObserver) {
@@ -269,6 +269,7 @@
       }
 
       window.removeEventListener('resize', this.setIndicatorStyles)
+      this.$refs.navigation.removeEventListener('transitionend', this.setIndicatorStyles)
     }
   })
 </script>

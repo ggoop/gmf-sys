@@ -80,18 +80,18 @@
           this.popperInstance = null
         }
       },
-      async bindPopper () {
-        await this.$nextTick()
-
-        if (this.originalParentEl) {
-          this.createPopper()
-        }
+      bindPopper () {
+        this.$nextTick().then(() => {
+          if (this.originalParentEl) {
+            this.createPopper()
+          }
+        })
       },
-      async createPopper () {
+      createPopper () {
         if (this.mdSettings) {
           const options = deepmerge(this.getPopperOptions(), this.mdSettings)
 
-          if (this.$el.constructor.name.toLowerCase() !== 'comment') {
+          if (this.$el.nodeType !== Node.COMMENT_NODE) {
             this.popperInstance = new Popper(this.originalParentEl, this.$el, options)
           }
         }

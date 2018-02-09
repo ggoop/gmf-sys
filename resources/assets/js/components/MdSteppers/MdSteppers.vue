@@ -76,10 +76,11 @@
       mdVertical (isVertical) {
         this.MdSteppers.isVertical = isVertical
       },
-      async activeIndex () {
-        await this.$nextTick()
-        this.setActiveStepIndex()
-        this.calculateStepperPos()
+      activeIndex () {
+        this.$nextTick().then(() => {
+          this.setActiveStepIndex()
+          this.calculateStepperPos()
+        })
       }
     },
     methods: {
@@ -186,6 +187,8 @@
         if ('ResizeObserver' in window) {
           this.resizeObserver = new window.ResizeObserver(this.calculateStepperPos)
           this.resizeObserver.observe(this.$el)
+        } else {
+          window.addEventListener('resize', this.calculateStepperPos)
         }
 
         if (steppersContent) {
@@ -225,26 +228,31 @@
       this.MdSteppers.isLinear = this.mdLinear
       this.MdSteppers.isVertical = this.mdVertical
     },
-    async mounted () {
-      await this.$nextTick()
+    mounted () {
+      this.$nextTick().then(() => {
+        if (this.mdSyncRoute) {
+          this.setActiveStepByRoute()
+        } else {
+          this.setActiveStepByIndex(0)
+        }
 
-      if (this.mdSyncRoute) {
-        this.setActiveStepByRoute()
-      } else {
-        this.setActiveStepByIndex(0)
+        return this.$nextTick()
+      }).then(() => {
+        this.setActiveStepIndex()
+        this.calculateStepperPos()
+
+        window.setTimeout(() => {
+          this.noTransition = false
+          this.setupObservers()
+          this.setupWatchers()
+        }, 100)
+      })
+    },
+    beforeDestroy () {
+      if (!('ResizeObserver' in window)) {
+        window.removeEventListener('resize', this.calculateStepperPos)
       }
-
-      await this.$nextTick()
-
-      this.setActiveStepIndex()
-      this.calculateStepperPos()
-
-      window.setTimeout(() => {
-        this.noTransition = false
-        this.setupObservers()
-        this.setupWatchers()
-      }, 100)
-    }
+    },
   })
 </script>
 

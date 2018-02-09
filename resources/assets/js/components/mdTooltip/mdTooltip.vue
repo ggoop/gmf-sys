@@ -55,6 +55,9 @@
     watch: {
       mdActive () {
         this.shouldRender = this.mdActive
+      },
+      shouldRender (shouldRender) {
+        this.$emit('update:mdActive', shouldRender)
       }
     },
     methods: {
@@ -62,20 +65,19 @@
         this.shouldRender = true
       },
       hide () {
-        this.$emit('update:mdActive', false)
         this.shouldRender = false
       }
     },
-    async mounted () {
-      await this.$nextTick()
+    mounted () {
+      this.$nextTick().then(() => {
+        this.shouldRender = this.mdActive
+        this.targetEl = this._vnode.componentInstance.originalParentEl
 
-      this.shouldRender = this.mdActive
-      this.targetEl = this._vnode.componentInstance.originalParentEl
-
-      if (this.targetEl) {
-        this.targetEl.addEventListener('mouseenter', this.show, false)
-        this.targetEl.addEventListener('mouseleave', this.hide, false)
-      }
+        if (this.targetEl) {
+          this.targetEl.addEventListener('mouseenter', this.show, false)
+          this.targetEl.addEventListener('mouseleave', this.hide, false)
+        }
+      })
     },
     beforeDestroy () {
       if (this.targetEl) {
@@ -97,7 +99,7 @@
     height: $md-tooltip-height;
     padding: 0 8px;
     position: fixed;
-    z-index: 60;
+    z-index: 111;
     pointer-events: none;
     border-radius: 2px;
     transition: .15s $md-transition-enter-timing;
