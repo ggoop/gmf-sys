@@ -11,7 +11,7 @@
     <md-button v-if="!disabled" class="md-dense md-icon-button md-ref-filter" @click.native="openRef()">
       <md-icon>search</md-icon>
     </md-button>
-    <md-ref v-if="mdRefId" :multiple="multiple" ref="ref" @confirm="onRefConfirm" :md-ref-id="mdRefId" :options="options"></md-ref>
+    <md-ref v-if="mdRefId" :multiple="multiple" :md-active.sync="showRefDia" @confirm="onRefConfirm" :md-ref-id="mdRefId" :options="options"></md-ref>
   </md-field>
 </template>
 <script>
@@ -43,13 +43,17 @@ export default new MdComponent({
     mdLabel: String,
     mdPlaceholder: [String, Number],
     mdStatic: Boolean,
-    mdLimit: Number
+    mdLimit: Number,
+    mdFormat: {
+      type: Function
+    }
   },
   data: () => ({
     inputValue: '',
     selectedValues: [],
     hasValue: false,
-    options: { wheres: {}, orders: [] }
+    options: { wheres: {}, orders: [] },
+    showRefDia:false
   }),
   computed: {
     chipsClasses() {
@@ -132,10 +136,10 @@ export default new MdComponent({
       return this.selectedValues;
     },
     openRef() {
-      if(this.disabled)return;
+      if (this.disabled) return;
       this.$emit('mdPick', this.options);
       if (this.mdRefId) {
-        this.$refs.ref.open();
+        this.showRefDia=true;
       }
     },
     onRefConfirm(data) {
@@ -146,7 +150,7 @@ export default new MdComponent({
       });
     },
     insertChip({ target }) {
-      if(this.disabled)return;
+      if (this.disabled) return;
       if (!this.inputValue ||
         this.getValueIndex(this.inputValue) >= 0 ||
         !this.modelRespectLimit
@@ -193,7 +197,8 @@ export default new MdComponent({
     margin-bottom: 1px;
     padding-left: 0px;
     overflow: hidden;
-    .md-ripple, {
+    .md-ripple,
+    {
       padding-left: 0px;
     }
     &:last-of-type {
@@ -217,7 +222,7 @@ export default new MdComponent({
     padding: 0px;
   }
   .md-input {
-    min-width:auto;
+    min-width: auto;
   }
 }
 

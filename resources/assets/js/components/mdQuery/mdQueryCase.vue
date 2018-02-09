@@ -1,5 +1,5 @@
 <template>
-  <md-dialog :md-active.sync="mdActive" :md-click-outside-to-close="false" @md-opened="onOpen" @md-closed="closeDialog" class="md-query-case-dialog">
+  <md-dialog :md-active.sync="isActive" :md-click-outside-to-close="false" @md-opened="onOpen" @md-closed="closeDialog" class="md-query-case-dialog">
     <md-button class="md-icon-button md-dialog-button-close" @click.native="closeDialog()">
       <md-icon>close</md-icon>
     </md-button>
@@ -81,6 +81,7 @@ export default {
       inited: false,
       loading: 0,
       diaNewCaseNameShow: false,
+      isActive: false,
       options: {
         case_id: '0',
         case_name: '',
@@ -93,6 +94,12 @@ export default {
       },
       cases: []
     }
+  },
+  watch: {
+     async mdActive(isActive) {
+      this.isActive = isActive;
+      await this.$nextTick();
+    },
   },
   methods: {
     async init() {
@@ -183,7 +190,12 @@ export default {
       await this.init();
       await this.fetchCases();
     },
+    open() {
+      this.isActive = true;
+      this.$emit('update:mdActive', true);
+    },
     closeDialog () {
+      this.isActive = false;
       this.$emit('update:mdActive', false);
     },
     getQueryCase() {

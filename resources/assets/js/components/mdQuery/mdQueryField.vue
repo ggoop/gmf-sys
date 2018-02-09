@@ -1,5 +1,5 @@
 <template>
-  <md-dialog :md-active.sync="mdActive" @md-opened="onOpen" @md-closed="closeDialog">
+  <md-dialog :md-active.sync="isActive" @md-opened="onOpen" @md-closed="closeDialog">
     <md-toolbar>
       <h1 class="md-title">选择更多内容</h1>
     </md-toolbar>
@@ -23,6 +23,7 @@ export default {
   },
   data() {
     return {
+      isActive: false,
       node: {
         type_id: '',
         path: '',
@@ -31,12 +32,19 @@ export default {
       }
     }
   },
+  watch: {
+     async mdActive(isActive) {
+      this.isActive = isActive;
+      await this.$nextTick();
+    },
+  },
   methods: {
     confirm() {
       this.$emit('confirm', this.getItems());
       this.closeDialog();
     },
     closeDialog() {
+      this.isActive=false;
       this.$emit('update:mdActive', false);
     },
     onOpen() {

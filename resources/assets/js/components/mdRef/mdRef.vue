@@ -1,5 +1,5 @@
 <template>
-  <md-dialog :md-active.sync="showDialog" :md-click-outside-to-close="false" @md-opened="onRefOpen" @md-closed="onRefClose" class="md-refs-dialog">
+  <md-dialog :md-active.sync="isActive" :md-click-outside-to-close="false" @md-opened="onRefOpen" @md-closed="onRefClose" class="md-refs-dialog">
     <md-toolbar md-elevation="0" class="md-primary">
       <div class="md-toolbar-row">
         <div class="md-toolbar-section-start">
@@ -18,7 +18,7 @@
       </md-grid>
     </md-dialog-content>
     <md-loading :loading="loading"></md-loading>
-    <md-query-case v-if="canQueryCaseOpen" :md-query-id="mdRefId" ref="queryCase" @init="initQueryCase" @query="queryQueryCase">
+    <md-query-case v-if="canQueryCaseOpen" :md-query-id="mdRefId" :md-active.sync="showQueryCase" @init="initQueryCase" @query="queryQueryCase">
     </md-query-case>
   </md-dialog>
 </template>
@@ -44,18 +44,20 @@ export default {
           orders: []
         }
       }
-    }
+    },
+    mdActive: Boolean
   },
   data() {
     return {
-      showDialog: false,
+      isActive: false,
       currentQ: '',
       autoquery: true,
       selectedRows: [],
       refInfo: {},
       loading: 0,
       caseModel: {},
-      canQueryCaseOpen: false
+      canQueryCaseOpen: false,
+      showQueryCase:false,
     };
   },
   watch: {
@@ -70,12 +72,16 @@ export default {
         }
       }
     },
+     async mdActive(isActive) {
+      this.isActive = isActive;
+      await this.$nextTick();
+    },
   },
   methods: {
     openQueryCase() {
       this.canQueryCaseOpen = true;
       this.$nextTick(() => {
-        this.$refs.queryCase&&this.$refs.queryCase.open();
+        this.showQueryCase=true;
       });
     },
     initQueryCase(options, promise) {
@@ -86,6 +92,7 @@ export default {
       this.pagination();
     },
     onRefOpen() {
+      this.$emit('init', this.options);
       this.pagination();
     },
     onRefClose() {
@@ -142,20 +149,24 @@ export default {
       this.selectedRows = [data];
       this.onConfirm();
     },
-    open() {
-      this.showDialog = true;
-      this.$emit('init', this.options);
-    },
     onCancel() {
       if (!this.canFireEvents) return;
-      this.showDialog = false;
       this.$emit('cancel', false);
+      this.closeDialog();
     },
     onConfirm() {
       if (!this.canFireEvents) return;
-      this.showDialog = false;
       this.$emit('confirm', this.getReturnValue());
-    }
+      this.closeDialog();
+    },
+    closeDialog() {
+      this.isActive = false;
+      this.$emit('update:mdActive', false);
+    },
+    open() {
+      this.isActive = true;
+      this.$emit('update:mdActive', true);
+    },
   },
   mounted() {
     this.$nextTick(() => {
