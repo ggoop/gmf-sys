@@ -203,7 +203,7 @@ export default {
         size: this.options.size,
         name: this.options.case_name,
         query_id: this.options.query_id || this.mdQueryId,
-        wheres: { case: { items: [], boolean: 'and' } },
+        wheres: { $case: { $items: [], boolean: 'and' } },
         orders: [],
         fields: []
       };
@@ -216,7 +216,7 @@ export default {
       this._.each(this.options.wheres, (v) => {
         if (v && (!v.sys_deleted)) {
           var item = this.formatCaseWhereItem(v);
-          if (item) qc.wheres.case.items.push(item);
+          if (item) qc.wheres.$case.$items.push(item);
         }
       });
       this._.each(this.options.orders, (v) => {

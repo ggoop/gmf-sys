@@ -1,17 +1,17 @@
 <template>
-  <md-field class="md-chips md-ref-input" ref="MdField" @blur="onBlur" :class="[$mdActiveTheme]">
+  <md-field class="md-chips md-ref-input" ref="MdField" @blur="onBlur" :class="[$mdActiveTheme,chipsClasses]">
     <label v-if="mdLabel">{{mdLabel}}</label>
     <slot v-if="!mdStatic" />
     <md-chip v-for="(chip, key) in selectedValues" :key="chip.id" :md-deletable="!mdStatic&&!disabled" :md-clickable="!mdStatic&&!disabled" @keydown.enter="!disabled&&$emit('md-click', chip, key)" @click.native="!disabled&&$emit('md-click', chip, key)" @md-delete.stop="!disabled&&removeChip(chip)">
       <slot name="md-chip" :chip="chip" v-if="$scopedSlots['md-chip']">{{ chip }}</slot>
       <template v-else>{{ chip.name }}</template>
     </md-chip>
-    <md-input ref="input" v-model.trim="inputValue" :disabled="disabled" v-show="!disabled&&!mdStatic && modelRespectLimit" :type="mdInputType" :id="id" :placeholder="mdPlaceholder" @keydown.enter="insertChip" @keydown.8="handleBackRemove" @dblclick.native="openRef()">
+    <md-input ref="input" :readonly="!canInput" v-model.trim="inputValue" :disabled="disabled" v-show="!disabled&&!mdStatic && modelRespectLimit" :type="inputType" :id="id" :placeholder="mdPlaceholder" @keydown.enter="insertChip" @keydown.8="handleBackRemove" @dblclick.native="openRef()">
     </md-input>
     <md-button v-if="!disabled" class="md-dense md-icon-button md-ref-filter" @click.native="openRef()">
       <md-icon>search</md-icon>
     </md-button>
-    <md-ref v-if="mdRefId" :multiple="multiple" :md-active.sync="showRefDia" @confirm="onRefConfirm" :md-ref-id="mdRefId" :options="options"></md-ref>
+    <md-ref v-if="mdRefId" :multiple="multiple" :md-init="mdInit" :md-active.sync="showRefDia" @confirm="onRefConfirm" :md-ref-type="mdRefType" :md-ref-id="mdRefId" :options="options"></md-ref>
   </md-field>
 </template>
 <script>
@@ -28,7 +28,7 @@ export default new MdComponent({
     MdInput
   },
   props: {
-    value: [Array, Object],
+    value: [Array, String, Object],
     disabled: Boolean,
     multiple: Boolean,
     mdRefId: String,
@@ -36,9 +36,10 @@ export default new MdComponent({
       type: [String, Number],
       default: () => 'md-chips-' + MdUuid()
     },
-    mdInputType: {
-      type: [String, Number],
-      ...MdPropValidator('md-input-type', ['email', 'number', 'password', 'search', 'tel', 'text', 'url'])
+    mdRefType: {
+      type: String,
+      default: 'entity',
+      ...MdPropValidator('md-ref-type', ['entity', 'enum', 'text'])
     },
     mdLabel: String,
     mdPlaceholder: [String, Number],
@@ -46,31 +47,33 @@ export default new MdComponent({
     mdLimit: Number,
     mdFormat: {
       type: Function
-    }
+    },
+    mdInit: { type: Function },
   },
   data: () => ({
     inputValue: '',
     selectedValues: [],
-    hasValue: false,
     options: { wheres: {}, orders: [] },
-    showRefDia:false
+    showRefDia: false
   }),
   computed: {
+    inputType() {
+      return 'text'
+    },
+    canInput() {
+      return this.mdRefType == 'text'
+    },
     chipsClasses() {
       return {
-        'md-has-value': this.hasValue
+        'md-has-value': this.selectedValues && this.selectedValues.length > 0
       }
     },
-
     modelRespectLimit() {
       return !this.mdLimit || this.value.length < this.mdLimit
     }
   },
   watch: {
     value(value) {
-      if (!common.isObject(value)) {
-        value = null;
-      }
       this.setValue(value);
     },
     selectedValues() {
@@ -82,22 +85,20 @@ export default new MdComponent({
       this.$refs.MdField.MdField.value = this.selectedValues && this.selectedValues.length > 0 ? "1" : '';
     },
     setValue(value) {
-      if (!common.isObject(value)) {
-        value = null;
-      }
-      if (!value) {
-        this.selectedValues = [];
+      this.selectedValues = [];
+      if (common.isArray(value)) {
+        value.forEach(v => {
+          this.addValue(v);
+        });
       } else {
-        if (common.isArray(value)) {
-          this.selectedValues = value;
-        } else {
-          this.selectedValues = [value];
-        }
+        this.addValue(value);
       }
+      this.emitChange();
     },
     addValue(value) {
-      if (!value || !value.id) {
-        return;
+      if (!value) return;
+      if (this._.isString(value)) {
+        value = { name: value, id: value };
       }
       if (this.multiple && this.mdLimit > 0 && this.selectedValues.length >= this.mdLimit) {
         return;
@@ -108,38 +109,50 @@ export default new MdComponent({
       const index = this.getValueIndex(value);
       if (index < 0) {
         this.selectedValues.push(value);
-        const nv = this.formatValue();
-        this.$emit('input', nv);
       }
+    },
+    emitChange() {
+      var values = null;
+      if (this.multiple) {
+        if (this.mdRefType == 'entity' || this.mdRefType == 'enum') {
+          values = this.selectedValues.filter(v => !!v);
+        } else if (this.mdRefType == 'text') {
+          values = this.selectedValues.map(v => v.name).filter(v => !!v);
+        }
+      } else if (this.selectedValues.length) {
+        if (this.mdRefType == 'entity' || this.mdRefType == 'enum') {
+          values = this.selectedValues[0];
+        } else if (this.mdRefType == 'text') {
+          values = this.selectedValues[0] ? this.selectedValues[0].name : '';
+        }
+      }
+      this.$emit('input', values);
     },
     getValueIndex(value) {
       for (var i = 0; i < this.selectedValues.length; i++) {
-        if (value.id && this.selectedValues[i].id == value.id) {
+        if (this._.isObject(value) && value.id && this._.isObject(this.selectedValues[i]) && this.selectedValues[i].id == value.id) {
           return i;
         }
-        if (value.code && this.selectedValues[i].code == value.code) {
+        if (this._.isObject(value) && value.code && this._.isObject(this.selectedValues[i]) && this.selectedValues[i].code == value.code) {
           return i;
         }
-        if (this._.isString(value) && this.selectedValues[i].code == value) {
+        if (this._.isString(value) && this._.isObject(this.selectedValues[i]) && this.selectedValues[i].code == value) {
           return i;
         }
-        if (this._.isString(value) && this.selectedValues[i].name == value) {
+        if (this._.isString(value) && this._.isObject(this.selectedValues[i]) && this.selectedValues[i].name == value) {
+          return i;
+        }
+        if (this._.isString(value) && this._.isString(this.selectedValues[i]) && this.selectedValues[i] == value) {
           return i;
         }
       }
       return -1;
     },
-    formatValue() {
-      if (!this.multiple) {
-        return this.selectedValues.length ? this.selectedValues[0] : null;
-      }
-      return this.selectedValues;
-    },
     openRef() {
       if (this.disabled) return;
       this.$emit('mdPick', this.options);
       if (this.mdRefId) {
-        this.showRefDia=true;
+        this.showRefDia = true;
       }
     },
     onRefConfirm(data) {
@@ -148,6 +161,7 @@ export default new MdComponent({
       data && data.forEach((row, index) => {
         this.addValue(row);
       });
+      this.emitChange();
     },
     insertChip({ target }) {
       if (this.disabled) return;
@@ -157,17 +171,16 @@ export default new MdComponent({
       ) {
         return
       }
-      const value = { name: this.inputValue.trim() };
-      value.id = value.name;
+      const value = this.inputValue.trim();
       this.inputValue = '';
       this.addValue(value);
+      this.emitChange();
     },
     removeChip(chip) {
       const index = this.getValueIndex(chip);
       if (index >= 0) {
         this.selectedValues.splice(index, 1);
-        const nv = this.formatValue();
-        this.$emit('input', nv);
+        this.emitChange();
       }
       this.$nextTick(() => this.$refs.input.$el.focus())
     },

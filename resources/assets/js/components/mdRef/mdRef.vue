@@ -3,7 +3,7 @@
     <md-toolbar md-elevation="0" class="md-primary">
       <div class="md-toolbar-row">
         <div class="md-toolbar-section-start">
-          <h1 class="md-title">{{refInfo.comment}}</h1>
+          <h1 class="md-title">{{refInfo.query_comment}}</h1>
         </div>
         <md-fetch class="search" :fetch="autoFetch"></md-fetch>
         <div class="md-toolbar-section-end">
@@ -14,12 +14,9 @@
       </div>
     </md-toolbar>
     <md-dialog-content class="no-padding layout flex">
-      <md-grid :auto-select="true" ref="grid" :datas="fetchData" :multiple="multiple" showConfirm showCancel showQuery showDownload @select="onSelected" @dblclick="dblclick" @onQuery="openQueryCase" @onConfirm="onConfirm" @onCancel="onCancel">
-      </md-grid>
+      <md-wrap v-if="componentName" :name="componentName" :md-active.sync="isRefLoaded" :md-init="mdInit" :multiple="multiple" :md-q="currentQ" :value="value" :md-ref-id="mdRefId" :md-ref-type="mdRefType" :options="options" @md-cancel="onCancel" @md-confirm="onConfirm"></md-wrap>
     </md-dialog-content>
     <md-loading :loading="loading"></md-loading>
-    <md-query-case v-if="canQueryCaseOpen" :md-query-id="mdRefId" :md-active.sync="showQueryCase" @init="initQueryCase" @query="queryQueryCase">
-    </md-query-case>
   </md-dialog>
 </template>
 <script>
@@ -36,6 +33,10 @@ export default {
       default: true
     },
     mdRefId: String,
+    mdRefType: {
+      type: String,
+      default: 'entity'
+    },
     options: {
       type: Object,
       default () {
@@ -45,118 +46,69 @@ export default {
         }
       }
     },
-    mdActive: Boolean
+    mdActive: Boolean,
+    mdInit: { type: Function },
   },
   data() {
     return {
       isActive: false,
+      isRefLoaded: false,
       currentQ: '',
-      autoquery: true,
-      selectedRows: [],
       refInfo: {},
       loading: 0,
-      caseModel: {},
-      canQueryCaseOpen: false,
-      showQueryCase:false,
     };
   },
   watch: {
-    value(value) {
-      if (!value) {
-        this.selectedRows = [];
-      } else {
-        if (common.isArray(value)) {
-          this.selectedRows = value;
-        } else {
-          this.selectedRows = [value];
-        }
-      }
-    },
-     async mdActive(isActive) {
+    async mdActive(isActive) {
       this.isActive = isActive;
       await this.$nextTick();
     },
   },
+  computed: {
+    componentName() {
+      if (this.refInfo && this.refInfo.entity_id)
+        return 'md-ref-body-entity';
+      else if (this.refInfo && this.refInfo.component && this.refInfo.component.code)
+        return this.refInfo.component.code;
+      return '';
+    },
+  },
   methods: {
-    openQueryCase() {
-      this.canQueryCaseOpen = true;
-      this.$nextTick(() => {
-        this.showQueryCase=true;
-      });
-    },
-    initQueryCase(options, promise) {
-      promise && promise.resolve(true);
-    },
-    queryQueryCase(caseModel) {
-      this.caseModel = caseModel;
-      this.pagination();
-    },
     onRefOpen() {
-      this.$emit('init', this.options);
-      this.pagination();
+      this.refInfo = {};
+      this.isRefLoaded = false;
+      if (this.mdInit) {
+        Promise.all([this.mdInit(this.options)]).then(v => {
+          this.fetchQueryInfo();
+        });
+      } else {
+        this.fetchQueryInfo();
+      }
+    },
+    fetchQueryInfo() {
+      if (!this.mdRefId) return;
+      this.$http.get('sys/queries/' + this.mdRefId).then(res => {
+        this.refInfo = res.data.data;
+        this.$nextTick().then(r => {
+          this.isRefLoaded = true;
+        });
+      });
     },
     onRefClose() {
       if (!this.canFireEvents) return;
       this.$emit('close');
     },
     autoFetch(q) {
-      this.doSearch(q);
-    },
-    doSearch(q) {
-      if ((this.autoquery && this.currentQ != q)) {
-        this.currentQ = q;
-        this.pagination();
-      }
       this.currentQ = q;
-    },
-    formatFieldToColumn(field) {
-      return {
-        field: field.alias,
-        label: field.comment,
-        hidden: field.alias == 'id' || field.hide || field.hidden
-      };
-    },
-    pagination() {
-      this.selectedRows = [];
-      this.$refs.grid&&this.$refs.grid.refresh();
-    },
-    async fetchData({ pager, filter, sort }) {
-      var options = this._.extend({}, { q: this.currentQ }, this.options, this.caseModel, pager);
-      if (options.orders && sort && sort.field) {
-        options.orders.length && this._.remove(options.orders, function(n) {
-          return n.name === sort.field;
-        });
-        options.orders.splice && options.orders.splice(0, 0, { name: sort.field, direction: sort.order });
-      }
-      const response = await this.$http.post('sys/queries/query/' + this.mdRefId, options);
-
-      this.refInfo = response.data.schema;
-      this.$refs.grid&&this.$refs.grid.setColumns(this.refInfo.fields.map(col => this.formatFieldToColumn(col)));
-      return response;
-    },
-    onSelected({ data }) {
-      if (!this.canFireEvents) return;
-      this.selectedRows = [];
-      Object.keys(data).forEach((row, index) => {
-        this.selectedRows[index] = data[row];
-      });
-      this.$emit('select', this.selectedRows);
-    },
-    getReturnValue() {
-      return this.selectedRows.map(row => this._.pick(row, Object.keys(row).filter(f => f !== 'vueRowId')));
-    },
-    dblclick({ data }) {
-      this.selectedRows = [data];
-      this.onConfirm();
     },
     onCancel() {
       if (!this.canFireEvents) return;
       this.$emit('cancel', false);
       this.closeDialog();
     },
-    onConfirm() {
+    onConfirm(datas) {
       if (!this.canFireEvents) return;
-      this.$emit('confirm', this.getReturnValue());
+      this.$emit('confirm', datas);
       this.closeDialog();
     },
     closeDialog() {

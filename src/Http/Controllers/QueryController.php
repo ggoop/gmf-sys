@@ -30,7 +30,7 @@ class QueryController extends Controller {
 	public function show(Request $request, string $queryID) {
 		$qc = QueryCase::create();
 		$caseID = $request->input('case_id');
-		$queryInfo = $qc->getQueryInfo($queryID, $caseID);
+		$queryInfo = $qc->getQueryInfo($request, $queryID, $caseID);
 		return $this->toJson($queryInfo);
 	}
 	public function getCases(Request $request, string $queryID) {
@@ -40,20 +40,20 @@ class QueryController extends Controller {
 
 		return $this->toJson($data);
 	}
-	private function buildQueryCase(Request $request, string $queryID) {
-		$qc = QueryCase::create();
-		$qc->fromQuery($queryID, $request);
-		return $qc;
-	}
-	public function query(Request $request, string $queryID) {
+
+	public function query(Request $request, string $queryID = '') {
 		$pageSize = $request->input('size', 10);
 
-		$qc = $this->buildQueryCase($request, $queryID);
+		$qc = QueryCase::create();
+		$qc->fromQuery($request, $queryID);
 
 		$data = [];
 		$error = false;
 		// try {
 		$entityQuery = EntityQuery::create($qc->query->entity_name);
+		if ($request->input('distinct')) {
+			$entityQuery->distinct();
+		}
 
 		foreach ($qc->fields as $f) {
 			if (empty($f)) {
@@ -77,7 +77,7 @@ class QueryController extends Controller {
 			}
 		}
 		$query = $entityQuery->build();
-
+		//var_dump($entityQuery->toSql());
 		if ($request->custFilter) {
 			$query->whereRaw($request->custFilter);
 		}

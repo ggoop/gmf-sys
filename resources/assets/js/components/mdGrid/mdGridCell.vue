@@ -5,15 +5,18 @@
         <slot name="editor"></slot>
       </template>
       <template v-else-if="column&&column.dataType=='entity'">
-        <md-ref-input :md-ref-id="column.refId||column.refType" @init="on_init_ref" v-model="row.data[column.field]"></md-ref-input>
+        <md-ref-input :md-ref-id="column.refId" @init="on_init_ref" v-model="row.data[column.field]"></md-ref-input>
       </template>
       <template v-else-if="column&&column.dataType=='enum'">
         <md-field>
-          <md-enum :md-enum-id="column.refId||column.refType" v-model="row.data[column.field]"></md-enum>
+          <md-enum :md-enum-id="column.refId" v-model="row.data[column.field]"></md-enum>
         </md-field>
       </template>
       <template v-else-if="column&&column.dataType=='date'">
         <md-datepicker v-model="row.data[column.field]"></md-datepicker>
+      </template>
+      <template v-else-if="column&&column.refId">
+        <md-ref-input :md-ref-id="column.refId" :md-ref-type="column.refType" @init="on_init_ref" v-model="row.data[column.field]"></md-ref-input>
       </template>
       <template v-else>
         <md-field>
@@ -37,7 +40,7 @@ export default {
   },
   props: {
     column: { type: Object },
-    containerClass:String,
+    containerClass: String,
     row: { type: Object },
     selection: { default: false, type: Boolean },
     type: { default: 'td', type: String },

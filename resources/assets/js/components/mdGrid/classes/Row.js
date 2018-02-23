@@ -14,7 +14,7 @@ export default class Row {
       return get(this.data, columnName);
     }
     if (column && column.dataType === 'enum') {
-      return enumCache.getEnumName(column.refId || column.refType, get(this.data, columnName));
+      return enumCache.getEnumName(column.refId, get(this.data, columnName));
     }
     return get(this.data, columnName);
   }

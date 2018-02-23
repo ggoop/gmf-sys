@@ -27,25 +27,45 @@ class QueryCase {
 		return $parse;
 	}
 
-	public function getQueryInfo(string $queryID, $caseID = '') {
-		$query = Models\Query::with('fields', 'entity', 'orders', 'wheres');
-		$query->where('id', $queryID)->orWhere('name', $queryID);
-		$model = $query->first();
-		if (empty($model)) {
-			throw new Exception("not find query");
+	public function getQueryInfo(Request $request = null, string $queryID = '', $caseID = '') {
+		if (empty($queryID)) {
+			return false;
 		}
 		$caseModel = false;
 		$queryInfo = new Builder;
-		$queryInfo->query_id($model->id)
-			->query_type_enum($model->type_enum)
-			->query_name($model->name)
-			->query_memo($model->memo)
-			->query_comment($model->comment ?: $model->name)
-			->size($model->size)
-			->wheres([])->orders([])->fields([]);
+		$queryInfo->wheres([])->orders([])->fields([]);
 
-		if ($model->entity) {
+		$query = Models\Query::with('fields', 'entity', 'orders', 'wheres', 'component');
+		$query->where('id', $queryID)->orWhere('name', $queryID);
+		$model = $query->first();
+		$mainEntity = false;
+		if (empty($model)) {
+			$mainEntity = Models\Entity::where('id', $queryID)->orWhere('name', $queryID)->first();
+			if (empty($mainEntity)) {
+				throw new \Exception("not find query");
+			}
+		} else {
+			$mainEntity = $model->entity;
+		}
+		if ($model) {
+			$queryInfo->query_id($model->id)
+				->query_type_enum($model->type_enum)
+				->query_name($model->name)
+				->query_memo($model->memo)
+				->query_comment($model->comment ?: $model->name)
+				->size($model->size);
+		}
+		if ($model && $model->component) {
+			$component = new Builder;
+			$component->id($model->component->id)
+				->code($model->component->code)
+				->name($model->component->name);
+			$queryInfo->component($component);
+		}
+		if ($model && $model->entity) {
 			$queryInfo->entity_id($model->entity->id)->entity_name($model->entity->name)->entity_comment($model->entity->comment);
+		} else if ($mainEntity) {
+			$queryInfo->entity_id($mainEntity->id)->entity_name($mainEntity->name)->entity_comment($mainEntity->comment);
 		}
 		if ($caseID) {
 			$caseModel = Models\QueryCase::where('query_id', $model->id)->where('id', $caseID)->first();
@@ -60,16 +80,16 @@ class QueryCase {
 		$wheres = [];
 		$orders = [];
 		if ($caseModel) {
-			if ($caseModel->data->fields) {
+			if ($caseModel->data && $caseModel->data->fields) {
 				$fields = $caseModel->data->fields;
 			}
-			if ($caseModel->data->wheres) {
+			if ($caseModel->data && $caseModel->data->wheres) {
 				$wheres = $caseModel->data->wheres;
 			}
-			if ($caseModel->data->orders) {
+			if ($caseModel->data && $caseModel->data->orders) {
 				$orders = $caseModel->data->orders;
 			}
-		} else {
+		} else if ($model) {
 			//fields
 			if (count($model->fields) > 0) {
 				foreach ($model->fields as $f) {
@@ -91,7 +111,6 @@ class QueryCase {
 					$fields[] = $field;
 				}
 			}
-
 			//wheres
 			if (count($model->wheres) > 0) {
 				foreach ($model->wheres as $f) {
@@ -126,14 +145,15 @@ class QueryCase {
 
 		//匹配项
 		$matchItems = [];
-		if ($model->matchs) {
+		if ($model && $model->matchs) {
 			$matchItems = explode(";", $model->matchs);
 		}
 		$queryInfo->matchs($matchItems);
 
 		//其它过滤项
-		$queryInfo->filter($model->filter);
-
+		if ($model) {
+			$queryInfo->filter($model->filter);
+		}
 		return $queryInfo;
 	}
 	public function fromRequest(Request $request) {
@@ -154,29 +174,22 @@ class QueryCase {
 			$this->fields = $parse->parse($temps);
 		}
 	}
-	protected function parseContext(Request $request = null) {
-		$context = [];
-		if ($request) {
-			$context['entId'] = GAuth::entId();
-			$context['userId'] = GAuth::userId();
-		}
-		$this->context = $context;
-		return $this->context;
-	}
-	public function fromQuery(string $queryID, Request $request = null) {
+
+	public function fromQuery(Request $request = null, string $queryID = '') {
 		$this->parseContext($request);
-		$this->query = $this->getQueryInfo($queryID);
-		//栏目
-		$this->fields = $this->query->fields;
-		//匹配项
-		$this->matchs = $this->query->matchs;
-		//其它过滤项
-		$this->filter = $this->query->filter;
-		if ($this->filter) {
+		$this->query = $this->getQueryInfo($request, $queryID);
+		if (!empty($this->query)) {
+			//栏目
+			$this->fields = $this->query->fields;
+			//匹配项
+			$this->matchs = $this->query->matchs;
+			//其它过滤项
+			$this->filter = $this->query->filter;
+		}
+		if (!empty($this->filter)) {
 			foreach ($this->context as $key => $value) {
 				$this->filter = str_replace('#{' . $key . '}#', "'" . $value . "'", $this->filter);
 			}
-
 		}
 		//优先使用方案栏目
 		if (!empty($request)) {
@@ -186,7 +199,7 @@ class QueryCase {
 				$this->fields = $parse->parse($temps);
 			}
 		}
-		if (empty($this->fields) || count($this->fields) == 0) {
+		if (!empty($this->query) && (empty($this->fields) || count($this->fields) == 0)) {
 			$this->fields = $this->query->fields;
 		}
 		//优先使用请求条件
@@ -205,7 +218,7 @@ class QueryCase {
 				$this->orders = $parse->parse($temps);
 			}
 		}
-		if (empty($this->orders) && count($this->orders) == 0) {
+		if (!empty($this->query) && (empty($this->orders) || count($this->orders) == 0)) {
 			$this->orders = $this->query->orders;
 		}
 	}
@@ -218,138 +231,67 @@ class QueryCase {
 	 * @param  string $column    [description]
 	 * @return [type]            [description]
 	 */
-	public static function attachWhere($query, $caseWhere, $column = '', $boolean = 'and') {
+	public static function attachWhere($query, $caseWhere, $column = '') {
 		if (empty($query) || empty($caseWhere)) {
 			return $query;
-		}
-		if (empty($boolean)) {
-			$boolean = 'and';
 		}
 
 		if (empty($column)) {
 			$column = $caseWhere->name;
 		}
 		$value = $caseWhere->value;
-		if (($caseWhere->operator == 'equal' || $caseWhere->operator == '=') && !empty($value)) {
-			if ($boolean === 'or') {
-				$query->orWhere($column, $value);
-			} else {
-				$query->where($column, $value);
-			}
-
+		if (in_array($caseWhere->operator, ['missing', 'null'])) {
+			$query->whereNull($column, $caseWhere->boolean);
 		}
-		if (($caseWhere->operator == 'not_equal' || $caseWhere->operator == '!=' || $caseWhere->operator == '<>') && !empty($value)) {
-			if ($boolean === 'or') {
-				$query->orWhere($column, '!=', $value);
-			} else {
-				$query->where($column, '!=', $value);
-			}
-
+		if (in_array($caseWhere->operator, ['exists', 'not_null'])) {
+			$query->whereNotNull($column, $caseWhere->boolean);
 		}
-		if (($caseWhere->operator == 'greater_than' || $caseWhere->operator == '>') && !empty($value)) {
-			if ($boolean === 'or') {
-				$query->orWhere($column, '>', $value);
-			} else {
-				$query->where($column, '>', $value);
-			}
+		if (in_array($caseWhere->operator, ['=', 'term', 'equal']) && !empty($value)) {
+			$query->where($column, '=', $value, $caseWhere->boolean);
 		}
-		if (($caseWhere->operator == 'less_than' || $caseWhere->operator == '<') && !empty($value)) {
-			if ($boolean === 'or') {
-				$query->orWhere($column, '<', $value);
-			} else {
-				$query->where($column, '<', $value);
-			}
+		if (in_array($caseWhere->operator, ['!=', '<>', 'not_term', 'not_equal']) && !empty($value)) {
+			$query->where($column, '!=', $value, $caseWhere->boolean);
 		}
-		if (($caseWhere->operator == 'greater_than_equal' || $caseWhere->operator == '>=') && !empty($value)) {
-			if ($boolean === 'or') {
-				$query->orWhere($column, '>=', $value);
-			} else {
-				$query->where($column, '>=', $value);
-			}
+		if (in_array($caseWhere->operator, ['gt', '>', 'greater_than']) && !empty($value)) {
+			$query->where($column, '>', $value, $caseWhere->boolean);
 		}
-		if (($caseWhere->operator == 'less_than_equal' || $caseWhere->operator == '<=') && !empty($value)) {
-			if ($boolean === 'or') {
-				$query->orWhere($column, '<=', $value);
-			} else {
-				$query->where($column, '<=', $value);
-			}
+		if (in_array($caseWhere->operator, ['gte', '>=', 'greater_than_equal']) && !empty($value)) {
+			$query->where($column, '>=', $value, $caseWhere->boolean);
 		}
-		if ($caseWhere->operator == 'between' && !empty($value) && is_array($value)) {
-			if ($boolean === 'or') {
-				$query->orWhereBetween($column, $value);
-			} else {
-				$query->whereBetween($column, $value);
-			}
-
+		if (in_array($caseWhere->operator, ['lt', '<', 'less_than']) && !empty($value)) {
+			$query->where($column, '<', $value, $caseWhere->boolean);
 		}
-		if ($caseWhere->operator == 'not_between' && !empty($value) && is_array($value)) {
-			if ($boolean === 'or') {
-				$query->orWhereNotBetween($column, $value);
-			} else {
-				$query->whereNotBetween($column, $value);
-			}
+		if (in_array($caseWhere->operator, ['lte', '<=', 'less_than_equal']) && !empty($value)) {
+			$query->where($column, '<=', $value, $caseWhere->boolean);
 		}
-		if ($caseWhere->operator == 'in' && !empty($value) && is_array($value)) {
-
-			if ($boolean === 'or') {
-				$query->orWhereIn($column, $value);
-			} else {
-				$query->whereIn($column, $value);
-			}
+		if (in_array($caseWhere->operator, ['match', 'like']) && !empty($value)) {
+			$query->where($column, 'like', '%' . $value . '%', $caseWhere->boolean);
 		}
-		if ($caseWhere->operator == 'not_in' && !empty($value) && is_array($value)) {
-
-			if ($boolean === 'or') {
-				$query->orWhereNotIn($column, $value);
-			} else {
-				$query->whereNotIn($column, $value);
-			}
+		if (in_array($caseWhere->operator, ['not_match', 'not_like']) && !empty($value)) {
+			$query->where($column, 'not like', $value, $caseWhere->boolean);
 		}
-		if ($caseWhere->operator == 'null') {
-
-			if ($boolean === 'or') {
-				$query->orWhereNull($column);
-			} else {
-				$query->whereNull($column);
-			}
+		if (in_array($caseWhere->operator, ['left_match', 'left_like']) && !empty($value)) {
+			$query->where($column, 'like', $value . '%', $caseWhere->boolean);
 		}
-		if ($caseWhere->operator == 'not_null') {
-
-			if ($boolean === 'or') {
-				$query->orWhereNotNull($column);
-			} else {
-				$query->whereNotNull($column);
-			}
+		if (in_array($caseWhere->operator, ['right_match', 'right_like']) && !empty($value)) {
+			$query->where($column, 'like', '%' . $value, $caseWhere->boolean);
 		}
-		if ($caseWhere->operator == 'like' && !empty($value)) {
-			if ($boolean === 'or') {
-				$query->orWhere($column, 'like', '%' . $value . '%');
-			} else {
-				$query->where($column, 'like', '%' . $value . '%');
-			}
+		if (in_array($caseWhere->operator, ['in', 'terms', 'not_in', 'not_terms']) && !empty($value)) {
+			$query->whereIn($column, $value, $caseWhere->boolean, starts_with($caseWhere->operator, 'not'));
 		}
-		if ($caseWhere->operator == 'left_like' && !empty($value)) {
-			if ($boolean === 'or') {
-				$query->orWhere($column, 'like', '%' . $value);
-			} else {
-				$query->where($column, 'like', '%' . $value);
-			}
-
-		}
-		if ($caseWhere->operator == 'right_like' && !empty($value)) {
-			if ($boolean === 'or') {
-				$query->orWhere($column, 'like', $value . '%');
-			} else {
-				$query->where($column, 'like', $value . '%');
-			}
-		}
-		if ($caseWhere->operator == 'not_like' && !empty($value)) {
-			if ($boolean === 'or') {
-				$query->orWhere($column, 'not like', '%' . $value . '%');
-			} else {
-				$query->where($column, 'not like', '%' . $value . '%');
-			}
+		if (in_array($caseWhere->operator, ['between', 'not_between']) && !empty($value)) {
+			$query->whereBetween($column, $value, $caseWhere->boolean, starts_with($caseWhere->operator, 'not'));
 		}
 		return $query;
+	}
+
+	protected function parseContext(Request $request = null) {
+		$context = [];
+		if ($request) {
+			$context['entId'] = GAuth::entId();
+			$context['userId'] = GAuth::userId();
+		}
+		$this->context = $context;
+		return $this->context;
 	}
 }

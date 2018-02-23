@@ -1,20 +1,19 @@
 <script>
-  import common from 'gmf/core/utils/common';
+import common from 'gmf/core/utils/common';
 
-  export default {
-    name:'MdWrap',
-    render: function(createElement) {
-        var tag=common.snakeCase(this.name);
-        return createElement(tag);
-    },
-    props: {
-        name: {
-            type: String,
-            required: true
-        }
+export default {
+  name: 'MdWrap',
+  functional: true,
+  render: function(createElement, context) {
+    var tag = common.snakeCase(context.props.name);
+    return createElement(tag, context.data, context.children);
+  },
+  props: {
+    name: {
+      type: String,
+      required: true
     }
+  }
 };
+
 </script>
-<style lang="scss">
-  @import "~components/MdAnimation/variables";
-</style>

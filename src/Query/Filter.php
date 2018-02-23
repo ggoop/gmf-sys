@@ -6,21 +6,34 @@ use Illuminate\Support\Facades\Log;
 
 class Filter {
 
-/**
-"wheres": {
-"fielda":"asdfe",
-"fieldb":[2,3,4,5,6],
-"fieldc":{"id":"123","code":"code"},
-"f1": {"name": "f1","value": "001"},
-"and":[{"name": "f3","value": "001"},{"name": "f4","value": "001"}],
-"or": [
-{"name": "f5","value": "001"},
-{"and": [{"name": "code","value": "001"},{"name": "code","value": "001"}]},
-{"or": [{"name": "code","value": "001"},{"name": "code1","value": "001"}]}
-],
-"filter":{"or":[]},
+/*
+wheres:{
+"term":{},
+"or":[],
+"and":[],
 "boolean":"and"
 }
+wheres:[]
+
+{"or": [item1,item2,item3]}
+{"or": {'field1':'234'}}
+
+{"and": [item1,item2,item3]}
+{"not":[item1,item2,item3]}
+
+{"term": {"last_name" : "smith" }}
+{"match" : {"last_name" : "smith" }}
+{"left_match" : {"last_name" : "smith" }}
+{"right_match" : {"last_name" : "smith" }}
+{"gt" : {"age" : 30 }}
+{"gtl" : {"age" : 30 }}
+{"lt" : {"age" : 30 }}
+{"lte" : {"age" : 30 }}
+{"missing": "field"}
+{"exists": "field"}
+
+{'field':'value'}
+{'$key':{'term':{'field':'value'}}}
 
  */
 	protected $items = [];
@@ -30,78 +43,10 @@ class Filter {
 	public function __construct($datas = null) {
 
 	}
-	private function isFilterItem($key, $value) {
+	protected function parseItemValue($value) {
 		if (empty($value)) {
 			return false;
 		}
-		if (is_object($value)
-			&& !empty($value->name)
-			&& is_string($value->name)
-			&& (isset($value->value) || !empty($value->operator))) {
-			return true;
-		}
-
-		return false;
-	}
-	private function isBooleanItem($key, $value) {
-		if (empty($value)) {
-			return false;
-		}
-		if ($key === 'and' && is_array($value)) {
-			return 'and';
-		}
-		if ($key === 'or' && is_array($value)) {
-			return 'or';
-		}
-		return false;
-	}
-	private function isBooleanTag($key) {
-		if (is_string($key) && !empty($key) && ($key === 'and' || $key === 'or')) {
-			return $key;
-		}
-		return false;
-	}
-
-	private function getBooleanExp($value, $default) {
-		if (is_object($value) && !empty($value->boolean) && ($value->boolean === 'and' || $value->boolean === 'or')) {
-			return $value->boolean;
-		}
-		return $default;
-	}
-	protected function parseItem($value) {
-		$item = new Builder;
-
-		$item->name($value->name);
-
-		if (empty($value->operator)) {
-			if (!empty($value->value) && is_array($value->value)) {
-				$item->operator('in');
-			} else if (!empty($value->value)) {
-				$item->operator('equal');
-			} else {
-				return null;
-			}
-		} else {
-			$item->operator($value->operator);
-		}
-		if (!empty($value->value)) {
-			$v = $this->parseItemValue($value->value, $item);
-			if ($v !== false) {
-				$item->value($v);
-			}
-		}
-
-		//值为空，条件无效
-		if (!($item->operator == 'null' || $item->operator == 'not_null') && empty($value->value)) {
-			return null;
-		}
-		return $item;
-	}
-	protected function parseItemValue($value, $item = null) {
-		if (empty($value)) {
-			return false;
-		}
-
 		$rtn = false;
 		if (is_object($value)) {
 			if (!empty($value->id)) {
@@ -124,58 +69,208 @@ class Filter {
 		}
 		return $rtn;
 	}
-	protected function _parse($items = null, Builder $where, $boolean = 'and') {
-		$wheres = [];
+	//and or
+	protected function _parseBoolean(Array &$contains, $operator, $value = null, $boolean = 'and') {
+		if (!is_array($value)) {
+			return false;
+		}
+
 		$hasItem = false;
-		foreach ($items as $key => $value) {
-			if (is_bool($value) || empty($value) || !(is_object($value) || is_array($value))) {
-				continue;
-			}
-			if ($this->isBooleanTag($key)) {
-				if ($b = $this->isBooleanItem($key, $value)) {
-					$item = new Builder;
-					$hasItem = $this->_parse($value, $item, $b);
-					if ($hasItem) {
-						$item->type('boolean');
-						array_push($wheres, $item);
-					}
-				}
-				continue;
-			} else if ($this->isFilterItem($key, $value)) {
-				$item = $this->parseItem($value);
-				if ($item) {
-					$item->type('item');
-					array_push($wheres, $item);
-				}
-				continue;
-			} else if (is_string($key) && ($v = $this->parseItemValue($value))) {
-				$item = new Builder;
-				$item->name($key);
-				if ($v !== false) {
-					$item->type('item');
-					if (is_array($v)) {
-						$item->operator('in');
-					} else {
-						$item->operator('equal');
-					}
-					$item->value($v);
-					array_push($wheres, $item);
-				}
-				continue;
-			} else {
-				$item = new Builder;
-				$b = $this->getBooleanExp($value, $boolean);
-				$hasItem = $this->_parse($value, $item, $b);
-				if ($hasItem) {
-					$item->type('boolean');
-					array_push($wheres, $item);
-					continue;
-				}
+		$wheres = [];
+
+		foreach ($value as $key => $item) {
+			if ($hasItem = $this->_parse($item, $operator)) {
+				$wheres = array_merge($wheres, $hasItem);
 			}
 		}
-		$where->boolean($boolean);
-		$where->items($wheres);
+		if ($wheres && count($wheres) > 0) {
+			$item = new Builder;
+			$item->type('boolean');
+			$item->boolean($boolean);
+			$item->items($wheres);
+			$contains[] = $item;
+		}
+	}
+	protected function _parseItemNull(Array &$contains, $operator, $names = null, $boolean = 'and') {
+		if (!is_string($names)) {return;}
+		$item = new Builder;
+		$item->type('item');
+		$item->operator($operator);
+		$item->boolean($boolean);
+		$item->name($names);
+		$contains[] = $item;
+		return $item;
+	}
+	protected function _parseItemMatch(Array &$contains, $operator, $value = null, $boolean = 'and') {
+		if (!is_object($value)) {return;}
+		$wheres = [];
+		$hasItem = false;
+		foreach ($value as $pk => $pv) {
+			$hasItem = $this->parseItemValue($pv);
+			if ($hasItem == false || is_array($hasItem)) {
+				continue;
+			}
+			$item = new Builder;
+			$item->type('item');
+			$item->operator($operator);
+			$item->boolean('and');
+			$item->name($pk);
+			$item->value($hasItem);
+			$wheres[] = $item;
+		}
+		if (count($wheres) == 1) {
+			$wheres[0]->boolean($boolean);
+			$contains[] = $wheres[0];
+		} else if (count($wheres) > 1) {
+			$item = new Builder;
+			$item->type('boolean');
+			$item->boolean($boolean);
+			$item->items($wheres);
+			$contains[] = $item;
+		}
+	}
+	protected function _parseItemBetween(Array &$contains, $operator, $value = null, $boolean = 'and') {
+		if (!is_object($value)) {return;}
+		$wheres = [];
+		$hasItem = false;
+		foreach ($value as $pk => $pv) {
+			if ($hasItem = $this->parseItemValue($pv) && is_array($hasItem) && count($hasItem) == 2) {
+				$item = new Builder;
+				$item->type('item');
+				$item->operator($operator);
+				$item->boolean('and');
+				$item->name($pk);
+				$item->value($hasItem);
+				$wheres[] = $item;
+			}
+		}
+		if (count($wheres) == 1) {
+			$wheres[0]->boolean($boolean);
+			$contains[] = $wheres[0];
+		} else if (count($wheres) > 1) {
+			$item = new Builder;
+			$item->type('boolean');
+			$item->boolean($boolean);
+			$item->items($wheres);
+			$contains[] = $item;
+		}
+	}
+	protected function _parseItemTerms(Array &$contains, $operator, $value = null, $boolean = 'and') {
+		if (!is_object($value)) {return;}
+		$wheres = [];
+		$hasItem = false;
+		foreach ($value as $pk => $pv) {
+			if ($hasItem = $this->parseItemValue($pv) && is_array($hasItem)) {
+				$item = new Builder;
+				$item->type('item');
+				$item->operator($operator);
+				$item->boolean('and');
+				$item->name($pk);
+				$item->value($hasItem);
+				$wheres[] = $item;
+			}
+		}
+		if (count($wheres) == 1) {
+			$wheres[0]->boolean($boolean);
+			$contains[] = $wheres[0];
+		} else if (count($wheres) > 1) {
+			$item = new Builder;
+			$item->type('boolean');
+			$item->boolean($boolean);
+			$item->items($wheres);
+			$contains[] = $item;
+		}
+	}
+	/**
+	$data={name:'',operator:''}
+	 */
+	protected function _parseLine(Array &$contains, $data, $boolean = 'and') {
+		if (empty($data->name) || empty($data->operator) || !is_string($data->name) || !is_string($data->operator)) {
+			return false;
+		}
+		$hasItem = false;
+		if (!empty($data->value)) {
+			$hasItem = $this->parseItemValue($data->value);
+		}
 
+		if (!in_array($data->operator, ['missing', 'exists', 'null', 'not_null']) && !$hasItem) {
+			return false;
+		}
+
+		$item = new Builder;
+		$item->type('item');
+		$item->operator($data->operator);
+		$item->boolean($boolean);
+		$item->name($data->name);
+
+		if (!empty($hasItem)) {
+			$item->value($hasItem);
+		}
+		$contains[] = $item;
+	}
+
+	protected function _parse($items = null, $boolean = 'and') {
+		$wheres = [];
+		$hasItem = false;
+		$item = false;
+
+		if (is_array($items)) {
+			$this->_parseBoolean($wheres, $boolean, $items, $boolean);
+			return count($wheres) > 0 ? $wheres : false;
+		} else if (!is_object($items)) {
+			return false;
+		}
+
+		if (!empty($items->name) && !empty($items->operator)) {
+			$this->_parseLine($wheres, $items, $boolean);
+			return count($wheres) > 0 ? $wheres : false;
+		}
+		foreach ($items as $ik => $iv) {
+			if (is_bool($iv) || empty($iv) || !(is_object($iv) || is_array($iv) || is_string($iv) || is_numeric($iv))) {
+				continue;
+			}
+			if (in_array($ik, ['or', 'and'])) {
+				$this->_parseBoolean($wheres, $ik, $iv, $boolean);
+				continue;
+			}
+			if (in_array($ik, ['missing', 'exists', 'null', 'not_null'])) {
+				$this->_parseItemNull($wheres, $ik, $iv, $boolean);
+				continue;
+			}
+			if (in_array($ik, [
+				'term', 'equal', '=', 'match', 'like', 'gt', 'gte', 'lt', 'lte', '>', '>=', '<', '<=',
+				'greater_than', 'less_than', 'greater_than_equal', 'less_than_equal',
+				'left_match', 'right_match', 'left_like', 'right_like',
+				'not_term', 'not_equal', '!=', '<>', 'not_match', 'not_like',
+			])) {
+				$this->_parseItemMatch($wheres, $ik, $iv, $boolean);
+				continue;
+			}
+			if (in_array($ik, ['between', 'not_between'])) {
+				$this->_parseItemBetween($wheres, $ik, $iv, $boolean);
+				continue;
+			}
+			if (in_array($ik, ['terms', 'in', 'not_in'])) {
+				$this->_parseItemTerms($wheres, $ik, $iv, $boolean);
+				continue;
+			}
+			if (starts_with($ik, '$')) {
+				if ($hasItem = $this->_parse($iv, $boolean)) {
+					$wheres = array_merge($wheres, $hasItem);
+				}
+				continue;
+			}
+			if (!in_array($ik, ['boolean']) && is_string($ik) && $hasItem = $this->parseItemValue($iv)) {
+				$item = new Builder;
+				$item->type('item');
+				$item->operator('term');
+				$item->boolean($boolean);
+				$item->name($ik);
+				$item->value($hasItem);
+				$wheres[] = $item;
+				continue;
+			}
+		}
 		return count($wheres) > 0 ? $wheres : false;
 	}
 	public function parse($items = null) {
@@ -184,19 +279,24 @@ class Filter {
 			$items = json_decode(json_encode($items));
 		}
 		if ($items) {
-			$boolean = $this->getBooleanExp($items, false);
-			if ($boolean) {
-				$wrap = new Builder;
-				$wrap->type('boolean');
-				$this->_parse($items, $wrap, $boolean);
-				$this->items[] = $wrap;
-			} else {
-				$wrap = new Builder;
-				$wrap->type('boolean');
-				$this->_parse($items, $wrap, $boolean);
-				$this->items = $wrap->items;
+			$hasItem = false;
+			$boolean = 'and';
+			if (is_object($items)) {
+				if (!empty($items->boolean)) {
+					$boolean = $items->boolean;
+				}
+				if ($hasItem = $this->_parse($items, $boolean)) {
+					$this->items = array_merge($this->items, $hasItem);
+				}
+			} else if (is_array($items)) {
+				foreach ($items as $key => $value) {
+					if ($hasItem = $this->_parse($value, $boolean)) {
+						$this->items = array_merge($this->items, $hasItem);
+					}
+				}
 			}
 		}
+
 		Log::error('parse filter');
 		return $this->items;
 	}

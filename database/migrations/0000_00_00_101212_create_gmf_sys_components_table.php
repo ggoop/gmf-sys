@@ -16,6 +16,7 @@ class CreateGmfSysComponentsTable extends Migration {
 		$md->mdEntity('gmf.sys.component')->comment('组件')->tableName('gmf_sys_components');
 
 		$md->string('id', 100)->primary();
+		$md->enum('type', 'gmf.sys.component.type.enum')->nullable()->comment('类型');
 		$md->string('code')->comment('编码');
 		$md->string('name')->nullable()->comment('名称');
 		$md->text('memo')->nullable()->comment('备注');

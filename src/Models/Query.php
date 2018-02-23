@@ -11,8 +11,12 @@ class Query extends Model {
 	protected $table = 'gmf_sys_queries';
 	public $incrementing = false;
 	protected $keyType = 'string';
-	protected $fillable = ['id', 'entity_id', 'name', 'comment', 'memo', 'type_enum', 'size'];
+	protected $fillable = ['id', 'component_id', 'entity_id', 'name', 'comment', 'memo', 'type_enum', 'size'];
 	protected $hidden = ['created_at', 'updated_at'];
+
+	public function component() {
+		return $this->belongsTo('Gmf\Sys\Models\Component');
+	}
 	public function fields() {
 		return $this->hasMany('Gmf\Sys\Models\QueryField');
 	}
@@ -44,10 +48,22 @@ class Query extends Model {
 			if ($entity) {
 				$builder->entity_id = $entity->id;
 			}
+			$component = false;
+			if (!empty($builder->component_id)) {
+				$component = Component::where('id', $builder->component_id)->first();
+			} else if (!empty($builder->component)) {
+				$component = Component::where('code', $builder->component)->first();
+			}
+			if ($component) {
+				$builder->component_id = $component->id;
+			}
 			if (empty($builder->comment) && $entity) {
 				$builder->comment = $entity->comment;
 			}
-			$data = array_only($builder->toArray(), ['id', 'entity_id', 'name', 'comment', 'memo', 'type_enum', 'matchs', 'filter', 'size']);
+			if (empty($builder->comment) && $component) {
+				$builder->comment = $component->name;
+			}
+			$data = array_only($builder->toArray(), ['id', 'component_id', 'entity_id', 'name', 'comment', 'memo', 'type_enum', 'matchs', 'filter', 'size']);
 
 			$find = array_only($data, ['name']);
 			$main = static::updateOrCreate($find, $data);

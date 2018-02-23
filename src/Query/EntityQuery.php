@@ -17,6 +17,7 @@ class EntityQuery {
 
 	protected $mainEntity;
 	protected $query;
+	protected $distinct = false;
 
 	public static function create($name, array $parameters = []) {
 		return new EntityQuery($name, $parameters);
@@ -28,6 +29,10 @@ class EntityQuery {
 		$parameters = array_except($parameters, ['name', 'alias', 'comment', 'type_id', 'type_type', 'path']);
 		$this->selects[] = $select = new Builder(array_merge(compact('name', 'alias', 'comment'), $parameters));
 		return $select;
+	}
+	public function distinct() {
+		$this->distinct = true;
+		return $this;
 	}
 	public function addOrder(string $name, $direction = 'asc') {
 		$this->orders[] = $order = new Builder(compact('name', 'direction'));
@@ -45,6 +50,9 @@ class EntityQuery {
 	public function build() {
 		$this->buildMainEntity();
 		$this->buildJoins();
+		if ($this->distinct) {
+			$this->query->distinct();
+		}
 		return $this->query;
 	}
 	public function getQuery() {
@@ -81,7 +89,6 @@ class EntityQuery {
 		$this->query = DB::table($this->mainEntity->table_name . ' as ' . $this->mainEntity->alias);
 	}
 	private function buildWheres($items, $query, $boolean = 'and') {
-
 		if (is_array($items)) {
 			foreach ($items as $key => $value) {
 				if (is_array($value)) {
@@ -129,7 +136,6 @@ class EntityQuery {
 			if ($this->parseField($value)) {
 				$this->query->addSelect($value->dbFieldName . ' as ' . $value->alias);
 			}
-
 		}
 		foreach ($this->orders as $key => $value) {
 			if ($this->parseField($value)) {

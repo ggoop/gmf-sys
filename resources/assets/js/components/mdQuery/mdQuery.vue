@@ -26,7 +26,8 @@ export default {
           orders: []
         }
       }
-    }
+    },
+    mdInit: { type: Function },
   },
   computed: {
     gridTitle() {
@@ -82,7 +83,7 @@ export default {
         });
         options.orders.splice && options.orders.splice(0, 0, { name: sort.field, direction: sort.order });
       }
-      this.$emit('init', options);
+      this.mdInit&&this.mdInit(options);
       const response = await this.$http.post('sys/queries/query/' + this.mdQueryId, options);
 
       this.refInfo = response.data.schema;

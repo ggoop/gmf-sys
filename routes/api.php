@@ -41,7 +41,7 @@ Route::prefix('api/sys')->middleware(['api', 'auth:api'])->namespace($ns)->group
 	Route::resource('entities', 'EntityController', ['only' => ['index', 'show']]);
 
 	Route::get('/queries/{query}/cases', 'QueryController@getCases');
-	Route::post('/queries/query/{query}', 'QueryController@query');
+	Route::post('/queries/query/{query?}', 'QueryController@query');
 	Route::resource('queries', 'QueryController', ['only' => ['index', 'show']]);
 
 	Route::resource('query-cases', 'QueryCaseController', ['only' => ['show', 'store', 'destroy']]);
