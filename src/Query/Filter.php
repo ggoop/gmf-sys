@@ -2,7 +2,6 @@
 
 namespace Gmf\Sys\Query;
 use Gmf\Sys\Builder;
-use Illuminate\Support\Facades\Log;
 
 class Filter {
 
@@ -15,6 +14,7 @@ wheres:{
 }
 wheres:[]
 
+{'name':'field','operator':'=','value':'value'}
 {"or": [item1,item2,item3]}
 {"or": {'field1':'234'}}
 
@@ -32,9 +32,8 @@ wheres:[]
 {"missing": "field"}
 {"exists": "field"}
 
-{'field':'value'}
 {'$key':{'term':{'field':'value'}}}
-
+{'field':'value'}
  */
 	protected $items = [];
 	public static function create($datas = null) {
@@ -184,29 +183,35 @@ wheres:[]
 	/**
 	$data={name:'',operator:''}
 	 */
-	protected function _parseLine(Array &$contains, $data, $boolean = 'and') {
+	protected function _parseCaseItem(Array &$contains, $data, $boolean = 'and') {
 		if (empty($data->name) || empty($data->operator) || !is_string($data->name) || !is_string($data->operator)) {
-			return false;
+			return;
 		}
-		$hasItem = false;
+		if (in_array($data->operator, ['missing', 'exists', 'null', 'not_null'])) {
+			$this->_parseItemNull($contains, $data->operator, $data->name, $boolean);
+			return;
+		}
+		$iv = new \stdClass;
 		if (!empty($data->value)) {
-			$hasItem = $this->parseItemValue($data->value);
+			$iv->{$data->name} = $data->value;
 		}
-
-		if (!in_array($data->operator, ['missing', 'exists', 'null', 'not_null']) && !$hasItem) {
-			return false;
+		if (in_array($data->operator, [
+			'term', 'equal', '=', 'match', 'like', 'gt', 'gte', 'lt', 'lte', '>', '>=', '<', '<=',
+			'greater_than', 'less_than', 'greater_than_equal', 'less_than_equal',
+			'left_match', 'right_match', 'left_like', 'right_like',
+			'not_term', 'not_equal', '!=', '<>', 'not_match', 'not_like',
+		])) {
+			$this->_parseItemMatch($contains, $data->operator, $iv, $boolean);
+			return;
 		}
-
-		$item = new Builder;
-		$item->type('item');
-		$item->operator($data->operator);
-		$item->boolean($boolean);
-		$item->name($data->name);
-
-		if (!empty($hasItem)) {
-			$item->value($hasItem);
+		if (in_array($data->operator, ['between', 'not_between'])) {
+			$this->_parseItemBetween($contains, $data->operator, $iv, $boolean);
+			return;
 		}
-		$contains[] = $item;
+		if (in_array($data->operator, ['terms', 'in', 'not_in'])) {
+			$this->_parseItemTerms($contains, $data->operator, $iv, $boolean);
+			return;
+		}
 	}
 
 	protected function _parse($items = null, $boolean = 'and') {
@@ -220,9 +225,8 @@ wheres:[]
 		} else if (!is_object($items)) {
 			return false;
 		}
-
 		if (!empty($items->name) && !empty($items->operator)) {
-			$this->_parseLine($wheres, $items, $boolean);
+			$this->_parseCaseItem($wheres, $items, $boolean);
 			return count($wheres) > 0 ? $wheres : false;
 		}
 		foreach ($items as $ik => $iv) {
@@ -296,8 +300,6 @@ wheres:[]
 				}
 			}
 		}
-
-		Log::error('parse filter');
 		return $this->items;
 	}
 	public function getItems() {
