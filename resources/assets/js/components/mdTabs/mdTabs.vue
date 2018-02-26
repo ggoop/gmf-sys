@@ -316,8 +316,8 @@
       justify-content: center;
 
       .md-button {
-        max-width: 264px;
-        min-width: 160px;
+        max-width: 564px;
+        min-width: 60px;
         flex: 1;
 
         @include md-layout-small {
@@ -341,8 +341,8 @@
     position: relative;
 
     .md-button {
-      max-width: 264px;
-      min-width: 72px;
+      max-width: 564px;
+      min-width: 62px;
       height: 48px;
       margin: 0;
       cursor: pointer;

@@ -3,11 +3,14 @@ import * as types from './mutation-types'
 
 export default {
   [types.SET_PAGE_TITLE]({ commit }, title) {
+    const name = document.querySelector('meta[property="og:site_name"]');
     const metaTitle = document.querySelector('meta[property="og:title"]');
     const metaUrl = document.querySelector('meta[property="og:url"]');
-
-    document.title = `${title}`;
-
+    if (name) {
+      document.title = `${title} - ${name.content}`;
+    } else {
+      document.title = `${title}`;
+    }
     if (metaTitle) {
       metaTitle.setAttribute('content', document.title)
     }
