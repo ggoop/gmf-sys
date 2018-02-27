@@ -1,6 +1,7 @@
 @import "~components/MdAnimation/variables";
 $materialIcon-font-path: "../fonts/materialIcon/";
 
+
 /**
  * Structure - The main styles for html and body tags
  */
@@ -17,6 +18,13 @@ html {
   *:after {
     box-sizing: inherit;
   }
+  code[class*="language-"],
+  pre[class*="language-"] {
+    white-space: normal;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+  }
 }
 
 body {
@@ -32,6 +40,7 @@ body {
   font-family: Roboto, 'Noto Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   @extend .md-body-1;
 }
+
 
 
 /*material-icons*/
@@ -76,21 +85,25 @@ body {
 }
 
 
+
 /**
  * Overrides - Default buttons
  */
+
 a {
   cursor: pointer;
 }
+
 a:not(.md-button) {
   transition: .3s $md-transition-stand-timing;
   transition-property: color, background-color, opacity;
 }
 
-input[type="search"]::-webkit-search-cancel-button{
-    display: none;
-    -webkit-appearance: none;
+input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+  -webkit-appearance: none;
 }
+
 
 
 /**
@@ -112,6 +125,7 @@ iframe {
     height: auto;
   }
 }
+
 
 
 
@@ -165,6 +179,7 @@ iframe {
 .clearfix {
   clear: both;
 }
+
 .circle {
   border-radius: 50%;
 }
@@ -179,9 +194,11 @@ iframe {
 .no-padding {
   padding: 0 !important;
 }
+
 .no-margin {
   margin: 0 !important;
 }
+
 .wrap {
   flex-wrap: wrap;
   white-space: normal;
