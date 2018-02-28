@@ -59,9 +59,6 @@ export default class Start {
       'configs': { home: '/', ent: false, user: false, token: false, auth: { route: { name: 'auth.login' } } },
       'userConfig': {}
     };
-    if (window.gmfConfig) {
-      _.extend(rootData.configs, window.gmfConfig);
-    }
 
     const vueRouter = new VueRouter(router);
     vueRouter.beforeEach((to, from, next) => {
@@ -74,6 +71,10 @@ export default class Start {
 
     document.addEventListener('DOMContentLoaded', () => {
       Promise.all(_.values(options)).then(function(values) {
+
+        if (window.gmfConfig) {
+          _.extend(rootData.configs, window.gmfConfig);
+        }
 
         const app = new Vue({
           router: vueRouter,
