@@ -202,6 +202,24 @@ export default class Start {
       localtion = common.merge(localtion, options, { params: { app: app } });
       this.$router && this.$router[isReplace ? 'replace' : 'push'](localtion);
     };
+    Vue.prototype.$hasRole = function(roles) {
+      if (!roles || !this.$root.configs || !this.$root.configs.roles) return false;
+      if (this._.isString(roles)) {
+        roles = roles.split(',');
+      }
+      return roles.map((v) => {
+        return this.$root.configs.roles.indexOf(v) >= 0;
+      }).filter(v => v).length > 0;
+    };
+    Vue.prototype.$canPermit = function(permits) {
+      if (!permits || !this.$root.configs || !this.$root.configs.permits) return false;
+      if (this._.isString(roles)) {
+        roles = roles.split(',');
+      }
+      return permits.map((v) => {
+        return this.$root.configs.permits.indexOf(v) >= 0;
+      }).filter(v => v).length > 0;
+    };
     Vue.prototype.$documentTitle = function(title) {
       document.title = title;
       this.$root.title = title;
