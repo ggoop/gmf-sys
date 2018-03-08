@@ -4,6 +4,7 @@ namespace Gmf\Sys\Models;
 use Gmf\Passport\HasApiTokens;
 use Gmf\Sys\Traits\HasGuard;
 use Gmf\Sys\Traits\Snapshotable;
+use Gmf\Sys\Uuid;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Validator;
@@ -109,6 +110,7 @@ class User extends Authenticatable {
 
 		$acc = $query->orderBy('created_at', 'desc')->first();
 		if (!$acc) {
+
 			$acc = Account::create(array_only($opts, [
 				'client_id', 'client_type', 'client_name',
 				'name', 'nick_name', 'type',
@@ -146,6 +148,9 @@ class User extends Authenticatable {
 				} else {
 					unset($data['secret']);
 					unset($data['password']);
+				}
+				if (empty($data['account'])) {
+					$data['account'] = Uuid::generate(1, 'gmf', Uuid::NS_DNS, "");
 				}
 				$user = User::create($data);
 			}
