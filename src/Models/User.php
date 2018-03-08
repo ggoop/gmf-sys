@@ -52,8 +52,8 @@ class User extends Authenticatable {
 			'client_id' => 'required',
 		])->validate();
 
-		if (empty($opts['account']) && empty($opts['email']) && empty($opts['mobile'])) {
-			throw new \Exception('account,email ,mobile not empty least one');
+		if (empty($opts['account']) && empty($opts['email']) && empty($opts['mobile']) && empty($opts['src_id'])) {
+			throw new \Exception('account,email ,mobile,src_id not empty least one');
 		}
 		if (empty($opts['account'])) {
 			if (Validator::make($opts, ['email' => 'required|email'])->passes()) {
@@ -87,17 +87,23 @@ class User extends Authenticatable {
 		$query = Account::where('type', $type)->where('client_id', $opts['client_id']);
 
 		$query->where(function ($query) use ($opts) {
+			$f = false;
 			if (!empty($opts['account'])) {
+				$f = true;
 				$query->orWhere('mobile', $opts['account'])->orWhere('email', $opts['account']);
-			}
-			if (!empty($opts['mobile'])) {
+			}if (!empty($opts['mobile'])) {
+				$f = true;
 				$query->orWhere('mobile', $opts['mobile']);
-			}
-			if (!empty($opts['email'])) {
+			}if (!empty($opts['email'])) {
+				$f = true;
 				$query->orWhere('email', $opts['email']);
 			}
 			if (!empty($opts['src_id'])) {
+				$f = true;
 				$query->orWhere('src_id', $opts['src_id']);
+			}
+			if (!$f) {
+				$query->where('id', 'xx==xx');
 			}
 		});
 
