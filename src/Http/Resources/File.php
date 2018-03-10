@@ -33,11 +33,12 @@ class File extends Resource {
 		if (empty($this->ext)) {
 			$rtn['ext'] = substr(strrchr($this->title, "."), 1);
 		}
-		if ($this->isImage()) {
+		if ($this->canImage()) {
 			$rtn['image_url'] = $this->getImagePathURL($request);
 			$rtn['url'] = $this->getImagePathURL($request);
 			$rtn['can_image'] = true;
-		} else if ($this->isPdf()) {
+		}
+		if ($this->canPdf()) {
 			$rtn['pdf_url'] = $this->getPdfPathURL($request);
 			$rtn['can_pdf'] = true;
 		}
@@ -49,11 +50,17 @@ class File extends Resource {
 		}
 		return $rtn;
 	}
-	private function isImage() {
+	private function canImage() {
 		return !empty($this->type) && starts_with($this->type, 'image/');
 	}
-	private function isPdf() {
-		return !empty($this->pdf_path) && $this->pdf_path;
+	private function canPdf() {
+		if ($this->ext == 'doc' || $this->ext == 'docx'
+			|| $this->ext == 'xls' || $this->ext == 'xlsx'
+			|| $this->ext == 'ppt' || $this->ext == 'pptx'
+			|| $this->ext == 'txt' || !empty($this->pdf_path)) {
+			return true;
+		}
+		return false;
 	}
 	private function getFullPath($disk, $path) {
 		$url = false;

@@ -58,7 +58,7 @@
 
   .md-empty-state {
     @include md-empty-state-base;
-    max-width: 420px;
+    max-width: 620px;
     padding: 36px;
     margin: 0 auto;
     position: relative;
