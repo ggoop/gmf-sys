@@ -1,0 +1,228 @@
+@import "~components/MdAnimation/variables";
+$materialIcon-font-path: "../fonts/materialIcon/";
+
+
+/**
+ * Structure - The main styles for html and body tags
+ */
+
+html {
+  min-height: 100%;
+  height: 100%;
+  font-size: 62.5%;
+  box-sizing: border-box;
+  transition: background-color .3s $md-transition-stand-timing;
+
+  *,
+  *:before,
+  *:after {
+    box-sizing: inherit;
+  }
+  code[class*="language-"],
+  pre[class*="language-"] {
+    white-space: normal;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+  }
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: Roboto, 'Noto Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  @extend .md-body-1;
+}
+
+
+
+/*material-icons*/
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url("#{$materialIcon-font-path}MaterialIcons-Regular.eot");
+  /* For IE6-8 */
+  src: local('Material Icons'),
+  local('MaterialIcons-Regular'),
+  url("#{$materialIcon-font-path}MaterialIcons-Regular.woff2") format('woff2'),
+  url("#{$materialIcon-font-path}MaterialIcons-Regular.woff") format('woff'),
+  url("#{$materialIcon-font-path}MaterialIcons-Regular.ttf") format('truetype');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
+
+
+
+/**
+ * Overrides - Default buttons
+ */
+
+a {
+  cursor: pointer;
+}
+
+a:not(.md-button) {
+  transition: .3s $md-transition-stand-timing;
+  transition-property: color, background-color, opacity;
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+  -webkit-appearance: none;
+}
+
+
+
+/**
+ * Overrides - Apply fluid media styles
+ */
+
+audio,
+img,
+object,
+embed,
+canvas,
+video,
+iframe {
+  max-width: 100%;
+  font-style: italic;
+  vertical-align: middle;
+
+  &:not(.md-image) {
+    height: auto;
+  }
+}
+
+
+
+
+/**
+ * Suppress the focus outline on links that cannot be accessed via keyboard.
+ * This prevents an unwanted focus outline from appearing around elements that
+ * might still respond to pointer events.
+ */
+
+
+/*
+   ========================================================================== */
+
+[tabindex="-1"]:focus {
+  outline: none !important;
+}
+
+//scrollbar
+::-webkit-scrollbar-track {
+  background-clip: padding-box;
+  border: solid transparent;
+  border-width: 0 0 0 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  background-clip: padding-box;
+  border: solid transparent;
+  border-width: 0px;
+  min-height: 28px;
+  padding: 100px 0 0;
+  -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.07);
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.07);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+::-webkit-scrollbar {
+  height: 8px;
+  overflow: visible;
+  width: 8px;
+  background-color: transparent
+}
+
+:focus {
+  outline: none;
+}
+
+.clearfix {
+  clear: both;
+}
+
+.circle {
+  border-radius: 50%;
+}
+
+.truncate {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.no-padding {
+  padding: 0 !important;
+}
+
+.no-margin {
+  margin: 0 !important;
+}
+
+.wrap {
+  flex-wrap: wrap;
+  white-space: normal;
+  word-break: break-all;
+}
+
+.nowrap {
+  white-space: nowrap;
+  flex-wrap: nowrap;
+}
+
+@mixin md-indent-mixin($ind) {
+  .md-indent-#{$ind} {
+    padding-left: (20*$ind)-0px;
+  }
+}
+
+@include md-indent-mixin(0);
+@include md-indent-mixin(1);
+@include md-indent-mixin(2);
+@include md-indent-mixin(3);
+@include md-indent-mixin(4);
+@include md-indent-mixin(5);
+@include md-indent-mixin(6);
+@include md-indent-mixin(7);
+@include md-indent-mixin(8);
+@include md-indent-mixin(9);
