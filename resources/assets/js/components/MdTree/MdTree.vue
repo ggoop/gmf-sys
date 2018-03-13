@@ -25,7 +25,7 @@ export default {
   },
   methods: {},
   beforeCreate: function() {
-    this.$options.components.MdTree = require('./mdTree.vue');
+    this.$options.components.MdTree = require('./MdTree.vue');
   }
 };
 </script>
