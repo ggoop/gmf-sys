@@ -1,5 +1,5 @@
 
-import mdTree from './mdTree.vue';
+import mdTree from './MdTree.vue';
 import mdTreeNode from './MdTreeNode.vue';
 import mdTreeView from './MdTreeView.vue';
 
