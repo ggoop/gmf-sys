@@ -1,5 +1,5 @@
-import mdBoards from './mdBoards.vue';
-import mdBoard from './mdBoard.vue';
+import mdBoards from './MdBoards.vue';
+import mdBoard from './MdBoard.vue';
 
 export default function install(Vue) {
   Vue.component('md-boards', mdBoards);

@@ -1,10 +1,10 @@
 
-import mdQuery from './mdQuery.vue';
-import mdQueryField from './mdQueryField.vue';
-import mdQueryCase from './mdQueryCase.vue';
-import mdQueryCaseWhere from './mdQueryCaseWhere.vue';
-import mdQueryCaseOrder from './mdQueryCaseOrder.vue';
-import mdQueryCaseField from './mdQueryCaseField.vue';
+import mdQuery from './MdQuery.vue';
+import mdQueryField from './MdQueryField.vue';
+import mdQueryCase from './MdQueryCase.vue';
+import mdQueryCaseWhere from './MdQueryCaseWhere.vue';
+import mdQueryCaseOrder from './MdQueryCaseOrder.vue';
+import mdQueryCaseField from './MdQueryCaseField.vue';
 export default function install(Vue) {
   Vue.component('mdQuery', mdQuery);
   Vue.component('mdQueryField', mdQueryField);

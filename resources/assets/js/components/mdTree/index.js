@@ -1,7 +1,7 @@
 
 import mdTree from './mdTree.vue';
-import mdTreeNode from './mdTreeNode.vue';
-import mdTreeView from './mdTreeView.vue';
+import mdTreeNode from './MdTreeNode.vue';
+import mdTreeView from './MdTreeView.vue';
 
 export default function install(Vue) {
   Vue.component('mdTree', mdTree);
