@@ -18,10 +18,10 @@
   </div>
 </template>
 <script>
-import mdGridCell from './mdGridCell';
-import mdGridHeadCell from './mdGridHeadCell';
+import mdGridCell from './MdGridCell';
+import mdGridHeadCell from './MdGridHeadCell';
 
-import mdGridEmptyRow from './mdGridEmptyRow';
+import mdGridEmptyRow from './MdGridEmptyRow';
 import { classList } from './helpers';
 import getClosestVueParent from 'core/utils/getClosestVueParent';
 export default {

@@ -16,8 +16,8 @@
   </div>
 </template>
 <script>
-import mdGridCell from './mdGridCell';
-import mdGridEmptyRow from './mdGridEmptyRow';
+import mdGridCell from './MdGridCell';
+import mdGridEmptyRow from './MdGridEmptyRow';
 import { classList } from './helpers';
 import getClosestVueParent from 'core/utils/getClosestVueParent';
 export default {

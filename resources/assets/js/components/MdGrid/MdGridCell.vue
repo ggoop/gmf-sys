@@ -31,8 +31,8 @@
 </template>
 <script>
 import getClosestVueParent from 'core/utils/getClosestVueParent';
-import mdGridCellShow from './mdGridCellShow';
-import mdGridCellEdit from './mdGridCellEdit';
+import mdGridCellShow from './MdGridCellShow';
+import mdGridCellEdit from './MdGridCellEdit';
 export default {
   components: {
     mdGridCellShow,

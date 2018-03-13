@@ -21,12 +21,12 @@ import Column from './classes/Column';
 import localCache from 'core/utils/localCache';
 import Row from './classes/Row';
 import DataExport from './classes/DataExport';
-import mdGridHead from './mdGridHead';
-import mdGridBody from './mdGridBody';
-import mdGridFoot from './mdGridFoot';
-import mdGridActions from './mdGridActions';
+import mdGridHead from './MdGridHead';
+import mdGridBody from './MdGridBody';
+import mdGridFoot from './MdGridFoot';
+import mdGridActions from './MdGridActions';
 import { classList } from './helpers';
-import mdGridCell from './mdGridCell';
+import mdGridCell from './MdGridCell';
 
 export default {
   name: 'MdGrid',

@@ -7,7 +7,7 @@
   </tr>
 </template>
 <script>
-import mdGridCell from './mdGridCell';
+import mdGridCell from './MdGridCell';
 import { classList } from './helpers';
 import getClosestVueParent from 'core/utils/getClosestVueParent';
 export default {
