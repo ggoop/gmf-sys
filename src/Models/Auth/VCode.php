@@ -14,5 +14,5 @@ class VCode extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['id', 'user_id', 'type', 'token', 'expire_time'];
+	protected $fillable = ['id', 'user_id', 'channel', 'type', 'token', 'expire_time'];
 }

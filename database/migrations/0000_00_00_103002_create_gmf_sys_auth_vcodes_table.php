@@ -15,8 +15,9 @@ class CreateGmfSysAuthVcodesTable extends Migration {
 		$md->mdEntity('gmf.sys.auth.vcode')->comment('验证码')->tableName('gmf_sys_auth_vcodes');
 		$md->string('id')->primary();
 		$md->entity('user', 'gmf.sys.user')->nullable()->comment('用户');
-		$md->string('type')->nullable()->index();
-		$md->string('token')->index();
+		$md->string('channel')->nullable()->comment('频道')->index();
+		$md->string('type')->nullable()->comment('类型')->index();
+		$md->string('token')->comment('验证码')->index();
 		$md->timestamp('expire_time')->nullable();
 		$md->timestamps();
 
