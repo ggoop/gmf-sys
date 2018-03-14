@@ -126,14 +126,21 @@ class User extends Authenticatable {
 			$query = User::where('type', $type);
 
 			$query->where(function ($query) use ($opts) {
+				$f = false;
 				if (!empty($opts['account'])) {
+					$f = true;
 					$query->orWhere('account', $opts['account'])->orWhere('mobile', $opts['account'])->orWhere('email', $opts['account']);
 				}
 				if (!empty($opts['mobile'])) {
+					$f = true;
 					$query->orWhere('mobile', $opts['mobile']);
 				}
 				if (!empty($opts['email'])) {
+					$f = true;
 					$query->orWhere('email', $opts['email']);
+				}
+				if (!$f) {
+					$query->where('id', 'xx==xx');
 				}
 			});
 			$user = $query->orderBy('created_at', 'desc')->first();
