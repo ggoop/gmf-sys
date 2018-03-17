@@ -91,7 +91,7 @@
       mdFixedHeader: Boolean,
       mdHeight: {
         type: Number,
-        default: 400
+        default: 0
       },
       mdSort: String,
       mdSortOrder: {
@@ -179,7 +179,7 @@
         }
       },
       contentStyles () {
-        if (this.mdFixedHeader) {
+        if (this.mdFixedHeader&&this.mdHeight>0) {
           return `height: ${this.mdHeight}px;max-height: ${this.mdHeight}px`
         }
       },
