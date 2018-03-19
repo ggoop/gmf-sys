@@ -68,7 +68,7 @@ class File {
 
 		$builder->type($file->getClientMimeType());
 
-		$builder->ext($file->extension());
+		$builder->ext($file->getClientOriginalExtension());
 
 		if ($path) {
 			$name = $path . '/' . date('Ymd', time());
@@ -92,7 +92,7 @@ class File {
 
 		$fileItem = Models\File::create($builder->toArray());
 
-		Models\FileContent::create(['file_id' => $fileItem->id, 'data' => $contents]);
+		//Models\FileContent::create(['file_id' => $fileItem->id, 'data' => $contents]);
 
 		return $fileItem;
 	}
@@ -138,7 +138,7 @@ class File {
 		}
 		$fileItem = Models\File::create($builder->toArray());
 		if (!empty($file->data)) {
-			Models\FileContent::create(['file_id' => $fileItem->id, 'data' => $file->data]);
+			//Models\FileContent::create(['file_id' => $fileItem->id, 'data' => $file->data]);
 		}
 		return $fileItem;
 	}
