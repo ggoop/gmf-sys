@@ -1,21 +1,32 @@
 <template>
-  <div class="md-file md-file-upload layout layout-row layout-align-start-start layout-wrap">
-    <div v-for="(file,ind) in files" :key="ind" class="md-files-item layout layout-align-center-center">
-      <md-image v-if="isImage(file)&&file.url" :md-src="file.url"></md-image>
-      <md-image v-else-if="isImage(file)&&file.data" :md-src="file.data"></md-image>
-      <div v-else class="file">
-        {{file.title}}
+  <div class="md-file-upload">
+    <template v-if="mdSimple">
+      <md-field :class="[classes]">
+        <label v-if="mdLabel">{{mdLabel}}</label>
+        <md-input ref="input" @click="openPicker" readonly v-model.trim="fileNames" :placeholder="placeholder"></md-input>
+        <md-file-icon @click.native="openPicker" class="md-picker"></md-file-icon>
+      </md-field>
+    </template>
+    <template v-else>
+      <div class="md-file layout layout-row layout-align-start-start layout-wrap">
+        <div v-for="(file,ind) in files" :key="ind" class="md-files-item layout layout-align-center-center">
+          <md-image v-if="isImage(file)&&file.url" :md-src="file.url"></md-image>
+          <md-image v-else-if="isImage(file)&&file.data" :md-src="file.data"></md-image>
+          <div v-else class="file">
+            {{file.title}}
+          </div>
+          <div class="md-delete" v-if="!disabled">
+            <md-button class="md-icon-button md-accent md-raised" @click.native="onItemDelete(ind)">
+              <md-icon>delete</md-icon>
+            </md-button>
+          </div>
+        </div>
+        <div v-show="showPicker" @click="openPicker" class="md-picker md-picker-box layout layout-column layout-align-center-center flex">
+          <md-icon v-if="!disabled">{{ mdIcon }}</md-icon>
+          <p v-if="placeholder">{{placeholder}}</p>
+        </div>
       </div>
-      <div class="md-delete" v-if="!disabled">
-        <md-button class="md-icon-button md-accent md-raised" @click.native="onItemDelete(ind)">
-          <md-icon>delete</md-icon>
-        </md-button>
-      </div>
-    </div>
-    <div v-show="showPicker" @click="openPicker" class="md-picker layout layout-column layout-align-center-center flex">
-      <md-icon v-if="!disabled">{{ mdIcon }}</md-icon>
-      <p v-if="placeholder">{{placeholder}}</p>
-    </div>
+    </template>
     <div v-if="loading>0" class="md-file-upload-progress">
       <md-progress-spinner md-mode="indeterminate"></md-progress-spinner>
     </div>
@@ -23,10 +34,14 @@
   </div>
 </template>
 <script>
-import compressImage from 'core/utils/MdCompressImage';
-import common from 'core/utils/common';
+import compressImage from 'gmf/core/utils/MdCompressImage';
+import common from 'gmf/core/utils/common';
+import MdFileIcon from 'gmf/core/icons/MdFileIcon'
 export default {
   name: 'MdFileUpload',
+  components: {
+    MdFileIcon
+  },
   props: {
     value: [String, Object, Array],
     mdIcon: {
@@ -35,9 +50,11 @@ export default {
     },
     id: String,
     name: String,
+    mdLabel: String,
     disabled: Boolean,
     required: Boolean,
     placeholder: String,
+    mdSimple: Boolean,
     accept: {
       type: String,
       default: 'image/*'
@@ -53,7 +70,8 @@ export default {
   data() {
     return {
       loading: 0,
-      files: []
+      files: [],
+      fileNames: '',
     };
   },
   watch: {
@@ -64,6 +82,7 @@ export default {
         this.files = [];
         v && this.files.push(v);
       }
+      this.setFileNames();
     }
   },
   computed: {
@@ -72,13 +91,24 @@ export default {
       if (!this.files || this.files.length == 0) return true;
       return false;
     },
+    classes() {
+      return {
+        'md-has-value': this.files && this.files.length
+      }
+    }
   },
   methods: {
+    setFileNames() {
+      var names = [];
+      this.files.forEach(({ title }) => names.push(title));
+      this.fileNames = names.join(', ');
+    },
     isImage(file) {
       return file && file.type && file.type.indexOf('image/') == 0;
     },
     openPicker() {
       if (!this.disabled && this.loading == 0) {
+        this.$refs.input && this.$refs.input.$el && this.$refs.input.$el.focus();
         this.resetFile();
         this.$refs.fileInput.click();
       }
@@ -137,7 +167,7 @@ export default {
       if (this.multiple) {
         this.$emit('input', this.files);
       } else if (this.files.length > 0) {
-        this.$emit('input', this.files[0]);
+        this.$emit('input', this.files[this.files.length-1]);
       } else {
         this.$emit('input', null);
       }
@@ -161,6 +191,7 @@ export default {
       this.files = [];
       this.value && this.files.push(this.value);
     }
+    this.setFileNames();
   },
   beforeDestroy() {
 
@@ -173,6 +204,17 @@ export default {
   color: #808080;
   position: relative;
   z-index: 2;
+  width: 100%;
+  input[type="file"] {
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    position: absolute;
+    clip: rect(0 0 0 0);
+    border: 0;
+  }
   .md-file-upload-progress {
     position: absolute;
     top: 0px;
@@ -183,6 +225,8 @@ export default {
   }
   .md-picker {
     cursor: pointer;
+  }
+  .md-picker-box {
     padding: 8px;
     min-width: 200px;
     &:hover {

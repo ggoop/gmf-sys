@@ -43,6 +43,7 @@
       </table>
 
       <slot name="md-table-pagination" />
+      <slot name="md-pagination" />
     </md-content>
 
     <slot v-if="value" />

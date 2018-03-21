@@ -19,7 +19,9 @@
 export default {
   name: 'MdPagination',
   props: {
-    pager: Object,
+    pager: {
+      type: [Object, Boolean]
+    },
     options: {
       type: [Array, Boolean],
       default: function() {
@@ -41,6 +43,9 @@ export default {
     },
     'pager.size' (val) {
       this.currentSize = parseInt(val, 10);
+      if (this.currentSize > 0 && this.options && this.options.indexOf(this.currentSize) < 0) {
+        this.options.push(this.currentSize);
+      }
     },
     'pager.page' (val) {
       this.currentPage = parseInt(val, 10);
