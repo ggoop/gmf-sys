@@ -26,6 +26,18 @@ class GAuthGuard {
 	public function id() {
 		return $this->userId();
 	}
+	public function verified() {
+		$u = $this->user();
+		if ($u && $u->email_verified) {
+			return 'email';
+		}
+
+		if ($u && $u->mobile_verified) {
+			return 'mobile';
+		}
+
+		return false;
+	}
 
 	public function check($scope = 'user') {
 		if (!$this->id()) {
