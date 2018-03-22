@@ -13,12 +13,11 @@ class ImageController extends Controller {
 		$file = Models\File::find($id);
 		$fileContent = Models\FileContent::where('file_id', $id)->first();
 		if ($file && $fileContent) {
-
 			$base64 = substr(strstr($fileContent->data, ','), 1);
 			$img = base64_decode($base64);
 			return response($img, 200, ['Content-Type' => $file->type]);
 		} else if ($file) {
-			return Storage::disk($file->disk)->get($file->path);
+			return response(Storage::disk($file->disk)->get($file->path), 200, ['Content-Type' => $file->type]);
 		}
 		ob_clean();
 		ob_start();
