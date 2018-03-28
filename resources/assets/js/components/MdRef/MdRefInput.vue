@@ -114,11 +114,19 @@ export default new MdComponent({
     emitChange() {
       var values = null;
       if (this.multiple) {
+        values = [];
         if (this.mdRefType == 'entity' || this.mdRefType == 'enum') {
-          values = this.selectedValues.filter(v => !!v);
+          this.selectedValues.each(function(v) {
+            v && values.push(v);
+          });
+          // values = this.selectedValues.filter(v => !!v);
         } else if (this.mdRefType == 'text') {
-          values = this.selectedValues.map(v => v.name).filter(v => !!v);
+          this.selectedValues.each(function(v) {
+            v && v.name && values.push(v.name);
+          });
+          // values = this.selectedValues.map(v => v.name).filter(v => !!v);
         }
+        if (values.length == 0) values = null;
       } else if (this.selectedValues.length) {
         if (this.mdRefType == 'entity' || this.mdRefType == 'enum') {
           values = this.selectedValues[0];

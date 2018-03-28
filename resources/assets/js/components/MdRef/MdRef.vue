@@ -14,7 +14,9 @@
       </div>
     </md-toolbar>
     <md-dialog-content class="no-padding layout flex">
-      <md-wrap v-if="componentName" :name="componentName" :md-active.sync="isRefLoaded" :md-init="mdInit" :multiple="multiple" :md-q="currentQ" :value="value" :md-ref-id="mdRefId" :md-ref-type="mdRefType" :options="options" @md-cancel="onCancel" @md-confirm="onConfirm"></md-wrap>
+      <template v-if="componentName">
+        <md-wrap :name="componentName" :md-active.sync="isRefLoaded" :md-init="mdInit" :multiple="multiple" :md-q="currentQ" :value="value" :md-ref-id="mdRefId" :md-ref-type="mdRefType" :options="options" @md-cancel="onCancel" @md-confirm="onConfirm"></md-wrap>
+      </template>
     </md-dialog-content>
     <md-loading :loading="loading"></md-loading>
   </md-dialog>
