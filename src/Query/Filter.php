@@ -133,7 +133,8 @@ wheres:[]
 		$wheres = [];
 		$hasItem = false;
 		foreach ($value as $pk => $pv) {
-			if ($hasItem = $this->parseItemValue($pv) && is_array($hasItem) && count($hasItem) == 2) {
+			$hasItem = $this->parseItemValue($pv);
+			if (is_array($hasItem) && count($hasItem) == 2) {
 				$item = new Builder;
 				$item->type('item');
 				$item->operator($operator);
@@ -159,7 +160,8 @@ wheres:[]
 		$wheres = [];
 		$hasItem = false;
 		foreach ($value as $pk => $pv) {
-			if ($hasItem = $this->parseItemValue($pv) && is_array($hasItem)) {
+			$hasItem = $this->parseItemValue($pv);
+			if ($hasItem && is_array($hasItem)) {
 				$item = new Builder;
 				$item->type('item');
 				$item->operator($operator);
@@ -279,6 +281,7 @@ wheres:[]
 	}
 	public function parse($items = null) {
 		$this->items = [];
+
 		if (!is_object($items)) {
 			$items = json_decode(json_encode($items));
 		}
