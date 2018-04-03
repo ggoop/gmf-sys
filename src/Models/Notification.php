@@ -1,6 +1,7 @@
 <?php
 
 namespace Gmf\Sys\Models;
+use Carbon\Carbon;
 use Gmf\Sys\Traits\HasGuard;
 use Gmf\Sys\Traits\Snapshotable;
 use Illuminate\Database\Eloquent\Model;
@@ -40,5 +41,29 @@ class Notification extends Model {
 		} else if (count($ids)) {
 			static::whereIn('id', $ids)->update(['is_completed' => '1']);
 		}
+	}
+	public static function markAsArrived($ids) {
+		if (!is_array($ids)) {
+			$ids = explode(',', $ids);
+		}
+		static::whereIn('id', $ids)->update(['arrived_at' => Carbon::now()]);
+	}
+	public static function markAsError($ids, $error, \Exception $exception = null) {
+		$msg = false;
+		if (!$msg && method_exists($exception, 'getRawMessage')) {
+			$msg = $exception->getRawMessage();
+		}
+		if (!$msg && method_exists($exception, 'getMessage')) {
+			$msg = $exception->getMessage();
+		}
+		if (!is_array($ids)) {
+			$ids = explode(',', $ids);
+		}
+
+		if (!empty($msg)) {
+			$error = $error . ':' . $msg;
+		}
+
+		static::whereIn('id', $ids)->update(['error' => $error]);
 	}
 }
