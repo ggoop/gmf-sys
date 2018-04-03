@@ -25,6 +25,9 @@ class Notification extends Model {
 	public function scopeRecent($query) {
 		return $query->orderBy('created_at', 'desc');
 	}
+	public function scopeWithVia($query, $via) {
+		return $query->where('via', '=', $via);
+	}
 	public function scopeWithType($query, $type) {
 		return $query->where('type', '=', $type);
 	}
