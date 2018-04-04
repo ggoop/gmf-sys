@@ -1,6 +1,6 @@
 .md-field {
   @include md-theme-component() {
-    @if md-get-theme-mode() == light {
+    @if md-get-theme-mode()==light {
       &:after {
         background-color: rgba(#000, .42);
       }
@@ -51,7 +51,8 @@
           color: rgba(#000, .42);
         }
       }
-    } @else {
+    }
+    @else {
       &:after {
         background-color: rgba(#fff, .7);
       }
@@ -104,7 +105,7 @@
       }
     }
 
-    > .md-icon {
+    >.md-icon {
       &:after {
         @include md-theme-property(background-color, background-variant);
       }
@@ -143,7 +144,7 @@
         @include md-theme-property(color, primary, background);
       }
 
-      > .md-icon {
+      >.md-icon {
         @include md-theme-property(color, primary, background);
         @include md-theme-property(fill, primary, background);
       }
@@ -158,6 +159,16 @@
     &.md-disabled {
       .md-icon svg {
         @include md-theme-property(fill, disabled, background);
+      }
+    }
+  }
+}
+
+.md-file-upload {
+  @include md-theme-component() {
+    &.md-invalid {
+      .md-field.md-invalid:after {
+        @include md-theme-property-by-hue(background-color, red, A400, field, error);
       }
     }
   }
