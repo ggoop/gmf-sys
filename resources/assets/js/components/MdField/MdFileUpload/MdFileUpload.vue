@@ -215,6 +215,7 @@ export default {
     clip: rect(0 0 0 0);
     border: 0;
   }
+
   .md-file-upload-progress {
     position: absolute;
     top: 0px;
@@ -266,6 +267,11 @@ export default {
       .md-delete {
         display: inline-block;
       }
+    }
+  }
+  &.md-invalid{
+    .md-field:after{
+      background-color: var(--md-theme-default-fieldvariant, #ff1744);
     }
   }
 }
