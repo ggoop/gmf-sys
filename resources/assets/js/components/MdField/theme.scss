@@ -167,8 +167,16 @@
 .md-file-upload {
   @include md-theme-component() {
     &.md-invalid {
-      .md-field.md-invalid:after {
-        @include md-theme-property-by-hue(background-color, red, A400, field, error);
+      .md-field {
+        &:after {
+          @include md-theme-property-by-hue(background-color, red, A400, field, error);
+        }
+        label {
+          @include md-theme-property-by-hue(color, red, A400, field, error);
+        }
+        .md-error {
+          @include md-theme-property-by-hue(color, red, A400, field, error);
+        }
       }
     }
   }

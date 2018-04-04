@@ -1,5 +1,5 @@
 <template>
-  <div class="md-file-upload">
+  <div class="md-file-upload" :class="[$mdActiveTheme]">
     <template v-if="mdSimple">
       <md-field :class="[classes]">
         <label v-if="mdLabel">{{mdLabel}}</label>
@@ -37,7 +37,8 @@
 import compressImage from 'gmf/core/utils/MdCompressImage';
 import common from 'gmf/core/utils/common';
 import MdFileIcon from 'gmf/core/icons/MdFileIcon'
-export default {
+import MdComponent from 'core/MdComponent'
+export default new MdComponent({
   name: 'MdFileUpload',
   components: {
     MdFileIcon
@@ -196,7 +197,7 @@ export default {
   beforeDestroy() {
 
   }
-};
+});
 
 </script>
 <style lang="scss">
