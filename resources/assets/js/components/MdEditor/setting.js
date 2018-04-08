@@ -2,6 +2,7 @@ const base = {
   min_height: 500,
   max_height: 800,
   branding: false,
+  relative_urls :false,
   // statusbar: false,
   skin: "lightgray",
   automatic_uploads: true,
