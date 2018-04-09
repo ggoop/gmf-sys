@@ -14,7 +14,7 @@ class File extends Model {
 	public $incrementing = false;
 	protected $fillable = [
 		'id', 'ent_id', 'user_id',
-		'disk', 'code', 'type', 'title',
+		'disk', 'code', 'type', 'title', 'pdf_need',
 		'ext', 'url', 'path', 'size', 'props', 'is_revoked'];
 
 	protected $appends = ['local_path'];

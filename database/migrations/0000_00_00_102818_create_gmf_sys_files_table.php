@@ -28,6 +28,7 @@ class CreateGmfSysFilesTable extends Migration {
 		$md->string('ext')->nullable()->comment('扩展名');
 		$md->string('path')->nullable()->comment('名称');
 		$md->string('url')->nullable()->comment('地址');
+		$md->string('pdf_need')->nullable()->comment('pdf转换');
 		$md->string('pdf_disk')->nullable()->comment('地址');
 		$md->string('pdf_path')->nullable()->comment('地址');
 		$md->integer('size')->nullable()->comment('大小');
