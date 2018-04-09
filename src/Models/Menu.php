@@ -30,7 +30,9 @@ class Menu extends Model {
 			$data = array_only($builder->toArray(), ['id', 'code', 'name', 'memo', 'uri', 'icon', 'style', 'tag', 'params', 'sequence']);
 			$parent = false;
 			if (!empty($builder->parent)) {
-				$parent = static::where('code', $builder->parent)->where('tag', $builder->tag)->first();
+				$parent = static::where(function ($query) use ($builder) {
+					$query->where('code', $builder->parent)->orWhere('id', $builder->parent);
+				})->first();
 			}
 			if ($parent) {
 				$data['root_id'] = $parent->root_id;
@@ -39,9 +41,15 @@ class Menu extends Model {
 				$data['root_id'] = $builder->id;
 				$data['parent_id'] = null;
 			}
-			$find = array_only($data, ['code', 'tag']);
-			static::updateOrCreate($find, $data);
 
+			$find = static::where(function ($query) use ($builder) {
+				$query->where('code', $builder->code)->orWhere('id', $builder->id);
+			})->first();
+			if ($find) {
+				static::where('id', $find->id)->update($data);
+			} else {
+				$find = static::create($data);
+			}
 			if ($parent) {
 				static::where('id', $parent->id)->update(['is_leaf' => '0']);
 			}

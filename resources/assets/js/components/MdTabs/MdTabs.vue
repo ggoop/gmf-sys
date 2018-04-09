@@ -16,6 +16,7 @@
         </template>
       </md-button>
       <span class="md-tabs-indicator" :style="indicatorStyles" :class="indicatorClass" ref="indicator"></span>
+      <div class="md-background" v-if="mdBackground"></div>
     </div>
     <md-content class="md-tabs-content" :style="contentStyles" v-show="hasContent">
       <div class="md-tabs-container" :style="containerStyles">
@@ -48,6 +49,7 @@ export default new MdComponent({
       type: [Number, String],
       default: 0
     },
+    mdBackground:Boolean,
     mdSyncRoute: Boolean,
     mdDynamicHeight: Boolean,
     mdActiveTab: [String, Number]
