@@ -45,6 +45,9 @@ class UserAuth {
 		$input['account'] = $user->account;
 		$credentials = array_only($input, ['account', 'password']);
 		$credentials['type'] = $user->type;
+		if (empty($credentials['account'])) {
+			$credentials['id'] = $user->id;
+		}
 		if (Auth::attempt($credentials, true)) {
 			if ($user->status_enum == 'locked') {
 				throw new \Exception('当前账号可能被锁定!');

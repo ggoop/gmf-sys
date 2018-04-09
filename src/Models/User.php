@@ -56,16 +56,6 @@ class User extends Authenticatable {
 		if (empty($opts['account']) && empty($opts['email']) && empty($opts['mobile']) && empty($opts['src_id'])) {
 			throw new \Exception('account,email ,mobile,src_id not empty least one');
 		}
-		if (empty($opts['account'])) {
-			if (Validator::make($opts, ['email' => 'required|email'])->passes()) {
-				$opts['account'] = $opts['email'];
-			}
-		}
-		if (empty($opts['account'])) {
-			if (Validator::make($opts, ['mobile' => 'required|digits:11'])->passes()) {
-				$opts['account'] = $opts['mobile'];
-			}
-		}
 		if (empty($opts['mobile']) && !empty($opts['account'])) {
 			if (Validator::make($opts, ['account' => 'required|digits:11'])->passes()) {
 				$opts['mobile'] = $opts['account'];
@@ -85,6 +75,9 @@ class User extends Authenticatable {
 		if (empty($opts['avatar'])) {
 			$opts['avatar'] = '/assets/vendor/gmf-sys/avatar/' . mt_rand(1, 50) . '.jpg';
 		}
+		if (empty($opts['account'])) {
+			$opts['account'] = Uuid::generate(1, 'gmf', Uuid::NS_DNS, "");
+		}
 		$query = Account::where('type', $type)->where('client_id', $opts['client_id']);
 
 		$query->where(function ($query) use ($opts) {
@@ -92,10 +85,12 @@ class User extends Authenticatable {
 			if (!empty($opts['account'])) {
 				$f = true;
 				$query->orWhere('mobile', $opts['account'])->orWhere('email', $opts['account']);
-			}if (!empty($opts['mobile'])) {
+			}
+			if (!empty($opts['mobile'])) {
 				$f = true;
 				$query->orWhere('mobile', $opts['mobile']);
-			}if (!empty($opts['email'])) {
+			}
+			if (!empty($opts['email'])) {
 				$f = true;
 				$query->orWhere('email', $opts['email']);
 			}
@@ -107,10 +102,8 @@ class User extends Authenticatable {
 				$query->where('id', 'xx==xx');
 			}
 		});
-
 		$acc = $query->orderBy('created_at', 'desc')->first();
 		if (!$acc) {
-
 			$acc = Account::create(array_only($opts, [
 				'client_id', 'client_type', 'client_name',
 				'name', 'nick_name', 'type',
@@ -123,26 +116,7 @@ class User extends Authenticatable {
 			$user = User::find($userAcc->user_id);
 		}
 		if (!$user) {
-			$query = User::where('type', $type);
-
-			$query->where(function ($query) use ($opts) {
-				$f = false;
-				if (!empty($opts['account'])) {
-					$f = true;
-					$query->orWhere('account', $opts['account'])->orWhere('mobile', $opts['account'])->orWhere('email', $opts['account']);
-				}
-				if (!empty($opts['mobile'])) {
-					$f = true;
-					$query->orWhere('mobile', $opts['mobile']);
-				}
-				if (!empty($opts['email'])) {
-					$f = true;
-					$query->orWhere('email', $opts['email']);
-				}
-				if (!$f) {
-					$query->where('id', 'xx==xx');
-				}
-			});
+			$query = User::where('type', $type)->where('account', $opts['account']);
 			$user = $query->orderBy('created_at', 'desc')->first();
 			if (!$user) {
 				$data = array_only($opts, ['account', 'password', 'name', 'nick_name', 'email', 'mobile', 'type', 'avatar']);
@@ -155,9 +129,6 @@ class User extends Authenticatable {
 				} else {
 					unset($data['secret']);
 					unset($data['password']);
-				}
-				if (empty($data['account'])) {
-					$data['account'] = Uuid::generate(1, 'gmf', Uuid::NS_DNS, "");
 				}
 				$user = User::create($data);
 			}
