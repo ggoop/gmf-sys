@@ -42,15 +42,27 @@ class MdCommand extends Command {
 			return;
 		}
 		try {
-
-			$pdo = $this->getPDOConnection(env('DB_HOST'), env('DB_PORT'), env('DB_USERNAME'), env('DB_PASSWORD'));
+			$default = config('database.connections')[config('database.default')];
+			$pdo = $this->getPDOConnection($default['host'], $default['port'], $default['username'], $default['password']);
 			$pdo->exec(sprintf(
 				'CREATE DATABASE IF NOT EXISTS %s CHARACTER SET %s COLLATE %s;',
-				$database,
-				env('DB_CHARSET', 'utf8'),
-				env('DB_COLLATION', 'utf8_general_ci')
+				$default['database'],
+				$default['charset'],
+				$default['collation']
 			));
-			$this->info(sprintf('Successfully created %s database', $database));
+			$this->info(sprintf('Successfully created %s database', $default['database']));
+			if (!empty(config('database.connections')['log'])) {
+				$default = config('database.connections')['log'];
+				$pdo = $this->getPDOConnection($default['host'], $default['port'], $default['username'], $default['password']);
+				$pdo->exec(sprintf(
+					'CREATE DATABASE IF NOT EXISTS %s CHARACTER SET %s COLLATE %s;',
+					$default['database'],
+					$default['charset'],
+					$default['collation']
+				));
+				$this->info(sprintf('Successfully created %s database', $default['database']));
+			}
+
 		} catch (PDOException $exception) {
 			$this->error(sprintf('Failed to create %s database, %s', $database, $exception->getMessage()));
 		}
