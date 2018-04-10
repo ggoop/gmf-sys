@@ -17,7 +17,8 @@ class MDInstaller {
 		]);
 	}
 	public function install($onlyMetadata = false) {
-		$exception = DB::transaction(function () use ($onlyMetadata) {
+		$entity = $this->guard->getMDEntity();
+		$exception = DB::connection($entity->connection)->transaction(function () use ($onlyMetadata) {
 			MDInit::init();
 			$this->installMD();
 		});
@@ -53,9 +54,9 @@ class MDInstaller {
 
 		if ($entity->type === 'entity') {
 			if ($oldMD && $oldMD->table_name != $entity->table_name) {
-				Schema::rename($oldMD->table_name, $entity->table_name);
+				Schema::connection($entity->connection)->rename($oldMD->table_name, $entity->table_name);
 			}
-			if (!Schema::hasTable($entity->table_name)) {
+			if (!Schema::connection($entity->connection)->hasTable($entity->table_name)) {
 				$this->createDBTable();
 			} else if ($oldMD) {
 				$this->updateDBTable($oldMD);
@@ -68,7 +69,7 @@ class MDInstaller {
 		if (!$table) {
 			return;
 		}
-		Schema::create($table->table_name, function (Blueprint $table) {
+		Schema::connection($table->connection)->create($table->table_name, function (Blueprint $table) {
 			$fields = $this->guard->getDBFields();
 			foreach ($fields as $column) {
 				$this->buildDBColumn($table, $column);
@@ -99,9 +100,9 @@ class MDInstaller {
 			}
 		}
 		if ($colNames && count($colNames)) {
-			Schema::table($newTable->table_name, function (Blueprint $table) use ($newTable, $colNames) {
+			Schema::connection($newTable->connection)->table($newTable->table_name, function (Blueprint $table) use ($newTable, $colNames) {
 				foreach ($colNames as $column) {
-					if (Schema::hasColumn($newTable->table_name, $column)) {
+					if (Schema::connection($newTable->connection)->hasColumn($newTable->table_name, $column)) {
 						$table->dropColumn($column);
 					}
 				}
@@ -122,9 +123,9 @@ class MDInstaller {
 			}
 		}
 		if ($colNames && count($colNames)) {
-			Schema::table($newTable->table_name, function (Blueprint $table) use ($newTable, $colNames) {
+			Schema::connection($newTable->connection)->table($newTable->table_name, function (Blueprint $table) use ($newTable, $colNames) {
 				foreach ($colNames as $column) {
-					if (!Schema::hasColumn($newTable->table_name, $column->field_name)) {
+					if (!Schema::connection($newTable->connection)->hasColumn($newTable->table_name, $column->field_name)) {
 						$this->buildDBColumn($table, $this->guard->getDBField($column->name));
 					}
 				}
@@ -163,18 +164,18 @@ class MDInstaller {
 		}
 
 		if ($reNames && count($reNames)) {
-			Schema::table($newTable->table_name, function (Blueprint $table) use ($newTable, $reNames) {
+			Schema::connection($newTable->connection)->table($newTable->table_name, function (Blueprint $table) use ($newTable, $reNames) {
 				foreach ($reNames as $old => $new) {
-					if (Schema::hasColumn($newTable->table_name, $old)) {
+					if (Schema::connection($newTable->connection)->hasColumn($newTable->table_name, $old)) {
 						$table->renameColumn($old, $new);
 					}
 				}
 			});
 		}
 		if ($dbChanges && count($dbChanges)) {
-			Schema::table($newTable->table_name, function (Blueprint $table) use ($newTable, $dbChanges) {
+			Schema::connection($newTable->connection)->table($newTable->table_name, function (Blueprint $table) use ($newTable, $dbChanges) {
 				foreach ($dbChanges as $column) {
-					if (Schema::hasColumn($newTable->table_name, $column->field_name)) {
+					if (Schema::connection($newTable->connection)->hasColumn($newTable->table_name, $column->field_name)) {
 						$this->buildDBColumn($table, $this->guard->getDBField($column->name), ['change' => true]);
 					}
 				}

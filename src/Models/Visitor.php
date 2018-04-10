@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Visitor extends Model {
 	use HasGuard;
+	protected $connection = 'log';
 	protected $table = 'gmf_sys_visitors';
 	public $timestamps = false;
 	public $dates = ['created_at'];

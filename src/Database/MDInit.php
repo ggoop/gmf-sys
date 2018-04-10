@@ -104,6 +104,8 @@ class MDInit {
 		$this->ECols[] = (new Builder)->type('string')->id('2bb9aba009b711e7b848e54ec581b1ca')->name('comment')->comment('描述')->nullable();
 		$this->ECols[] = (new Builder)->type('string')->id('2bb9abf009b711e78a0799e6922803b9')->name('table_name')->comment('描述')->nullable();
 		$this->ECols[] = (new Builder)->type('string')->id('2bb9ac4009b711e7bfb959b13d8e317f')->name('type')->comment('类型')->nullable();
+		$this->ECols[] = (new Builder)->type('string')->id('50a905003c1011e881a74d88f918661d')->name('connection')->comment('连接')->nullable();
+
 		$this->ECols[] = (new Builder)->type('entity')->refType('gmf.sys.entity.field')->id('2bb9ac9009b711e79bc2179587e6a8b1')->name('fields')->comment('属性')->collection(true)->local_key('id')->foreign_key('entity_id');
 
 		$this->ECols[] = (new Builder)->type('timestamp')->id('7aed33c0bf7511e7901e55b84684f7ff')->name('created_at')->comment('创建时间')->nullable();

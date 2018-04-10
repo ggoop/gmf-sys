@@ -24,7 +24,7 @@ class MDGuard {
 			return false;
 		}
 		$table = new Builder;
-		$table->table_name($this->entity->tableName);
+		$table->table_name($this->entity->tableName)->connection($this->entity->connection);
 		return $table;
 	}
 	public function getDBFields() {
@@ -67,7 +67,7 @@ class MDGuard {
 	public function getMDEntity() {
 		$item = new Builder;
 		$item->setAttributes(array_only(
-			$this->entity->toArray(), ['id', 'name', 'comment', 'type']
+			$this->entity->toArray(), ['id', 'name', 'comment', 'type', 'connection']
 		));
 		$item->table_name($this->entity->tableName);
 		return $item;

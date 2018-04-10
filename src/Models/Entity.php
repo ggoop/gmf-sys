@@ -13,7 +13,7 @@ class Entity extends Model {
 	protected $table = 'gmf_sys_entities';
 	public $incrementing = false;
 	protected $keyType = 'string';
-	protected $fillable = ['id', 'name', 'comment', 'table_name', 'type'];
+	protected $fillable = ['id', 'name', 'comment', 'table_name', 'type', 'connection'];
 	protected $hidden = ['created_at', 'updated_at'];
 	public function fields() {
 		return $this->hasMany('Gmf\Sys\Models\EntityField');
@@ -42,7 +42,7 @@ class Entity extends Model {
 	public static function build(Closure $callback) {
 		$builder = new Builder;
 		$callback($builder);
-		$data = array_only($builder->toArray(), ['id', 'name', 'comment', 'table_name', 'type']);
+		$data = array_only($builder->toArray(), ['id', 'name', 'comment', 'table_name', 'type', 'connection']);
 
 		$old = false;
 		if (!empty($data['id']) || !empty($data['name'])) {

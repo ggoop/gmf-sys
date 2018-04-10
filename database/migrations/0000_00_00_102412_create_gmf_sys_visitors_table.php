@@ -11,7 +11,7 @@ class CreateGmfSysVisitorsTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		$md = Metadata::create($this->mdID);
+		$md = Metadata::create($this->mdID, [], 'log');
 		$md->mdEntity('gmf.sys.visitor')->comment('访问记录')->tableName('gmf_sys_visitors');
 
 		$md->bigIncrements('id');

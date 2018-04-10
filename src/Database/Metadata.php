@@ -13,7 +13,11 @@ class Metadata {
 	protected $commands = [];
 	protected $mainEntity;
 
-	public static function create($id, array $parameters = []) {
+	public static function create($id, array $parameters = [], $connection = null) {
+		if (empty($parameters)) {
+			$parameters = [];
+		}
+		$parameters['connection'] = $connection;
 		return new Metadata($id, $parameters);
 	}
 	public static function dropIfExists($id) {
