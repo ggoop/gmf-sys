@@ -5,12 +5,12 @@ import material from './material'
 import * as MdComponents from './components/core';
 import { sync } from 'vuex-router-sync';
 import Start from './Start';
-
+import values from 'lodash/values'
 window.Vue = window.Vue || Vue;
 
 let VueMaterial = Vue => {
   material(Vue)
-  Object.values(MdComponents).forEach((MdComponent) => {
+  values(MdComponents).forEach((MdComponent) => {
     Vue.use(MdComponent)
   })
 }

@@ -23,6 +23,7 @@
   </md-field>
 </template>
 <script>
+import valuesFn from 'lodash/values'
 import fuzzy from 'fuzzysearch'
 import isPromise from 'is-promise'
 import MdPropValidator from 'core/utils/MdPropValidator'
@@ -156,7 +157,7 @@ export default {
     },
     filterByObject() {
       return this.mdOptions.filter(item => {
-        const values = Object.values(item)
+        const values = valuesFn(item)
         const valuesCount = values.length
 
         for (let i = 0; i <= valuesCount; i++) {
