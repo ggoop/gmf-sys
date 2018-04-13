@@ -79,21 +79,18 @@ export default {
     changeSize() {
       if (this.canFireEvents) {
         this.currentPage = 1;
-        this.$emit('size', this.currentSize);
         this.emitPaginationEvent();
       }
     },
     previousPage() {
       if (this.canFireEvents) {
         this.currentPage--;
-        this.$emit('page', this.currentPage);
         this.emitPaginationEvent();
       }
     },
     nextPage() {
       if (this.canFireEvents) {
         this.currentPage++;
-        this.$emit('page', this.currentPage);
         this.emitPaginationEvent();
       }
     }

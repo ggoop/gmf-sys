@@ -2,6 +2,8 @@
   <div class="md-chart"></div>
 </template>
 <script>
+import extend from 'lodash/extend'
+import debounce from 'lodash/debounce'
 import Highcharts from 'highcharts';
 var defaultOpts = {
   credits: { enabled: false },
@@ -30,7 +32,7 @@ export default {
   },
   methods: {
     formatOption(options) {
-      return this._.extend({}, defaultOpts, options);
+      return extend({}, defaultOpts, options);
     },
     addSeries(options) {
       this.delegateMethod('addSeries', this.formatOption(options));
@@ -72,7 +74,7 @@ export default {
         });
         if (this.autoResize) {
           this.resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize';
-          this.resizeHanlder = this._.debounce(() => {
+          this.resizeHanlder = debounce(() => {
             this.chart && this.chart.reflow();
           }, 100, { leading: true });
 

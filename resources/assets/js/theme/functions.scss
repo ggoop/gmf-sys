@@ -61,7 +61,8 @@
 
   @if $type == "primary" or $type == "accent" {
     @return md-get-color-by-type($type, null);
-  } @else {
+  }
+  @else {
     $color-theme: map-get($md-theme-palette, theme);
 
     @if $background != "" {

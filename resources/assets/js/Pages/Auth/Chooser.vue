@@ -41,6 +41,7 @@
 <script>
 import AuthSns from './Sns';
 import authCache from './AuthCache';
+
 export default {
   name: 'AppAuthChooser',
   components: {

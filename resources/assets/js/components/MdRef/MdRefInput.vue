@@ -21,6 +21,10 @@ import MdInput from 'components/MdField/MdInput/MdInput'
 import MdUuid from 'core/utils/MdUuid'
 import MdPropValidator from 'core/utils/MdPropValidator'
 import common from 'core/utils/common';
+
+import isString from 'lodash/isString'
+import isArray from 'lodash/isArray'
+import isObject from 'lodash/isObject'
 export default new MdComponent({
   name: 'MdRefInput',
   components: {
@@ -97,7 +101,7 @@ export default new MdComponent({
     },
     addValue(value) {
       if (!value) return;
-      if (this._.isString(value)) {
+      if (isString(value)) {
         value = { name: value, id: value };
       }
       if (this.multiple && this.mdLimit > 0 && this.selectedValues.length >= this.mdLimit) {
@@ -138,19 +142,19 @@ export default new MdComponent({
     },
     getValueIndex(value) {
       for (var i = 0; i < this.selectedValues.length; i++) {
-        if (this._.isObject(value) && value.id && this._.isObject(this.selectedValues[i]) && this.selectedValues[i].id == value.id) {
+        if (isObjectvalue) && value.id && isObject(this.selectedValues[i]) && this.selectedValues[i].id == value.id) {
           return i;
         }
-        if (this._.isObject(value) && value.code && this._.isObject(this.selectedValues[i]) && this.selectedValues[i].code == value.code) {
+        if (isObjectvalue) && value.code && isObject(this.selectedValues[i]) && this.selectedValues[i].code == value.code) {
           return i;
         }
-        if (this._.isString(value) && this._.isObject(this.selectedValues[i]) && this.selectedValues[i].code == value) {
+        if (isString(value) && isObject(this.selectedValues[i]) && this.selectedValues[i].code == value) {
           return i;
         }
-        if (this._.isString(value) && this._.isObject(this.selectedValues[i]) && this.selectedValues[i].name == value) {
+        if (isString(value) && isObject(this.selectedValues[i]) && this.selectedValues[i].name == value) {
           return i;
         }
-        if (this._.isString(value) && this._.isString(this.selectedValues[i]) && this.selectedValues[i] == value) {
+        if (isString(value) && isString(this.selectedValues[i]) && this.selectedValues[i] == value) {
           return i;
         }
       }

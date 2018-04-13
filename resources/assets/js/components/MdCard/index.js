@@ -1,4 +1,4 @@
-import material from 'vue-material/material'
+import material from 'gmf/material'
 import MdCard from './MdCard'
 import MdCardArea from './MdCardArea/MdCardArea'
 import MdCardHeader from './MdCardHeader/MdCardHeader'

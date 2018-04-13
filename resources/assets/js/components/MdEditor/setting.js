@@ -1,3 +1,4 @@
+import assignIn from 'lodash/assignIn'
 const base = {
   min_height: 500,
   max_height: 800,
@@ -51,16 +52,16 @@ const base = {
     toolbar: ['undo', 'bold', 'italic', 'bullist', 'image', 'removeformat']
   }
 };
-const full = _.assignIn({}, base, {
+const full = assignIn({}, base, {
   toolbar1: "bold italic blockquote hr numlist bullist outdent indent table link image media | alignleft aligncenter alignright | formatselect styleselect  forecolor backcolor | template codesample code removeformat",
 });
 
-const simple = _.assignIn({}, base, {
+const simple =assignIn({}, base, {
   menubar: false,
   toolbar1: "bold italic blockquote hr numlist bullist outdent indent table link image media | formatselect styleselect  forecolor backcolor | template codesample code removeformat",
 });
 
-const small = _.assignIn({}, base, {
+const small = assignIn({}, base, {
   menubar: false,
   statusbar: false,
   toolbar1: "bold italic blockquote hr numlist bullist outdent indent table link image | formatselect styleselect | template removeformat",

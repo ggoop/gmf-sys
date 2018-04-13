@@ -1,4 +1,4 @@
-import material from 'vue-material/material'
+import material from 'gmf/material'
 import MdSpeedDial from './MdSpeedDial'
 import MdSpeedDialTarget from './MdSpeedDialTarget'
 import MdSpeedDialContent from './MdSpeedDialContent'

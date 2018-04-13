@@ -1,4 +1,4 @@
-import material from 'vue-material/material'
+import material from 'gmf/material'
 import MdTabs from './MdTabs'
 import MdTab from './MdTab'
 

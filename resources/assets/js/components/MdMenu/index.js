@@ -1,4 +1,4 @@
-import material from 'vue-material/material'
+import material from 'gmf/material'
 import MdMenu from './MdMenu'
 import MdMenuContent from './MdMenuContent'
 import MdMenuItem from './MdMenuItem'

@@ -1,4 +1,4 @@
-import material from 'vue-material/material'
+import material from 'gmf/material'
 import MdSubheader from './MdSubheader'
 
 export default Vue => {

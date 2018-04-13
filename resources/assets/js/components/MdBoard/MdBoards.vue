@@ -28,7 +28,7 @@
 </template>
 <script>
 import MdComponent from 'core/MdComponent'
-
+import throttle from 'lodash/throttle'
 export default new MdComponent({
   props: {
     mdFixed: Boolean,
@@ -137,7 +137,7 @@ export default new MdComponent({
       }
     },
     observeElementChanges() {
-      this.parentObserver = new MutationObserver(_.throttle(this.calculateOnWatch, 50));
+      this.parentObserver = new MutationObserver(throttle(this.calculateOnWatch, 50));
       this.parentObserver.observe(this.$refs.boardsContent, {
         childList: true,
         attributes: true,

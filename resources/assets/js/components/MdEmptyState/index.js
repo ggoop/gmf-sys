@@ -1,4 +1,4 @@
-import material from 'vue-material/material'
+import material from 'gmf/material'
 import MdEmptyState from './MdEmptyState'
 
 export default Vue => {

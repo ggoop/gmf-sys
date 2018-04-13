@@ -1,17 +1,22 @@
 import dateFormat from 'date-fns/format'
-const isArray = _.isArray;
-const bind = _.bind;
-const spread = _.spread;
-const merge = _.merge;
-const extend = _.extend;
-const forEach = _.forEach;
-const isString = _.isString;
-const isNumber = _.isNumber;
-const isUndefined = _.isUndefined;
-const isObject = _.isObject;
-const isDate = _.isDate;
-const debounce = _.debounce;
-
+import isArray from 'lodash/isArray'
+import bind from 'lodash/bind'
+import merge from 'lodash/merge'
+import extend from 'lodash/extend'
+import each from 'lodash/each'
+import forEach from 'lodash/forEach'
+import isString from 'lodash/isString'
+import isNumber from 'lodash/isNumber'
+import isUndefined from 'lodash/isUndefined'
+import isObject from 'lodash/isObject'
+import isDate from 'lodash/isDate'
+import debounce from 'lodash/debounce'
+import values from 'lodash/values'
+import startsWith from 'lodash/startsWith'
+import throttle from 'lodash/throttle'
+import forOwn from 'lodash/forOwn'
+import pick from 'lodash/pick'
+import spread from 'lodash/spread'
 function regEmail(email) {　　
   if (String(email).indexOf('@') > 0) {　　　　
     var str = email.split('@'),
@@ -84,7 +89,7 @@ const css = function(element, name, value) {
   }
 }
 const style = function(el, st) {
-  _.forEach(st, function(value, key) {
+  forEach.forEach(st, function(value, key) {
     css(el, key, value);
   });
 }
@@ -193,8 +198,10 @@ const common = {
   style,
   snakeCase,
   formatDecimal,
-  merge: merge,
-  forEach: forEach,
+  merge,
+  each,
+  forEach,
+  forOwn,
   isString,
   isNumber,
   isObject,
@@ -211,6 +218,10 @@ const common = {
   now,
   uid: uniqueId,
   regEmail,
-  regMobile
+  regMobile,
+  values,
+  startsWith,
+  throttle,
+  pick
 };
 export default common;

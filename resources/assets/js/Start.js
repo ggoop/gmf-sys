@@ -2,10 +2,9 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import http from './core/utils/http';
 import VueRouter from 'vue-router';
-import validator from './validator';
 import common from './core/utils/common';
 import lang from './lang';
-import lodash from 'lodash';
+// import lodash from 'lodash';
 import gmfConfig from './config';
 import enumCache from './core/utils/enumCache';
 import storeConfig from './store';
@@ -70,10 +69,10 @@ export default class Start {
     });
 
     document.addEventListener('DOMContentLoaded', () => {
-      Promise.all(_.values(options)).then(function(values) {
+      Promise.all(common.values(options)).then(function(values) {
 
         if (window.gmfConfig) {
-          _.extend(rootData.configs, window.gmfConfig);
+          common.extend(rootData.configs, window.gmfConfig);
         }
 
         const app = new Vue({
@@ -83,7 +82,7 @@ export default class Start {
           mixins: [mixin],
           methods: {
             changedConfig() {
-              _.extend(window.gmfConfig, this.configs);
+              common.extend(window.gmfConfig, this.configs);
               this.$http.defaults.headers.common.Ent = this.configs.ent ? this.configs.ent.id : false;
               if (this.configs.token) {
                 this.$http.defaults.headers.common.Authorization = this.configs.token.token_type + " " + this.configs.token.access_token;
@@ -169,18 +168,15 @@ export default class Start {
     http.defaults.headers = { common: { Ent: false } };
     Vue.prototype.$http = http;
 
-    Vue.prototype._ = lodash;
+    Vue.prototype._ = common;
     Vue.prototype.$toast = function(toast) {
       this.$root.$refs.rootToast && this.$root.$refs.rootToast.toast(toast);
     }
     Vue.prototype.$setConfigs = function(configs) {
-      _.extend(this.$root.configs, configs);
+      common.extend(this.$root.configs, configs);
       this.$root.changedConfig();
     }
     Vue.prototype.$lang = lang;
-    Vue.prototype.$validate = function(input, rules, customMessages) {
-      return new validator(input, rules, customMessages);
-    };
     Vue.prototype.$go = function(options, isReplace) {
       this.$router && this.$router[isReplace ? 'replace' : 'push'](options);
     };
@@ -204,7 +200,7 @@ export default class Start {
     };
     Vue.prototype.$hasRole = function(roles) {
       if (!roles || !this.$root.configs || !this.$root.configs.roles) return false;
-      if (this._.isString(roles)) {
+      if (common.isString(roles)) {
         roles = roles.split(',');
       }
       return roles.map((v) => {
@@ -213,7 +209,7 @@ export default class Start {
     };
     Vue.prototype.$canPermit = function(permits) {
       if (!permits || !this.$root.configs || !this.$root.configs.permits) return false;
-      if (this._.isString(roles)) {
+      if (common.isString(roles)) {
         roles = roles.split(',');
       }
       return permits.map((v) => {

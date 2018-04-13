@@ -1,15 +1,10 @@
 import Vue from 'vue';
 import 'regenerator-runtime/runtime'
-import MdCss from 'core/MdCss'
+import MdStyle from './style/MdStyle'
 import material from './material'
-import * as MdComponents from './components'
-import lodash from 'lodash';
-import ga from 'vue-ga'
+import * as MdComponents from './components/core';
 import { sync } from 'vuex-router-sync';
 import Start from './Start';
-
-
-window._ = window._ || lodash;
 
 window.Vue = window.Vue || Vue;
 
@@ -22,10 +17,10 @@ let VueMaterial = Vue => {
 
 VueMaterial.version = '__VERSION__'
 
-const start =new Start;
+const start = new Start;
 start.use(VueMaterial);
 
 
 export default VueMaterial
 
-export {start,VueMaterial}
+export { start, VueMaterial }

@@ -22,6 +22,9 @@
   </div>
 </template>
 <script>
+import uniqueId from 'lodash/uniqueId'
+import isObject from 'lodash/isObject'
+import isString from 'lodash/isString'
 export default {
   props: {
     id: [String, Number],
@@ -70,11 +73,11 @@ export default {
       }, 200);
     },
     toast: function(toastInfo) {
-      const toast = { id: this._.uniqueId() };
-      if (this._.isString(toastInfo)) {
+      const toast = { id: uniqueId() };
+      if (isString(toastInfo)) {
         toast.text = toastInfo;
       }
-      if (this._.isObject(toastInfo)) {
+      if (isObject(toastInfo)) {
         if (toastInfo.response && toastInfo.response.status == 401 && this.$root.configs.auth.route) {
           this.showAuthDialog = true;
           return;

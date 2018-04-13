@@ -24,7 +24,7 @@ const wrapModule = {
     wrap: function() {
       const app = common.snakeCase(this.$route.params.app);
       const module = common.snakeCase(this.$route.params.module);
-      if (!this._.startsWith(module, app) && module.indexOf('-') < 0) {
+      if (!common.startsWith(module, app) && module.indexOf('-') < 0) {
         return app + '-' + module;
       }
       return module;
@@ -46,7 +46,7 @@ const wrapExtend = {
     wrap: function() {
       const app = common.snakeCase(this.$route.params.app);
       const module = common.snakeCase(this.$route.params.module);
-      if (!this._.startsWith(module, app) && module.indexOf('-') < 0) {
+      if (!common.startsWith(module, app) && module.indexOf('-') < 0) {
         return app + '-' + module;
       }
       return module;
@@ -84,7 +84,7 @@ class gmfConfig {
     this.defaultRoutes = defaultRoutes;
   }
   route(routes) {
-    if (_.isArray(routes)) {
+    if (common.isArray(routes)) {
       routes.forEach((item) => {
         this.routes.push(item);
       });

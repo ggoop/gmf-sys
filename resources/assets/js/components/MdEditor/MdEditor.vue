@@ -6,7 +6,7 @@
 <script>
 import MdUuid from 'core/utils/MdUuid';
 import setting from './setting';
-
+import assignIn from 'lodash/assignIn'
 import LoadScript from 'gmf/core/utils/LoadScript';
 export default {
   name: 'MdEditor',
@@ -87,7 +87,7 @@ export default {
           this.images_upload_handler(blobInfo, success, failure);
         }
       };
-      tinymce && tinymce.init(this._.assignIn(setting[this.mdMode], options, this.mdOptions));
+      tinymce && tinymce.init(assignIn(setting[this.mdMode], options, this.mdOptions));
     },
     submitNewContent() {
       this.isTyping = true;

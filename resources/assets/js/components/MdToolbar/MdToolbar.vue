@@ -149,7 +149,6 @@
   .md-toolbar-section-end {
     display: flex;
     align-items: center;
-    flex: 1;
   }
 
   .md-toolbar-section-start {

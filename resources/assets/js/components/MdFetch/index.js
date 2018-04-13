@@ -1,4 +1,4 @@
-import material from 'vue-material/material'
+import material from 'gmf/material'
 
 //news
 import MdFetch from './MdFetch'

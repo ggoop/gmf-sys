@@ -142,5 +142,4 @@ export default {
     await this.fetchData();
   },
 };
-
 </script>

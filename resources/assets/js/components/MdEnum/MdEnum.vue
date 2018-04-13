@@ -4,6 +4,8 @@
   </md-select>
 </template>
 <script>
+import isString from 'lodash/isString'
+import isArray from 'lodash/isArray'
 export default {
   name:'MdEnum',
   props: {
@@ -31,9 +33,9 @@ export default {
 
         if (this.items) {
           var exps = [];
-          if (this._.isString(this.items)) {
+          if (isString(this.items)) {
             exps = this.items.split(",");
-          } else if (this._.isArray(this.items)) {
+          } else if (isArray(this.items)) {
             exps = this.items;
           }
           if (exps && exps.length > 0)

@@ -1,4 +1,4 @@
-import material from 'vue-material/material'
+import material from 'gmf/material'
 import MdIcon from 'components/MdIcon'
 import MdSelect from './MdSelect'
 import MdField from './MdField'

@@ -1,4 +1,4 @@
-import material from 'vue-material/material'
+import material from 'gmf/material'
 import MdApp from './MdApp'
 import MdAppToolbar from './MdAppToolbar'
 import MdAppContent from './MdAppContent'

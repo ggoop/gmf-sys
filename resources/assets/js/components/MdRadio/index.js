@@ -1,4 +1,4 @@
-import material from 'vue-material/material'
+import material from 'gmf/material'
 import MdRadio from './MdRadio'
 
 export default Vue => {

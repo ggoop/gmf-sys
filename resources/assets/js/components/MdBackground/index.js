@@ -1,5 +1,5 @@
 import MdBackground from './MdBackground.vue';
-import material from 'vue-material/material'
+import material from 'gmf/material'
 
 export default Vue => {
   material(Vue)

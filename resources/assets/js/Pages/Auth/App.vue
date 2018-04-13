@@ -37,7 +37,6 @@ export default {
   >.content {
     z-index: 2;
     width: 450px;
-    margin: 0 auto;
     max-width: 100%;
     @include md-layout-xsmall {
       min-height: 100vh;

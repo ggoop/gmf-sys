@@ -1,0 +1,40 @@
+import MdBoards from 'gmf/components/MdBoard/MdBoards'
+import MdBoard from 'gmf/components/MdBoard/MdBoard'
+
+import MdTable from 'gmf/components/MdTable/MdTable'
+import MdTableRow from 'gmf/components/MdTable/MdTableRow'
+import MdTableCell from 'gmf/components/MdTable/MdTableCell'
+import MdTableToolbar from 'gmf/components/MdTable/MdTableToolbar'
+import MdTableEmptyState from 'gmf/components/MdTable/MdTableEmptyState'
+import MdTableHead from 'gmf/components/MdTable/MdTableHead'
+import MdTableContainer from 'gmf/components/MdTable/MdTableContainer'
+import MdTablePagination from 'gmf/components/MdTable/MdTablePagination'
+
+
+import MdEditor from 'gmf/components/MdEditor/MdEditor';
+import MdDialogConfirm from 'gmf/components/MdDialog/MdDialogConfirm/MdDialogConfirm';
+
+import MdIconHome from 'gmf/components/MdIcon/Parts/MdIconHome';
+import MdIconMenu from 'gmf/components/MdIcon/Parts/MdIconMenu';
+import MdIconDelete from 'gmf/components/MdIcon/Parts/MdIconDelete';
+import MdIconMore from 'gmf/components/MdIcon/Parts/MdIconMore';
+import MdIconEdit from 'gmf/components/MdIcon/Parts/MdIconEdit';
+import MdIconAdd from 'gmf/components/MdIcon/Parts/MdIconAdd';
+import MdIconBack from 'gmf/components/MdIcon/Parts/MdIconBack';
+import MdIconApp from 'gmf/components/MdIcon/Parts/MdIconApp';
+
+import GhubPostTagSelector from '../../components/Post/TagSelector';
+import GhubDraft from '../../components/Draft/Draft';
+
+import GhubPostRelationList from '../../components/Post/RelationList';
+import GhubPostTagList from '../../components/Post/TagList';
+import GhubPostListItem from '../../components/Post/ListItem';
+
+import GhubButtonFollow from '../../components/Button/Follow';
+import GhubButtonSms from '../../components/Button/Sms';
+
+
+components: {
+    GhubPostTagSelector,
+    GhubDraft
+  },

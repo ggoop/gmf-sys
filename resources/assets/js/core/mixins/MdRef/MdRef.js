@@ -1,3 +1,4 @@
+import debounce from 'lodash/debounce'
 export default {
   props: {
     value: {
@@ -51,7 +52,7 @@ export default {
     }
   },
   methods: {
-    onDoSearch: _.debounce(function() {
+    onDoSearch: debounce(function() {
       if (!this.mdActive) return;
       if (this.loadData) {
         this.loadData(this.mdQ);

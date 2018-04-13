@@ -1,4 +1,4 @@
-import material from 'vue-material/material'
+import material from 'gmf/material'
 import MdRef from './MdRef.vue';
 import MdRefInput from './MdRefInput.vue';
 import MdRefBodyEntity from './MdRefBodyEntity.vue';
