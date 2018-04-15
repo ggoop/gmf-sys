@@ -13,8 +13,8 @@
 </template>
 
 <script>
-  import MdComponent from 'core/MdComponent'
-  import MdObserveElement from 'core/utils/MdObserveElement'
+  import MdComponent from 'gmf/core/MdComponent'
+  import MdObserveElement from 'gmf/core/utils/MdObserveElement'
   import MdStepHeader from './MdStepHeader'
 
   export default new MdComponent({
@@ -257,9 +257,9 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
-  @import "~components/MdElevation/mixins";
-  @import "~components/MdLayout/mixins";
+  @import "~gmf/components/MdAnimation/variables";
+  @import "~gmf/components/MdElevation/mixins";
+  @import "~gmf/components/MdLayout/mixins";
 
   $md-stepper-icon-size: 24px;
 

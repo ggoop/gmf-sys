@@ -37,7 +37,7 @@
 import compressImage from 'gmf/core/utils/MdCompressImage';
 import common from 'gmf/core/utils/common';
 import MdFileIcon from 'gmf/core/icons/MdFileIcon'
-import MdComponent from 'core/MdComponent'
+import MdComponent from 'gmf/core/MdComponent'
 export default new MdComponent({
   name: 'MdFileUpload',
   components: {

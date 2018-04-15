@@ -18,7 +18,7 @@
 </template>
 <script>
 import Column from './classes/Column';
-import localCache from 'core/utils/localCache';
+import localCache from 'gmf/core/utils/localCache';
 import Row from './classes/Row';
 import DataExport from './classes/DataExport';
 import mdGridHead from './MdGridHead';
@@ -470,7 +470,7 @@ export default {
 
 </script>
 <style lang="scss">
-@import "~components/MdAnimation/variables";
+@import "~gmf/components/MdAnimation/variables";
 .md-grid {
   border: 1px solid #c7c7c7;
   background: #fff;

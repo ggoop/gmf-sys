@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import MdComponent from 'core/MdComponent'
+  import MdComponent from 'gmf/core/MdComponent'
 
   export default new MdComponent({
     name: 'MdCard',
@@ -34,8 +34,8 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
-  @import "~components/MdElevation/mixins";
+  @import "~gmf/components/MdAnimation/variables";
+  @import "~gmf/components/MdElevation/mixins";
   @import "./base";
 
   $md-card-radius: 2px;

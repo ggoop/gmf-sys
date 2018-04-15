@@ -2,8 +2,8 @@ import mountTemplate from 'test/utils/mountTemplate'
 import MdSpeedDial from './MdSpeedDial.vue'
 import MdSpeedDialContent from './MdSpeedDialContent.vue'
 import MdSpeedDialTarget from './MdSpeedDialTarget.vue'
-import MdIcon from 'components/MdIcon/MdIcon.vue'
-import MdButton from 'components/MdButton/MdButton.vue'
+import MdIcon from 'gmf/components/MdIcon/MdIcon.vue'
+import MdButton from 'gmf/components/MdButton/MdButton.vue'
 
 const componentList = {
   components: {

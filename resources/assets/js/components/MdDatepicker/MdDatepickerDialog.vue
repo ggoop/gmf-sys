@@ -82,11 +82,11 @@ import setDate from 'date-fns/set_date'
 import setMonth from 'date-fns/set_month'
 import setYear from 'date-fns/set_year'
 
-import MdComponent from 'core/MdComponent'
-import MdPopover from 'components/MdPopover/MdPopover'
-import MdArrowRightIcon from 'core/icons/MdArrowRightIcon'
-import MdArrowLeftIcon from 'core/icons/MdArrowLeftIcon'
-import MdDialog from 'components/MdDialog/MdDialog'
+import MdComponent from 'gmf/core/MdComponent'
+import MdPopover from 'gmf/components/MdPopover/MdPopover'
+import MdArrowRightIcon from 'gmf/core/icons/MdArrowRightIcon'
+import MdArrowLeftIcon from 'gmf/core/icons/MdArrowLeftIcon'
+import MdDialog from 'gmf/components/MdDialog/MdDialog'
 
 const daysInAWeek = 7
 
@@ -326,9 +326,9 @@ export default new MdComponent({
 
 </script>
 <style lang="scss">
-@import "~components/MdAnimation/variables";
-@import "~components/MdLayout/mixins";
-@import "~components/MdElevation/mixins";
+@import "~gmf/components/MdAnimation/variables";
+@import "~gmf/components/MdLayout/mixins";
+@import "~gmf/components/MdElevation/mixins";
 
 $md-calendar-width: 320px;
 $md-calendar-mobile-width: 296px;

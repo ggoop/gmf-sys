@@ -12,7 +12,7 @@
 </template>
 
 <script>
-  import MdComponent from 'core/MdComponent'
+  import MdComponent from 'gmf/core/MdComponent'
   import MdAppMixin from './MdAppMixin'
 
   export default new MdComponent({
@@ -22,7 +22,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   .md-app-internal-drawer {
     flex-direction: column;

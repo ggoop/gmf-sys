@@ -42,7 +42,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   .md-speed-dial-content {
     display: flex;

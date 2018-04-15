@@ -7,8 +7,8 @@
   </div>
 </template>
 <script>
-import common from 'core/utils/common';
-import MdRefMixin from 'core/mixins/MdRef/MdRef';
+import common from 'gmf/core/utils/common';
+import MdRefMixin from 'gmf/core/mixins/MdRef/MdRef';
 import extend from 'lodash/extend'
 import remove from 'lodash/remove'
 export default {
@@ -85,7 +85,7 @@ export default {
 
 </script>
 <style lang="scss">
-@import "~components/MdAnimation/variables";
+@import "~gmf/components/MdAnimation/variables";
 @import "~gmf/components/MdLayout/mixins";
 .md-ref-body-text {
   @include md-layout-xsmall {

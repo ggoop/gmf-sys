@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import MdButton from 'components/MdButton/MdButton'
+  import MdButton from 'gmf/components/MdButton/MdButton'
 
   export default {
     name: 'MdSpeedDialTarget',
@@ -24,7 +24,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   .md-speed-dial-target {
     z-index: 1;

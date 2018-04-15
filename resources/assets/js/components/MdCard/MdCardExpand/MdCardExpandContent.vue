@@ -40,7 +40,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   .md-card-expand-content {
     overflow: hidden;

@@ -1,7 +1,7 @@
 <script>
-  import MdUuid from 'core/utils/MdUuid'
-  import MdObserveElement from 'core/utils/MdObserveElement'
-  import MdRouterLinkProps from 'core/utils/MdRouterLinkProps'
+  import MdUuid from 'gmf/core/utils/MdUuid'
+  import MdObserveElement from 'gmf/core/utils/MdObserveElement'
+  import MdRouterLinkProps from 'gmf/core/utils/MdRouterLinkProps'
 
   export default {
     name: 'MdTab',

@@ -1,5 +1,5 @@
 import material from 'gmf/material'
-import MdIcon from 'components/MdIcon'
+import MdIcon from 'gmf/components/MdIcon'
 import MdSelect from './MdSelect'
 import MdField from './MdField'
 import MdFile from './MdFile/MdFile'

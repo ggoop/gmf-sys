@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import MdPropValidator from 'core/utils/MdPropValidator'
+  import MdPropValidator from 'gmf/core/utils/MdPropValidator'
 
   export default {
     name: 'MdMenu',
@@ -129,8 +129,8 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
-  @import "~components/MdLayout/mixins";
+  @import "~gmf/components/MdAnimation/variables";
+  @import "~gmf/components/MdLayout/mixins";
 
   .md-menu {
     display: inline-block;

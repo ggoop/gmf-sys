@@ -1,4 +1,4 @@
-import MdReactive from 'core/utils/MdReactive'
+import MdReactive from 'gmf/core/utils/MdReactive'
 
 let hasEvents = false
 let eventTarget = null

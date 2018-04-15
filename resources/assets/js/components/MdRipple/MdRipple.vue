@@ -16,8 +16,8 @@
 
 <script>
   import raf from 'raf'
-  import MdComponent from 'core/MdComponent'
-  import debounce from 'core/utils/MdDebounce'
+  import MdComponent from 'gmf/core/MdComponent'
+  import debounce from 'gmf/core/utils/MdDebounce'
 
   export default new MdComponent({
     name: 'MdRipple',
@@ -139,7 +139,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   .md-ripple {
     width: 100%;

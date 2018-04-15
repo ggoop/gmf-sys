@@ -27,7 +27,7 @@
   </div>
 </template>
 <script>
-import MdComponent from 'core/MdComponent'
+import MdComponent from 'gmf/core/MdComponent'
 import throttle from 'lodash/throttle'
 export default new MdComponent({
   props: {
@@ -331,8 +331,8 @@ export default new MdComponent({
 
 </script>
 <style lang="scss">
-@import "~components/MdAnimation/variables";
-@import "~components/MdLayout/mixins";
+@import "~gmf/components/MdAnimation/variables";
+@import "~gmf/components/MdLayout/mixins";
 $board-width: 24px;
 $board-max-width: 24px;
 

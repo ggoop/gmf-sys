@@ -9,7 +9,7 @@
 </template>
 
 <script>
-  import MdUuid from 'core/utils/MdUuid'
+  import MdUuid from 'gmf/core/utils/MdUuid'
 
   export default {
     name: 'MdOption',

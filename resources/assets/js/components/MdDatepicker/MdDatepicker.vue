@@ -16,11 +16,11 @@ import isFirefox from 'is-firefox'
 import format from 'date-fns/format'
 import parse from 'date-fns/parse'
 import isValid from 'date-fns/is_valid'
-import MdOverlay from 'components/MdOverlay/MdOverlay'
+import MdOverlay from 'gmf/components/MdOverlay/MdOverlay'
 import MdDatepickerDialog from './MdDatepickerDialog'
-import MdDateIcon from 'core/icons/MdDateIcon'
-import MdField from 'components/MdField/MdField'
-import MdInput from 'components/MdField/MdInput/MdInput'
+import MdDateIcon from 'gmf/core/icons/MdDateIcon'
+import MdField from 'gmf/components/MdField/MdField'
+import MdInput from 'gmf/components/MdField/MdInput/MdInput'
 
 export default {
   name: 'MdDatepicker',
@@ -114,8 +114,8 @@ export default {
 
 </script>
 <style lang="scss">
-@import "~components/MdAnimation/variables";
-@import "~components/MdLayout/mixins";
+@import "~gmf/components/MdAnimation/variables";
+@import "~gmf/components/MdLayout/mixins";
 
 .md-datepicker-overlay {
   opacity: 0;

@@ -1,8 +1,8 @@
 <script>
-  import MdComponent from 'core/MdComponent'
-  import MdFocused from 'core/mixins/MdFocused/MdFocused'
-  import MdRipple from 'core/mixins/MdRipple/MdRipple'
-  import MdRouterLinkProps from 'core/utils/MdRouterLinkProps'
+  import MdComponent from 'gmf/core/MdComponent'
+  import MdFocused from 'gmf/core/mixins/MdFocused/MdFocused'
+  import MdRipple from 'gmf/core/mixins/MdRipple/MdRipple'
+  import MdRouterLinkProps from 'gmf/core/utils/MdRouterLinkProps'
   import MdButtonContent from './MdButtonContent'
 
   export default new MdComponent({
@@ -68,9 +68,9 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
-  @import "~components/MdElevation/mixins";
-  @import "~components/MdElevation/variables";
+  @import "~gmf/components/MdAnimation/variables";
+  @import "~gmf/components/MdElevation/mixins";
+  @import "~gmf/components/MdElevation/variables";
 
   $md-button-min-width: 88px;
   $md-button-height: 36px;

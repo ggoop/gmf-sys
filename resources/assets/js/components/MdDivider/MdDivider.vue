@@ -4,7 +4,7 @@
 </template>
 
 <script>
-  import MdComponent from 'core/MdComponent'
+  import MdComponent from 'gmf/core/MdComponent'
 
   export default new MdComponent({
     name: 'MdDivider',
@@ -17,7 +17,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   .md-divider {
     height: 1px;

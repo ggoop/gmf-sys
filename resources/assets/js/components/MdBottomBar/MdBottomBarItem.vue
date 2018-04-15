@@ -19,9 +19,9 @@
 </template>
 
 <script>
-  import MdAssetIcon from 'core/mixins/MdAssetIcon/MdAssetIcon'
-  import MdUuid from 'core/utils/MdUuid'
-  import MdRouterLinkProps from 'core/utils/MdRouterLinkProps'
+  import MdAssetIcon from 'gmf/core/mixins/MdAssetIcon/MdAssetIcon'
+  import MdUuid from 'gmf/core/utils/MdUuid'
+  import MdRouterLinkProps from 'gmf/core/utils/MdRouterLinkProps'
 
   const ignoredProps = ['id', 'mdLabel', 'mdIcon', 'mdDisabled']
 

@@ -9,9 +9,9 @@
 </template>
 
 <script>
-  import MdComponent from 'core/MdComponent'
-  import MdPropValidator from 'core/utils/MdPropValidator'
-  import MdPopover from 'components/MdPopover/MdPopover'
+  import MdComponent from 'gmf/core/MdComponent'
+  import MdPropValidator from 'gmf/core/utils/MdPropValidator'
+  import MdPopover from 'gmf/components/MdPopover/MdPopover'
 
   export default new MdComponent({
     name: 'MdTooltip',
@@ -89,8 +89,8 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
-  @import "~components/MdLayout/mixins";
+  @import "~gmf/components/MdAnimation/variables";
+  @import "~gmf/components/MdLayout/mixins";
 
   $md-tooltip-height: 22px;
   $md-tooltip-height-mobile: 32px;

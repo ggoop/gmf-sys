@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import MdPortal from 'components/MdPortal/MdPortal'
+  import MdPortal from 'gmf/components/MdPortal/MdPortal'
 
   export default {
     name: 'MdOverlay',
@@ -30,7 +30,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   .md-overlay {
     position: absolute;

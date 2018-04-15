@@ -15,12 +15,12 @@
   </md-field>
 </template>
 <script>
-import MdComponent from 'core/MdComponent'
-import MdField from 'components/MdField/MdField'
-import MdInput from 'components/MdField/MdInput/MdInput'
-import MdUuid from 'core/utils/MdUuid'
-import MdPropValidator from 'core/utils/MdPropValidator'
-import common from 'core/utils/common';
+import MdComponent from 'gmf/core/MdComponent'
+import MdField from 'gmf/components/MdField/MdField'
+import MdInput from 'gmf/components/MdField/MdInput/MdInput'
+import MdUuid from 'gmf/core/utils/MdUuid'
+import MdPropValidator from 'gmf/core/utils/MdPropValidator'
+import common from 'gmf/core/utils/common';
 
 import isString from 'lodash/isString'
 import isArray from 'lodash/isArray'
@@ -142,10 +142,10 @@ export default new MdComponent({
     },
     getValueIndex(value) {
       for (var i = 0; i < this.selectedValues.length; i++) {
-        if (isObjectvalue) && value.id && isObject(this.selectedValues[i]) && this.selectedValues[i].id == value.id) {
+        if (isObject(value) && value.id && isObject(this.selectedValues[i]) && this.selectedValues[i].id == value.id) {
           return i;
         }
-        if (isObjectvalue) && value.code && isObject(this.selectedValues[i]) && this.selectedValues[i].code == value.code) {
+        if (isObject(value) && value.code && isObject(this.selectedValues[i]) && this.selectedValues[i].code == value.code) {
           return i;
         }
         if (isString(value) && isObject(this.selectedValues[i]) && this.selectedValues[i].code == value) {
@@ -214,7 +214,7 @@ export default new MdComponent({
 
 </script>
 <style lang="scss">
-@import "~components/MdAnimation/variables";
+@import "~gmf/components/MdAnimation/variables";
 .md-ref-input.md-field {
   .md-chip {
     font-size: 16px;

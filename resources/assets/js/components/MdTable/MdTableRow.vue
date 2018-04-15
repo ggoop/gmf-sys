@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import MdPropValidator from 'core/utils/MdPropValidator'
+  import MdPropValidator from 'gmf/core/utils/MdPropValidator'
   import MdTableCellSelection from './MdTableCellSelection'
 
   export default {
@@ -140,7 +140,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   .md-table-row {
     transition: .3s $md-transition-default-timing;

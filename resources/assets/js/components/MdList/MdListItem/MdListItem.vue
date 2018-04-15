@@ -1,12 +1,12 @@
 <script>
-  import MdInteractionEvents from 'core/utils/MdInteractionEvents'
-  import MdRouterLinkProps from 'core/utils/MdRouterLinkProps'
+  import MdInteractionEvents from 'gmf/core/utils/MdInteractionEvents'
+  import MdRouterLinkProps from 'gmf/core/utils/MdRouterLinkProps'
   import MdListItemDefault from './MdListItemDefault'
   import MdListItemButton from './MdListItemButton'
   import MdListItemLink from './MdListItemLink'
   import MdListItemRouter from './MdListItemRouter'
   import MdListItemExpand from './MdListItemExpand'
-  import MdButton from 'components/MdButton/MdButton'
+  import MdButton from 'gmf/components/MdButton/MdButton'
 
   function hasExpansion (props) {
     return props.hasOwnProperty('mdExpand') && props.mdExpand !== false
@@ -73,7 +73,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   .md-list-item {
     height: auto;

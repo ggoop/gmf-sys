@@ -30,11 +30,11 @@
 </template>
 
 <script>
-  import MdComponent from 'core/MdComponent'
-  import MdField from 'components/MdField/MdField'
-  import MdInput from 'components/MdField/MdInput/MdInput'
-  import MdUuid from 'core/utils/MdUuid'
-  import MdPropValidator from 'core/utils/MdPropValidator'
+  import MdComponent from 'gmf/core/MdComponent'
+  import MdField from 'gmf/components/MdField/MdField'
+  import MdInput from 'gmf/components/MdField/MdInput/MdInput'
+  import MdUuid from 'gmf/core/utils/MdUuid'
+  import MdPropValidator from 'gmf/core/utils/MdPropValidator'
 
   export default new MdComponent({
     name: 'MdChips',
@@ -149,7 +149,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   .md-chips.md-field {
     padding-top: 12px;

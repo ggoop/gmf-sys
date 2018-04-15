@@ -15,9 +15,9 @@
 </template>
 
 <script>
-  import MdComponent from 'core/MdComponent'
-  import MdPropValidator from 'core/utils/MdPropValidator'
-  import MdPortal from 'components/MdPortal/MdPortal'
+  import MdComponent from 'gmf/core/MdComponent'
+  import MdPropValidator from 'gmf/core/utils/MdPropValidator'
+  import MdPortal from 'gmf/components/MdPortal/MdPortal'
   import MdSnackbarContent from './MdSnackbarContent'
   import { createSnackbar, destroySnackbar } from './MdSnackbarQueue'
 
@@ -64,9 +64,9 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
-  @import "~components/MdLayout/mixins";
-  @import "~components/MdElevation/mixins";
+  @import "~gmf/components/MdAnimation/variables";
+  @import "~gmf/components/MdLayout/mixins";
+  @import "~gmf/components/MdElevation/mixins";
 
   .md-snackbar {
     @include md-elevation(6);

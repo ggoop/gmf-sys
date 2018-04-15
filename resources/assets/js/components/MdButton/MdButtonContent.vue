@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import MdRipple from 'components/MdRipple/MdRipple'
+  import MdRipple from 'gmf/components/MdRipple/MdRipple'
 
   export default {
     name: 'MdButtonContent',

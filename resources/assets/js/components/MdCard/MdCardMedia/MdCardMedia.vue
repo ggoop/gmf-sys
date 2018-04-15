@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import MdPropValidator from 'core/utils/MdPropValidator'
+  import MdPropValidator from 'gmf/core/utils/MdPropValidator'
 
   export default {
     name: 'MdCardMedia',

@@ -16,9 +16,9 @@
 </template>
 
 <script>
-  import MdComponent from 'core/MdComponent'
+  import MdComponent from 'gmf/core/MdComponent'
   import MdEmptyStateProps from './MdEmptyStateProps'
-  import MdAssetIcon from 'core/mixins/MdAssetIcon/MdAssetIcon'
+  import MdAssetIcon from 'gmf/core/mixins/MdAssetIcon/MdAssetIcon'
 
   export default new MdComponent({
     name: 'MdEmptyState',
@@ -45,8 +45,8 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
-  @import "~components/MdIcon/mixins";
+  @import "~gmf/components/MdAnimation/variables";
+  @import "~gmf/components/MdIcon/mixins";
 
   @mixin md-empty-state-base () {
     display: flex;

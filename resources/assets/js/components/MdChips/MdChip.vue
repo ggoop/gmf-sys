@@ -17,11 +17,11 @@
 </template>
 
 <script>
-  import MdComponent from 'core/MdComponent'
-  import MdFocused from 'core/mixins/MdFocused/MdFocused'
-  import MdRipple from 'core/mixins/MdRipple/MdRipple'
-  import MdClearIcon from 'core/icons/MdClearIcon'
-  import MdButton from 'components/MdButton/MdButton'
+  import MdComponent from 'gmf/core/MdComponent'
+  import MdFocused from 'gmf/core/mixins/MdFocused/MdFocused'
+  import MdRipple from 'gmf/core/mixins/MdRipple/MdRipple'
+  import MdClearIcon from 'gmf/core/icons/MdClearIcon'
+  import MdButton from 'gmf/components/MdButton/MdButton'
 
   export default new MdComponent({
     name: 'MdChip',
@@ -57,8 +57,8 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
-  @import "~components/MdElevation/mixins";
+  @import "~gmf/components/MdAnimation/variables";
+  @import "~gmf/components/MdElevation/mixins";
 
   $md-chips-height: 32px;
 

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-  import MdComponent from 'core/MdComponent'
+  import MdComponent from 'gmf/core/MdComponent'
 
   export default new MdComponent({
     name: 'MdSubheader',
@@ -22,7 +22,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   .md-subheader {
     min-height: 48px;

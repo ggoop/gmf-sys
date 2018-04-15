@@ -13,7 +13,7 @@
 </template>
 
 <script>
-  import MdComponent from 'core/MdComponent'
+  import MdComponent from 'gmf/core/MdComponent'
 
   import MdBadgeStandalone from './MdBadgeStandalone'
 
@@ -45,7 +45,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   .md-badge-content {
     position: relative;

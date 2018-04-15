@@ -53,9 +53,9 @@
 <script>
   import raf from 'raf'
 
-  import MdTagSwitcher from 'components/MdTagSwitcher/MdTagSwitcher'
-  import MdUuid from 'core/utils/MdUuid'
-  import MdPropValidator from 'core/utils/MdPropValidator'
+  import MdTagSwitcher from 'gmf/components/MdTagSwitcher/MdTagSwitcher'
+  import MdUuid from 'gmf/core/utils/MdUuid'
+  import MdPropValidator from 'gmf/core/utils/MdPropValidator'
   import MdTableThead from './MdTableThead'
   import MdTableAlternateHeader from './MdTableAlternateHeader'
   import MdTableRow from './MdTableRow'
@@ -306,7 +306,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   .md-table {
     display: flex;

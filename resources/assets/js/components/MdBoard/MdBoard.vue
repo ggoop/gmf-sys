@@ -5,8 +5,8 @@
 </template>
 
 <script>
-  import MdUuid from 'core/utils/MdUuid';
-  import getClosestVueParent from 'core/utils/getClosestVueParent';
+  import MdUuid from 'gmf/core/utils/MdUuid';
+  import getClosestVueParent from 'gmf/core/utils/getClosestVueParent';
 
   export default {
     props: {

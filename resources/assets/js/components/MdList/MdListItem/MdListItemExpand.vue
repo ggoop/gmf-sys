@@ -14,7 +14,7 @@
 
 <script>
   import raf from 'raf'
-  import MdArrowDownIcon from 'core/icons/MdArrowDownIcon'
+  import MdArrowDownIcon from 'gmf/core/icons/MdArrowDownIcon'
   import MdListItemMixin from './MdListItemMixin'
 
   export default {
@@ -62,7 +62,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   .md-list-item-expand {
     border-top: 1px solid transparent;

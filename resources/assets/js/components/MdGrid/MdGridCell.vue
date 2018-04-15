@@ -30,7 +30,7 @@
   </td>
 </template>
 <script>
-import getClosestVueParent from 'core/utils/getClosestVueParent';
+import getClosestVueParent from 'gmf/core/utils/getClosestVueParent';
 import mdGridCellShow from './MdGridCellShow';
 import mdGridCellEdit from './MdGridCellEdit';
 export default {

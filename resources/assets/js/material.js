@@ -1,5 +1,5 @@
-import MdReactive from 'core/utils/MdReactive'
-import MdTheme from 'core/MdTheme'
+import MdReactive from 'gmf/core/utils/MdReactive'
+import MdTheme from 'gmf/core/MdTheme'
 
 const init = () => {
   let material = new MdReactive({

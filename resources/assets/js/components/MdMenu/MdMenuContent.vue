@@ -20,13 +20,13 @@
 </template>
 
 <script>
-  import MdComponent from 'core/MdComponent'
-  import MdPropValidator from 'core/utils/MdPropValidator'
-  import MdObserveEvent from 'core/utils/MdObserveEvent'
-  import MdResizeObserver from 'core/utils/MdResizeObserver'
-  import MdPopover from 'components/MdPopover/MdPopover'
-  import MdFocusTrap from 'components/MdFocusTrap/MdFocusTrap'
-  import MdList from 'components/MdList/MdList'
+  import MdComponent from 'gmf/core/MdComponent'
+  import MdPropValidator from 'gmf/core/utils/MdPropValidator'
+  import MdObserveEvent from 'gmf/core/utils/MdObserveEvent'
+  import MdResizeObserver from 'gmf/core/utils/MdResizeObserver'
+  import MdPopover from 'gmf/components/MdPopover/MdPopover'
+  import MdFocusTrap from 'gmf/components/MdFocusTrap/MdFocusTrap'
+  import MdList from 'gmf/components/MdList/MdList'
 
   export default new MdComponent({
     name: 'MdMenuContent',
@@ -244,9 +244,9 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
-  @import "~components/MdElevation/mixins";
-  @import "~components/MdLayout/mixins";
+  @import "~gmf/components/MdAnimation/variables";
+  @import "~gmf/components/MdElevation/mixins";
+  @import "~gmf/components/MdLayout/mixins";
 
   $md-menu-base-width: 56px;
 

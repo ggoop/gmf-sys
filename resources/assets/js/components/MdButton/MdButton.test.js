@@ -2,7 +2,7 @@ import VueRouter from 'vue-router'
 import Vue from 'vue'
 import mountTemplate from 'test/utils/mountTemplate'
 import MdButton from './MdButton.vue'
-import MdRipple from 'components/MdRipple/MdRipple.vue'
+import MdRipple from 'gmf/components/MdRipple/MdRipple.vue'
 
 test('should render the theme class', async () => {
   const template = '<md-button md-theme="alt">Button</md-button>'

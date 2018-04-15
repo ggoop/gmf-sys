@@ -9,7 +9,7 @@
 </template>
 
 <script>
-  import MdUuid from 'core/utils/MdUuid'
+  import MdUuid from 'gmf/core/utils/MdUuid'
   import MdStepHeader from './MdStepHeader'
 
   export default {
@@ -124,7 +124,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   .md-steppers.md-vertical .md-stepper-content {
     padding: 0 24px 0 60px;

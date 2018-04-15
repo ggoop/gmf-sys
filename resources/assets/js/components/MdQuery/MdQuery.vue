@@ -8,7 +8,7 @@
   </div>
 </template>
 <script>
-import common from 'core/utils/common';
+import common from 'gmf/core/utils/common';
 
 export default {
   props: {

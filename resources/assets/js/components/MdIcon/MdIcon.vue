@@ -6,8 +6,8 @@
   </i>
 </template>
 <script>
-import MdComponent from 'core/MdComponent'
-import MdSvgLoader from 'components/MdSvgLoader/MdSvgLoader'
+import MdComponent from 'gmf/core/MdComponent'
+import MdSvgLoader from 'gmf/components/MdSvgLoader/MdSvgLoader'
 
 export default new MdComponent({
   name: 'MdIcon',
@@ -26,7 +26,7 @@ export default new MdComponent({
 
 </script>
 <style lang="scss">
-@import "~components/MdAnimation/variables";
+@import "~gmf/components/MdAnimation/variables";
 @import "./mixins";
 
 $icon-size: 24px;

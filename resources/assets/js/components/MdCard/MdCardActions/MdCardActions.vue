@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import MdPropValidator from 'core/utils/MdPropValidator'
+  import MdPropValidator from 'gmf/core/utils/MdPropValidator'
 
   const alignments = ['left', 'right', 'space-between','center']
 
@@ -22,8 +22,8 @@
 </script>
 
 <style lang="scss">
-@import "~components/MdAnimation/variables";
-@import "~components/MdLayout/mixins";
+@import "~gmf/components/MdAnimation/variables";
+@import "~gmf/components/MdLayout/mixins";
   .md-card-actions {
     padding: 8px 16px;
     display: flex;

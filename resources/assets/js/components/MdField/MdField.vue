@@ -20,10 +20,10 @@
 </template>
 
 <script>
-  import MdComponent from 'core/MdComponent'
-  import MdClearIcon from 'core/icons/MdClearIcon'
-  import MdPasswordOffIcon from 'core/icons/MdPasswordOffIcon'
-  import MdPasswordOnIcon from 'core/icons/MdPasswordOnIcon'
+  import MdComponent from 'gmf/core/MdComponent'
+  import MdClearIcon from 'gmf/core/icons/MdClearIcon'
+  import MdPasswordOffIcon from 'gmf/core/icons/MdPasswordOffIcon'
+  import MdPasswordOnIcon from 'gmf/core/icons/MdPasswordOnIcon'
 
   export default new MdComponent({
     name: 'MdField',
@@ -123,7 +123,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   $md-input-height: 32px;
 

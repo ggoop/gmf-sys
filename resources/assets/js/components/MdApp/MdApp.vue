@@ -77,8 +77,8 @@ export default {
 
 </script>
 <style lang="scss">
-@import "~components/MdAnimation/variables";
-@import "~components/MdLayout/mixins";
+@import "~gmf/components/MdAnimation/variables";
+@import "~gmf/components/MdLayout/mixins";
 
 .md-app {
   display: flex;

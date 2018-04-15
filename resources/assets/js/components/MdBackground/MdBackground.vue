@@ -2,7 +2,7 @@
   <div class="md-background" :style="styles"></div>
 </template>
 <script>
-  import MdComponent from 'core/MdComponent';
+  import MdComponent from 'gmf/core/MdComponent';
   export default new MdComponent({
     name: 'MdBackground',
     data: () => ({
@@ -12,7 +12,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
   .md-background {
     height: 200%;
     left: 0;

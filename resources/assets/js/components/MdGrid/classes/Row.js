@@ -1,7 +1,7 @@
 import get from 'lodash/get';
 import has from 'lodash/has';
 import set from 'lodash/set';
-import enumCache from '../../../core/utils/enumCache';
+import enumCache from 'gmf/core/utils/enumCache';
 export default class Row {
   constructor(data, columns) {
     this.data = data;

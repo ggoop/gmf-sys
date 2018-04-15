@@ -24,7 +24,7 @@
 import mdGridBodyRow from './MdGridBodyRow';
 import mdGridEmptyRow from './MdGridEmptyRow';
 import { classList } from './helpers';
-import getClosestVueParent from 'core/utils/getClosestVueParent';
+import getClosestVueParent from 'gmf/core/utils/getClosestVueParent';
 export default {
   props: {
     columns: { },

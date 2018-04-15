@@ -27,11 +27,11 @@
 </template>
 <script>
 import raf from 'raf'
-import MdComponent from 'core/MdComponent'
-import MdAssetIcon from 'core/mixins/MdAssetIcon/MdAssetIcon'
-import MdPropValidator from 'core/utils/MdPropValidator'
-import MdObserveElement from 'core/utils/MdObserveElement'
-import MdContent from 'components/MdContent/MdContent'
+import MdComponent from 'gmf/core/MdComponent'
+import MdAssetIcon from 'gmf/core/mixins/MdAssetIcon/MdAssetIcon'
+import MdPropValidator from 'gmf/core/utils/MdPropValidator'
+import MdObserveElement from 'gmf/core/utils/MdObserveElement'
+import MdContent from 'gmf/components/MdContent/MdContent'
 
 export default new MdComponent({
   name: 'MdTabs',
@@ -263,9 +263,9 @@ export default new MdComponent({
 
 </script>
 <style lang="scss">
-@import "~components/MdAnimation/variables";
-@import "~components/MdElevation/mixins";
-@import "~components/MdLayout/mixins";
+@import "~gmf/components/MdAnimation/variables";
+@import "~gmf/components/MdElevation/mixins";
+@import "~gmf/components/MdLayout/mixins";
 
 .md-tabs {
   display: flex;

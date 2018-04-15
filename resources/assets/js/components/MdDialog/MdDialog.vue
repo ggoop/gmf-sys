@@ -17,10 +17,10 @@
 </template>
 
 <script>
-  import MdComponent from 'core/MdComponent'
-  import MdPortal from 'components/MdPortal/MdPortal'
-  import MdOverlay from 'components/MdOverlay/MdOverlay'
-  import MdFocusTrap from 'components/MdFocusTrap/MdFocusTrap'
+  import MdComponent from 'gmf/core/MdComponent'
+  import MdPortal from 'gmf/components/MdPortal/MdPortal'
+  import MdOverlay from 'gmf/components/MdOverlay/MdOverlay'
+  import MdFocusTrap from 'gmf/components/MdFocusTrap/MdFocusTrap'
 
   export default new MdComponent({
     name: 'MdDialog',
@@ -90,9 +90,9 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
-  @import "~components/MdLayout/mixins";
-  @import "~components/MdElevation/mixins";
+  @import "~gmf/components/MdAnimation/variables";
+  @import "~gmf/components/MdLayout/mixins";
+  @import "~gmf/components/MdElevation/mixins";
 
   .md-dialog {
     @include md-elevation(24);

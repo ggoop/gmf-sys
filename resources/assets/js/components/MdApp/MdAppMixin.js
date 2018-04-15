@@ -1,5 +1,5 @@
 import raf from 'raf'
-import MdPropValidator from 'core/utils/MdPropValidator'
+import MdPropValidator from 'gmf/core/utils/MdPropValidator'
 
 const mdAppModes = [
   'fixed',

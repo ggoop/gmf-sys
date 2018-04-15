@@ -19,7 +19,7 @@
 </template>
 
 <script>
-  import MdUpwardIcon from 'core/icons/MdUpwardIcon'
+  import MdUpwardIcon from 'gmf/core/icons/MdUpwardIcon'
 
   export default {
     name: 'MdTableHead',
@@ -109,7 +109,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   .md-table-head {
     padding: 0;

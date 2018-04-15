@@ -57,6 +57,6 @@ export default {
 
 </script>
 <style lang="scss">
-@import "~components/MdAnimation/variables";
+@import "~gmf/components/MdAnimation/variables";
 
 </style>

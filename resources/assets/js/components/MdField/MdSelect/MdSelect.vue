@@ -45,11 +45,11 @@
 
 <script>
   import raf from 'raf'
-  import MdUuid from 'core/utils/MdUuid'
-  import MdComponent from 'core/MdComponent'
-  import MdDropDownIcon from 'core/icons/MdDropDownIcon'
-  import MdMenu from 'components/MdMenu/MdMenu'
-  import MdMenuContent from 'components/MdMenu/MdMenuContent'
+  import MdUuid from 'gmf/core/utils/MdUuid'
+  import MdComponent from 'gmf/core/MdComponent'
+  import MdDropDownIcon from 'gmf/core/icons/MdDropDownIcon'
+  import MdMenu from 'gmf/components/MdMenu/MdMenu'
+  import MdMenuContent from 'gmf/components/MdMenu/MdMenuContent'
   import MdInput from '../MdInput/MdInput'
   import MdFieldMixin from '../MdFieldMixin'
 
@@ -281,7 +281,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   .md-menu.md-select {
     display: flex;

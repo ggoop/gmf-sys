@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import MdUuid from 'core/utils/MdUuid';
+import MdUuid from 'gmf/core/utils/MdUuid';
 import setting from './setting';
 import assignIn from 'lodash/assignIn'
 import LoadScript from 'gmf/core/utils/LoadScript';
@@ -35,7 +35,7 @@ export default {
   },
   created() {
     this.content = this.value;
-    LoadScript('/assets/vendor/gmf-sys/tinymce/tinymce.js').then((s) => {
+    LoadScript('/assets/vendor/gmf-sys/tinymce/tinymce.min.js').then((s) => {
       this.initEdit();
     }).catch(e => {
       this.$toast('tinymce加载失败!');

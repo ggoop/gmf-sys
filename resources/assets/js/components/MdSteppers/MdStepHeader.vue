@@ -17,9 +17,9 @@
 </template>
 
 <script>
-  import MdWarningIcon from 'core/icons/MdWarningIcon'
-  import MdCheckIcon from 'core/icons/MdCheckIcon'
-  import MdEditIcon from 'core/icons/MdEditIcon'
+  import MdWarningIcon from 'gmf/core/icons/MdWarningIcon'
+  import MdCheckIcon from 'gmf/core/icons/MdCheckIcon'
+  import MdEditIcon from 'gmf/core/icons/MdEditIcon'
 
   export default {
     name: 'MdStepperHeader',

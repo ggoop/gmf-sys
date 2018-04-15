@@ -5,8 +5,8 @@
 </template>
 
 <script>
-  import MdComponent from 'core/MdComponent'
-  import MdPropValidator from 'core/utils/MdPropValidator'
+  import MdComponent from 'gmf/core/MdComponent'
+  import MdPropValidator from 'gmf/core/utils/MdPropValidator'
 
   export default new MdComponent({
     name: 'MdSpeedDial',
@@ -55,7 +55,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   .md-speed-dial {
     display: inline-flex;

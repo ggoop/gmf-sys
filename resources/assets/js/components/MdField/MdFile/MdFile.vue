@@ -15,8 +15,8 @@
 </template>
 
 <script>
-  import MdUuid from 'core/utils/MdUuid'
-  import MdFileIcon from 'core/icons/MdFileIcon'
+  import MdUuid from 'gmf/core/utils/MdUuid'
+  import MdFileIcon from 'gmf/core/icons/MdFileIcon'
   import MdFieldMixin from '../MdFieldMixin'
 
   export default {

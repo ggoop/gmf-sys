@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import MdToolbar from 'components/MdToolbar/MdToolbar'
+  import MdToolbar from 'gmf/components/MdToolbar/MdToolbar'
 
   export default {
     name: 'MdTableToolbar',
@@ -17,7 +17,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   .md-table-toolbar {
     padding-left: 24px;

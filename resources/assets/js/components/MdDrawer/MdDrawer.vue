@@ -7,9 +7,9 @@
 </template>
 
 <script>
-  import MdComponent from 'core/MdComponent'
-  import MdOverlay from 'components/MdOverlay/MdOverlay'
-  import MdPropValidator from 'core/utils/MdPropValidator'
+  import MdComponent from 'gmf/core/MdComponent'
+  import MdOverlay from 'gmf/components/MdOverlay/MdOverlay'
+  import MdPropValidator from 'gmf/core/utils/MdPropValidator'
 
   export default new MdComponent({
     name: 'MdDrawer',
@@ -101,10 +101,10 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
-  @import "~components/MdLayout/mixins";
-  @import "~components/MdElevation/mixins";
-  @import "~components/MdCard/base";
+  @import "~gmf/components/MdAnimation/variables";
+  @import "~gmf/components/MdLayout/mixins";
+  @import "~gmf/components/MdElevation/mixins";
+  @import "~gmf/components/MdCard/base";
 
   @mixin md-drawer-base () {
     position: absolute;

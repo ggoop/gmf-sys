@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import mountTemplate from 'test/utils/mountTemplate'
-import MdFieldModule from 'components/MdField'
+import MdFieldModule from 'gmf/components/MdField'
 import MdField from '../MdField.vue'
 
 Vue.use(MdFieldModule)

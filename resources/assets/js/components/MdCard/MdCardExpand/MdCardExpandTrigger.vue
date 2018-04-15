@@ -30,7 +30,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   .md-card-expand-trigger.md-icon-button {
     transition: transform .4s $md-transition-stand-timing;

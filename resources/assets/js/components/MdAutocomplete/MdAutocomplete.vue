@@ -26,7 +26,7 @@
 import valuesFn from 'lodash/values'
 import fuzzy from 'fuzzysearch'
 import isPromise from 'is-promise'
-import MdPropValidator from 'core/utils/MdPropValidator'
+import MdPropValidator from 'gmf/core/utils/MdPropValidator'
 
 export default {
   name: 'MdAutocomplete',
@@ -206,9 +206,9 @@ export default {
 
 </script>
 <style lang="scss">
-@import "~components/MdAnimation/variables";
-@import "~components/MdElevation/mixins";
-@import "~components/MdLayout/mixins";
+@import "~gmf/components/MdAnimation/variables";
+@import "~gmf/components/MdElevation/mixins";
+@import "~gmf/components/MdLayout/mixins";
 
 .md-autocomplete {
   .md-menu {

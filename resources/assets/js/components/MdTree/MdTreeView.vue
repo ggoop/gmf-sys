@@ -5,7 +5,7 @@
   </div>
 </template>
 <script>
-import MdComponent from 'core/MdComponent'
+import MdComponent from 'gmf/core/MdComponent'
 export default new MdComponent({
   name: 'MdTreeView',
   props: {

@@ -13,9 +13,9 @@
 </template>
 
 <script>
-  import MdComponent from 'core/MdComponent'
-  import MdUuid from 'core/utils/MdUuid'
-  import MdRipple from 'components/MdRipple/MdRipple'
+  import MdComponent from 'gmf/core/MdComponent'
+  import MdUuid from 'gmf/core/utils/MdUuid'
+  import MdRipple from 'gmf/components/MdRipple/MdRipple'
 
   export default new MdComponent({
     name: 'MdRadio',
@@ -67,7 +67,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   $md-radio-size: 20px;
   $md-radio-touch-size: 48px;

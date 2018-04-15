@@ -14,8 +14,8 @@
 </template>
 
 <script>
-  import MdComponent from 'core/MdComponent'
-  import MdPropValidator from 'core/utils/MdPropValidator'
+  import MdComponent from 'gmf/core/MdComponent'
+  import MdPropValidator from 'gmf/core/utils/MdPropValidator'
   import INDETERMINATE_ANIMATION_TEMPLATE from './MdProgressSpinnerAnimation'
 
   const MdProgressSpinner = {
@@ -150,7 +150,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   @keyframes md-progress-spinner-rotate {
     0% {

@@ -1,6 +1,6 @@
 <script>
   import Vue from 'vue'
-  import MdComponent from 'core/MdComponent'
+  import MdComponent from 'gmf/core/MdComponent'
 
   function getHTMLOutput (str) {
     let text = str

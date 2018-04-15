@@ -5,8 +5,8 @@
 </template>
 
 <script>
-  import MdEmptyState from 'components/MdEmptyState/MdEmptyState'
-  import MdEmptyStateProps from 'components/MdEmptyState/MdEmptyStateProps'
+  import MdEmptyState from 'gmf/components/MdEmptyState/MdEmptyState'
+  import MdEmptyStateProps from 'gmf/components/MdEmptyState/MdEmptyStateProps'
 
   export default {
     name: 'MdTableEmptyState',
@@ -16,7 +16,7 @@
 </script>
 
 <style lang="scss">
-  @import "~components/MdAnimation/variables";
+  @import "~gmf/components/MdAnimation/variables";
 
   .md-table-empty-state {
     padding-left: 24px;
