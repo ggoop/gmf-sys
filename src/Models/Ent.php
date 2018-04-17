@@ -12,7 +12,9 @@ class Ent extends Model {
 	protected $table = 'gmf_sys_ents';
 	public $incrementing = false;
 	protected $keyType = 'string';
-	protected $fillable = ['id', 'code', 'name', 'memo', 'short_name', 'avatar', 'dc_host', 'industry', 'area', 'revoked'];
+	protected $fillable = ['id', 'code', 'name', 'memo', 'short_name', 'avatar',
+		'dc_host', 'dc_key', 'dc_secret', 'dc_token', 'in_host',
+		'industry', 'area', 'revoked'];
 
 	public static function addUser($entId, $userId, $type = 'member') {
 		$m = EntUser::where('ent_id', $entId)->where('user_id', $userId)->first();

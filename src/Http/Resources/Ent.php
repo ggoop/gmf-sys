@@ -22,7 +22,10 @@ class Ent extends Resource {
 			return false;
 		}
 		$rtn = new Builder;
-		Common::toField($this, $rtn, ['id', 'code', 'name', 'memo', 'short_name', 'avatar', 'dc_host', 'industry', 'area', 'created_at']);
+		Common::toField($this, $rtn, ['id', 'code', 'name', 'memo', 'short_name', 'avatar',
+			'dc_host', 'dc_key', 'dc_secret', 'dc_token',
+			'industry', 'area', 'created_at',
+		]);
 
 		if (!is_null($this->callback)) {
 			$flag = call_user_func($this->callback, $rtn, $this);
