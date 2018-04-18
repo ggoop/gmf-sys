@@ -109,7 +109,7 @@ class User extends Authenticatable {
 				'name', 'nick_name', 'type',
 				'avatar', 'mobile', 'email', 'src_id', 'src_url', 'token', 'expire_time', 'info']));
 		}
-		$userAcc = UserAccount::where('account_id', $acc->id)->orderBy('is_default', 'desc')->first();
+		$userAcc = UserAccount::where('account_id', $acc->id)->orderBy('is_default', 'desc')->orderBy('created_at', 'desc')->first();
 
 		$user = false;
 		if ($userAcc && $userAcc->user_id) {
