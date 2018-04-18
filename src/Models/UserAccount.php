@@ -13,5 +13,5 @@ class UserAccount extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['user_id', 'account_id'];
+	protected $fillable = ['user_id', 'account_id', 'is_default'];
 }

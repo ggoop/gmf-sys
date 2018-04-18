@@ -16,7 +16,7 @@ class CreateGmfSysUserAccountsTable extends Migration {
 		$md->bigIncrements('id');
 		$md->entity('user', 'gmf.sys.user')->nullable()->comment('用户');
 		$md->entity('account', 'gmf.sys.account')->nullable()->comment('账号');
-
+		$md->boolean('is_default')->default(0)->comment('默认账号');
 		$md->timestamps();
 
 		$md->build();
