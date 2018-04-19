@@ -1,7 +1,7 @@
 <template>
   <md-card-content class="login-sns" v-if="canSns">
-    <div class="md-body-1">使用合作账号登录</div>
-    <div class="layout-row">
+    <div class="md-subheading">使用合作账号登录</div>
+    <div class="layout-row layout-align-center-center">
       <md-button class="md-icon-button md-raised md-primary" v-if="snsQQ" :href="snsQQ">
         <md-icon md-src="/assets/vendor/gmf-sys/svg/auth-qq.svg"></md-icon>
       </md-button>
@@ -55,12 +55,18 @@ export default {
 @import "~gmf/components/MdAnimation/variables";
 @import "~gmf/components/MdLayout/mixins";
 .login-sns {
+  text-align: center;
   .md-icon-button {
-    margin: 10px 16px 0px 0px;
+    margin: 20px 36px 0px 0px;
     min-width: auto;
     box-shadow: none;
+    width: 50px;
+    height: 50px;
     .md-icon {
       transition: all .345s;
+      width: 30px;
+      height: 30px;
+      font-size: 30px;
     }
     &:hover {
       .md-icon {
