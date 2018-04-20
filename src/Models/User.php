@@ -21,7 +21,7 @@ class User extends Authenticatable {
 	 * @var array
 	 */
 	protected $fillable = [
-		'id', 'account', 'password', 'secret', 'name', 'nick_name', 'email',
+		'id', 'account', 'password', 'secret', 'name', 'nick_name', 'email', 'gender',
 		'type', 'avatar', 'mobile', 'status_enum',
 		'client_id', 'client_type', 'client_name', 'src_id', 'src_url', 'info',
 	];
@@ -113,7 +113,7 @@ class User extends Authenticatable {
 		$user = $query->orderBy('created_at', 'desc')->first();
 		if (!$user) {
 			$data = array_only($opts, [
-				'account', 'email', 'mobile', 'password', 'name', 'nick_name', 'type', 'avatar', 'memo',
+				'account', 'email', 'mobile', 'password', 'name', 'nick_name', 'type', 'avatar', 'memo', 'gender',
 				'client_id', 'client_type', 'client_name', 'src_id', 'src_url', 'info',
 			]);
 			if (!empty($opts['user_id']) && $type == 'sys') {
