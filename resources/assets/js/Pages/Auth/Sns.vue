@@ -1,6 +1,6 @@
 <template>
   <md-card-content class="login-sns" v-if="canSns">
-    <div class="md-subheading">使用合作账号登录</div>
+    <div class="md-subheading">{{ title }}</div>
     <div class="layout-row layout-align-center-center">
       <md-button class="md-icon-button md-raised md-primary" v-if="snsQQ" :href="snsQQ">
         <md-icon md-src="/assets/vendor/gmf-sys/svg/auth-qq.svg"></md-icon>
@@ -17,6 +17,16 @@
 <script>
 export default {
   name: 'GmfPagesAuthSns',
+  props: {
+    title: {
+      type: String,
+      default: '使用合作账号登录'
+    },
+    type: {
+      type: String,
+      default: 'login'
+    }
+  },
   data() {
     return {
       sending: false,
@@ -29,20 +39,28 @@ export default {
     },
     snsQQ() {
       if (!this.canSns) return false;
-      return this.$root.configs.auth.sns.qq;
+      return this.makeUrl(this.$root.configs.auth.sns.qq);
     },
     snsWeixin() {
       if (!this.canSns) return false;
-      return this.$root.configs.auth.sns.weixin;
+      return this.makeUrl(this.$root.configs.auth.sns.weixin);
     },
     snsWeibo() {
       if (!this.canSns) return false;
-      return this.$root.configs.auth.sns.weibo;
+      return this.makeUrl(this.$root.configs.auth.sns.weibo);
     }
   },
   methods: {
     fetchData() {
 
+    },
+    makeUrl(old) {
+      if (old && this.type) {
+        return old.indexOf('?') > 0 ? old + '&type=' + this.type : old + '?type=' + this.type;
+      } else if (old) {
+        return old;
+      }
+      return false;
     },
   },
   mounted() {

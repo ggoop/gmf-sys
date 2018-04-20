@@ -69,6 +69,18 @@ const routes = [{
       component:() => import('../Pages/Auth/Logout'),
       meta: { requiresAuth: true },
     },
+    {
+      path: 'account/join',
+      name: 'auth.account.join',
+      component:() => import('../Pages/Auth/AccountJoin'),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: 'account/dashboard',
+      name: 'auth.account.dashboard',
+      component:() => import('../Pages/Auth/AccountDashboard'),
+      meta: { requiresAuth: true },
+    },
   ]
 }];
 export default routes;

@@ -32,6 +32,16 @@ class CreateGmfSysUsersTable extends Migration {
 		$md->boolean('email_verified')->default(false)->comment('邮件认证');
 		$md->boolean('mobile_verified')->default(false)->comment('手机认证');
 		$md->enum('status', 'gmf.sys.user.status.enum')->nullable();
+
+		$md->string('client_id')->nullable()->comment('应用ID');
+		$md->string('client_type')->nullable()->comment('应用类型');
+		$md->string('client_name')->nullable()->comment('应用名称');
+
+		$md->string('src_id', 200)->nullable()->comment('第三方用户id');
+		$md->text('src_url')->nullable()->comment('账号来源地址');
+
+		$md->text('info')->nullable();
+
 		$md->rememberToken();
 		$md->timestamps();
 

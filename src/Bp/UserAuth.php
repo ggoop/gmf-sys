@@ -15,14 +15,14 @@ use Notification;
 use Validator;
 
 class UserAuth {
-	public function checker(BPListener $observer, $input) {
+	public function checker(BPListener $observer, $input, $type = ['sys', 'web']) {
 		if (empty($input['account']) && empty($input['id'])) {
 			throw new \Exception('参数错误！');
 		}
 		if (!empty($input['id'])) {
 			$user = Models\User::find($input['id']);
 		} else {
-			$user = Models\User::where($input)->whereIn('type', ['sys', 'web'])->first();
+			$user = Models\User::where($input)->whereIn('type', $type)->first();
 		}
 		if (!$user) {
 			throw new \Exception('当前用户不存在!');

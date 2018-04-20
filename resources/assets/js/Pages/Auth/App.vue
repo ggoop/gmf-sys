@@ -26,6 +26,7 @@ export default {
   },
   created() {}
 }
+
 </script>
 <style lang="scss">
 @import "~gmf/components/MdAnimation/variables";
@@ -41,7 +42,7 @@ export default {
     @include md-layout-xsmall {
       min-height: 100vh;
       width: 100%;
-      background:#fff;
+      background: #fff;
     }
     >.md-card {
       padding: 10px 20px 30px 20px;
@@ -50,6 +51,10 @@ export default {
         padding-right: 0px;
         min-height: 100%;
         box-shadow: none;
+      }
+      >.md-divider,
+      form>.md-divider {
+        margin-top: 20px;
       }
     }
   }
@@ -92,4 +97,5 @@ export default {
     }
   }
 }
+
 </style>

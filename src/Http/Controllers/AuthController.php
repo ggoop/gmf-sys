@@ -149,4 +149,26 @@ class AuthController extends Controller {
 		}
 		$this->toJson(app('Gmf\Sys\Bp\UserAuth')->verifyMail($this, $user, $input['token']));
 	}
+	public function join(Request $request) {
+		GAuth::check();
+		$token = false;
+		$input = array_only($request->all(), ['account', 'password']);
+		$validator = Validator::make($input, [
+			'account' => ['required'],
+			'password' => ['required'],
+		]);
+		if ($validator->fails()) {
+			return $this->toError($validator->errors());
+		}
+		$user = app('Gmf\Sys\Bp\UserAuth')->checker($this, array_only($input, ['account']));
+		if (GAuth::user()->account == $user->account) {
+			throw new \Exception("不能关联自己...");
+		}
+		if (!empty($user->password) && bcrypt($input['password']) != $user->password) {
+			GAuth::user()->linkUser($user);
+			return $this->toJson(new Resources\User($user));
+		} else {
+			throw new \Exception("密码不正确...");
+		}
+	}
 }

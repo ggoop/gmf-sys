@@ -20,7 +20,11 @@ class User extends Authenticatable {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['id', 'account', 'password', 'secret', 'name', 'nick_name', 'email', 'type', 'avatar', 'mobile', 'status_enum'];
+	protected $fillable = [
+		'id', 'account', 'password', 'secret', 'name', 'nick_name', 'email',
+		'type', 'avatar', 'mobile', 'status_enum',
+		'client_id', 'client_type', 'client_name', 'src_id', 'src_url', 'info',
+	];
 
 	/**
 	 * The attributes that should be hidden for arrays.
@@ -78,13 +82,17 @@ class User extends Authenticatable {
 		if (empty($opts['account'])) {
 			$opts['account'] = Uuid::generate(1, 'gmf', Uuid::NS_DNS, "");
 		}
-		$query = Account::where('type', $type)->where('client_id', $opts['client_id']);
-
+		$query = static::where('type', $type);
+		if (!in_array($opts['type'], ['sys', 'web'])) {
+			$query->where('client_id', $opts['client_id']);
+		}
 		$query->where(function ($query) use ($opts) {
 			$f = false;
 			if (!empty($opts['account'])) {
 				$f = true;
-				$query->orWhere('mobile', $opts['account'])->orWhere('email', $opts['account']);
+				$query->orWhere('mobile', $opts['account'])
+					->orWhere('email', $opts['account'])
+					->orWhere('account', $opts['account']);
 			}
 			if (!empty($opts['mobile'])) {
 				$f = true;
@@ -94,7 +102,7 @@ class User extends Authenticatable {
 				$f = true;
 				$query->orWhere('email', $opts['email']);
 			}
-			if (!empty($opts['src_id'])) {
+			if (!empty($opts['src_id']) && !in_array($opts['type'], ['sys', 'web'])) {
 				$f = true;
 				$query->orWhere('src_id', $opts['src_id']);
 			}
@@ -102,23 +110,15 @@ class User extends Authenticatable {
 				$query->where('id', 'xx==xx');
 			}
 		});
-		$acc = $query->orderBy('created_at', 'desc')->first();
-		if (!$acc) {
-			$acc = Account::create(array_only($opts, [
-				'client_id', 'client_type', 'client_name',
-				'name', 'nick_name', 'type',
-				'avatar', 'mobile', 'email', 'src_id', 'src_url', 'token', 'expire_time', 'info']));
-		}
-		$userAcc = UserAccount::where('account_id', $acc->id)->orderBy('is_default', 'desc')->orderBy('created_at', 'desc')->first();
-
-		$user = false;
-		if ($userAcc && $userAcc->user_id) {
-			$user = User::find($userAcc->user_id);
-		}
+		$user = $query->orderBy('created_at', 'desc')->first();
 		if (!$user) {
-			$data = array_only($opts, ['account', 'password', 'name', 'nick_name', 'email', 'mobile', 'type', 'avatar']);
+			$data = array_only($opts, [
+				'account', 'email', 'mobile', 'password', 'name', 'nick_name', 'type', 'avatar', 'memo',
+				'client_id', 'client_type', 'client_name', 'src_id', 'src_url', 'info',
+			]);
 			if (!empty($opts['user_id']) && $type == 'sys') {
 				$data['id'] = $opts['user_id'];
+				$data['src_id'] = $opts['user_id'];
 			}
 			if (!empty($data['password']) && in_array($type, ['sys', 'web'])) {
 				$data['secret'] = base64_encode($data['password']);
@@ -128,9 +128,15 @@ class User extends Authenticatable {
 				unset($data['password']);
 			}
 			$user = User::create($data);
-
-			UserAccount::updateOrCreate(['user_id' => $user->id, 'account_id' => $acc->id]);
 		}
 		return $user;
+	}
+	public function linkUser($user) {
+		if ($this->account == $user->account) {
+			return false;
+		}
+		$credentials = ['fm_user_id' => $this->id, 'to_user_id' => $user->id];
+		UserLink::updateOrCreate($credentials);
+		return true;
 	}
 }

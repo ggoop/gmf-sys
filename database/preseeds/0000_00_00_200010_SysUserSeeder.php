@@ -21,7 +21,7 @@ class SysUserSeeder extends Seeder {
 		}
 		//用户
 		$b = new Builder;
-		$b->user_id($id)->email($email)->name($email)->password($secret)->client_id(config('gmf.client.id'));
+		$b->user_id($id)->account($email)->name($email)->password($secret)->client_id(config('gmf.client.id'));
 		User::registerByAccount('sys', $b->toArray());
 	}
 }
