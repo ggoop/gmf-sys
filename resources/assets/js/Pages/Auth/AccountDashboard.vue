@@ -31,8 +31,8 @@
         </div>
       </md-list-item>
     </md-list>
-    <md-card-actions md-alignment="center">
-      <router-link to="/">返回首页</router-link>
+    <md-card-actions md-alignment="left">
+      <router-link :to="{name:'home'}">返回首页</router-link>
     </md-card-actions>
     <md-progress-bar md-mode="indeterminate" v-if="sending" />
   </md-card>
