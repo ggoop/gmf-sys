@@ -1,7 +1,7 @@
 <?php
 
 namespace Gmf\Sys\Models;
-use Gmf\Passport\HasApiTokens;
+use Gmf\Sys\Passport\HasApiTokens;
 use Gmf\Sys\Traits\HasGuard;
 use Gmf\Sys\Traits\Snapshotable;
 use Gmf\Sys\Uuid;
