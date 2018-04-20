@@ -17,7 +17,9 @@ Route::prefix('api/sys/auth')->middleware(['web', 'auth'])->namespace($ns)->grou
 	Route::any('logout', 'AuthController@logout');
 });
 Route::prefix('api/sys/auth')->middleware(['api', 'auth:api'])->namespace($ns)->group(function () {
-	Route::post('join', 'AuthController@join');
+	Route::post('joins', 'AuthController@addJoins');
+	Route::get('joins', 'AuthController@getJoins');
+	Route::delete('joins', 'AuthController@removeJoins');
 });
 Route::prefix('api/sys')->middleware(['api'])->namespace($ns)->group(function () {
 	Route::get('editor/templates', 'EditorController@templates');

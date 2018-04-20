@@ -25,6 +25,7 @@
         </md-layout>
       </md-card-content>
       <md-card-actions>
+        <router-link :to="{name:'auth.account.dashboard'}">查看关联账号</router-link>
         <span class="flex"></span>
         <md-button type="submit" class="md-primary md-raised" :disabled="sending">关联账号</md-button>
       </md-card-actions>
@@ -100,7 +101,7 @@ export default {
     },
     submitPost() {
       this.sending = true;
-      this.$http.post('sys/auth/join', this.mainDatas).then(response => {
+      this.$http.post('sys/auth/joins', this.mainDatas).then(response => {
         this.sending = false;
         this.$go({ name: 'auth.account.dashboard', query: this.routeQuery });
       }).catch(err => {

@@ -149,9 +149,8 @@ class AuthController extends Controller {
 		}
 		$this->toJson(app('Gmf\Sys\Bp\UserAuth')->verifyMail($this, $user, $input['token']));
 	}
-	public function join(Request $request) {
+	public function addJoins(Request $request) {
 		GAuth::check();
-		$token = false;
 		$input = array_only($request->all(), ['account', 'password']);
 		$validator = Validator::make($input, [
 			'account' => ['required'],
@@ -170,5 +169,23 @@ class AuthController extends Controller {
 		} else {
 			throw new \Exception("密码不正确...");
 		}
+	}
+	public function getJoins(Request $request) {
+		GAuth::check();
+		$uids = Models\UserLink::where('fm_user_id', GAuth::id())->pluck('to_user_id');
+		return $this->toJson((new Resources\UserCollection(Models\User::whereIn('id', $uids)->get()))->withCallback(function ($rtn, $value) {
+			$rtn->account($value->account);
+		}));
+	}
+	public function removeJoins(Request $request) {
+		GAuth::check();
+		$uids = $request->input('to_user_id');
+		if (!empty($uids) && is_string($uids)) {
+			$uids = explode(',', $uids);
+		}
+		if (is_array($uids)) {
+			Models\UserLink::where('fm_user_id', GAuth::id())->whereIn('to_user_id', $uids)->delete();
+		}
+		return $this->toJson(true);
 	}
 }
