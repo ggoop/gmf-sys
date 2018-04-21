@@ -19,7 +19,6 @@
     <router-view></router-view>
     <md-toast ref="rootToast"></md-toast>
   </div>
-  <script src="https://cdn.bootcss.com/lodash.js/4.17.5/lodash.min.js"></script>
   <script src="{{ mix('/js/manifest.js')}}"></script>
   <script src="{{ mix('/js/vendor.js')}}"></script>
   <script src="{{ mix('/js/app.js')}}"></script>
