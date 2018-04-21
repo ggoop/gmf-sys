@@ -1,14 +1,30 @@
 <template>
   <md-toolbar class="md-part-toolbar md-dense" md-elevation="1">
     <slot></slot>
+    <md-part-toolbar-group>
+      <md-button class="md-icon-button" @click="toggleScreenfull">
+        <md-icon v-if="!screenfull">fullscreen</md-icon>
+        <md-icon v-else>fullscreen_exit</md-icon>
+      </md-button>
+    </md-part-toolbar-group>
   </md-toolbar>
 </template>
 <script>
 export default {
   name: 'MdPartToolbar',
   inject: ['MdPart'],
+  computed: {
+    screenfull() {
+      return this.MdPart.part.screenfull;
+    }
+  },
+  methods: {
+    toggleScreenfull() {
+      this.MdPart.part.screenfull = !this.MdPart.part.screenfull;
+    }
+  },
   mounted() {
-    this.MdPart.toolbar.element = this.$el
+    this.MdPart.toolbar.element = this.$el;
   }
 };
 
@@ -57,7 +73,7 @@ export default {
         margin: 0px;
         margin-top: 10px;
       }
-      >.md-select>.md-input{
+      >.md-select>.md-input {
         padding-top: 16px;
       }
       .md-chip {

@@ -151,6 +151,9 @@ export default {
     .search {
       margin: 0 10px;
     }
+    .md-title{
+      margin-right: 10px;
+    }
   }
 }
 

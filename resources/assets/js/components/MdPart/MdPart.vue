@@ -18,6 +18,10 @@ export default {
         height: '0px',
         top: 0
       },
+      part: {
+        element: null,
+        screenfull: false
+      }
     }
   }),
   provide() {
@@ -29,16 +33,18 @@ export default {
     classes() {
       const s = {};
       s['layout-' + this.direction] = true;
+      s['fullscreen'] = this.MdPart.part.screenfull;
       return s;
     },
   },
   methods: {
     handleFlexibleMode() {
-      
+
     },
   },
   mounted() {
-    this.handleFlexibleMode()
+    this.MdPart.part.element = this.$el;
+    this.handleFlexibleMode();
   }
 };
 
@@ -53,6 +59,18 @@ export default {
     &.md-transparent {
       background-color: transparent;
     }
+  }
+  &.fullscreen {
+    z-index: 110;
+    position: fixed;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    overflow: auto;
   }
 }
 

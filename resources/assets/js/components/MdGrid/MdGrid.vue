@@ -651,10 +651,10 @@ export default {
         }
       }
       &:nth-child(even) {
-        background-color: #c8e6c9;
+        background-color: rgba(245, 247, 250, 0.7);
       }
       &.selected {
-        background-color: #66bb6a;
+        background-color:rgba(102, 187, 106, 0.5);
       }
     }
     tr:hover>:first-child:before,

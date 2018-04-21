@@ -97,7 +97,6 @@ export default new MdComponent({
       } else {
         this.addValue(value);
       }
-      this.emitChange();
     },
     addValue(value) {
       if (!value) return;
@@ -120,12 +119,12 @@ export default new MdComponent({
       if (this.multiple) {
         values = [];
         if (this.mdRefType == 'entity' || this.mdRefType == 'enum') {
-          this.selectedValues.each(function(v) {
+          this.selectedValues.forEach(function(v) {
             v && values.push(v);
           });
           // values = this.selectedValues.filter(v => !!v);
         } else if (this.mdRefType == 'text') {
-          this.selectedValues.each(function(v) {
+          this.selectedValues.forEach(function(v) {
             v && v.name && values.push(v.name);
           });
           // values = this.selectedValues.map(v => v.name).filter(v => !!v);
