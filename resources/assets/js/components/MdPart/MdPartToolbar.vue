@@ -1,8 +1,8 @@
 <template>
   <md-toolbar class="md-part-toolbar md-dense" md-elevation="1">
     <slot></slot>
-    <md-part-toolbar-group>
-      <md-button class="md-icon-button" @click="toggleScreenfull">
+    <md-part-toolbar-group v-if="hasGroup">
+      <md-button v-if="mdFullscreen" class="md-icon-button" @click="toggleScreenfull">
         <md-icon v-if="!screenfull">fullscreen</md-icon>
         <md-icon v-else>fullscreen_exit</md-icon>
       </md-button>
@@ -13,9 +13,15 @@
 export default {
   name: 'MdPartToolbar',
   inject: ['MdPart'],
+  props: {
+    mdFullscreen: Boolean,
+  },
   computed: {
     screenfull() {
       return this.MdPart.part.screenfull;
+    },
+    hasGroup(){
+      return this.mdFullscreen;
     }
   },
   methods: {
