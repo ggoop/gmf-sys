@@ -1,9 +1,12 @@
-$baseline-grid:            8px !default;
-$layout-gutter-width:      ($baseline-grid * 2) !default;
-$layout-breakpoint-xs:     600px !default;
-$layout-breakpoint-sm:     960px !default;
-$layout-breakpoint-md:     1280px !default;
-$layout-breakpoint-lg:     1920px !default;
+$baseline-grid: 8px !default;
+$layout-gutter-width: ($baseline-grid * 2) !default;
+$layout-breakpoint-xs: 600px !default;
+$layout-breakpoint-sm: 960px !default;
+$layout-breakpoint-md: 1280px !default;
+$layout-breakpoint-lg: 1920px !default;
+
+
+
 
 @mixin rtl($prop, $ltr-value, $rtl-value) {
   #{$prop}: $ltr-value;
@@ -22,10 +25,10 @@ $layout-breakpoint-lg:     1920px !default;
 
 // To reverse padding (top left bottom right) -> (top right bottom left)
 @function rtl-value($list) {
-  @if length($list) == 4 {
+  @if length($list)==4 {
     @return nth($list, 1) nth($list, 4) nth($list, 3) nth($list, 2)
   }
-  @if length($list) == 5 {
+  @if length($list)==5 {
     @return nth($list, 1) nth($list, 4) nth($list, 3) nth($list, 2) nth($list, 5)
   }
   @return $list;
@@ -131,6 +134,17 @@ $layout-breakpoint-lg:     1920px !default;
   }
 }
 
+@mixin layouts_for_gutter($size:null) {
+  .layout-gutter {
+    margin-right: -#{$size};
+    margin-left:-#{$size};
+    >* {
+      padding-right:#{$size};
+      padding-left: #{$size};
+    }
+  }
+}
+
 @mixin layout-for-name($name: null) {
   @if $name==null {
     $name: '';
@@ -221,24 +235,24 @@ $layout-breakpoint-lg:     1920px !default;
       max-height: #{$value};
       box-sizing: border-box;
     }
-
-    .layout#{$name}-row>.#{$flexName}-#{$i * 5} {
-      flex: 1 1 100%;
-      max-width: #{$value};
-      max-height: 100%;
-      box-sizing: border-box; // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
-      @if $i==0 {
-        min-width: 0;
+    @if $name!=null and $name!='' {
+      .layout#{$name}-row>.#{$flexName}-#{$i * 5} {
+        flex: 1 1 100%;
+        max-width: #{$value};
+        max-height: 100%;
+        box-sizing: border-box; // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
+        @if $i==0 {
+          min-width: 0;
+        }
       }
-    }
-
-    .layout#{$name}-column>.#{$flexName}-#{$i * 5} {
-      flex: 1 1 100%;
-      max-width: 100%;
-      max-height: #{$value};
-      box-sizing: border-box; // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
-      @if $i==0 {
-        min-height: 0;
+      .layout#{$name}-column>.#{$flexName}-#{$i * 5} {
+        flex: 1 1 100%;
+        max-width: 100%;
+        max-height: #{$value};
+        box-sizing: border-box; // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
+        @if $i==0 {
+          min-height: 0;
+        }
       }
     }
   }
@@ -272,40 +286,41 @@ $layout-breakpoint-lg:     1920px !default;
       box-sizing: border-box;
     }
   }
+  @if $name!=null and $name!='' {
+    .layout#{$name}-row {
+      >.#{$flexName}-33 {
+        flex: 1 1 100%;
+        max-width: 33.33%;
+        max-height: 100%;
+        box-sizing: border-box;
+      }
+      >.#{$flexName}-66 {
+        flex: 1 1 100%;
+        max-width: 66.66%;
+        max-height: 100%;
+        box-sizing: border-box;
+      } // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
+      >.flex {
+        min-width: 0;
+      }
+    }
 
-  .layout#{$name}-row {
-    >.#{$flexName}-33 {
-      flex: 1 1 100%;
-      max-width: 33.33%;
-      max-height: 100%;
-      box-sizing: border-box;
-    }
-    >.#{$flexName}-66 {
-      flex: 1 1 100%;
-      max-width: 66.66%;
-      max-height: 100%;
-      box-sizing: border-box;
-    } // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
-    >.flex {
-      min-width: 0;
-    }
-  }
-
-  .layout#{$name}-column {
-    >.#{$flexName}-33 {
-      flex: 1 1 100%;
-      max-width: 100%;
-      max-height: 33.33%;
-      box-sizing: border-box;
-    }
-    >.#{$flexName}-66 {
-      flex: 1 1 100%;
-      max-width: 100%;
-      max-height: 66.66%;
-      box-sizing: border-box;
-    } // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
-    >.flex {
-      min-height: 0;
+    .layout#{$name}-column {
+      >.#{$flexName}-33 {
+        flex: 1 1 100%;
+        max-width: 100%;
+        max-height: 33.33%;
+        box-sizing: border-box;
+      }
+      >.#{$flexName}-66 {
+        flex: 1 1 100%;
+        max-width: 100%;
+        max-height: 66.66%;
+        box-sizing: border-box;
+      } // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
+      >.flex {
+        min-height: 0;
+      }
     }
   }
 }
@@ -494,6 +509,11 @@ $layout-breakpoint-lg:     1920px !default;
 }
 
 
+
+
+
+
+
 /**/
 
 @-moz-document url-prefix() {
@@ -507,25 +527,29 @@ $layout-breakpoint-lg:     1920px !default;
 
 @include layouts_for_breakpoint();
 @include layout-padding-margin();
+@include layouts_for_gutter($baseline-grid * 2);
 
 @media (max-width: $layout-breakpoint-xs - 1) {
   // Xtra-SMALL  SCREEN
-  .hide-xs, .hide {
+  .hide-xs,
+  .hide {
     &:not(.show-xs):not(.show) {
       display: none;
     }
   }
   @include layouts_for_breakpoint(xs);
+  @include layouts_for_gutter($baseline-grid);
 }
 
 @media (min-width: $layout-breakpoint-xs) {
   // BIGGER THAN Xtra-SMALL SCREEN
   @include layouts_for_breakpoint(gt-xs);
-
+  @include layouts_for_gutter($baseline-grid * 2);
 }
 
 @media (min-width: $layout-breakpoint-xs) and (max-width: $layout-breakpoint-sm - 1) {
-  .hide, .hide-gt-xs {
+  .hide,
+  .hide-gt-xs {
     &:not(.show-gt-xs):not(.show-sm):not(.show) {
       display: none;
     }
@@ -540,12 +564,13 @@ $layout-breakpoint-lg:     1920px !default;
 @media (min-width: $layout-breakpoint-sm) {
   // BIGGER THAN SMALL SCREEN
   @include layouts_for_breakpoint(gt-sm);
-
 }
 
 @media (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md - 1) {
   // MEDIUM SCREEN
-  .hide, .hide-gt-xs, .hide-gt-sm {
+  .hide,
+  .hide-gt-xs,
+  .hide-gt-sm {
     &:not(.show-gt-xs):not(.show-gt-sm):not(.show-md):not(.show) {
       display: none;
     }
@@ -563,7 +588,10 @@ $layout-breakpoint-lg:     1920px !default;
 
 @media (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg - 1) {
   // LARGE SCREEN
-  .hide,.hide-gt-xs, .hide-gt-sm, .hide-gt-md {
+  .hide,
+  .hide-gt-xs,
+  .hide-gt-sm,
+  .hide-gt-md {
     &:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-lg):not(.show) {
       display: none;
     }
@@ -577,10 +605,13 @@ $layout-breakpoint-lg:     1920px !default;
 
 @media (min-width: $layout-breakpoint-lg) {
   @include layouts_for_breakpoint(gt-lg);
-  @include layouts_for_breakpoint(xl);
-
-  // BIGGER THAN LARGE SCREEN
-  .hide, .hide-gt-xs, .hide-gt-sm, .hide-gt-md, .hide-gt-lg {
+  @include layouts_for_breakpoint(xl); // BIGGER THAN LARGE SCREEN
+  @include layouts_for_gutter($baseline-grid * 3);
+  .hide,
+  .hide-gt-xs,
+  .hide-gt-sm,
+  .hide-gt-md,
+  .hide-gt-lg {
     &:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-gt-lg):not(.show-xl):not(.show) {
       display: none;
     }
@@ -588,7 +619,6 @@ $layout-breakpoint-lg:     1920px !default;
   .hide-xl:not(.show-xl):not(.show-gt-lg):not(.show-gt-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {
     display: none;
   }
-
 }
 
 // General printing Rules

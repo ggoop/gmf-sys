@@ -1,5 +1,5 @@
 <template>
-  <md-toolbar class="md-part-toolbar md-dense" md-elevation="1">
+  <md-toolbar class="md-part-toolbar md-dense no-scroll" md-elevation="1">
     <slot></slot>
     <md-part-toolbar-group v-if="hasGroup">
       <md-button v-if="mdFullscreen" class="md-icon-button" @click="toggleScreenfull">

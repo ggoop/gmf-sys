@@ -2,6 +2,7 @@
 $materialIcon-font-path: "../fonts/materialIcon/";
 
 
+
 /**
  * Structure - The main styles for html and body tags
  */
@@ -40,6 +41,7 @@ body {
   font-family: Roboto, 'Noto Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   @extend .md-body-1;
 }
+
 
 
 
@@ -86,6 +88,7 @@ body {
 
 
 
+
 /**
  * Overrides - Default buttons
  */
@@ -103,6 +106,7 @@ input[type="search"]::-webkit-search-cancel-button {
   display: none;
   -webkit-appearance: none;
 }
+
 
 
 
@@ -125,6 +129,7 @@ iframe {
     height: auto;
   }
 }
+
 
 
 
@@ -183,20 +188,21 @@ iframe {
 .circle {
   border-radius: 50%;
 }
-
 .truncate {
   display: block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 .no-padding {
   padding: 0 !important;
 }
-
 .no-margin {
   margin: 0 !important;
+}
+
+.no-scroll {
+  overflow: hidden !important;
 }
 
 .wrap {

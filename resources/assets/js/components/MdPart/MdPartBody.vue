@@ -1,5 +1,5 @@
 <template>
-  <div class="layout-fill flex md-part-body" :class="classes">
+  <div class="flex md-part-body" :class="classes">
     <slot></slot>
   </div>
 </template>
@@ -27,7 +27,6 @@
 
 
 .md-part-body {
-  overflow: auto;
   background-color: #fff;
   position: relative;
   padding: 0 16px;
