@@ -9,9 +9,6 @@
   <title>{{env('APP_NAME')}}</title>
   <link rel="shortcut icon" href="{{ URL::asset('favicon.ico') }}" />
   <link rel="stylesheet" type="text/css" href="{{ mix('/css/app.css') }}" />
-  <script>
-    gmfConfig={!! json_encode($config) !!};
-  </script>
 </head>
 
 <body>
