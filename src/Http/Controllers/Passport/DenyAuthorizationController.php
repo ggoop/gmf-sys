@@ -1,51 +1,48 @@
 <?php
 
-namespace Gmf\Sys\Passport\Http\Controllers;
+namespace Gmf\Sys\Http\Controllers\Passport;
 
-use Illuminate\Support\Arr;
-use Illuminate\Http\Request;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
-class DenyAuthorizationController
-{
-    use RetrievesAuthRequestFromSession;
+class DenyAuthorizationController {
+	use RetrievesAuthRequestFromSession;
 
-    /**
-     * The response factory implementation.
-     *
-     * @var \Illuminate\Contracts\Routing\ResponseFactory
-     */
-    protected $response;
+	/**
+	 * The response factory implementation.
+	 *
+	 * @var \Illuminate\Contracts\Routing\ResponseFactory
+	 */
+	protected $response;
 
-    /**
-     * Create a new controller instance.
-     *
-     * @param  \Illuminate\Contracts\Routing\ResponseFactory  $response
-     * @return void
-     */
-    public function __construct(ResponseFactory $response)
-    {
-        $this->response = $response;
-    }
+	/**
+	 * Create a new controller instance.
+	 *
+	 * @param  \Illuminate\Contracts\Routing\ResponseFactory  $response
+	 * @return void
+	 */
+	public function __construct(ResponseFactory $response) {
+		$this->response = $response;
+	}
 
-    /**
-     * Deny the authorization request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function deny(Request $request)
-    {
-        $authRequest = $this->getAuthRequestFromSession($request);
+	/**
+	 * Deny the authorization request.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function deny(Request $request) {
+		$authRequest = $this->getAuthRequestFromSession($request);
 
-        if (is_array($uri = $authRequest->getClient()->getRedirectUri())) {
-            $uri = Arr::first($uri);
-        }
+		if (is_array($uri = $authRequest->getClient()->getRedirectUri())) {
+			$uri = Arr::first($uri);
+		}
 
-        $separator = $authRequest->getGrantTypeId() === 'implicit' ? '#' : '?';
+		$separator = $authRequest->getGrantTypeId() === 'implicit' ? '#' : '?';
 
-        return $this->response->redirectTo(
-            $uri.$separator.'error=access_denied&state='.$request->input('state')
-        );
-    }
+		return $this->response->redirectTo(
+			$uri . $separator . 'error=access_denied&state=' . $request->input('state')
+		);
+	}
 }

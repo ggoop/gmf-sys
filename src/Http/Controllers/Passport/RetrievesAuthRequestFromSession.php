@@ -1,30 +1,28 @@
 <?php
 
-namespace Gmf\Sys\Passport\Http\Controllers;
+namespace Gmf\Sys\Http\Controllers\Passport;
 
 use Exception;
-use Illuminate\Http\Request;
 use Gmf\Sys\Passport\Bridge\User;
+use Illuminate\Http\Request;
 
-trait RetrievesAuthRequestFromSession
-{
-    /**
-     * Get the authorization request from the session.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \League\OAuth2\Server\RequestTypes\AuthorizationRequest
-     * @throws \Exception
-     */
-    protected function getAuthRequestFromSession(Request $request)
-    {
-        return tap($request->session()->get('authRequest'), function ($authRequest) use ($request) {
-            if (! $authRequest) {
-                throw new Exception('Authorization request was not present in the session.');
-            }
+trait RetrievesAuthRequestFromSession {
+	/**
+	 * Get the authorization request from the session.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \League\OAuth2\Server\RequestTypes\AuthorizationRequest
+	 * @throws \Exception
+	 */
+	protected function getAuthRequestFromSession(Request $request) {
+		return tap($request->session()->get('authRequest'), function ($authRequest) use ($request) {
+			if (!$authRequest) {
+				throw new Exception('Authorization request was not present in the session.');
+			}
 
-            $authRequest->setUser(new User($request->user()->getKey()));
+			$authRequest->setUser(new User($request->user()->getKey()));
 
-            $authRequest->setAuthorizationApproved(true);
-        });
-    }
+			$authRequest->setAuthorizationApproved(true);
+		});
+	}
 }

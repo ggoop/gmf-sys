@@ -1,47 +1,43 @@
 <?php
 
-namespace Gmf\Sys\Passport\Http\Controllers;
-
+namespace Gmf\Sys\Http\Controllers\Passport;
 use Illuminate\Http\Request;
-use Zend\Diactoros\Response as Psr7Response;
 use League\OAuth2\Server\AuthorizationServer;
+use Zend\Diactoros\Response as Psr7Response;
 
-class ApproveAuthorizationController
-{
-    use HandlesOAuthErrors, RetrievesAuthRequestFromSession;
+class ApproveAuthorizationController {
+	use HandlesOAuthErrors, RetrievesAuthRequestFromSession;
 
-    /**
-     * The authorization server.
-     *
-     * @var \League\OAuth2\Server\AuthorizationServer
-     */
-    protected $server;
+	/**
+	 * The authorization server.
+	 *
+	 * @var \League\OAuth2\Server\AuthorizationServer
+	 */
+	protected $server;
 
-    /**
-     * Create a new controller instance.
-     *
-     * @param  \League\OAuth2\Server\AuthorizationServer  $server
-     * @return void
-     */
-    public function __construct(AuthorizationServer $server)
-    {
-        $this->server = $server;
-    }
+	/**
+	 * Create a new controller instance.
+	 *
+	 * @param  \League\OAuth2\Server\AuthorizationServer  $server
+	 * @return void
+	 */
+	public function __construct(AuthorizationServer $server) {
+		$this->server = $server;
+	}
 
-    /**
-     * Approve the authorization request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function approve(Request $request)
-    {
-        return $this->withErrorHandling(function () use ($request) {
-            $authRequest = $this->getAuthRequestFromSession($request);
+	/**
+	 * Approve the authorization request.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function approve(Request $request) {
+		return $this->withErrorHandling(function () use ($request) {
+			$authRequest = $this->getAuthRequestFromSession($request);
 
-            return $this->server->completeAuthorizationRequest(
-                $authRequest, new Psr7Response
-            );
-        });
-    }
+			return $this->server->completeAuthorizationRequest(
+				$authRequest, new Psr7Response
+			);
+		});
+	}
 }

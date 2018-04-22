@@ -1,41 +1,38 @@
 <?php
 
-namespace Gmf\Sys\Passport\Http\Controllers;
+namespace Gmf\Sys\Http\Controllers\Passport;
 
+use Gmf\Sys\Passport\ApiTokenCookieFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Gmf\Sys\Passport\ApiTokenCookieFactory;
 
-class TransientTokenController
-{
-    /**
-     * The cookie factory instance.
-     *
-     * @var \Gmf\Passport\ApiTokenCookieFactory
-     */
-    protected $cookieFactory;
+class TransientTokenController {
+	/**
+	 * The cookie factory instance.
+	 *
+	 * @var \Gmf\Passport\ApiTokenCookieFactory
+	 */
+	protected $cookieFactory;
 
-    /**
-     * Create a new controller instance.
-     *
-     * @param  \Gmf\Passport\ApiTokenCookieFactory  $cookieFactory
-     * @return void
-     */
-    public function __construct(ApiTokenCookieFactory $cookieFactory)
-    {
-        $this->cookieFactory = $cookieFactory;
-    }
+	/**
+	 * Create a new controller instance.
+	 *
+	 * @param  \Gmf\Passport\ApiTokenCookieFactory  $cookieFactory
+	 * @return void
+	 */
+	public function __construct(ApiTokenCookieFactory $cookieFactory) {
+		$this->cookieFactory = $cookieFactory;
+	}
 
-    /**
-     * Get a fresh transient token cookie for the authenticated user.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function refresh(Request $request)
-    {
-        return (new Response('Refreshed.'))->withCookie($this->cookieFactory->make(
-            $request->user()->getKey(), $request->session()->token()
-        ));
-    }
+	/**
+	 * Get a fresh transient token cookie for the authenticated user.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function refresh(Request $request) {
+		return (new Response('Refreshed.'))->withCookie($this->cookieFactory->make(
+			$request->user()->getKey(), $request->session()->token()
+		));
+	}
 }

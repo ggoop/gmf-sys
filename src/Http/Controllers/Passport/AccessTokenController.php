@@ -1,6 +1,6 @@
 <?php
 
-namespace Gmf\Sys\Passport\Http\Controllers;
+namespace Gmf\Sys\Http\Controllers\Passport;
 
 use Gmf\Sys\Passport\TokenRepository;
 use Lcobucci\JWT\Parser as JwtParser;

@@ -1,9 +1,9 @@
 <?php
 
-namespace Gmf\Sys\Passport\Http\Controllers;
+namespace Gmf\Sys\Http\Controllers\Passport;
 
-use Gmf\Sys\Passport\ClientRepository;
 use Gmf\Sys\Http\Controllers\Controller;
+use Gmf\Sys\Passport\ClientRepository;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
