@@ -131,7 +131,7 @@ class UserAuth {
 		$type = $input['type'];
 
 		$user = app('Gmf\Sys\Bp\UserAuth')->checker($observer, array_only($input, ['id', 'account']));
-		$vcode = Models\Auth\VCode::create([
+		$vcode = Models\VCode::create([
 			'user_id' => $input['id'],
 			'type' => $input['type'],
 			'token' => $code,
@@ -154,7 +154,7 @@ class UserAuth {
 			'type' => 'required',
 			'token' => 'required',
 		])->validate();
-		Models\Auth\VCode::where([
+		Models\VCode::where([
 			'user_id' => $input['id'],
 			'type' => $input['type'],
 			'token' => $input['token'],
@@ -168,7 +168,7 @@ class UserAuth {
 			'token' => 'required',
 		])->validate();
 
-		$t = Models\Auth\VCode::where([
+		$t = Models\VCode::where([
 			'user_id' => $input['id'],
 			'type' => $input['type'],
 			'token' => $input['token'],
@@ -176,7 +176,7 @@ class UserAuth {
 		if (!$t) {
 			throw new \Exception("验证码无效");
 		}
-		if ($t < Carbon::now()) {
+		if ($t->expire_time < Carbon::now()) {
 			throw new \Exception("验证码已过期");
 		}
 		return true;

@@ -1,7 +1,7 @@
 <?php
 
 namespace Gmf\Sys\Http\Controllers;
-
+use Auth;
 use DB;
 use GAuth;
 use Gmf\Sys\Http\Resources;
@@ -15,6 +15,21 @@ class AuthController extends Controller {
 	}
 	public function getUser(Request $request) {
 		return $this->toJson(new Resources\User(app('Gmf\Sys\Bp\UserAuth')->checker($this, $request->only('account', 'id'))));
+	}
+	public function loginWithVCode(Request $request, $vcode = '') {
+		if ($c = app('Gmf\Sys\Bp\VCode')->checker($vcode, 'auth.login')) {
+			app('Gmf\Sys\Bp\VCode')->delete($vcode);
+			if ($c->user_id) {
+				$user = Models\User::find($c->user_id);
+				if ($user && Auth::loginUsingId($user->id)) {
+					$token = app('Gmf\Sys\Bp\UserAuth')->issueToken($user);
+					return $this->toJson(new Resources\User($user), function ($b) use ($token) {
+						$b->token($token);
+					});
+				}
+			}
+		}
+		throw new \Exception("code 登录失败");
 	}
 	public function login(Request $request) {
 		$input = $request->only('id', 'account', 'password');

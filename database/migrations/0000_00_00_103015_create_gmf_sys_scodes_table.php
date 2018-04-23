@@ -21,6 +21,7 @@ class CreateGmfSysScodesTable extends Migration {
 		$md->string('type')->nullable()->comment('类型');
 		$md->string('code')->nullable()->comment('短码');
 		$md->text('content')->nullable()->comment('内容');
+		$md->dateTime('expire_time')->nullable();
 		$md->timestamps();
 
 		$md->build();

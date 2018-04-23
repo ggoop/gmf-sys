@@ -21,8 +21,9 @@ class User extends Authenticatable {
 	 * @var array
 	 */
 	protected $fillable = [
-		'id', 'account', 'password', 'secret', 'name', 'nick_name', 'email', 'gender',
-		'type', 'avatar', 'mobile', 'status_enum',
+		'id', 'account', 'mobile', 'email', 'password', 'secret',
+		'name', 'nick_name', 'gender',
+		'type', 'cover', 'avatar', 'titles', 'memo', 'status_enum',
 		'client_id', 'client_type', 'client_name', 'src_id', 'src_url', 'info',
 	];
 
@@ -111,11 +112,34 @@ class User extends Authenticatable {
 			}
 		});
 		$user = $query->orderBy('created_at', 'desc')->first();
-		if (!$user) {
-			$data = array_only($opts, [
-				'account', 'email', 'mobile', 'password', 'name', 'nick_name', 'type', 'avatar', 'memo', 'gender',
-				'client_id', 'client_type', 'client_name', 'src_id', 'src_url', 'info',
-			]);
+
+		$data = array_only($opts, [
+			'id', 'account', 'mobile', 'email', 'password', 'secret',
+			'name', 'nick_name', 'gender',
+			'type', 'cover', 'avatar', 'titles', 'memo',
+			'client_id', 'client_type', 'client_name', 'src_id', 'src_url', 'info',
+		]);
+		if ($user) {
+			$updates = [];
+			if (empty($user->mobile) && !empty($data['mobile']) && !in_array($type, ['sys', 'web'])) {
+				$updates['mobile'] = $data['mobile'];
+			}
+			if (empty($user->email) && !empty($data['email']) && !in_array($type, ['sys', 'web'])) {
+				$updates['email'] = $data['email'];
+			}
+			if (empty($user->gender) && !empty($data['gender'])) {
+				$updates['gender'] = $data['gender'];
+			}
+			if (empty($user->titles) && !empty($data['titles'])) {
+				$updates['titles'] = $data['titles'];
+			}
+			if (empty($user->memo) && !empty($data['memo'])) {
+				$updates['memo'] = $data['memo'];
+			}
+			if (count($updates) > 0) {
+				User::where('id', $user->id)->update($updates);
+			}
+		} else {
 			if (!empty($opts['user_id']) && $type == 'sys') {
 				$data['id'] = $opts['user_id'];
 				$data['src_id'] = $opts['user_id'];

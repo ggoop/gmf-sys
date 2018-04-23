@@ -87,9 +87,31 @@ class TokenGuard {
 			return $this->authenticateViaBearerToken($request);
 		} elseif ($request->cookie(Passport::cookie())) {
 			return $this->authenticateViaCookie($request);
+		} else if ($this->withVCode($request)) {
+			return $this->authenticateViaVCode($request);
 		}
 	}
-
+	protected function withVCode($request) {
+		if ($request->hasHeader('VCode') && $vcode = $request->header('VCode')) {
+			return true;
+		}
+		return false;
+	}
+	protected function authenticateViaVCode($request) {
+		$vcode = $request->header('VCode');
+		if ($c = app('Gmf\Sys\Bp\VCode')->checker($vcode, 'auth.login')) {
+			app('Gmf\Sys\Bp\VCode')->delete($vcode);
+			$client = $this->clients->find($c->client_id);
+			if ($client) {
+				app('gauth')->guard()->setClient($client);
+			}
+			$user = $this->provider->retrieveById($c->user_id);
+			if ($user) {
+				app('gauth')->guard()->setUser($user);
+			}
+			return $user ? $user->withAccessToken(new TransientToken) : null;
+		}
+	}
 	/**
 	 * Authenticate the incoming request via the Bearer token.
 	 *
@@ -115,8 +137,7 @@ class TokenGuard {
 			if ($user) {
 				app('gauth')->guard()->setUser($user);
 			} else if ($client) {
-				$userId = $this->clients->find($client->id)->user_id;
-				$user = $this->provider->retrieveById($userId);
+				$user = $this->provider->retrieveById($client->user_id);
 				app('gauth')->guard()->setForged(true);
 			}
 			// If the access token is valid we will retrieve the user according to the user ID

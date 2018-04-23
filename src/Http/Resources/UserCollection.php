@@ -34,8 +34,9 @@ class UserCollection extends ResourceCollection {
 			->name($value->name)
 			->nick_name($value->nick_name)
 			->avatar($value->avatar)
-			->cover($value->cover);
-
+			->cover($value->cover)
+			->titles($value->titles)
+			->memo($value->memo);
 		if (empty($rtn->avatar)) {
 			$rtn->avatar('/assets/vendor/gmf-sys/avatar/1.jpg');
 		}

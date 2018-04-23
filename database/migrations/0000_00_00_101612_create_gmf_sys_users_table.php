@@ -21,13 +21,14 @@ class CreateGmfSysUsersTable extends Migration {
 		$md->string('password')->nullable();
 		$md->string('secret')->nullable();
 
-		$md->string('name')->nullable();
 		$md->string('gender')->nullable();
+		$md->string('name')->nullable();
 		$md->string('nick_name')->nullable();
 
 		$md->string('type')->nullable()->comment('类型');
 		$md->string('avatar', 500)->nullable();
 		$md->string('cover', 500)->nullable();
+		$md->string('titles', 500)->nullable()->comment('职称');
 		$md->string('memo', 500)->nullable()->comment('备注');
 
 		$md->boolean('email_verified')->default(false)->comment('邮件认证');

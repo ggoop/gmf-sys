@@ -10,6 +10,7 @@ Route::prefix('api/sys/auth')->middleware(['web'])->namespace($ns)->group(functi
 	Route::post('vcode-checker', 'AuthController@checkVCode');
 	Route::post('vcode-create', 'AuthController@createVCode');
 	Route::post('reset', 'AuthController@resetPassword');
+	Route::post('login-vcode/{id}', 'AuthController@loginWithVCode');
 });
 Route::prefix('api/sys/auth')->middleware(['web', 'auth'])->namespace($ns)->group(function () {
 	Route::post('/entry-ent/{id}', 'AuthController@entryEnt');
