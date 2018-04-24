@@ -34,15 +34,21 @@
         <span class="flex"></span>
         <md-button type="submit" class="md-primary md-raised" :disabled="sending">登 录</md-button>
       </md-card-actions>
+      <md-divider></md-divider>
+      <auth-sns></auth-sns>
       <md-progress-bar md-mode="indeterminate" v-if="sending" />
     </form>
   </md-card>
 </template>
 <script>
+import AuthSns from './Sns';
 import { validationMixin } from 'vuelidate';
 import { required, email, minLength, maxLength } from 'vuelidate/lib/validators';
 export default {
   name: 'GmfPagesAuthPassword',
+  components: {
+    AuthSns
+  },
   props: {},
   mixins: [validationMixin],
   data() {
@@ -114,4 +120,5 @@ export default {
     await this.fetchData();
   },
 };
+
 </script>
