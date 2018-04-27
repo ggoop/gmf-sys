@@ -13,7 +13,7 @@ class GAuthGuard {
 	protected $m_forged = false;
 
 	public function SESSION_ENT_KEY() {
-		return config('gmf.ent_session_name');
+		return config('gmf.ent.session');
 	}
 
 	public function setForged($forged = true) {

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="{{ config('app.locale') }}">
-
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -10,7 +9,6 @@
   <link rel="shortcut icon" href="{{ URL::asset('favicon.ico') }}" />
   <link rel="stylesheet" type="text/css" href="{{ mix('/css/app.css') }}" />
 </head>
-
 <body>
   <div id="gmfApp" class="layout-fill">
     <router-view></router-view>
