@@ -16,7 +16,7 @@ class SysUserSeeder extends Seeder {
 		$id = config('gmf.admin.id');
 		$email = config('gmf.admin.email');
 		$secret = config('gmf.admin.pwd');
-		if (!$id) {
+		if (empty($id) || empty($email) || empty($secret)) {
 			return;
 		}
 		//用户

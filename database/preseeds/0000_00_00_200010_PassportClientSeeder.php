@@ -1,8 +1,8 @@
 <?php
 
+use Gmf\Sys\Builder;
 use Gmf\Sys\Passport\Client;
 use Gmf\Sys\Passport\PersonalAccessClient;
-use Gmf\Sys\Builder;
 use Illuminate\Database\Seeder;
 
 class PassportClientSeeder extends Seeder {
@@ -18,7 +18,7 @@ class PassportClientSeeder extends Seeder {
 		$name = config('gmf.client.name');
 		$secret = config('gmf.client.secret');
 		$userId = config('gmf.client.user');
-		if (!$id) {
+		if (empty($id) || empty($secret) || empty($userId)) {
 			return;
 		}
 
