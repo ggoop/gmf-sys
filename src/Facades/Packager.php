@@ -1,18 +1,18 @@
 <?php
-namespace Gmf\Sys;
+namespace Gmf\Sys\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * UuidFacade
+ * Packager
  *
  */
-class GAuthFacade extends Facade {
+class Packager extends Facade {
 	/**
 	 * Get the registered name of the component.
 	 *
 	 * @return string
 	 */
 	protected static function getFacadeAccessor() {
-		return 'gauth';
+		return 'packager';
 	}
 }

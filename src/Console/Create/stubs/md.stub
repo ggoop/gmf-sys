@@ -1,0 +1,39 @@
+<?php
+
+use Gmf\Sys\Database\Metadata;
+use Illuminate\Database\Migrations\Migration;
+
+class DummyClass extends Migration {
+    public $mdID = "DummyId";
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up() {
+        $md = Metadata::create($this->mdID);
+        $md->mdEntity('DummyName')->comment('表名称')->tableName('DummyTable');
+
+        $md->increments('id')->primary();
+        //$md->string('id', 100)->primary();
+        $md->entity('user', 'gmf.sys.user')->nullable()->comment('用户');
+        $md->enum('type', 'gmf.sys.user.owner.type.enum')->nullable()->comment('类型');
+        $md->string('code')->nullable()->comment('code');
+        $md->string('name')->nullable()->comment('名称');
+        $md->text('memo')->nullable()->comment('备注');
+        $md->boolean('is_revoked')->default(0)->comment('注销');
+        $md->timestamps();
+
+        $md->build();
+
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down() {
+        Metadata::dropIfExists($this->mdID);
+    }
+}

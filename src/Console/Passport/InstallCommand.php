@@ -1,10 +1,10 @@
 <?php
 
-namespace Gmf\Sys\Console;
+namespace Gmf\Sys\Console\Passport;
 
 use Illuminate\Console\Command;
 
-class PassportInstallCommand extends Command {
+class InstallCommand extends Command {
 	/**
 	 * The name and signature of the console command.
 	 *

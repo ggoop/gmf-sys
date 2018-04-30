@@ -1,12 +1,12 @@
 <?php
 
-namespace Gmf\Sys\Console;
+namespace Gmf\Sys\Console\Passport;
 
 use Gmf\Sys\Passport\Passport;
 use Illuminate\Console\Command;
 use phpseclib\Crypt\RSA;
 
-class PassportKeysCommand extends Command {
+class KeysCommand extends Command {
 	/**
 	 * The name and signature of the console command.
 	 *

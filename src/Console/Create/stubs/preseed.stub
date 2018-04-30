@@ -1,0 +1,19 @@
+<?php
+
+use Gmf\Sys\Builder;
+use Illuminate\Database\Seeder;
+
+/**
+* 在数据库结构创建或者修改成功后，执行此逻辑，需要支持可多次重复执行.
+*
+*/
+class DummyClass extends Seeder {
+	/**
+	 * Run the database seeds.
+	 *
+	 * @return void
+	 */
+	public function run() {
+    //在这里填写逻辑
+	}
+}

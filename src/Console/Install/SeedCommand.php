@@ -1,6 +1,6 @@
 <?php
 
-namespace Gmf\Sys\Console;
+namespace Gmf\Sys\Console\Install;
 
 use Exception;
 use Gmf\Sys\Models;
@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Packager;
 
 class SeedCommand extends Command {
 	/**
@@ -16,7 +17,7 @@ class SeedCommand extends Command {
 	 *
 	 * @var string
 	 */
-	protected $signature = 'gmf:seed
+	protected $signature = 'gmf:install-seed
             {--force : Overwrite data}
             {--name= : The name of seed files to be executed.}
             {--tag= : seed by tag},
@@ -39,44 +40,42 @@ class SeedCommand extends Command {
 	 * @return void
 	 */
 	public function handle() {
-
-		$path = $this->getCommandPath();
+		$paths = Packager::dbPaths();
 		$tag = $this->getTags();
-		$path .= $tag;
+		$paths = Collection::make($paths)->map(function ($path) use ($tag) {
+			return $path . $tag;
+		})->all();
 
-		$files = $this->getMigrationFiles($path);
+		$this->info("======\t {$tag} begin");
 
-		$files = $this->filterFiles($files);
+		$files = $this->filterFiles($files = $this->getMigrationFiles($paths));
 
 		$this->requireFiles($migrations = $this->pendingMigrations($files, ['DatabaseSeeder']));
 
 		foreach ($migrations as $file) {
 			$this->runUp($file);
 		}
-		$this->info($tag . ' seeding all complete');
+		$this->info("======\t {$tag} end");
 	}
 	protected function getTags() {
 		return $this->option('tag') . 'seeds';
 	}
-	protected function getCommandPath() {
-		return $this->laravel->databasePath() . DIRECTORY_SEPARATOR;
-	}
 	protected function runUp($file) {
 		$tag = $this->getTags();
 		$migration = $this->resolve($name = $this->getMigrationName($file));
-		$this->line($tag . " seeding begin:    {$name}");
+		$this->line("{$tag} seeding :\t{$name}");
 
 		$entId = $this->option('ent') ?: false;
 		if ($entId) {
 			if (empty(Models\Ent::find($entId))) {
-				$this->line($tag . " seeding returned:    {$name}. the entid is null");
+				$this->line("entid is null, returned. \t{$name}");
 				throw new Exception("the entid is null", 1);
 				return;
 			}
 		}
 		Model::unguarded(function () use ($migration, $entId) {
 			if ($entId && !array_has(get_object_vars($migration), 'entId')) {
-				$this->line("entId property is not exists, returned");
+				$this->line("entId property is not exists, returned. \t{$name}");
 				return;
 			}
 			if ($entId && array_has(get_object_vars($migration), 'entId')) {
@@ -86,12 +85,7 @@ class SeedCommand extends Command {
 				$migration->run();
 			}
 		});
-		$this->line($tag . " seeding complete: {$name}");
-	}
-	protected function getSeeder($seeder) {
-		$class = $this->laravel->make($seeder);
-
-		return $class->setContainer($this->laravel)->setCommand($this);
+		$this->line("{$tag} seeded:\t{$name}");
 	}
 	public function resolve($file) {
 		$class = $this->getResolveName($file);

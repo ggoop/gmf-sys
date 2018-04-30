@@ -1,0 +1,17 @@
+<?php
+
+use Illuminate\Database\Seeder;
+//use Gmf\Sys\Models\User;
+
+class DummyClass extends Seeder {
+	/**
+	 * Run the database seeds.
+	 *
+	 * @return void
+	 */
+	public function run() {
+		//在这里填写逻辑，一般用作测试数据填充
+    //User::whereIn('id',['test'])->delete();
+    //User::create(['id'=>'test','name'=>'test','account'=>'test','type'=>'sys']);
+	}
+}

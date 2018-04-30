@@ -1,0 +1,18 @@
+<?php
+
+namespace DummyNamespace;
+use Gmf\Sys\Traits\HasGuard;
+use Gmf\Sys\Traits\Snapshotable;
+use Illuminate\Database\Eloquent\Model;
+
+class DummyClass extends Model {
+	use Snapshotable, HasGuard;
+	protected $table = 'DummyTable';
+	public $incrementing = false;
+	/**
+	 * The attributes that are mass assignable.
+	 *
+	 * @var array
+	 */
+	protected $fillable = ['id'];
+}

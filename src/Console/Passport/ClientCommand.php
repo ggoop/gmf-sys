@@ -1,12 +1,12 @@
 <?php
 
-namespace Gmf\Sys\Console;
+namespace Gmf\Sys\Console\Passport;
 
 use Gmf\Sys\Passport\ClientRepository;
 use Gmf\Sys\Passport\PersonalAccessClient;
 use Illuminate\Console\Command;
 
-class PassportClientCommand extends Command {
+class ClientCommand extends Command {
 	/**
 	 * The name and signature of the console command.
 	 *

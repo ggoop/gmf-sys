@@ -1,0 +1,57 @@
+<?php
+
+namespace DummyNamespace;
+
+use Illuminate\Http\Request;
+use Gmf\Sys\Http\Controllers\Controller;
+class DummyClass extends Controller {
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function index() {
+		//$data=[];
+		//return $this->toJson($data);
+	}
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function store(Request $request) {
+		//
+	}
+
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  \App\Flightdddd  $flightdddd
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show(Request $request, $id) {
+		//
+	}
+
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \App\Flightdddd  $flightdddd
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request, $id) {
+		//
+	}
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  $ids
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy($ids) {
+		//return $this->toJson(true);
+	}
+}

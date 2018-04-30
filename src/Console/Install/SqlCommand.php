@@ -1,12 +1,13 @@
 <?php
 
-namespace Gmf\Sys\Console;
+namespace Gmf\Sys\Console\Install;
 
 use DB;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Packager;
 
 class SqlCommand extends Command {
 	/**
@@ -14,7 +15,7 @@ class SqlCommand extends Command {
 	 *
 	 * @var string
 	 */
-	protected $signature = 'gmf:sql
+	protected $signature = 'gmf:install-sql
             {--force : Overwrite data}
             {--name= : The name of sql files to be executed.}
             {--tag= : seed by tag}';
@@ -36,35 +37,31 @@ class SqlCommand extends Command {
 	 * @return void
 	 */
 	public function handle() {
-
-		$path = $this->getCommandPath();
-
+		$paths = Packager::dbPaths();
 		$tag = $this->getTags();
+		$paths = Collection::make($paths)->map(function ($path) use ($tag) {
+			return $path . $tag;
+		})->all();
 
-		$path .= $tag;
-		$this->info('******************' . $tag . ' sql executing*************');
+		$this->info("======\t {$tag} begin");
 
-		$files = $this->getMigrationFiles($path);
-		$files = $this->filterFiles($files);
+		$files = $this->filterFiles($files = $this->getMigrationFiles($paths));
+
 		$migrations = $this->pendingMigrations($files);
 
 		foreach ($migrations as $file) {
 			$this->runUp($file);
 		}
-		$this->info('******************' . $tag . ' sql execute complete******');
-
+		$this->info("======\t {$tag} end");
 	}
 	protected function getTags() {
 		return $this->option('tag') . 'sqls';
-	}
-	protected function getCommandPath() {
-		return $this->laravel->databasePath() . DIRECTORY_SEPARATOR;
 	}
 	protected function runUp($file) {
 		$tag = $this->getTags();
 
 		$name = $this->getMigrationName($file);
-		$this->line($tag . "  execute begin:    {$name}");
+		$this->line("{$tag} executing :\t{$name}");
 
 		$content = $this->files->get($file);
 		if (str_contains($content, 'DELIMITER')) {
@@ -78,10 +75,9 @@ class SqlCommand extends Command {
 			$content = str_replace('$$', ';', $content);
 			$content = str_replace('DELIMITER', '', $content);
 		}
-
 		//DB::statement($content);
 		DB::unprepared($content);
-		$this->line($tag . " execute completed: {$name}");
+		$this->line("{$tag} executed:\t{$name}");
 	}
 	protected function getResolveName($file) {
 		$sp = explode('_', $file);

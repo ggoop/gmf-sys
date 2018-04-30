@@ -1,0 +1,26 @@
+<?php
+
+use Gmf\Sys\Builder;
+use Illuminate\Database\Seeder;
+/**
+* 在数据库结构创建或者修改成功后，先执行preseed逻辑，然后再执行，需要支持可多次重复执行.
+*
+*/
+class DummyClass extends Seeder {
+	public $entId = '';
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function run() {
+		//如果需要企业信息，则使用如下代码
+		// if (empty($this->entId)) {
+		// 	$this->entId = config('gmf.ent.id');
+		// }
+		// if (empty($this->entId)) {
+		// 	return;
+		// }
+		//在这里写数据填充逻辑
+	}
+}

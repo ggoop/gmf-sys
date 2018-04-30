@@ -36,17 +36,27 @@ class ServiceProvider extends BaseServiceProvider {
 	 * @return void
 	 */
 	public function boot() {
-		$this->commands([
-			Console\PublishlCommand::class,
-			Console\InstallCommand::class,
-			Console\SeedCommand::class,
-			Console\SqlCommand::class,
-			Console\MdCommand::class,
+		if ($this->app->runningInConsole()) {
+			$this->commands([
+				Console\Publish\PublishlCommand::class,
+				Console\Install\InstallCommand::class,
+				Console\Install\SeedCommand::class,
+				Console\Install\SqlCommand::class,
+				Console\Install\MdCommand::class,
 
-			Console\PassportInstallCommand::class,
-			Console\PassportClientCommand::class,
-			Console\PassportKeysCommand::class,
-		]);
+				Console\Passport\InstallCommand::class,
+				Console\Passport\ClientCommand::class,
+				Console\Passport\KeysCommand::class,
+
+				Console\Create\MdCommand::class,
+				Console\Create\PostSeedCommand::class,
+				Console\Create\PreSeedCommand::class,
+				Console\Create\SeedCommand::class,
+				Console\Create\ControllerCommand::class,
+				Console\Create\ModelCommand::class,
+				Console\Create\PageCommand::class,
+			]);
+		}
 		$this->loadViewsFrom(__DIR__ . '/../resources/views', 'gmf');
 		$this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
 		$this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
@@ -54,19 +64,10 @@ class ServiceProvider extends BaseServiceProvider {
 		$this->deleteCookieOnLogout();
 
 		if ($this->app->runningInConsole()) {
-			$this->registerMigrations();
-
 			$publishes = config('gmf.publishes', 'gmf');
 
 			$this->publishes([
 				__DIR__ . '/../config/gmf.php' => config_path('gmf.php'),
-			], $publishes);
-
-			$this->publishes([
-				__DIR__ . '/../resources/git/database.gitignore' => database_path('.gitignore'),
-				__DIR__ . '/../resources/git/jsvendor.gitignore' => resource_path('assets/js/vendor/.gitignore'),
-				__DIR__ . '/../resources/git/fontvendor.gitignore' => resource_path('assets/fonts/vendor/.gitignore'),
-				__DIR__ . '/../resources/git/sassvendor.gitignore' => resource_path('assets/sass/vendor/.gitignore'),
 			], $publishes);
 
 			$this->publishes([
@@ -76,21 +77,11 @@ class ServiceProvider extends BaseServiceProvider {
 			$this->publishes([
 				__DIR__ . '/../resources/public' => public_path('assets/vendor/gmf-sys'),
 			], $publishes);
-
-			$this->publishes([
-				__DIR__ . '/../database/seeds' => database_path('seeds'),
-				__DIR__ . '/../database/preseeds' => database_path('preseeds'),
-				__DIR__ . '/../database/postseeds' => database_path('postseeds'),
-			], $publishes);
-
-			$this->publishes([
-				__DIR__ . '/../database/sqls' => database_path('sqls'),
-				__DIR__ . '/../database/presqls' => database_path('presqls'),
-				__DIR__ . '/../database/postsqls' => database_path('postsqls'),
-			], $publishes);
 		}
 	}
-
+	public function alias() {
+		return 'gmf-sys';
+	}
 	/**
 	 * Register the application services.
 	 *
@@ -104,20 +95,26 @@ class ServiceProvider extends BaseServiceProvider {
 		$this->registerGuard();
 
 		$this->registerEnt();
-	}
-	protected function registerEnt() {
 
+		$this->registerPackager();
+	}
+
+	protected function registerEnt() {
 		$this->app->singleton('gauth', function ($app) {
 			return new GAuth\GAuthManager($app);
 		});
 	}
-	/**
-	 * Register Passport's migration files.
-	 *
-	 * @return void
-	 */
-	protected function registerMigrations() {
-		return $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+	protected function registerPackager() {
+		$this->app->singleton('packager', function ($app) {
+			return tap(new Packager\PackagerManager($app), function ($grant) {
+				$grant->loadDatabasesFrom(__DIR__ . '/../database/');
+			});
+		});
+	}
+	public function provides() {
+		return [
+			'gauth', 'packager',
+		];
 	}
 
 	/**

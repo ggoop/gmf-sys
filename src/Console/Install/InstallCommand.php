@@ -1,9 +1,10 @@
 <?php
 
-namespace Gmf\Sys\Console;
+namespace Gmf\Sys\Console\Install;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Packager;
 
 class InstallCommand extends Command {
 	/**
@@ -35,6 +36,8 @@ class InstallCommand extends Command {
 	 */
 	public function handle() {
 
+		Packager::loadDatabasesFrom($this->laravel->databasePath());
+
 		$opt = [];
 		$opt['--tag'] = 'gmf';
 		if ($this->option('force')) {
@@ -44,31 +47,31 @@ class InstallCommand extends Command {
 
 		//migrate
 		$opt = [];
-		$this->call('gmf:md', $opt);
+		$this->call('gmf:install-md', $opt);
 
-		$this->call('migrate', $opt);
+		//$this->call('migrate', $opt);
 
 		//gmf:sql --tag=pre
 		$opt = ['--tag' => 'pre'];
-		$this->call('gmf:sql', $opt);
+		$this->call('gmf:install-sql', $opt);
 
 		//gmf:seed --tag=pre
 		$opt = ['--tag' => 'pre'];
-		$this->call('gmf:seed', $opt);
+		$this->call('gmf:install-seed', $opt);
 
 		if ($this->option('sql')) {
-			$this->call('gmf:sql', []);
+			$this->call('gmf:install-sql', []);
 		}
 		if ($this->option('seed')) {
-			$this->call('gmf:seed', []);
+			$this->call('gmf:install-seed', []);
 		}
 
 		//gmf:sql --tag=post
 		$opt = ['--tag' => 'post'];
-		$this->call('gmf:sql', $opt);
+		$this->call('gmf:install-sql', $opt);
 
 		//gmf:seed --tag=post
 		$opt = ['--tag' => 'post'];
-		$this->call('gmf:seed', $opt);
+		$this->call('gmf:install-seed', $opt);
 	}
 }

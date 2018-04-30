@@ -1,6 +1,6 @@
 <?php
 
-namespace Gmf\Sys\Console;
+namespace Gmf\Sys\Console\Publish;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
@@ -57,9 +57,9 @@ class PublishlCommand extends Command {
 	 * @return mixed
 	 */
 	public function handle() {
-
+		$this->info("======\t publish begin");
 		if ($this->option('force')) {
-			$this->reNewRun();
+			//$this->reNewRun();
 		}
 
 		$opt = [];
@@ -68,6 +68,6 @@ class PublishlCommand extends Command {
 			$opt['--force'] = true;
 		}
 		$this->call('vendor:publish', $opt);
-
+		$this->info("======\t publish end");
 	}
 }

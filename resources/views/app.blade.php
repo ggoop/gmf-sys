@@ -8,6 +8,11 @@
   <title>{{env('APP_NAME')}}</title>
   <link rel="shortcut icon" href="{{ URL::asset('favicon.ico') }}" />
   <link rel="stylesheet" type="text/css" href="{{ mix('/css/app.css') }}" />
+  @if (!empty($data))
+      <script>
+        gmfData={!! json_encode($data) !!};
+      </script>
+  @endif
 </head>
 <body>
   <div id="gmfApp" class="layout-fill">
