@@ -58,8 +58,8 @@ class MdCommand extends GeneratorCommand {
 		return __DIR__ . '/stubs/md.stub';
 	}
 	protected function handleStub($name, $stub) {
-		$className = $this->getClassName($name);
-		$fullName = implode('_', explode('\\', $this->getRootNamespace())) . $className;
+		$fullName = strtolower(implode('_', explode('\\', $this->getRootNamespace())) . '_' . $name);
+		$className = $this->getClassName($fullName);
 		$stub = str_replace('DummyClass', $className, $stub);
 		$stub = str_replace('DummyName', str_replace('_', '.', Str::snake($fullName)), $stub);
 		$stub = str_replace('DummyTable', Str::snake($fullName), $stub);
@@ -68,7 +68,8 @@ class MdCommand extends GeneratorCommand {
 		return $stub;
 	}
 	protected function getFileName($name) {
-		return date('Y_m_d_His') . '_' . $name . '.php';
+		$fullName = strtolower(implode('_', explode('\\', $this->getRootNamespace())) . '_' . $name);
+		return date('Y_m_d_His') . '_' . $fullName . '.php';
 	}
 	protected function getOptions() {
 		return [
