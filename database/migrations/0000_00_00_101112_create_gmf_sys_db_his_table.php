@@ -11,7 +11,7 @@ class CreateGmfSysDbHisTable extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		$md = Metadata::create($this->mdID);
+		$md = Metadata::create($this->mdID, [], 'log');
 		$md->mdEntity('gmf.sys.dbhis')->comment('数据备份')->tableName('gmf_sys_dbhis');
 
 		$md->bigIncrements('id');
