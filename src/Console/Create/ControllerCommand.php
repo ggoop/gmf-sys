@@ -48,7 +48,7 @@ class ControllerCommand extends GeneratorCommand {
 		return $rootNamespace . '\Http\Controllers';
 	}
 	protected function getFileName($name) {
-		return Str::studly($name) . '.php';
+		return $this->getClassName($name) . '.php';
 	}
 	protected function getNameInput() {
 		return Str::snake(trim($this->input->getArgument('name') . 'Controller'));

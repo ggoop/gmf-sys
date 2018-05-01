@@ -34,8 +34,16 @@ class PreSeedCommand extends GeneratorCommand {
 		return __DIR__ . '/stubs/preseed.stub';
 	}
 	protected function handleStub($name, $stub) {
-		$className = $this->getClassName($name);
+		$fullName = strtolower(implode('_', explode('\\', $this->getRootNamespace()))) . '_' . Str::snake($this->getClassName($name));
+		$className = $this->getClassName($fullName);
 		$stub = str_replace('DummyClass', $className, $stub);
 		return $stub;
+	}
+	protected function getFileName($name) {
+		$fullName = strtolower(implode('_', explode('\\', $this->getRootNamespace()))) . '_' . Str::snake($this->getClassName($name));
+		return date('Y_m_d_His') . '_' . $fullName . '.php';
+	}
+	protected function getNameInput() {
+		return Str::snake(trim($this->input->getArgument('name') . 'PreSeeder'));
 	}
 }

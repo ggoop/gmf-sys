@@ -29,12 +29,12 @@ class PageCommand extends GeneratorCommand {
 		return __DIR__ . '/stubs/page.vue';
 	}
 	protected function handleStub($name, $stub) {
-		$className = $this->getClassName($name);
-		$fullName = implode('', explode('\\', $this->getRootNamespace())) . $className;
-		$stub = str_replace('DummyName', $fullName, $stub);
+		$fullName = strtolower(implode('_', explode('\\', $this->getRootNamespace()))) . '_' . Str::snake($this->getClassName($name));
+		$className = $this->getClassName($fullName);
+		$stub = str_replace('DummyName', $className, $stub);
 		return $stub;
 	}
 	protected function getFileName($name) {
-		return Str::studly($name) . '.vue';
+		return $this->getClassName($name) . '.vue';
 	}
 }

@@ -38,9 +38,11 @@ class ModelCommand extends GeneratorCommand {
 		return __DIR__ . '/stubs/model.stub';
 	}
 	protected function handleStub($name, $stub) {
+		$fullName = strtolower(implode('_', explode('\\', $this->getRootNamespace()))) . '_' . Str::snake($this->getClassName($name));
+
 		$className = $this->getClassName($name);
+
 		$ns = $this->getNamespace($name);
-		$fullName = implode('_', explode('\\', $this->getRootNamespace())) . $className;
 		$stub = str_replace('DummyTable', Str::snake($fullName), $stub);
 		$stub = str_replace('DummyClass', $className, $stub);
 		$stub = str_replace('DummyNamespace', $ns, $stub);
@@ -50,7 +52,7 @@ class ModelCommand extends GeneratorCommand {
 		return $rootNamespace . '\Models';
 	}
 	protected function getFileName($name) {
-		return Str::studly($name) . '.php';
+		return $this->getClassName($name) . '.php';
 	}
 	protected function getNameInput() {
 		return Str::snake(trim($this->input->getArgument('name')));

@@ -60,7 +60,7 @@ abstract class GeneratorCommand extends Command {
 
 		$this->firePostCreateHooks();
 
-		$this->info($this->type . " created successfully:\t" . $path);
+		$this->line($this->type . " created successfully:\t" . $path);
 	}
 	protected function firePostCreateHooks() {
 		foreach ($this->postCreate as $callback) {

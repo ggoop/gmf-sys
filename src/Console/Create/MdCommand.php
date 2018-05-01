@@ -39,12 +39,16 @@ class MdCommand extends GeneratorCommand {
 	protected function createModel() {
 		$this->call('gmf:create-model', [
 			'name' => $this->argument('name'),
+			'--package' => $this->option('package'),
+			'--path' => $this->option('path'),
 		]);
 	}
 	protected function createController() {
-		$controller = Str::studly(class_basename($this->argument('name')));
 		$this->call('gmf:create-controller', [
-			'name' => "{$controller}Controller"]);
+			'name' => $this->argument('name'),
+			'--package' => $this->option('package'),
+			'--path' => $this->option('path'),
+		]);
 	}
 	/**
 	 * Get migration path (either specified by '--path' option or default location).
@@ -58,7 +62,7 @@ class MdCommand extends GeneratorCommand {
 		return __DIR__ . '/stubs/md.stub';
 	}
 	protected function handleStub($name, $stub) {
-		$fullName = strtolower(implode('_', explode('\\', $this->getRootNamespace())) . '_' . $name);
+		$fullName = strtolower(implode('_', explode('\\', $this->getRootNamespace()))) . '_' . Str::snake($this->getClassName($name));
 		$className = $this->getClassName($fullName);
 		$stub = str_replace('DummyClass', $className, $stub);
 		$stub = str_replace('DummyName', str_replace('_', '.', Str::snake($fullName)), $stub);
@@ -68,7 +72,7 @@ class MdCommand extends GeneratorCommand {
 		return $stub;
 	}
 	protected function getFileName($name) {
-		$fullName = strtolower(implode('_', explode('\\', $this->getRootNamespace())) . '_' . $name);
+		$fullName = strtolower(implode('_', explode('\\', $this->getRootNamespace()))) . '_' . Str::snake($this->getClassName($name));
 		return date('Y_m_d_His') . '_' . $fullName . '.php';
 	}
 	protected function getOptions() {
