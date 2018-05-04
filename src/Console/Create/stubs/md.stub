@@ -14,7 +14,7 @@ class DummyClass extends Migration {
         $md = Metadata::create($this->mdID);
         $md->mdEntity('DummyName')->comment('表名称')->tableName('DummyTable');
 
-        $md->increments('id')->primary();
+        $md->increments('id');
         //$md->string('id', 100)->primary();
         $md->entity('user', 'gmf.sys.user')->nullable()->comment('用户');
         $md->enum('type', 'gmf.sys.user.owner.type.enum')->nullable()->comment('类型');

@@ -1,6 +1,8 @@
 <?php
 $ns = 'Gmf\Sys\Http\Controllers';
-
+Route::prefix('api/sys/jsapi')->middleware(['api'])->namespace($ns)->group(function () {
+	Route::post('config', 'JsApiController@config');
+});
 Route::prefix('api/sys/auth')->middleware(['web'])->namespace($ns)->group(function () {
 	Route::post('checker', 'AuthController@checker');
 	Route::any('show', 'AuthController@getUser');
@@ -25,6 +27,7 @@ Route::prefix('api/sys/auth')->middleware(['api', 'auth:api'])->namespace($ns)->
 Route::prefix('api/sys')->middleware(['api'])->namespace($ns)->group(function () {
 	Route::get('editor/templates', 'EditorController@templates');
 });
+
 Route::prefix('api/sys')->middleware(['api'])->namespace($ns)->group(function () {
 	Route::get('datas/uid', 'DataController@issueUid');
 	Route::get('datas/sn', 'DataController@issueSn');
