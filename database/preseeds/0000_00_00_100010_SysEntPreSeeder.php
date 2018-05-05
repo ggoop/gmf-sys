@@ -27,11 +27,12 @@ class SysEntPreSeeder extends Seeder {
 
 		$id = config('gmf.ent.id');
 		$name = config('gmf.ent.name');
+		$gateway = config('gmf.ent.gateway');
 		if (!$id) {
 			return;
 		}
 		$b = new Builder;
-		$b->name($name)->code($id);
+		$b->name($name)->code($id)->gateway($gateway);
 		$ent = Models\Ent::updateOrCreate(['id' => $id], $b->toArray());
 		if ($uid && $ent) {
 			Models\Ent::addUser($ent->id, $uid);

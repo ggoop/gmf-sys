@@ -32,5 +32,6 @@ return [
 		'session' => env('GMF_ENT_SESSION', 'GMFENTSESSIONNAME'),
 		'id' => env('GMF_ENT_ID'),
 		'name' => env('GMF_ENT_NAME'),
+		'gateway' => env('GMF_ENT_GATEWAY'),
 	],
 ];
