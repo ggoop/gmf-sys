@@ -13,8 +13,7 @@ class CreateGmfSysEntUsersTable extends Migration {
 	public function up() {
 		$md = Metadata::create($this->mdID);
 		$md->mdEntity('gmf.sys.ent.user')->comment('企业用户')->tableName('gmf_sys_ent_users');
-
-		$md->string('id', 100)->primary();
+		$md->bigIncrements('id');
 		$md->entity('ent', 'gmf.sys.ent')->comment('企业');
 		$md->entity('user', config('gmf.user.entity'));
 		$md->integer('is_default')->nullable()->comment('是否默认');

@@ -107,6 +107,9 @@ class MDGuard {
 			if (isset($field->default)) {
 				$item->default_value($field->default);
 			}
+			if (!empty($field->autoIncrement)) {
+				$item->default_value('autoIncrement');
+			}
 			if (isset($field->total)) {
 				$item->precision($field->total);
 			}

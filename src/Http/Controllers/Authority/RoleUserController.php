@@ -35,7 +35,7 @@ class RoleUserController extends Controller {
 		$entId = GAuth::entId();
 		$lines = $request->input('datas');
 
-		$fillable = ['is_revoked'];
+		$fillable = ['revoked'];
 		$entityable = [
 			'role' => ['type' => Role::class, 'matchs' => ['code', 'ent_id' => '${ent_id}']],
 			'user' => ['type' => config('gmf.user.model'), 'matchs' => ['email']],

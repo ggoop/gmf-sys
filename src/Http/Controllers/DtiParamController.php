@@ -10,8 +10,8 @@ use Validator;
 class DtiParamController extends Controller {
 	public function index(Request $request) {
 		$query = Models\DtiParam::with('category', 'dti')->where('ent_id', GAuth::entId());
-		if ($request->has('is_revoked')) {
-			$query->where('is_revoked', $request->is_revoked);
+		if ($request->has('revoked')) {
+			$query->where('revoked', $request->revoked);
 		}
 		$data = $query->get();
 
@@ -23,7 +23,7 @@ class DtiParamController extends Controller {
 		return $this->toJson($data);
 	}
 	public function store(Request $request) {
-		$input = array_only($request->all(), ['id', 'code', 'name', 'category_id', 'dti_id', 'type_enum', 'value', 'is_revoked']);
+		$input = array_only($request->all(), ['id', 'code', 'name', 'category_id', 'dti_id', 'type_enum', 'value', 'revoked']);
 		GAuth::check('user');
 		$input = InputHelper::fillEntity($input, $request, ['category', 'dti']);
 		$validator = Validator::make($input, [
@@ -39,7 +39,7 @@ class DtiParamController extends Controller {
 		return $this->show($request, $data->id);
 	}
 	public function update(Request $request, $id) {
-		$input = array_only($request->all(), ['id', 'code', 'name', 'category_id', 'dti_id', 'type_enum', 'value', 'is_revoked']);
+		$input = array_only($request->all(), ['id', 'code', 'name', 'category_id', 'dti_id', 'type_enum', 'value', 'revoked']);
 		GAuth::check('user');
 		$input = InputHelper::fillEntity($input, $request, ['category', 'dti']);
 		$validator = Validator::make($input, [

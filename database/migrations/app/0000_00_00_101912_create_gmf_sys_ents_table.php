@@ -19,11 +19,7 @@ class CreateGmfSysEntsTable extends Migration {
 		$md->text('memo')->nullable()->comment('备注');
 		$md->string('short_name')->nullable()->comment('简称');
 		$md->string('avatar')->nullable()->comment('图标');
-		$md->string('dc_host')->nullable()->comment('数据中心地址');
-		$md->string('dc_key')->nullable()->comment('应用key');
-		$md->string('dc_secret')->nullable()->comment('应用secret');
-		$md->string('dc_token')->nullable()->comment('应用token');
-		$md->string('in_host')->nullable()->comment('许可服务器');
+		$md->string('secret')->nullable()->comment('企业秘钥');
 		$md->string('industry')->nullable()->comment('行业');
 		$md->string('area')->nullable()->comment('地区');
 		$md->boolean('revoked')->default(0)->comment('注销');

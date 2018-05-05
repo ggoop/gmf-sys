@@ -34,7 +34,7 @@ class RolePermitController extends Controller {
 		$entId = GAuth::entId();
 		$lines = $request->input('datas');
 
-		$fillable = ['is_revoked', 'opinion_enum'];
+		$fillable = ['revoked', 'opinion_enum'];
 		$entityable = [
 			'role' => ['type' => Role::class, 'matchs' => ['code', 'ent_id' => '${ent_id}']],
 			'permit' => ['type' => Permit::class, 'matchs' => ['code']],

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 class RoleEntity extends Model {
 	use Snapshotable, HasGuard;
 	protected $table = 'gmf_sys_authority_role_entities';
-	public $incrementing = false;
+
 	protected $fillable = ['ent_id', 'role_id', 'entity_id', 'filter', 'operation_enum'];
 
 	public function role() {

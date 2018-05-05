@@ -20,7 +20,7 @@ class CreateGmfSysEditorTemplatesTable extends Migration {
 		$md->string('title')->nullable()->comment('名称');
 		$md->string('memo')->nullable()->comment('备注');
 		$md->longText('content')->nullable()->comment('备注');
-		$md->boolean('is_revoked')->default(0)->comment('注销');
+		$md->boolean('revoked')->default(0)->comment('注销');
 		$md->timestamps();
 
 		$md->build();

@@ -15,7 +15,7 @@ class File extends Model {
 	protected $fillable = [
 		'id', 'ent_id', 'user_id',
 		'disk', 'code', 'type', 'title', 'pdf_need',
-		'ext', 'url', 'path', 'size', 'props', 'is_revoked'];
+		'ext', 'url', 'path', 'size', 'props', 'revoked'];
 
 	protected $appends = ['local_path'];
 	public static function storage(Request $request, $mdFiles, $path = '', $disk = 'public') {

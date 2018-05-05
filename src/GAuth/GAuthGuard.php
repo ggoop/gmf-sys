@@ -61,8 +61,8 @@ class GAuthGuard {
 				->select('r.id')
 				->where('ru.user_id', $this->id())
 				->whereIn('r.code', $roles)
-				->where('ru.is_revoked', '0')
-				->where('r.is_revoked', '0')
+				->where('ru.revoked', '0')
+				->where('r.revoked', '0')
 				->first()) {
 				return true;
 			}
@@ -86,10 +86,10 @@ class GAuthGuard {
 				->select('p.id')
 				->where('ru.user_id', $this->id())
 				->whereIn('p.code', $permits)
-				->where('ru.is_revoked', '0')
-				->where('rp.is_revoked', '0')
-				->where('p.is_revoked', '0')
-				->where('r.is_revoked', '0')
+				->where('ru.revoked', '0')
+				->where('rp.revoked', '0')
+				->where('p.revoked', '0')
+				->where('r.revoked', '0')
 				->first()) {
 				return true;
 			}

@@ -122,4 +122,26 @@ class Common {
 		}
 		return substr($text, 0, -1 * $pad);
 	}
+	public static function listDirs($dir) {
+		static $alldirs = array();
+		$dirs = glob($dir . '/*', GLOB_ONLYDIR);
+		if (count($dirs) > 0) {
+			foreach ($dirs as $d) {
+				$alldirs[] = $d;
+			}
+		}
+		foreach ($dirs as $dir) {
+			static::listDirs($dir);
+		}
+		return $alldirs;
+	}
+	public static function listFiles($dir, $pattern = '*') {
+		$dirs = static::listDirs($dir);
+		$dirs[] = $dir;
+		$files = [];
+		foreach ($dirs as $k => $v) {
+			$files = array_merge($files, glob($v . DIRECTORY_SEPARATOR . $pattern));
+		}
+		return $files;
+	}
 }

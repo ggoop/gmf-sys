@@ -7,9 +7,9 @@ use Gmf\Sys\Traits\HasGuard;
 use Gmf\Sys\Traits\Snapshotable;
 use Illuminate\Database\Eloquent\Model;
 
-class Client extends Model {
+class App extends Model {
 	use Snapshotable, HasGuard;
-	protected $table = 'gmf_sys_clients';
+	protected $table = 'gmf_sys_apps';
 	public $incrementing = false;
 	protected $keyType = 'string';
 	protected $fillable = ['id', 'code', 'name', 'memo', 'revoked'];

@@ -2,6 +2,7 @@
 
 namespace Gmf\Sys\Console\Install;
 
+use Gmf\Sys\Libs\Common;
 use Illuminate\Console\Command;
 use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Filesystem\Filesystem;
@@ -120,7 +121,7 @@ class MdCommand extends Command {
 	}
 	public function getMigrationFiles($paths) {
 		return Collection::make($paths)->flatMap(function ($path) {
-			return $this->files->glob($path . '/*_*_*_*.php');
+			return Common::listFiles($path, '*_*_*_*.php');
 		})->filter()->sortBy(function ($file) {
 			return $this->getMigrationName($file);
 		})->values()->keyBy(function ($file) {

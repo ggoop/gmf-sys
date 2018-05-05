@@ -13,7 +13,7 @@ class CreateGmfSysDtiLogsTable extends Migration {
 	public function up() {
 		$md = Metadata::create($this->mdID);
 		$md->mdEntity('gmf.sys.dti.log')->comment('接口执行日志')->tableName('gmf_sys_dti_logs');
-		$md->string('id', 100)->primary();
+		$md->bigIncrements('id');
 		$md->entity('ent', 'gmf.sys.ent')->nullable()->comment('企业');
 		$md->entity('dti', 'gmf.sys.dti')->nullable()->comment('接口');
 		$md->string('session')->nullable()->comment('回话');

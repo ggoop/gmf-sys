@@ -14,7 +14,7 @@ class CreateGmfSysFileContentsTable extends Migration {
 		$md = Metadata::create($this->mdID);
 		$md->mdEntity('gmf.sys.file.content')->comment('文件内容')->tableName('gmf_sys_file_contents');
 
-		$md->string('id', 100)->primary();
+		$md->bigIncrements('id');
 		$md->entity('file', 'gmf.sys.file')->nullable()->comment('文件');
 		$md->longText('data')->nullable()->comment('内容');
 

@@ -9,8 +9,8 @@ use Validator;
 class DtiCategoryController extends Controller {
 	public function index(Request $request) {
 		$query = Models\DtiCategory::with('params')->where('ent_id', GAuth::entId());
-		if ($request->has('is_revoked')) {
-			$query->where('is_revoked', $request->is_revoked);
+		if ($request->has('revoked')) {
+			$query->where('revoked', $request->revoked);
 		}
 		$data = $query->get();
 
@@ -22,7 +22,7 @@ class DtiCategoryController extends Controller {
 		return $this->toJson($data);
 	}
 	public function store(Request $request) {
-		$input = array_only($request->all(), ['id', 'code', 'name', 'host', 'is_revoked']);
+		$input = array_only($request->all(), ['id', 'code', 'name', 'host', 'revoked']);
 		$validator = Validator::make($input, [
 			'code' => [
 				'required',
@@ -45,7 +45,7 @@ class DtiCategoryController extends Controller {
 	 * @return [type]           [description]
 	 */
 	public function update(Request $request, $id) {
-		$input = $request->only(['code', 'name', 'host', 'is_revoked']);
+		$input = $request->only(['code', 'name', 'host', 'revoked']);
 		$validator = Validator::make($input, [
 			'code' => [
 				'required',

@@ -34,7 +34,7 @@ class CreateGmfSysFilesTable extends Migration {
 		$md->integer('size')->nullable()->comment('大小');
 		$md->text('props')->nullable()->comment('属性');
 
-		$md->boolean('is_revoked')->default(0)->comment('撤销');
+		$md->boolean('revoked')->default(0)->comment('撤销');
 
 		$md->timestamps();
 

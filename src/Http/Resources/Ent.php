@@ -22,8 +22,8 @@ class Ent extends Resource {
 			return false;
 		}
 		$rtn = new Builder;
-		Common::toField($this, $rtn, ['id', 'code', 'name', 'memo', 'short_name', 'avatar',
-			'dc_host', 'dc_key', 'dc_secret', 'dc_token',
+		Common::toField($this, $rtn, [
+			'id', 'code', 'name', 'memo', 'short_name', 'avatar', 'secret',
 			'industry', 'area', 'created_at',
 		]);
 

@@ -3,8 +3,8 @@
 use Gmf\Sys\Database\Metadata;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGmfSysClientsTable extends Migration {
-	public $mdID = "172fd6e0c06111e796b1f515c759a8ff";
+class CreateGmfSysAuthorityPermitsTable extends Migration {
+	public $mdID = "01af8f30101f11e7984a57ab42922395";
 	/**
 	 * Run the migrations.
 	 *
@@ -12,9 +12,11 @@ class CreateGmfSysClientsTable extends Migration {
 	 */
 	public function up() {
 		$md = Metadata::create($this->mdID);
-		$md->mdEntity('gmf.sys.client')->comment('客户端')->tableName('gmf_sys_clients');
+		$md->mdEntity('gmf.sys.authority.permit')->comment('权限')->tableName('gmf_sys_authority_permits');
+
 		$md->string('id', 100)->primary();
-		$md->string('code')->nullable()->comment('编码');
+		$md->entity('ent', 'gmf.sys.ent')->nullable()->comment('企业');
+		$md->string('code')->index()->comment('编码');
 		$md->string('name')->nullable()->comment('名称');
 		$md->text('memo')->nullable()->comment('备注');
 		$md->boolean('revoked')->default(0)->comment('注销');

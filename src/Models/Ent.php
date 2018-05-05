@@ -12,8 +12,7 @@ class Ent extends Model {
 	protected $table = 'gmf_sys_ents';
 	public $incrementing = false;
 	protected $keyType = 'string';
-	protected $fillable = ['id', 'code', 'name', 'memo', 'short_name', 'avatar',
-		'dc_host', 'dc_key', 'dc_secret', 'dc_token', 'in_host',
+	protected $fillable = ['id', 'code', 'name', 'memo', 'short_name', 'avatar', 'secret',
 		'industry', 'area', 'revoked'];
 
 	public static function addUser($entId, $userId, $type = 'member') {

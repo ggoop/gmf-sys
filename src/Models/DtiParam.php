@@ -14,9 +14,9 @@ class DtiParam extends Model {
 	use Snapshotable, HasGuard;
 	protected $table = 'gmf_sys_dti_params';
 	public $incrementing = false;
-	protected $fillable = ['id', 'ent_id', 'category_id', 'dti_id', 'code', 'name', 'type_enum', 'value', 'is_revoked'];
+	protected $fillable = ['id', 'ent_id', 'category_id', 'dti_id', 'code', 'name', 'type_enum', 'value', 'revoked'];
 	protected $casts = [
-		'is_revoked' => 'boolean',
+		'revoked' => 'boolean',
 	];
 	public function category() {
 		return $this->belongsTo('Gmf\Sys\Models\DtiCategory');
@@ -61,7 +61,7 @@ class DtiParam extends Model {
 		tap(new Builder, function ($builder) use ($callback) {
 			$callback($builder);
 
-			$data = array_only($builder->toArray(), ['id', 'ent_id', 'category_id', 'dti_id', 'code', 'name', 'type_enum', 'value', 'is_revoked']);
+			$data = array_only($builder->toArray(), ['id', 'ent_id', 'category_id', 'dti_id', 'code', 'name', 'type_enum', 'value', 'revoked']);
 			$ent_id = '';
 			if (!empty($builder->ent_id)) {
 				$ent_id = $builder->ent_id;

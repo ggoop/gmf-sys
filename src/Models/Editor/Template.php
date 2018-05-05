@@ -12,7 +12,7 @@ class Template extends Model {
 	protected $table = 'gmf_sys_editor_templates';
 	public $incrementing = false;
 	protected $keyType = 'string';
-	protected $fillable = ['id', 'user_id', 'code', 'title', 'memo', 'content', 'is_revoked'];
+	protected $fillable = ['id', 'user_id', 'code', 'title', 'memo', 'content', 'revoked'];
 
 	public static function build(Closure $callback) {
 		tap(new Builder, function ($builder) use ($callback) {

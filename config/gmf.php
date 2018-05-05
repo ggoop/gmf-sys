@@ -32,6 +32,5 @@ return [
 		'session' => env('GMF_ENT_SESSION', 'GMFENTSESSIONNAME'),
 		'id' => env('GMF_ENT_ID'),
 		'name' => env('GMF_ENT_NAME'),
-		'dc_host' => env('GMF_ENT_DC_HOST', 'http://localhost'),
 	],
 ];

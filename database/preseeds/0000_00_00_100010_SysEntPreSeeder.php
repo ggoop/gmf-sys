@@ -13,12 +13,11 @@ class SysEntPreSeeder extends Seeder {
 	public function run() {
 		$id = config('app.key');
 		$name = config('app.name');
-		$dchost = config('APP.url');
 		if (!$id) {
 			return;
 		}
 		$b = new Builder;
-		$b->name($name)->code($id)->dc_host($dchost);
+		$b->name($name)->code($id);
 		$ent = Models\Ent::updateOrCreate(['id' => $id], $b->toArray());
 
 		$uid = config('gmf.admin.id');
@@ -28,12 +27,11 @@ class SysEntPreSeeder extends Seeder {
 
 		$id = config('gmf.ent.id');
 		$name = config('gmf.ent.name');
-		$dchost = config('gmf.ent.dc_host');
 		if (!$id) {
 			return;
 		}
 		$b = new Builder;
-		$b->name($name)->code($id)->dc_host($dchost);
+		$b->name($name)->code($id);
 		$ent = Models\Ent::updateOrCreate(['id' => $id], $b->toArray());
 		if ($uid && $ent) {
 			Models\Ent::addUser($ent->id, $uid);

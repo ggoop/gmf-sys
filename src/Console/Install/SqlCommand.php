@@ -3,6 +3,7 @@
 namespace Gmf\Sys\Console\Install;
 
 use DB;
+use Gmf\Sys\Libs\Common;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
@@ -105,7 +106,7 @@ class SqlCommand extends Command {
 	}
 	public function getMigrationFiles($paths) {
 		return Collection::make($paths)->flatMap(function ($path) {
-			return $this->files->glob($path . '/*_*_*_*.sql');
+			return Common::listFiles($path, '*_*_*_*.sql');
 		})->filter()->sortBy(function ($file) {
 			return $this->getMigrationName($file);
 		})->values()->keyBy(function ($file) {

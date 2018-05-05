@@ -15,6 +15,7 @@ class CreateGmfSysMenusTable extends Migration {
 		$md->mdEntity('gmf.sys.menu')->comment('菜单')->tableName('gmf_sys_menus');
 
 		$md->string('id', 100)->primary();
+		$md->entity('app', 'gmf.sys.app')->nullable()->comment('应用');
 		$md->entity('root', 'gmf.sys.menu')->nullable()->comment('最上级菜单Id');
 		$md->entity('parent', 'gmf.sys.menu')->nullable()->comment('上级菜单');
 

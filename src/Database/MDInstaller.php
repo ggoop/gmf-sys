@@ -53,7 +53,9 @@ class MDInstaller {
 		$oldMD = $query->first();
 
 		if ($entity->type === 'entity') {
-			if ($oldMD && $oldMD->table_name != $entity->table_name) {
+			if ($oldMD
+				&& $oldMD->table_name != $entity->table_name
+				&& Schema::connection($entity->connection)->hasTable($oldMD->table_name)) {
 				Schema::connection($entity->connection)->rename($oldMD->table_name, $entity->table_name);
 			}
 			if (!Schema::connection($entity->connection)->hasTable($entity->table_name)) {
@@ -90,6 +92,13 @@ class MDInstaller {
 		foreach ($oldFields as $oldColumn) {
 			$flag = false;
 			foreach ($newFields as $column) {
+				//调整为自动增长时，需要先删除
+				if ($oldColumn->name == $column->name
+					&& $column->default_value == 'autoIncrement'
+					&& in_array($column->type_type, ['bigInteger', 'integer', 'mediumInteger', 'smallInteger'])
+					&& $column->type_type != $oldColumn->type_type) {
+					break;
+				}
 				if ($oldColumn->name == $column->name) {
 					$flag = true;
 					break;
@@ -108,6 +117,8 @@ class MDInstaller {
 				}
 			});
 		}
+		$oldDbColumns = Schema::connection($newTable->connection)->getColumnListing($newTable->table_name);
+
 		//增加
 		$colNames = [];
 		foreach ($newFields as $column) {
@@ -118,7 +129,8 @@ class MDInstaller {
 					break;
 				}
 			}
-			if (!$flag) {
+			//模型没有，或者数据库里没有，就自动增加
+			if (!$flag || ($oldDbColumns && !in_array($column->field_name, $oldDbColumns))) {
 				$colNames[] = $column;
 			}
 		}
@@ -131,9 +143,7 @@ class MDInstaller {
 				}
 			});
 		}
-		//修改
-		$colNames = [];
-		$dbChanges = [];
+		//修改,表名，
 		$reNames = [];
 		foreach ($newFields as $column) {
 			foreach ($oldFields as $oldColumn) {
@@ -142,27 +152,10 @@ class MDInstaller {
 				}
 				if ($oldColumn->field_name != $column->field_name) {
 					$reNames[$oldColumn->field_name] = $column->field_name;
-					$colNames[] = $column;
-					break;
-				}
-				if ($oldColumn->default_value != $column->default_value
-					|| $oldColumn->nullable != $column->nullable
-					|| $oldColumn->length != $column->length
-					|| $oldColumn->scale != $column->scale
-					|| $oldColumn->precision != $column->precision) {
-					$dbChanges[] = $column;
-					$colNames[] = $column;
-					break;
-				}
-				if ($oldColumn->comment != $column->comment
-					|| $oldColumn->foreign_key != $column->foreign_key
-					|| $oldColumn->local_key != $column->local_key) {
-					$colNames[] = $column;
 					break;
 				}
 			}
 		}
-
 		if ($reNames && count($reNames)) {
 			Schema::connection($newTable->connection)->table($newTable->table_name, function (Blueprint $table) use ($newTable, $reNames) {
 				foreach ($reNames as $old => $new) {
@@ -172,11 +165,34 @@ class MDInstaller {
 				}
 			});
 		}
+		//修改类型
+		$colNames = [];
+		$dbChanges = [];
+
+		foreach ($newFields as $column) {
+			foreach ($oldFields as $oldColumn) {
+				if ($oldColumn->name != $column->name) {
+					continue;
+				}
+				if ($oldColumn->default_value != $column->default_value
+					|| $oldColumn->nullable != $column->nullable
+					|| $oldColumn->length != $column->length
+					|| $oldColumn->type_type != $column->type_type
+					|| $oldColumn->scale != $column->scale
+					|| $oldColumn->precision != $column->precision) {
+					$dbChanges[] = $column;
+					$colNames[] = $column;
+					break;
+				}
+			}
+		}
 		if ($dbChanges && count($dbChanges)) {
 			Schema::connection($newTable->connection)->table($newTable->table_name, function (Blueprint $table) use ($newTable, $dbChanges) {
 				foreach ($dbChanges as $column) {
 					if (Schema::connection($newTable->connection)->hasColumn($newTable->table_name, $column->field_name)) {
 						$this->buildDBColumn($table, $this->guard->getDBField($column->name), ['change' => true]);
+					} else {
+						$this->buildDBColumn($table, $this->guard->getDBField($column->name));
 					}
 				}
 			});

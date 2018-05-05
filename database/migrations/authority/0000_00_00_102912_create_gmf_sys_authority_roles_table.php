@@ -3,8 +3,8 @@
 use Gmf\Sys\Database\Metadata;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGmfSysDtiCategoriesTable extends Migration {
-	public $mdID = "777d004063ae11e78231e95dd4273a4c";
+class CreateGmfSysAuthorityRolesTable extends Migration {
+	public $mdID = "01af8a60101f11e7bfae89be1248726a";
 	/**
 	 * Run the migrations.
 	 *
@@ -12,16 +12,15 @@ class CreateGmfSysDtiCategoriesTable extends Migration {
 	 */
 	public function up() {
 		$md = Metadata::create($this->mdID);
-		$md->mdEntity('gmf.sys.dti.category')->comment('接口分类')->tableName('gmf_sys_dti_categories');
+		$md->mdEntity('gmf.sys.authority.role')->comment('角色')->tableName('gmf_sys_authority_roles');
+
 		$md->string('id', 100)->primary();
 		$md->entity('ent', 'gmf.sys.ent')->nullable()->comment('企业');
-		$md->string('code')->nullable()->comment('编码');
+		$md->string('code')->index()->comment('编码');
 		$md->string('name')->nullable()->comment('名称');
-		$md->string('host')->nullable()->comment('主机');
-		$md->boolean('is_revoked')->default(0)->comment('注销');
-
-		$md->string('data_src_identity')->nullable()->comment('数据来源身份');
-
+		$md->text('memo')->nullable()->comment('备注');
+		$md->enum('type', 'gmf.sys.authority.role.type.enum')->nullable()->comment('类型');
+		$md->boolean('revoked')->default(0)->comment('注销');
 		$md->timestamps();
 
 		$md->build();
