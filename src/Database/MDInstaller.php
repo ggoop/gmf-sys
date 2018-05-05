@@ -25,6 +25,10 @@ class MDInstaller {
 	}
 
 	private function buildDBColumn(Blueprint $table, $column, $options = []) {
+		if (!$column) {
+			return;
+		}
+
 		$fields = ['comment', 'length', 'autoIncrement', 'nullable', 'primary', 'index', 'unique', 'default', 'total', 'places'];
 		$changeFields = ['change', 'autoIncrement', 'length', 'default', 'nullable', 'total', 'places'];
 		$parameters = array_only($column->toArray(), $fields);
