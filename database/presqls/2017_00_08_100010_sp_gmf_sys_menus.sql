@@ -35,14 +35,17 @@ SELECT rm.menu_id,rm.opinion_enum FROM `gmf_sys_authority_role_users` AS ru
 INNER JOIN `gmf_sys_authority_roles` AS r ON ru.role_id=r.id
 INNER JOIN `gmf_sys_authority_role_menus` AS rm ON ru.role_id=rm.role_id
 WHERE ru.user_id=p_user AND ru.ent_id=p_ent AND rm.ent_id=p_ent 
- AND ru.`is_revoked`=0 AND rm.`is_revoked`=0 AND r.`is_revoked`=0
+ AND ru.`revoked`=0 AND rm.`revoked`=0 AND r.`revoked`=0
 GROUP BY rm.menu_id,rm.opinion_enum;
 
 INSERT INTO temp_menus_data(root_id,parent_id,id,CODE,NAME)
 SELECT m.root_id,m.parent_id,m.id,m.code,m.name
 FROM gmf_sys_menus AS m
 WHERE (p_tag IS NULL OR m.tag=p_tag) AND m.is_leaf=1
-AND m.id IN (SELECT menu_id FROM temp_opinion_data AS d WHERE d.opinion_enum='permit');
+AND (
+  m.id IN (SELECT menu_id FROM temp_opinion_data AS d WHERE d.opinion_enum='permit')  
+  OR NOT EXISTS(SELECT menu_id FROM temp_opinion_data)
+);
 
 DELETE FROM temp_menus_data WHERE id IN (SELECT menu_id FROM temp_opinion_data AS d WHERE d.opinion_enum!='permit');
 
