@@ -123,7 +123,7 @@ class Common {
 		return substr($text, 0, -1 * $pad);
 	}
 	public static function listDirs($dir) {
-		static $alldirs = array();
+		$alldirs = array();
 		$dirs = glob($dir . '/*', GLOB_ONLYDIR);
 		if (count($dirs) > 0) {
 			foreach ($dirs as $d) {
