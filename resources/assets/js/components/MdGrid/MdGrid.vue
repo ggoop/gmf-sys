@@ -28,6 +28,11 @@ import mdGridActions from './MdGridActions';
 import { classList } from './helpers';
 import mdGridCell from './MdGridCell';
 
+import isArray from 'lodash/isArray'
+import uniqueId from 'lodash/uniqueId'
+import chunk from 'lodash/chunk'
+import pick from 'lodash/pick'
+import forEach from 'lodash/forEach'
 export default {
   name: 'MdGrid',
   components: {
@@ -115,7 +120,7 @@ export default {
 
   computed: {
     usesLocalData() {
-      return this._.isArray(this.datas);
+      return isArray(this.datas);
     },
     filterableColumnExists() {
       return this.columns.filter(c => c.isFilterable()).length > 0;
@@ -242,7 +247,7 @@ export default {
     },
 
     formatDataToRow(data) {
-      data.vueRowId = data.vueRowId || this._.uniqueId('row');
+      data.vueRowId = data.vueRowId || uniqueId('row');
       data.sys_deleted = data.sys_deleted || false;
       data.sys_updated = data.sys_updated || false;
       data.sys_created = data.sys_created || false;
@@ -284,10 +289,10 @@ export default {
           sort: this.sort,
           pager: pager
         });
-        if (this._.isArray(response) && response.length > 0) {
+        if (isArray(response) && response.length > 0) {
           rds = response;
         }
-        if (response && response.data && this._.isArray(response.data.data) && response.data.data.length > 0) {
+        if (response && response.data && isArray(response.data.data) && response.data.data.length > 0) {
           rds = response.data.data;
         }
         if (rds && rds.length > 0) {
@@ -315,7 +320,7 @@ export default {
         }
       }
       this.pager.total = allDatas.length;
-      var ds = this._.chunk(allDatas, this.pager.size);
+      var ds = chunk(allDatas, this.pager.size);
       if (ds.length >= this.pager.page) {
         return ds[this.pager.page - 1];
       }
@@ -328,7 +333,7 @@ export default {
         sort: this.sort,
         pager: this.pager
       });
-      if (this._.isArray(response)) {
+      if (isArray(response)) {
         return response;
       }
       if (response.data.pager) {
@@ -355,7 +360,7 @@ export default {
       this.refreshStatus();
     },
     saveState() {
-      localCache.set(this.storageKey, this._.pick(this.$data, ['filter', 'sort']), this.cacheLifetime);
+      localCache.set(this.storageKey, pick(this.$data, ['filter', 'sort']), this.cacheLifetime);
     },
     restoreState() {
       const previousState = localCache.get(this.storageKey);
@@ -373,14 +378,14 @@ export default {
     getSelectedDatas(isAll) {
       const rows = [];
       if (isAll) {
-        this._.forEach(this.selectedRows, (cv, ck) => {
-          this._.forEach(cv, (v, k) => {
+        forEach(this.selectedRows, (cv, ck) => {
+          forEach(cv, (v, k) => {
             rows.push(v);
           });
         });
       } else {
         let items = this.selectedRows[this.pageCacheKey];
-        items && this._.forEach(items, (v, k) => {
+        items && forEach(items, (v, k) => {
           rows.push(v);
         });
       }
@@ -390,7 +395,7 @@ export default {
       let selected = false,
         vueRowId = row && row.vueRowId || row;
       const rows = this.getSelectedDatas(true);
-      this._.forEach(rows, (v, k) => {
+      forEach(rows, (v, k) => {
         if (v.vueRowId == vueRowId)
           selected = true;
       });
@@ -404,7 +409,7 @@ export default {
       this.columns.push(new Column(instance));
     },
     addDatas(datas) {
-      if (this._.isArray(datas)) {
+      if (isArray(datas)) {
         datas.forEach((data) => {
           data.sys_created = true;
           this.rows.push(this.formatDataToRow(data));
@@ -416,8 +421,8 @@ export default {
     },
     getAllDatas() {
       const datas = [];
-      this._.forEach(this.cacheRows, (cv, ck) => {
-        this._.forEach(cv, (v, k) => {
+      forEach(this.cacheRows, (cv, ck) => {
+        forEach(cv, (v, k) => {
           datas.push(v.data);
         });
       });

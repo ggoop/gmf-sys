@@ -57,6 +57,8 @@
 
 </style>
 <script>
+import each from 'lodash/each'
+import omit from 'lodash/omit'
 export default {
   props: {
     mdQueryId: String,
@@ -165,9 +167,9 @@ export default {
         size: this.options.size,
         name: this.options.case_name,
         query_id: this.options.query_id,
-        wheres: this.options.wheres.filter(v => !v.sys_deleted).map(v => this._.omit(v, ['sys_deleted', 'sys_created', 'sys_updated', 'vueRowId'])),
-        orders: this.options.orders.filter(v => !v.sys_deleted).map(v => this._.omit(v, ['sys_deleted', 'sys_created', 'sys_updated', 'vueRowId'])),
-        fields: this.options.fields.filter(v => !v.sys_deleted).map(v => this._.omit(v, ['sys_deleted', 'sys_created', 'sys_updated', 'vueRowId']))
+        wheres: this.options.wheres.filter(v => !v.sys_deleted).map(v => omit(v, ['sys_deleted', 'sys_created', 'sys_updated', 'vueRowId'])),
+        orders: this.options.orders.filter(v => !v.sys_deleted).map(v => omit(v, ['sys_deleted', 'sys_created', 'sys_updated', 'vueRowId'])),
+        fields: this.options.fields.filter(v => !v.sys_deleted).map(v => omit(v, ['sys_deleted', 'sys_created', 'sys_updated', 'vueRowId']))
       };
       if (this.options.case_id && this.options.case_id.length > 2) {
         caseModel.id = this.options.case_id;
@@ -213,18 +215,18 @@ export default {
       if (this.options.case_id && this.options.case_id.length > 2) {
         qc.id = this.options.case_id;
       }
-      this._.each(this.options.wheres, (v) => {
+      each(this.options.wheres, (v) => {
         if (v && (!v.sys_deleted)) {
           var item = this.formatCaseWhereItem(v);
           if (item) qc.wheres.$case.$items.push(item);
         }
       });
-      this._.each(this.options.orders, (v) => {
+      each(this.options.orders, (v) => {
         if (v && (!v.sys_deleted)) {
           qc.orders.push({ name: v.name, direction: v.direction, comment: v.comment });
         }
       });
-      this._.each(this.options.fields, (v) => {
+      each(this.options.fields, (v) => {
         if (v && (!v.sys_deleted)) {
           qc.fields.push({ name: v.name, comment: v.comment });
         }

@@ -1,3 +1,4 @@
+import forEach from 'lodash/forEach'
 export default {
   props: {
     mdQueryId: String,
@@ -50,7 +51,7 @@ export default {
       var ind = -1;
       for (var i = this.mdItems.length - 1; i >= 0; i--) {
         ind = -1;
-        this._.forEach(options.data, (sv, sk) => {
+        forEach(options.data, (sv, sk) => {
           if (this.mdItems[i].name === sv.name) {
             ind = i;
           }
@@ -61,10 +62,10 @@ export default {
       }
     },
     onNewItemConfirm(selectedItems) {
-      this._.forEach(selectedItems, (v, k) => {
+      forEach(selectedItems, (v, k) => {
         var need = false,
           item = this.formatFieldToItem(v);
-        this._.forEach(this.mdItems, (va, ka) => {
+        forEach(this.mdItems, (va, ka) => {
           if (va.name == item.name) {
             need = true;
           }

@@ -14,6 +14,7 @@
   </md-dialog>
 </template>
 <script>
+import forEach from 'lodash/forEach'
 export default {
   props: {
     mdActive: Boolean,
@@ -66,7 +67,7 @@ export default {
       }
       this.$http.get('sys/entities/' + parentNode.type_id).then(response => {
         parentNode.childs.splice(0, parentNode.childs.length);
-        this._.forEach(response.data.data.fields, (v, k) => {
+        forEach(response.data.data.fields, (v, k) => {
           var item = {
             name: v.name,
             comment: v.comment,

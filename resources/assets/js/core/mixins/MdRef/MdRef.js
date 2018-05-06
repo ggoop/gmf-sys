@@ -1,4 +1,5 @@
 import debounce from 'lodash/debounce'
+import pick from 'lodash/pick'
 export default {
   props: {
     value: {
@@ -69,7 +70,7 @@ export default {
       }
     },
     getReturnValue() {
-      return this.selectedRows.map(row => this._.pick(row, Object.keys(row).filter(f => f !== 'vueRowId')));
+      return this.selectedRows.map(row => pick(row, Object.keys(row).filter(f => f !== 'vueRowId')));
     },
     onCancel() {
       this.$emit('md-cancel', false);
