@@ -3,7 +3,7 @@
 namespace Gmf\Sys\Console\Create;
 
 use Gmf\Sys\Console\GeneratorCommand;
-use Gmf\Sys\Uuid;
+use Uuid;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Composer;
 use Illuminate\Support\Str;
@@ -67,7 +67,7 @@ class MdCommand extends GeneratorCommand {
 		$stub = str_replace('DummyClass', $className, $stub);
 		$stub = str_replace('DummyName', str_replace('_', '.', Str::snake($fullName)), $stub);
 		$stub = str_replace('DummyTable', str_plural(Str::snake($fullName)), $stub);
-		$stub = str_replace('DummyId', Uuid::generate(1, 'gmf', Uuid::NS_DNS, ""), $stub);
+		$stub = str_replace('DummyId', Uuid::generate(), $stub);
 
 		return $stub;
 	}

@@ -3,7 +3,7 @@
 namespace Gmf\Sys\Bp;
 use Carbon\Carbon;
 use Gmf\Sys\Models;
-use Gmf\Sys\Uuid;
+use Uuid;
 
 class VCode {
 	public function generate($type, $input, $token = '') {
@@ -11,7 +11,7 @@ class VCode {
 		$data['type'] = $type;
 		$data['content'] = serialize($input);
 		if (empty($token)) {
-			$token = Uuid::generate(1, 'gmf', Uuid::NS_DNS, "");
+			$token = Uuid::generate();
 		}
 		$data['token'] = $token;
 		$code = Models\VCode::create($data);

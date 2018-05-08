@@ -5,7 +5,7 @@ use Carbon\Carbon;
 use Closure;
 use Gmf\Sys\Libs\Common;
 use Gmf\Sys\Models;
-use Gmf\Sys\Uuid;
+use Uuid;
 use Illuminate\Http\Request;
 use GAuth;
 class Createor {
@@ -18,7 +18,7 @@ class Createor {
 		if (empty($input['to_date'])) {
 			$input['to_date'] = Carbon::now()->addYears(1)->toDateString();
 		}
-		$input['id'] = Uuid::generate(1, 'gmf', Uuid::NS_DNS, "");
+		$input['id'] = Uuid::generate();
 		$input['serial'] = Common::EncryptDES($result[1], 'gmf');
 		$rc = array_only($input, ['id', 'serial', 'fm_date', 'to_date', 'content']);
 		$rc['cid'] = Common::EncryptDES($input['id'], 'gmf');
@@ -57,7 +57,7 @@ class Createor {
 		if ($codeObj->cid !== Common::EncryptDES($codeObj->id, 'gmf')) {
 			throw new \Exception("code is altered", 1);
 		}
-		$codeObj->aid = Uuid::generate(1, 'gmf', Uuid::NS_DNS, "");
+		$codeObj->aid = Uuid::generate();
 
 		$ansCode = Common::EncryptDES(json_encode($codeObj), $reqCode);
 		$input = [

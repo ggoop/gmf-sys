@@ -3,25 +3,25 @@
 namespace Gmf\Sys\Http\Controllers;
 use DB;
 use GAuth;
-use Gmf\Sys\Uuid;
+use Uuid;
 use Illuminate\Http\Request;
 
 class DataController extends Controller {
 	public function index(Request $request) {
 		$datas = [];
 		for ($i = 0; $i < 20; $i++) {
-			$datas[] = Uuid::generate(1, 'gmf', Uuid::NS_DNS, "");
+			$datas[] = Uuid::generate();
 		}
 		return $this->toJson($datas);
 	}
 	public function show(Request $request) {
 		return GAuth::entId();
 
-		$datas = Uuid::generate(1, 'gmf', Uuid::NS_DNS, "");
+		$datas = Uuid::generate();
 		return $this->toJson($datas);
 	}
 	public function issueUid(Request $request) {
-		return $this->toJson(Uuid::generate(1, 'gmf', Uuid::NS_DNS, ""));
+		return $this->toJson(Uuid::generate());
 	}
 	public function issueSn(Request $request) {
 		$num = $request->input('num', 1);

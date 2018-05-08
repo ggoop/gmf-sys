@@ -1,6 +1,6 @@
 <?php
 
-namespace Gmf\Sys;
+namespace Gmf\Sys\Uuid;
 
 use Exception;
 
@@ -214,8 +214,8 @@ class Uuid {
 		$time = pack("H*", str_pad($time, 16, "0", STR_PAD_LEFT));
 
 		// Reorder bytes to their proper locations in the UUID
-		$uuid = $time[4] . $time[5] . $time[6] . $time[7] . $time[2] . $time[3] . $time[0] . $time[1];
-
+		//$uuid = $time[4] . $time[5] . $time[6] . $time[7] . $time[2] . $time[3] . $time[0] . $time[1];
+		$uuid = $time[0] . $time[1] . $time[2] . $time[3] . $time[4] . $time[5] . $time[6] . $time[7];
 		// Generate a random clock sequence
 		$uuid .= static::randomBytes(2);
 

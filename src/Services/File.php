@@ -4,7 +4,7 @@ namespace Gmf\Sys\Services;
 use Auth;
 use Gmf\Sys\Builder;
 use Gmf\Sys\Models;
-use Gmf\Sys\Uuid;
+use Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Storage;
@@ -60,7 +60,7 @@ class File {
 			$builder->ent_id($this->request->oauth_ent_id);
 		}
 		$builder->user_id(Auth::id());
-		$builder->code(Uuid::generate(1, 'gmf', Uuid::NS_DNS, ""));
+		$builder->code(Uuid::generate());
 
 		$builder->title($file->getClientOriginalName());
 
@@ -75,7 +75,7 @@ class File {
 		} else {
 			$name = date('Ymd', time());
 		}
-		$name .= Uuid::generate(1, 'gmf', Uuid::NS_DNS, "");
+		$name .= Uuid::generate();
 		if ($builder->ext) {
 			$name .= '.' . $builder->ext;
 		}
@@ -103,7 +103,7 @@ class File {
 			$builder->ent_id($this->request->oauth_ent_id);
 		}
 		$builder->user_id(Auth::id());
-		$builder->code(Uuid::generate(1, 'gmf', Uuid::NS_DNS, ""));
+		$builder->code(Uuid::generate());
 		$builder->title($file->title);
 		if (!empty($file->size)) {
 			$builder->size($file->size);
@@ -119,7 +119,7 @@ class File {
 		} else {
 			$name = date('Ymd', time());
 		}
-		$name .= Uuid::generate(1, 'gmf', Uuid::NS_DNS, '');
+		$name .= Uuid::generate();
 		if ($builder->ext) {
 			$name .= '.' . $builder->ext;
 		}

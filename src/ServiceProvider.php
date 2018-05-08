@@ -94,11 +94,17 @@ class ServiceProvider extends BaseServiceProvider {
 
 		$this->registerGuard();
 
+		$this->registerUuid();
+
 		$this->registerEnt();
 
 		$this->registerPackager();
 	}
-
+	protected function registerUuid() {
+		$this->app->singleton('uuid', function ($app) {
+			return new Uuid\Manager($app);
+		});
+	}
 	protected function registerEnt() {
 		$this->app->singleton('gauth', function ($app) {
 			return new GAuth\GAuthManager($app);

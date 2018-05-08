@@ -4,7 +4,7 @@ namespace Gmf\Sys\Models;
 use Gmf\Sys\Passport\HasApiTokens;
 use Gmf\Sys\Traits\HasGuard;
 use Gmf\Sys\Traits\Snapshotable;
-use Gmf\Sys\Uuid;
+use Uuid;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Validator;
@@ -98,7 +98,7 @@ class User extends Authenticatable {
 			$opts['avatar'] = '/assets/vendor/gmf-sys/avatar/' . mt_rand(1, 50) . '.jpg';
 		}
 		if (empty($opts['account'])) {
-			$opts['account'] = Uuid::generate(1, 'gmf', Uuid::NS_DNS, "");
+			$opts['account'] = Uuid::generate();
 		}
 		$query = static::where('type', $type);
 		if (!in_array($opts['type'], ['sys', 'web'])) {

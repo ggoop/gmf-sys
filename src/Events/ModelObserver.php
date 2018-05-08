@@ -1,7 +1,7 @@
 <?php
 
 namespace Gmf\Sys\Events;
-use Gmf\Sys\Uuid;
+use Uuid;
 use Illuminate\Database\Eloquent\Model;
 
 class ModelObserver {
@@ -25,7 +25,7 @@ class ModelObserver {
 		//自动生成ID
 		if (!$model->incrementing) {
 			if (empty($model->{$model->getKeyName()})) {
-				$model->{$model->getKeyName()} = Uuid::generate(1, 'gmf', Uuid::NS_DNS, "");
+				$model->{$model->getKeyName()} = Uuid::generate();
 			}
 		}
 	}
