@@ -11,10 +11,10 @@ class SysEntPreSeeder extends Seeder {
 	 * @return void
 	 */
 	public function run() {
-		$code = config('gmf.ent.code');
+		$id = config('gmf.ent.id');
 		$name = config('gmf.ent.name');
 		$account = config('gmf.ent.user');
-		if (!$code || !$account) {
+		if (!$id || !$account) {
 			return;
 		}
 		$user = config('gmf.user.model')::findByAccount($account, 'sys');
@@ -23,7 +23,7 @@ class SysEntPreSeeder extends Seeder {
 		}
 		$b = new Builder;
 		$b->name($name)->code($code);
-		$ent = Models\Ent::updateOrCreate(['code' => $code], $b->toArray());
+		$ent = Models\Ent::updateOrCreate(['id' => $id], $b->toArray());
 		if ($ent) {
 			Models\Ent::addUser($ent->id, $user->id);
 		}

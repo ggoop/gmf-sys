@@ -16,18 +16,16 @@ class SysRolePermitPostSeeder extends Seeder {
 	 */
 	public function run() {
 		if (empty($this->entId)) {
-			if ($ent = config('gmf.ent.model')::findByCode(config('gmf.ent.code'))) {
-				$this->entId = $ent->id;
-			}
+			$this->entId = config('gmf.ent.id');
 		}
 		if (empty($this->entId)) {
 			return;
 		}
-		$uid = config('gmf.admin.id');
-
-		RoleUser::build(function (Builder $b) use ($uid) {
-			$b->ent_id($this->entId)->user_id($uid)->role($this->role);
-		});
+		if ($user = config('gmf.user.model')::findByAccount(config('gmf.admin.account'), 'sys')) {
+			RoleUser::build(function (Builder $b) use ($user) {
+				$b->ent_id($this->entId)->user_id($user->id)->role($this->role);
+			});
+		}
 		$menus = Menu::where('is_leaf', '1')->get();
 		if ($menus && count($menus)) {
 			foreach ($menus as $m) {

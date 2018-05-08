@@ -16,6 +16,7 @@ return [
 	],
 	//应用信息
 	'client' => [
+		'id' => env('GMF_OAUTH_CLIENT_ID', ''),
 		//应用名称
 		'name' => env('GMF_OAUTH_CLIENT_NAME', env('APP_NAME', '')),
 		//应用秘钥,默认为应用KEY
@@ -37,7 +38,7 @@ return [
 		//企业模型
 		'model' => env('GMF_ENT_MODEL', Gmf\Sys\Models\Ent::class),
 		//企业编码，
-		'code' => env('GMF_ENT_CODE', env('APP_KEY', '')),
+		'id' => env('GMF_ENT_ID', ''),
 		//企业名称，默认为应用名称
 		'name' => env('GMF_ENT_NAME', env('APP_NAME', '')),
 		//企业管理员,默认为系统管理员

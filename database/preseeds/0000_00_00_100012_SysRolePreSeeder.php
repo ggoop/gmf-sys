@@ -14,9 +14,7 @@ class SysRolePreSeeder extends Seeder {
 	 */
 	public function run() {
 		if (empty($this->entId)) {
-			if ($ent = config('gmf.ent.model')::findByCode(config('gmf.ent.code'))) {
-				$this->entId = $ent->id;
-			}
+			$this->entId = config('gmf.ent.id');
 		}
 		if (empty($this->entId)) {
 			return;

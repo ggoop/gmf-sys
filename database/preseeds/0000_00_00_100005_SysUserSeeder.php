@@ -20,7 +20,7 @@ class SysUserSeeder extends Seeder {
 		}
 		//用户
 		$b = new Builder;
-		$b->account($account)->name($account)->password($secret);
+		$b->account($account)->name($account)->password($secret)->client_id(config('gmf.client.id'));
 		User::registerByAccount('sys', $b->toArray());
 	}
 }

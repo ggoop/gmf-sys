@@ -14,10 +14,11 @@ class PassportClientSeeder extends Seeder {
 	public function run() {
 
 		$b = new Builder;
+		$id = config('gmf.client.id');
 		$name = config('gmf.client.name');
 		$secret = config('gmf.client.secret');
 		$account = config('gmf.client.user');
-		if (empty($name) || empty($secret) || empty($account)) {
+		if (empty($id) || empty($secret) || empty($account)) {
 			return;
 		}
 		$user = config('gmf.user.model')::findByAccount($account, 'sys');
@@ -29,7 +30,7 @@ class PassportClientSeeder extends Seeder {
 		$b = new Builder;
 		$b->name($name)->secret($secret)->user_id($user->id);
 		$b->personal_access_client(1)->password_client(1)->revoked(0);
-		$client = Client::updateOrCreate(['name' => $name], $b->toArray());
+		$client = Client::updateOrCreate(['id' => $id], $b->toArray());
 
 		//私有登录
 		$b = new Builder;
