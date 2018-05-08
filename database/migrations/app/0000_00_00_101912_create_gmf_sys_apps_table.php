@@ -21,8 +21,10 @@ class CreateGmfSysAppsTable extends Migration {
 		$md->string('group_name')->nullable()->comment('分组名称');
 		$md->string('avatar', 500)->nullable();
 		$md->integer('is_public')->default(0)->comment('是否公共');
-		$md->string('gateway')->nullable()->comment('地址');
+		$md->string('discover')->nullable()->comment('发现地址');
+		$md->string('gateway')->nullable()->comment('注册网关');
 		$md->text('memo')->nullable()->comment('备注');
+		$md->enum('status', 'gmf.sys.ent.app.enum')->nullable()->comment('状态');
 		$md->boolean('revoked')->default(0)->comment('注销');
 		$md->timestamps();
 

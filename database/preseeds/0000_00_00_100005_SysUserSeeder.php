@@ -13,15 +13,14 @@ class SysUserSeeder extends Seeder {
 	public function run() {
 
 		$b = new Builder;
-		$id = config('gmf.admin.id');
-		$email = config('gmf.admin.email');
+		$account = config('gmf.admin.account');
 		$secret = config('gmf.admin.pwd');
-		if (empty($id) || empty($email) || empty($secret)) {
+		if (empty($account) || empty($secret)) {
 			return;
 		}
 		//用户
 		$b = new Builder;
-		$b->user_id($id)->account($email)->name($email)->password($secret)->client_id(config('gmf.client.id'));
+		$b->account($account)->name($account)->password($secret);
 		User::registerByAccount('sys', $b->toArray());
 	}
 }

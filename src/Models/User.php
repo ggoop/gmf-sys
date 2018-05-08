@@ -49,14 +49,31 @@ class User extends Authenticatable {
 		//var_dump($password);
 		return true;
 	}
+	public static function findByAccount($account, $type, Array $opts = []) {
+		if (empty($account) || empty($type)) {
+			return false;
+		}
+
+		if (empty($opts)) {
+			$opts = [];
+		}
+
+		$opts['account'] = $account;
+		$opts['type'] = $type;
+		return static::where($opts)->first();
+	}
 	public static function registerByAccount($type, Array $opts = []) {
 		$user = false;
 		$opts['type'] = $type;
 
 		Validator::make($opts, [
 			'name' => 'required',
-			'client_id' => 'required',
 		])->validate();
+		if ($type != 'sys') {
+			Validator::make($opts, [
+				'client_id' => 'required',
+			])->validate();
+		}
 
 		if (empty($opts['account']) && empty($opts['email']) && empty($opts['mobile']) && empty($opts['src_id'])) {
 			throw new \Exception('account,email ,mobile,src_id not empty least one');
@@ -140,10 +157,6 @@ class User extends Authenticatable {
 				User::where('id', $user->id)->update($updates);
 			}
 		} else {
-			if (!empty($opts['user_id']) && $type == 'sys') {
-				$data['id'] = $opts['user_id'];
-				$data['src_id'] = $opts['user_id'];
-			}
 			if (!empty($data['password']) && in_array($type, ['sys', 'web'])) {
 				$data['secret'] = base64_encode($data['password']);
 				$data['password'] = bcrypt($data['password']);

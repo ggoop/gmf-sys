@@ -43,7 +43,7 @@ class ModelCommand extends GeneratorCommand {
 		$className = $this->getClassName($name);
 
 		$ns = $this->getNamespace($name);
-		$stub = str_replace('DummyTable', Str::snake($fullName), $stub);
+		$stub = str_replace('DummyTable', str_plural(Str::snake($fullName)), $stub);
 		$stub = str_replace('DummyClass', $className, $stub);
 		$stub = str_replace('DummyNamespace', $ns, $stub);
 		return $stub;

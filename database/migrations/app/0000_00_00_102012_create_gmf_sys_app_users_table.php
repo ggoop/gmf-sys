@@ -3,8 +3,8 @@
 use Gmf\Sys\Database\Metadata;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGmfSysEntAppsTable extends Migration {
-	public $mdID = "ab3063c04f6f11e8bfb0d9000adcab84";
+class CreateGmfSysAppUsersTable extends Migration {
+	public $mdID = "7f5c5ed0524e11e8a893e33e86cf0025";
 	/**
 	 * Run the migrations.
 	 *
@@ -12,15 +12,12 @@ class CreateGmfSysEntAppsTable extends Migration {
 	 */
 	public function up() {
 		$md = Metadata::create($this->mdID);
-		$md->mdEntity('gmf.sys.ent.app')->comment('企业应用')->tableName('gmf_sys_ent_apps');
-
+		$md->mdEntity('gmf.sys.app.user')->comment('应用用户')->tableName('gmf_sys_app_users');
 		$md->bigIncrements('id');
-		$md->entity('ent', 'gmf.sys.ent')->comment('企业');
 		$md->entity('app', 'gmf.sys.app')->comment('应用');
-		$md->string('secret')->nullable()->comment('secret');
-		$md->string('discover')->nullable()->comment('发现地址');
-		$md->string('gateway')->nullable()->comment('注册网关');
+		$md->entity('user', config('gmf.user.entity'));
 		$md->integer('is_default')->nullable()->comment('是否默认');
+		$md->enum('type', 'gmf.sys.user.owner.type.enum');
 		$md->boolean('revoked')->default(0)->comment('注销');
 		$md->timestamps();
 

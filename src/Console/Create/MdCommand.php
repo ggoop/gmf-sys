@@ -66,7 +66,7 @@ class MdCommand extends GeneratorCommand {
 		$className = $this->getClassName($fullName);
 		$stub = str_replace('DummyClass', $className, $stub);
 		$stub = str_replace('DummyName', str_replace('_', '.', Str::snake($fullName)), $stub);
-		$stub = str_replace('DummyTable', Str::snake($fullName), $stub);
+		$stub = str_replace('DummyTable', str_plural(Str::snake($fullName)), $stub);
 		$stub = str_replace('DummyId', Uuid::generate(1, 'gmf', Uuid::NS_DNS, ""), $stub);
 
 		return $stub;

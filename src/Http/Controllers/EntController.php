@@ -12,7 +12,7 @@ class EntController extends Controller {
 	public function index(Request $request) {
 		$userID = GAuth::userId();
 		$query = DB::table('gmf_sys_ents as l')->join('gmf_sys_ent_users as u', 'l.id', '=', 'u.ent_id');
-		$query->addSelect('l.id', 'l.name', 'l.avatar', 'l.gateway', 'u.is_default', 'u.type_enum as type');
+		$query->addSelect('l.id', 'l.name', 'l.avatar', 'u.is_default', 'u.type_enum as type');
 		$query->where('u.user_id', $userID);
 		$query->orderBy('u.is_default', 'desc')->orderBy('l.name');
 
@@ -25,7 +25,7 @@ class EntController extends Controller {
 		return $this->toJson($data);
 	}
 	public function store(Request $request) {
-		$input = array_only($request->all(), ['code', 'name', 'memo', 'short_name', 'avatar', 'gateway', 'industry', 'area']);
+		$input = array_only($request->all(), ['code', 'name', 'memo', 'short_name', 'avatar', 'industry', 'area']);
 		$validator = Validator::make($input, [
 			'code' => [
 				'required',
@@ -49,7 +49,7 @@ class EntController extends Controller {
 	 * @return [type]           [description]
 	 */
 	public function update(Request $request, $id) {
-		$input = $request->only(['code', 'name', 'memo', 'short_name', 'avatar', 'gateway', 'industry', 'area']);
+		$input = $request->only(['code', 'name', 'memo', 'short_name', 'avatar', 'industry', 'area']);
 		$validator = Validator::make($input, [
 			'code' => [
 				'required',
@@ -72,7 +72,7 @@ class EntController extends Controller {
 	public function getMyEnts(Request $request) {
 		$userID = GAuth::userId();
 		$query = DB::table('gmf_sys_ents as l')->join('gmf_sys_ent_users as u', 'l.id', '=', 'u.ent_id');
-		$query->addSelect('l.id', 'l.name', 'l.avatar', 'l.gateway', 'u.is_default', 'u.type_enum as type');
+		$query->addSelect('l.id', 'l.name', 'l.avatar', 'u.is_default', 'u.type_enum as type');
 		$query->where('u.user_id', $userID);
 		$query->orderBy('u.is_default', 'desc')->orderBy('l.name');
 

@@ -11,31 +11,21 @@ class SysEntPreSeeder extends Seeder {
 	 * @return void
 	 */
 	public function run() {
-		$id = config('app.key');
-		$name = config('app.name');
-		if (!$id) {
-			return;
-		}
-		$b = new Builder;
-		$b->name($name)->code($id);
-		$ent = Models\Ent::updateOrCreate(['id' => $id], $b->toArray());
-
-		$uid = config('gmf.admin.id');
-		if ($uid && $ent) {
-			Models\Ent::addUser($ent->id, $uid);
-		}
-
-		$id = config('gmf.ent.id');
+		$code = config('gmf.ent.code');
 		$name = config('gmf.ent.name');
-		$gateway = config('gmf.ent.gateway');
-		if (!$id) {
+		$account = config('gmf.ent.user');
+		if (!$code || !$account) {
 			return;
 		}
+		$user = config('gmf.user.model')::findByAccount($account, 'sys');
+		if (empty($user)) {
+			throw new \Exception("$account is not exsts!");
+		}
 		$b = new Builder;
-		$b->name($name)->code($id)->gateway($gateway);
-		$ent = Models\Ent::updateOrCreate(['id' => $id], $b->toArray());
-		if ($uid && $ent) {
-			Models\Ent::addUser($ent->id, $uid);
+		$b->name($name)->code($code);
+		$ent = Models\Ent::updateOrCreate(['code' => $code], $b->toArray());
+		if ($ent) {
+			Models\Ent::addUser($ent->id, $user->id);
 		}
 	}
 }

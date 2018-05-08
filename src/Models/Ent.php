@@ -13,7 +13,7 @@ class Ent extends Model {
 	public $incrementing = false;
 	protected $keyType = 'string';
 	protected $fillable = [
-		'id', 'code', 'name', 'gateway', 'memo', 'short_name', 'avatar', 'secret',
+		'id', 'code', 'name', 'discover', 'gateway', 'memo', 'short_name', 'avatar', 'secret',
 		'industry', 'area', 'revoked'];
 
 	public static function addUser($entId, $userId, $type = 'member') {
@@ -23,7 +23,18 @@ class Ent extends Model {
 		}
 		return $m;
 	}
+	public static function findByCode($code, Array $opts = []) {
+		if (empty($code)) {
+			return false;
+		}
 
+		if (empty($opts)) {
+			$opts = [];
+		}
+
+		$opts['code'] = $code;
+		return static::where($opts)->first();
+	}
 	public static function build(Closure $callback) {
 		//id,root,parent,code,name,memo,uri,sequence
 		tap(new Builder, function ($builder) use ($callback) {

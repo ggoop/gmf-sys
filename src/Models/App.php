@@ -12,7 +12,7 @@ class App extends Model {
 	protected $table = 'gmf_sys_apps';
 	public $incrementing = false;
 	protected $keyType = 'string';
-	protected $fillable = ['id', 'code', 'name', 'memo', 'revoked'];
+	protected $fillable = ['id', 'code', 'name', 'memo', 'discover', 'gateway', 'revoked'];
 
 	public static function build(Closure $callback) {
 		//id,root,parent,code,name,memo,uri,sequence
