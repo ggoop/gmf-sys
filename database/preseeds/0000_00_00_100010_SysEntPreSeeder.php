@@ -22,7 +22,7 @@ class SysEntPreSeeder extends Seeder {
 			throw new \Exception("$account is not exsts!");
 		}
 		$b = new Builder;
-		$b->name($name)->code($code);
+		$b->name($name)->code($id);
 		$ent = Models\Ent::updateOrCreate(['id' => $id], $b->toArray());
 		if ($ent) {
 			Models\Ent::addUser($ent->id, $user->id);
