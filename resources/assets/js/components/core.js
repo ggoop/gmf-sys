@@ -45,6 +45,9 @@ import MdLoading from './MdLoading'
 import MdLayout from './MdLayout'
 import MdToast from './MdToast'
 import MdWrap from './MdWrap'
+
+import MdTable from './MdTable'
+import MdDatepicker from './MdDatepicker'
 export {
   MdApp,
   MdAutocomplete,
@@ -90,5 +93,8 @@ export {
 
   MdLayout,
   MdToast,
-  MdWrap
+  MdWrap,
+
+  MdTable,
+  MdDatepicker
 }

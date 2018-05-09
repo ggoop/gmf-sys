@@ -1,5 +1,5 @@
 import MdEnum from './MdEnum'
-import MdDatepicker from './MdDatepicker'
+// import MdDatepicker from './MdDatepicker'
 import MdGrid from './MdGrid'
 import MdQuery from './MdQuery'
 import MdRef from './MdRef'
@@ -10,7 +10,7 @@ import MdDialogAlert from './MdDialog/MdDialogAlert'
 import MdDialogConfirm from './MdDialog/MdDialogConfirm'
 import MdDialogPrompt from './MdDialog/MdDialogPrompt'
 
-import MdTable from './MdTable'
+// import MdTable from './MdTable'
 
 import MdBoard from './MdBoard'
 import MdPart from './MdPart'
@@ -34,7 +34,7 @@ import MdIconDelete from './MdIcon/Parts/MdIconDelete'
 export {
 
   MdEnum,
-  MdDatepicker,
+  // MdDatepicker,
   MdGrid,
   MdQuery,
   MdRef,
@@ -45,7 +45,7 @@ export {
   MdDialogConfirm,
   MdDialogPrompt,
 
-  MdTable,
+  // MdTable,
   MdBoard,
   MdPart,
   MdTree,
