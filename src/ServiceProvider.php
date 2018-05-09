@@ -56,6 +56,11 @@ class ServiceProvider extends BaseServiceProvider {
 				Console\Create\ModelCommand::class,
 				Console\Create\PageCommand::class,
 			]);
+		} else {
+			$this->commands([
+				Console\Install\SeedCommand::class,
+				Console\Install\SqlCommand::class,
+			]);
 		}
 		$this->loadViewsFrom(__DIR__ . '/../resources/views', 'gmf');
 		$this->loadRoutesFrom(__DIR__ . '/../routes/api.php');

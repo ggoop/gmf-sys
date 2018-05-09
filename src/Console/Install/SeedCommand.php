@@ -46,7 +46,6 @@ class SeedCommand extends Command {
 		$paths = Collection::make($paths)->map(function ($path) use ($tag) {
 			return $path . $tag;
 		})->all();
-
 		$this->info("======\t {$tag} begin");
 
 		$files = $this->filterFiles($files = $this->getMigrationFiles($paths));
@@ -63,7 +62,8 @@ class SeedCommand extends Command {
 	}
 	protected function runUp($file) {
 		$tag = $this->getTags();
-		$migration = $this->resolve($name = $this->getMigrationName($file));
+		$name = $this->getMigrationName($file);
+		$migration = $this->resolve($name);
 		$this->line("{$tag} seeding :\t{$name}");
 
 		$entId = $this->option('ent') ?: false;
@@ -74,7 +74,7 @@ class SeedCommand extends Command {
 				return;
 			}
 		}
-		Model::unguarded(function () use ($migration, $entId) {
+		Model::unguarded(function () use ($migration, $entId, $name) {
 			if ($entId && !array_has(get_object_vars($migration), 'entId')) {
 				$this->line("entId property is not exists, returned. \t{$name}");
 				return;

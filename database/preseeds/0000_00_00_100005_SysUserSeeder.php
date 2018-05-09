@@ -15,6 +15,7 @@ class SysUserSeeder extends Seeder {
 		$b = new Builder;
 		$account = config('gmf.admin.account');
 		$secret = config('gmf.admin.pwd');
+
 		if (empty($account) || empty($secret)) {
 			return;
 		}

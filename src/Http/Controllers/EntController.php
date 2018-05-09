@@ -80,15 +80,18 @@ class EntController extends Controller {
 		return $this->toJson($datas);
 	}
 	public function seedDatas(Request $request, $id) {
+		if (empty($id)) {
+			throw new \Exception('ent is null');
+		}
 		$datas = [];
 		if ($id) {
-			$datas[] = Artisan::call('gmf:seed', [
+			$datas[] = Artisan::call('gmf:install-seed', [
 				'--tag' => 'pre', '--ent' => $id,
 			]);
-			$datas[] = Artisan::call('gmf:seed', [
+			$datas[] = Artisan::call('gmf:install-seed', [
 				'--ent' => $id,
 			]);
-			$datas[] = Artisan::call('gmf:seed', [
+			$datas[] = Artisan::call('gmf:install-seed', [
 				'--tag' => 'post', '--ent' => $id,
 			]);
 		}
