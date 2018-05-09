@@ -13,6 +13,15 @@ class AuthController extends Controller {
 	public function checker(Request $request) {
 		return $this->toJson(new Resources\User(app('Gmf\Sys\Bp\UserAuth')->checker($this, $request->only('account', 'id'))));
 	}
+	public function getLogged(Request $request) {
+		$user = GAuth::user();
+		return $this->toJson(new Resources\User($user), function ($b) use ($user) {
+			if ($user) {
+				$token = app('Gmf\Sys\Bp\UserAuth')->issueToken($user);
+				$b->token($token);
+			}
+		});
+	}
 	public function getUser(Request $request) {
 		return $this->toJson(new Resources\User(app('Gmf\Sys\Bp\UserAuth')->checker($this, $request->only('account', 'id'))));
 	}

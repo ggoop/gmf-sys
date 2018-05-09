@@ -6,6 +6,7 @@ Route::prefix('api/sys/jsapi')->middleware(['api'])->namespace($ns)->group(funct
 Route::prefix('api/sys/auth')->middleware(['web'])->namespace($ns)->group(function () {
 	Route::post('checker', 'AuthController@checker');
 	Route::any('show', 'AuthController@getUser');
+	Route::get('logged', 'AuthController@getLogged');
 	Route::post('token', 'AuthController@issueToken');
 	Route::post('register', 'AuthController@register');
 	Route::post('login', 'AuthController@login');
