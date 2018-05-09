@@ -3,6 +3,7 @@ import MdCard from './MdCard'
 import MdCardArea from './MdCardArea/MdCardArea'
 import MdCardHeader from './MdCardHeader/MdCardHeader'
 import MdCardHeaderText from './MdCardHeader/MdCardHeaderText'
+import MdCardHeaderActions from './MdCardHeader/MdCardHeaderActions'
 import MdCardMedia from './MdCardMedia/MdCardMedia'
 import MdCardMediaActions from './MdCardMedia/MdCardMediaActions'
 import MdCardMediaCover from './MdCardMedia/MdCardMediaCover'
@@ -18,6 +19,7 @@ export default Vue => {
   Vue.component(MdCardArea.name, MdCardArea)
   Vue.component(MdCardHeader.name, MdCardHeader)
   Vue.component(MdCardHeaderText.name, MdCardHeaderText)
+  Vue.component(MdCardHeaderActions.name, MdCardHeaderActions)
   Vue.component(MdCardMedia.name, MdCardMedia)
   Vue.component(MdCardMediaActions.name, MdCardMediaActions)
   Vue.component(MdCardMediaCover.name, MdCardMediaCover)
