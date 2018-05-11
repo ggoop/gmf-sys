@@ -15,7 +15,7 @@
           <span>{{ mainDatas.name }}</span>
           <span>{{ mainDatas.email }}</span>
         </div>
-        <md-button class="md-icon-button md-list-action" :to="{name:'auth.chooser'}">
+        <md-button class="md-icon-button md-list-action" :to="{name:'auth.chooser',query:routeQuery}">
           <md-icon class="md-primary">expand_more</md-icon>
         </md-button>
       </md-list-item>
@@ -70,6 +70,11 @@ export default {
     }
   },
   computed: {
+    routeQuery() {
+      const q = {};
+      if (this.$route.query && this.$route.query.continue) q.continue = this.$route.query.continue;
+      return q;
+    },
     disabledSendBtn() {
       return this.sending || this.isSended || !!this.mainDatas.token;
     },
@@ -90,11 +95,11 @@ export default {
       }
     },
     onOtherClick() {
-      this.$go({ name: 'auth.password.find.word', params: { id: this.mainDatas.id } });
+      this.$go({ name: 'auth.password.find.word', params: { id: this.mainDatas.id }, query: this.routeQuery });
     },
     onSendCode() {
       this.sending = true;
-      const options = { id: this.mainDatas.id,account:this.mainDatas.account, type: 'password', mode: 'mail' };
+      const options = { id: this.mainDatas.id, account: this.mainDatas.account, type: 'password', mode: 'mail' };
       this.$http.post('sys/auth/vcode-create', options).then(response => {
         this.isSended = true;
         this.sending = false;
@@ -112,10 +117,10 @@ export default {
     },
     submitPost() {
       this.sending = true;
-      const options = { id: this.mainDatas.id,account:this.mainDatas.account, type: 'password', token: this.mainDatas.token };
+      const options = { id: this.mainDatas.id, account: this.mainDatas.account, type: 'password', token: this.mainDatas.token };
       this.$http.post('sys/auth/vcode-checker', options).then(response => {
         this.sending = false;
-        this.$go({ name: 'auth.reset', params: { id: this.mainDatas.id, token: this.mainDatas.token } });
+        this.$go({ name: 'auth.reset', params: { id: this.mainDatas.id, token: this.mainDatas.token }, query: this.routeQuery });
       }).catch(err => {
         this.sending = false;
         this.$toast(err);
@@ -126,13 +131,13 @@ export default {
         this.sending = true;
         const thId = this.$route.params.id;
         if (!thId) {
-          this.$go({ name: 'auth.login' });
+          this.$go({ name: 'auth.login', query: this.routeQuery });
         }
         const response = await this.$http.post('sys/auth/checker', { id: thId });
         this.mainDatas = response.data.data;
       } catch (err) {
         this.$toast(err);
-        this.$go({ name: 'auth.identifier' });
+        this.$go({ name: 'auth.identifier', query: this.routeQuery });
       } finally {
         this.sending = false;
       }
@@ -142,4 +147,5 @@ export default {
     await this.fetchData();
   },
 };
+
 </script>

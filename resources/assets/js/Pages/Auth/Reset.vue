@@ -15,7 +15,7 @@
             <span>{{ mainDatas.name }}</span>
             <span>{{ mainDatas.account }}</span>
           </div>
-          <md-button class="md-icon-button md-list-action" :to="{name:'auth.chooser'}">
+          <md-button class="md-icon-button md-list-action" :to="{name:'auth.chooser',query:routeQuery}">
             <md-icon class="md-primary">expand_more</md-icon>
           </md-button>
         </md-list-item>
@@ -65,13 +65,17 @@ export default {
         minLength: minLength(6),
         maxLength: maxLength(30)
       },
-      password_confirmation:{
-        sameAsPassword:sameAs('password')
+      password_confirmation: {
+        sameAsPassword: sameAs('password')
       }
     }
   },
   computed: {
-
+    routeQuery() {
+      const q = {};
+      if (this.$route.query && this.$route.query.continue) q.continue = this.$route.query.continue;
+      return q;
+    },
   },
   methods: {
     getValidationClass(fieldName) {
@@ -91,12 +95,12 @@ export default {
     async submitPost() {
       try {
         this.sending = true;
-        this.mainDatas.token=this.$route.params.token;
+        this.mainDatas.token = this.$route.params.token;
         const response = await this.$http.post('sys/auth/reset', this.mainDatas);
         this.sending = false;
         this.$setConfigs({ user: response.data.data, token: response.data.token });
         await this.$root.$loadConfigs();
-        this.$go(this.$root.configs.home);
+        this.$go(this.$route.query.continue ? this.$route.query.continue : this.$root.configs.home);
       } catch (err) {
         this.sending = false;
         this.$toast(err);
@@ -107,16 +111,16 @@ export default {
         this.sending = true;
         const thId = this.$route.params.id;
         if (!thId) {
-          this.$go({ name: 'auth.chooser' });
+          this.$go({ name: 'auth.chooser', query: this.routeQuery });
         }
         const response = await this.$http.post('sys/auth/checker', { id: thId });
         const u = response.data.data;
         this.mainDatas = response.data.data;
-        const options={id:this.mainDatas.id,type:'password',token:this.$route.params.token};
+        const options = { id: this.mainDatas.id, type: 'password', token: this.$route.params.token };
         await this.$http.post('sys/auth/vcode-checker', options);
       } catch (err) {
         this.$toast(err);
-        this.$go({ name: 'auth.identifier' });
+        this.$go({ name: 'auth.identifier', query: this.routeQuery });
       } finally {
         this.sending = false;
       }
@@ -126,4 +130,5 @@ export default {
     await this.fetchData();
   },
 };
+
 </script>

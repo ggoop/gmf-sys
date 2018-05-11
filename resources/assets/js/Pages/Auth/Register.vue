@@ -16,11 +16,10 @@
         </md-layout>
         <md-layout>
           <md-field :class="getValidationClass('account')" md-clearable>
-            <label>电子邮件地址</label>
+            <label>账号</label>
             <md-input v-model="mainDatas.account" autocomplete="off" :disabled="sending"></md-input>
-            <span class="md-helper-text">我们会向此地址发送一封电子邮件，验证您是否佣有该邮件地址。</span>
-            <span class="md-error" v-if="!$v.mainDatas.account.required">请输入电子邮件地址!</span>
-            <span class="md-error" v-else-if="!$v.mainDatas.account.email">请输入有效的电子邮件地址!</span>
+            <span class="md-helper-text">输入电子邮件地址或者手机号。</span>
+            <span class="md-error" v-if="!$v.mainDatas.account.required">请输入输入电子邮件地址或者手机号。!</span>
           </md-field>
         </md-layout>
         <md-layout>
@@ -36,7 +35,7 @@
         <md-button type="submit" class="md-primary md-raised" :disabled="sending">注册</md-button>
       </md-card-actions>
       <md-card-actions class="login-memo">
-        <router-link :to="{name:'auth.login'}">我有帐号，直接登录</router-link>
+        <router-link :to="{name:'auth.login',query:routeQuery}">我有帐号，直接登录</router-link>
       </md-card-actions>
       <md-progress-bar md-mode="indeterminate" v-if="sending" />
     </form>
@@ -63,7 +62,6 @@ export default {
       },
       account: {
         required,
-        email,
         minLength: minLength(3),
         maxLength: maxLength(30)
       },
@@ -75,7 +73,11 @@ export default {
     }
   },
   computed: {
-    
+    routeQuery() {
+      const q = {};
+      if (this.$route.query && this.$route.query.continue) q.continue = this.$route.query.continue;
+      return q;
+    },
   },
   methods: {
     getValidationClass(fieldName) {
@@ -89,6 +91,13 @@ export default {
     validateForm() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
+
+        var m = /^1[358][0123456789]\d{8}$/;
+        var e = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+        if (!m.test(this.mainDatas.account) && !e.test(this.mainDatas.account)) {
+          alert('账号需要是电子邮件或者手机号!');
+          return false;
+        }
         this.submitPost()
       }
     },
@@ -96,8 +105,7 @@ export default {
       this.sending = true;
       this.$http.post('sys/auth/register', this.mainDatas).then(response => {
         this.sending = false;
-        //continue
-        //this.$go({name:'app.users.show',params:{id:'0'}});
+        this.$go(this.$route.query.continue ? this.$route.query.continue : { name: 'app.users.show', params: { id: '0' } });
       }).catch(err => {
         this.sending = false;
         this.$toast(err);
@@ -112,4 +120,5 @@ export default {
     this.fetchData();
   },
 };
+
 </script>

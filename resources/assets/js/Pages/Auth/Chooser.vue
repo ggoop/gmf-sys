@@ -15,7 +15,7 @@
           <span>{{ item.account }}</span>
         </div>
       </md-list-item>
-      <md-list-item :to="{name:'auth.identifier'}">
+      <md-list-item :to="{name:'auth.identifier',query:{continue:$route.query.continue}}">
         <md-avatar>
           <md-icon class="md-size-2x">account_circle</md-icon>
         </md-avatar>
@@ -27,10 +27,10 @@
     </md-list>
     <md-divider></md-divider>
     <auth-sns></auth-sns>
-    <template  v-if="mainDatas&&mainDatas.length">
-       <md-divider></md-divider>
+    <template v-if="mainDatas&&mainDatas.length">
+      <md-divider></md-divider>
       <md-card-content>
-        <md-button :to="{name:'auth.remove'}">
+        <md-button :to="{name:'auth.remove',query:{continue:$route.query.continue}}">
           移除账号
         </md-button>
       </md-card-content>
@@ -54,7 +54,11 @@ export default {
     };
   },
   computed: {
-
+    routeQuery() {
+      const q = {};
+      if (this.$route.query && this.$route.query.continue) q.continue = this.$route.query.continue;
+      return q;
+    }
   },
   methods: {
     removeItem(item) {
@@ -64,9 +68,9 @@ export default {
       this.sending = true;
       this.$http.post('sys/auth/checker', item).then(response => {
         this.sending = false;
-        const u=response.data.data;
-        if(u){
-          this.$go({name:'auth.password',params:{id:u.id}});
+        const u = response.data.data;
+        if (u) {
+          this.$go({ name: 'auth.password', params: { id: u.id }, query: this.routeQuery });
         }
       }).catch(err => {
         this.sending = false;
@@ -81,4 +85,5 @@ export default {
     this.fetchData();
   },
 };
+
 </script>

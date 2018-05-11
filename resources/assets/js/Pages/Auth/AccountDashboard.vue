@@ -53,7 +53,7 @@ export default {
   computed: {
     routeQuery() {
       const q = {};
-      if (this.$route.query && this.$route.query.continue) p.continue = this.$route.query.continue;
+      if (this.$route.query && this.$route.query.continue) q.continue = this.$route.query.continue;
       return q;
     },
     userName() {

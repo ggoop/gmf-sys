@@ -55,12 +55,16 @@ export default {
 
     },
     makeUrl(old) {
+      var url = false;
       if (old && this.type) {
-        return old.indexOf('?') > 0 ? old + '&type=' + this.type : old + '?type=' + this.type;
+        url = old.indexOf('?') > 0 ? old + '&type=' + this.type : old + '?type=' + this.type;
       } else if (old) {
-        return old;
+        url = old;
       }
-      return false;
+      if (url && this.$route.query.continue) {
+        url = url.indexOf('?') > 0 ? url + '&continue=' + this.$route.query.continue : url + '?continue=' + this.$route.query.continue;
+      }
+      return url;
     },
   },
   mounted() {

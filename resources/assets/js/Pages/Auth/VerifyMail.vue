@@ -15,7 +15,7 @@
           <span>{{ mainDatas.name }}</span>
           <span>{{ mainDatas.email }}</span>
         </div>
-        <md-button class="md-icon-button md-list-action" :to="{name:'auth.chooser'}">
+        <md-button class="md-icon-button md-list-action" :to="{name:'auth.chooser',query:routeQuery}">
           <md-icon class="md-primary">expand_more</md-icon>
         </md-button>
       </md-list-item>
@@ -56,7 +56,7 @@ export default {
     return {
       mainDatas: {},
       loading: 0,
-      isSended:false,
+      isSended: false,
       sending: false,
     };
   },
@@ -70,14 +70,19 @@ export default {
     }
   },
   computed: {
-    disabledSendBtn(){
-      return this.sending||this.isSended||!!this.mainDatas.token;
+    routeQuery() {
+      const q = {};
+      if (this.$route.query && this.$route.query.continue) q.continue = this.$route.query.continue;
+      return q;
     },
-    disabledConfirmBtn(){
-      return this.sending||!this.mainDatas.token;
+    disabledSendBtn() {
+      return this.sending || this.isSended || !!this.mainDatas.token;
     },
-    tipLabel(){
-      return '验证码将发送到 '+this.mainDatas.email;
+    disabledConfirmBtn() {
+      return this.sending || !this.mainDatas.token;
+    },
+    tipLabel() {
+      return '验证码将发送到 ' + this.mainDatas.email;
     }
   },
   methods: {
@@ -89,14 +94,14 @@ export default {
         }
       }
     },
-    onOtherClick(){
-       this.$go(this.$root.configs.home);
+    onOtherClick() {
+      this.$go(this.$route.query.continue ? this.$route.query.continue : this.$root.configs.home);
     },
-    onSendCode(){
+    onSendCode() {
       this.sending = true;
-      const options = { id: this.mainDatas.id,account:this.mainDatas.account, type: 'verify-mail', mode: 'mail' };
+      const options = { id: this.mainDatas.id, account: this.mainDatas.account, type: 'verify-mail', mode: 'mail' };
       this.$http.post('sys/auth/vcode-create', options).then(response => {
-        this.isSended=true;
+        this.isSended = true;
         this.sending = false;
         this.$toast('验证码已发送到您的邮件上，请及时查收!');
       }).catch(err => {
@@ -112,10 +117,10 @@ export default {
     },
     submitPost() {
       this.sending = true;
-      const options = { id: this.mainDatas.id,account:this.mainDatas.account, token: this.mainDatas.token };
+      const options = { id: this.mainDatas.id, account: this.mainDatas.account, token: this.mainDatas.token };
       this.$http.post('sys/auth/verify-mail', options).then(response => {
         this.sending = false;
-        this.$go(this.$root.configs.home);
+        this.$go(this.$route.query.continue ? this.$route.query.continue : this.$root.configs.home);
       }).catch(err => {
         this.sending = false;
         this.$toast(err);
@@ -123,14 +128,14 @@ export default {
     },
     async fetchData() {
       try {
-        this.sending=true;
+        this.sending = true;
         const response = await this.$http.post('sys/auth/checker', { id: this.$root.configs.user.id });
-        this.mainDatas =response.data.data;
+        this.mainDatas = response.data.data;
       } catch (err) {
         this.$toast(err);
-        this.$go(this.$root.configs.home);
-      }finally{
-        this.sending=false;
+        this.$go(this.$route.query.continue ? this.$route.query.continue : this.$root.configs.home);
+      } finally {
+        this.sending = false;
       }
     },
   },
@@ -138,4 +143,5 @@ export default {
     await this.fetchData();
   },
 };
+
 </script>

@@ -6,7 +6,7 @@
           <div class="md-title">登录</div>
           <div class="md-body-1">使用您的帐号登录</div>
         </md-card-header-text>
-        <md-button class="md-icon-button md-list-action" :to="{name:'auth.chooser'}">
+        <md-button class="md-icon-button md-list-action" :to="{name:'auth.chooser',query:routeQuery}">
           <md-icon class="md-primary">expand_more</md-icon>
         </md-button>
       </md-card-header>
@@ -20,7 +20,7 @@
         </md-layout>
       </md-card-content>
       <md-card-actions>
-        <router-link v-if="canRegister" :to="{name:'auth.register'}">免费注册</router-link>
+        <router-link v-if="canRegister" :to="{name:'auth.register',query:routeQuery}">免费注册</router-link>
         <span class="flex"></span>
         <md-button type="submit" class="md-primary md-raised" :disabled="sending">下一步</md-button>
       </md-card-actions>
@@ -63,6 +63,11 @@ export default {
       if(!this.$root.configs.auth||!this.$root.configs.auth.register)return false;
       return this.$root.configs.auth.register;
     },
+    routeQuery() {
+      const q = {};
+      if (this.$route.query && this.$route.query.continue) q.continue = this.$route.query.continue;
+      return q;
+    }
   },
   methods: {
     getValidationClass(fieldName) {
@@ -86,7 +91,7 @@ export default {
         const u=response.data.data;
         if(u){
           authCache.add(u);
-          this.$go({name:'auth.password',params:{id:u.id}});
+          this.$go({name:'auth.password',params:{id:u.id},query:this.routeQuery});
         }
       }).catch(err => {
         this.sending = false;

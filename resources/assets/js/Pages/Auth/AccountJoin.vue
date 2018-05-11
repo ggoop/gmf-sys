@@ -71,7 +71,7 @@ export default {
   computed: {
     routeQuery() {
       const q = {};
-      if (this.$route.query && this.$route.query.continue) p.continue = this.$route.query.continue;
+      if (this.$route.query && this.$route.query.continue) q.continue = this.$route.query.continue;
       return q;
     }
   },
@@ -103,7 +103,7 @@ export default {
       this.sending = true;
       this.$http.post('sys/auth/joins', this.mainDatas).then(response => {
         this.sending = false;
-        this.$go({ name: 'auth.account.dashboard', query: this.routeQuery });
+        this.$go(this.$route.query.continue ? this.$route.query.continue :{ name: 'auth.account.dashboard'});
       }).catch(err => {
         this.sending = false;
         this.$toast(err);

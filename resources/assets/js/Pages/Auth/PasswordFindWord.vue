@@ -15,7 +15,7 @@
           <span>{{ mainDatas.name }}</span>
           <span>{{ mainDatas.account }}</span>
         </div>
-        <md-button class="md-icon-button md-list-action" :to="{name:'auth.chooser'}">
+        <md-button class="md-icon-button md-list-action" :to="{name:'auth.chooser',query:routeQuery}">
           <md-icon class="md-primary">expand_more</md-icon>
         </md-button>
       </md-list-item>
@@ -60,15 +60,20 @@ export default {
     }
   },
   computed: {
-    disabledSendBtn(){
-      return this.sending||!!this.mainDatas.vcode;
+    routeQuery() {
+      const q = {};
+      if (this.$route.query && this.$route.query.continue) q.continue = this.$route.query.continue;
+      return q;
     },
-    disabledConfirmBtn(){
-      return this.sending||!this.mainDatas.vcode;
+    disabledSendBtn() {
+      return this.sending || !!this.mainDatas.vcode;
+    },
+    disabledConfirmBtn() {
+      return this.sending || !this.mainDatas.vcode;
     },
   },
   methods: {
-    onSendCode(){
+    onSendCode() {
       this.$toast('验证码已发送到您的邮件上，请及时查收!');
     },
     getValidationClass(fieldName) {
@@ -97,19 +102,19 @@ export default {
     },
     async fetchData() {
       try {
-        this.sending=true;
+        this.sending = true;
         const thId = this.$route.params.id;
         if (!thId) {
-          this.$go({ name: 'auth.login' });
+          this.$go({ name: 'auth.login', query: this.routeQuery });
         }
         const response = await this.$http.post('sys/auth/checker', { id: thId });
         const u = response.data.data;
         this.mainDatas = response.data.data;
       } catch (err) {
         this.$toast(err);
-        this.$go({ name: 'auth.identifier' });
-      }finally{
-        this.sending=false;
+        this.$go({ name: 'auth.identifier', query: this.routeQuery });
+      } finally {
+        this.sending = false;
       }
     },
   },
@@ -117,6 +122,7 @@ export default {
     await this.fetchData();
   },
 };
+
 </script>
 <style lang="scss" scoped>
 @import "~gmf/components/MdAnimation/variables";
@@ -124,4 +130,5 @@ export default {
 .md-card-actions {
   justify-content: center;
 }
+
 </style>

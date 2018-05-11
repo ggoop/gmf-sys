@@ -13,15 +13,23 @@ export default {
   methods: {
     fetchData() {},
   },
+  computed: {
+    routeQuery() {
+      const q = {};
+      if (this.$route.query && this.$route.query.continue) q.continue = this.$route.query.continue;
+      return q;
+    }
+  },
   mounted() {
     const us = authCache.get();
     if (us && us.length > 1) {
-      this.$go({ name: 'auth.chooser' });
+      this.$go({ name: 'auth.chooser', query: this.routeQuery });
     } else if (us && us.length == 1) {
-      this.$go({ name: 'auth.password', params: { id: us[0].id } });
+      this.$go({ name: 'auth.password', params: { id: us[0].id }, query: this.routeQuery });
     } else {
-      this.$go({ name: 'auth.identifier' });
+      this.$go({ name: 'auth.identifier', query: this.routeQuery });
     }
   },
 };
+
 </script>

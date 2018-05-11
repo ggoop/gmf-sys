@@ -15,7 +15,7 @@
             <span>{{ mainDatas.name }}</span>
             <span>{{ mainDatas.account }}</span>
           </div>
-          <md-button class="md-icon-button md-list-action" :to="{name:'auth.chooser'}">
+          <md-button class="md-icon-button md-list-action" :to="{name:'auth.chooser',query:routeQuery}">
             <md-icon class="md-primary">expand_more</md-icon>
           </md-button>
         </md-list-item>
@@ -30,7 +30,7 @@
         </md-layout>
       </md-card-content>
       <md-card-actions>
-        <router-link :to="{name:'auth.password.find',params:{id:mainDatas.id}}">忘记了密码</router-link>
+        <router-link :to="{name:'auth.password.find',params:{id:mainDatas.id},query:routeQuery}">忘记了密码</router-link>
         <span class="flex"></span>
         <md-button type="submit" class="md-primary md-raised" :disabled="sending">登 录</md-button>
       </md-card-actions>
@@ -68,7 +68,11 @@ export default {
     }
   },
   computed: {
-
+    routeQuery() {
+      const q = {};
+      if (this.$route.query && this.$route.query.continue) q.continue = this.$route.query.continue;
+      return q;
+    }
   },
   methods: {
     getValidationClass(fieldName) {
@@ -92,7 +96,7 @@ export default {
         this.sending = false;
         this.$setConfigs({ user: response.data.data, token: response.data.token });
         await this.$root.$loadConfigs();
-        this.$go(this.$root.configs.home);
+        this.$go(this.$route.query.continue ? this.$route.query.continue : this.$root.configs.home);
       } catch (err) {
         this.sending = false;
         this.$toast(err);
@@ -103,14 +107,14 @@ export default {
         this.sending = true;
         const thId = this.$route.params.id;
         if (!thId) {
-          this.$go({ name: 'auth.chooser' });
+          this.$go({ name: 'auth.chooser', query: this.routeQuery });
         }
         const response = await this.$http.post('sys/auth/checker', { id: thId });
         const u = response.data.data;
         this.mainDatas = response.data.data;
       } catch (err) {
         this.$toast(err);
-        this.$go({ name: 'auth.identifier' });
+        this.$go({ name: 'auth.identifier', query: this.routeQuery });
       } finally {
         this.sending = false;
       }
