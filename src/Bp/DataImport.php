@@ -1,9 +1,9 @@
 <?php
 
 namespace Gmf\Sys\Bp;
-use Excel;
 use Gmf\Sys\Models\File;
 use Illuminate\Http\Request;
+use Log;
 use Storage;
 
 class DataImport {
@@ -22,24 +22,52 @@ class DataImport {
 				foreach ($files as $key => $file) {
 					$disk = Storage::disk($file->disk);
 					$path = $disk->path($file->path);
-					Excel::load($path, function ($reader) use ($request, $datas) {
-						$results = $reader->all();
-						foreach ($results as $sheet) {
-							$cols = array_where($sheet->getHeading(), function ($value) {
-								return is_string($value) && $value;
-							});
+					Log::error(static::class . ':' . $fileParamName . ', load begin');
+
+					$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+					$worksheetNames = $reader->listWorksheetNames($path);
+					$worksheetNames = collect($worksheetNames)->reject(function ($v) {
+						return starts_with(strtolower($v), 'sheet');
+					})->all();
+					$reader->setLoadSheetsOnly($worksheetNames);
+					$spreadsheet = $reader->load($path)->getAllSheets();
+					foreach ($spreadsheet as $sheet) {
+						$cells = $sheet->getCellCollection();
+						$maxColName = $sheet->getHighestDataColumn();
+						$maxRowName = $sheet->getHighestDataRow();
+						$cols = [];
+						for ($i = 'A'; $i <= $maxColName; $i++) {
+							$col = $cells->get($i . '1');
+							if (empty($col) || empty($col->getValue())) {
+								break;
+							}
+							$cols[$i] = $col->getValue();
+						}
+						for ($i = 3; $i <= $maxRowName; $i++) {
 							$rowsData = [];
-							foreach ($sheet as $key => $row) {
-								if ($key > 0 && !empty($row->key)) {
-									$datas->push($row->only($cols)->all());
+							$empty = true;
+							foreach ($cols as $ck => $cv) {
+								$col = $cells->get($ck . $i);
+								if (!empty($col)) {
+									$rowsData[$cv] = $col->getValue();
+								}
+								if (!empty($rowsData[$cv])) {
+									$empty = false;
 								}
 							}
+							if ($empty || empty($rowsData)) {
+								break;
+							}
+							$datas->push($rowsData);
 						}
-					});
+					}
+					unset($spreadsheet);
+					Log::error(static::class . ':' . $fileParamName . ', load end');
 				}
 			}
 		}
 		if (count($datas)) {
+			Log::error(static::class . ':' . $fileParamName . ',rows:' . count($datas));
 			if (!class_exists($entity)) {
 				throw new \Exception('找不到实体：' . $entity);
 			}
