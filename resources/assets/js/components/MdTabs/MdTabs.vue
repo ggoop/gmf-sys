@@ -18,7 +18,7 @@
       <span class="md-tabs-indicator" :style="indicatorStyles" :class="indicatorClass" ref="indicator"></span>
       <div class="md-background" v-if="mdBackground"></div>
     </div>
-    <md-content class="md-tabs-content" :style="contentStyles" v-show="hasContent">
+    <md-content class="md-tabs-content" :class="contentClass" :style="contentStyles" v-show="hasContent">
       <div class="md-tabs-container" :style="containerStyles">
         <slot />
       </div>
@@ -49,7 +49,8 @@ export default new MdComponent({
       type: [Number, String],
       default: 0
     },
-    mdBackground:Boolean,
+    mdContentTransparent: Boolean,
+    mdBackground: Boolean,
     mdSyncRoute: Boolean,
     mdDynamicHeight: Boolean,
     mdActiveTab: [String, Number]
@@ -81,9 +82,14 @@ export default new MdComponent({
         'md-dynamic-height': this.mdDynamicHeight
       }
     },
+    contentClass() {
+      return {
+        'md-transparent': this.mdContentTransparent
+      }
+    },
     navigationClasses() {
       return 'md-elevation-' + this.mdElevation
-    }
+    },
   },
   watch: {
     MdTabs: {
@@ -388,6 +394,10 @@ export default new MdComponent({
   overflow: hidden;
   transition: none;
   will-change: height;
+
+  &.md-transparent {
+    background-color: transparent!important;
+  }
 }
 
 .md-tabs-container {

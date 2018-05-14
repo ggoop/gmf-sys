@@ -62,7 +62,11 @@ export default class Start {
     const vueRouter = new VueRouter(router);
     vueRouter.beforeEach((to, from, next) => {
       if (to.meta.requiresAuth && !rootData.configs.user) {
-        next(rootData.configs.auth.route);
+        if (common.isString(rootData.configs.auth.route)) {
+          next(rootData.configs.auth.route + "?continue=" + to.fullPath);
+        } else {
+          next(common.extend({}, rootData.configs.auth.route, { query: { continue: to.fullPath } }));
+        }
       } else {
         next();
       }
@@ -85,7 +89,7 @@ export default class Start {
               common.extend(window.gmfConfig, this.configs);
               this.$http.defaults.headers.common.Ent = this.configs.ent ? this.configs.ent.id : false;
               if (this.configs.token) {
-                this.$http.defaults.headers.common.Authorization = (this.configs.token.token_type?this.configs.token.token_type:"Bearer") + " " + this.configs.token.access_token;
+                this.$http.defaults.headers.common.Authorization = (this.configs.token.token_type ? this.configs.token.token_type : "Bearer") + " " + this.configs.token.access_token;
               } else {
                 this.$http.defaults.headers.common.Authorization = false;
               }

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use Gmf\Sys\Database\Metadata;
 use Illuminate\Database\Migrations\Migration;
@@ -18,7 +18,7 @@ class CreateGmfSysUserOwnerTypeEnum extends Migration {
 		$md->string('owner')->comment('拥有者')->default(1);
 		$md->string('manager')->comment('管理者')->default(2);
 		$md->string('member')->comment('成员')->default(3);
-		$md->string('user')->comment('使用者')->default(4);
+		$md->string('used')->comment('使用者')->default(4);
 		$md->build();
 
 	}
