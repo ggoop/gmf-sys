@@ -35,7 +35,11 @@ class Notification extends Model {
 		return $query->where('is_completed', 0);
 	}
 	public function scopeToWhom($query, $user_id) {
-		return $query->where('user_id', '=', $user_id);
+		if (is_array($user_id)) {
+			return $query->whereIn('user_id', $user_id);
+		} else {
+			return $query->where('user_id', '=', $user_id);
+		}
 	}
 
 	public static function markAsRead($ids) {
