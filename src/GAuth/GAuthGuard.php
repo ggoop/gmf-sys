@@ -23,6 +23,9 @@ class GAuthGuard {
 		return $this->m_forged;
 	}
 	public function ids() {
+		if (empty($this->user_links)) {
+			$this->user_links = $this->getLinkIds($this->user());
+		}
 		return $this->user_links;
 	}
 	public function id() {
@@ -141,9 +144,13 @@ class GAuthGuard {
 	public function setUser($user) {
 		$this->user_links = [];
 		$this->m_user = $user;
-		if ($user) {
-			$this->user_links = $user->findLinkUserIds('all');
-		}
+		$this->user_links = $this->getLinkIds($user);
 		return $this;
+	}
+	private function getLinkIds($user) {
+		if ($user) {
+			return $user->findLinkUserIds('all');
+		}
+		return [];
 	}
 }

@@ -40,6 +40,7 @@ class User extends Authenticatable {
 		return User::where('account', $username)->first();
 	}
 	public function findLinkUserIds($type = ['sys', 'web']) {
+
 		$links = collect([$this->id]);
 		$links = $links->merge(UserLink::where('fm_user_id', $this->id)->pluck('to_user_id')->all());
 
