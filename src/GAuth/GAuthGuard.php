@@ -142,16 +142,7 @@ class GAuthGuard {
 		$this->user_links = [];
 		$this->m_user = $user;
 		if ($user) {
-			$links = DB::table('gmf_sys_user_links as l')->where('l.fm_user_id', $user->id)->pluck('to_user_id');
-			if ($links->count()) {
-				$links = $links->merge(DB::table('gmf_sys_user_links as l')->whereIn('l.fm_user_id', $links->all())->pluck('to_user_id')->all());
-			}
-			if ($links->count()) {
-				$this->user_links = $links->unique()->reject(function ($v) {return empty($v);})->values()->all();
-			}
-		}
-		if (!in_array($user->id, $this->user_links)) {
-			$this->user_links[] = $user->id;
+			$this->user_links = $user->findLinkUserIds('all');
 		}
 		return $this;
 	}

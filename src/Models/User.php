@@ -4,9 +4,9 @@ namespace Gmf\Sys\Models;
 use Gmf\Sys\Passport\HasApiTokens;
 use Gmf\Sys\Traits\HasGuard;
 use Gmf\Sys\Traits\Snapshotable;
-use Uuid;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Uuid;
 use Validator;
 
 class User extends Authenticatable {
@@ -38,6 +38,21 @@ class User extends Authenticatable {
 
 	public function findForPassport($username) {
 		return User::where('account', $username)->first();
+	}
+	public function findLinkUserIds($type = ['sys', 'web']) {
+		$links = collect([$this->id]);
+		$links = $links->merge(UserLink::where('fm_user_id', $this->id)->pluck('to_user_id')->all());
+
+		$links = $links->merge(UserLink::where('to_user_id', $this->id)->pluck('fm_user_id')->all());
+
+		$query = User::whereIn('id', $links->unique()->reject(function ($v) {return empty($v);})->values()->all());
+		if (is_array($type)) {
+			$query->whereIn('type', $type);
+		}
+		if (is_string($type) && $type != 'all') {
+			$query->where('type', $type);
+		}
+		return $query->pluck('id')->all();
 	}
 	public function routeNotificationForNexmo() {
 		return $this->mobile;
