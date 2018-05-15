@@ -32,7 +32,7 @@
 </template>
 <script>
 import authCache from './AuthCache';
-
+import pick from 'lodash/pick'
 import AuthSns from './Sns';
 import { validationMixin } from 'vuelidate';
 import { required, email, minLength, maxLength } from 'vuelidate/lib/validators';
@@ -59,8 +59,8 @@ export default {
     }
   },
   computed: {
-    canRegister(){
-      if(!this.$root.configs.auth||!this.$root.configs.auth.register)return false;
+    canRegister() {
+      if (!this.$root.configs.auth || !this.$root.configs.auth.register) return false;
       return this.$root.configs.auth.register;
     },
     routeQuery() {
@@ -88,10 +88,11 @@ export default {
       this.sending = true;
       this.$http.post('sys/auth/checker', this.mainDatas).then(response => {
         this.sending = false;
-        const u=response.data.data;
-        if(u){
+        var u = response.data.data;
+        if (u) {
+          u = pick(u, ['id', 'account', 'avatar', 'email', 'name', 'nick_name']);
           authCache.add(u);
-          this.$go({name:'auth.password',params:{id:u.id},query:this.routeQuery});
+          this.$go({ name: 'auth.password', params: { id: u.id }, query: this.routeQuery });
         }
       }).catch(err => {
         this.sending = false;
@@ -107,4 +108,5 @@ export default {
     this.fetchData();
   },
 };
+
 </script>

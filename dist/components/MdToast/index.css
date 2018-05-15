@@ -1,0 +1,6 @@
+/*!
+ * gmf v1.0.0
+ * Made with <3 by ggoop 2018
+ * Released under the MIT License.
+ */
+.md-toast-wrap{height:0;width:0;max-height:0}.md-toast.md-snackbar{max-height:none;width:1000px;max-width:100%}.md-toast.md-snackbar .md-snackbar-content{position:relative}.md-toast.md-snackbar .md-button-lock{position:absolute;left:-30px;top:-18px;margin:0}.md-toast.md-snackbar .md-button-close{position:absolute;right:-10px;top:0}.md-toast.md-snackbar .main{margin-left:16px;max-height:400px;overflow:auto}.md-toast.md-snackbar .main>p{margin-top:0;word-wrap:break-word;word-break:break-all}

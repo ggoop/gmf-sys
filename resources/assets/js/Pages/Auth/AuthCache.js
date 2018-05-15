@@ -20,6 +20,7 @@ class AuthCache {
     }
     if (i >= 0) {
       users.splice(i, 1);
+      localStorage.removeItem(this.storageKey);
       localStorage.setItem(this.storageKey, JSON.stringify(users));
     }
   }
@@ -35,6 +36,7 @@ class AuthCache {
     if (!isExists) {
       users.push(user);
     }
+    localStorage.removeItem(this.storageKey);
     localStorage.setItem(this.storageKey, JSON.stringify(users));
   }
 }

@@ -196,8 +196,7 @@ class AuthController extends Controller {
 	}
 	public function getJoins(Request $request) {
 		GAuth::check();
-		$uids = Models\UserLink::where('fm_user_id', GAuth::id())->pluck('to_user_id');
-		return $this->toJson((new Resources\UserCollection(Models\User::whereIn('id', $uids)->get()))->withCallback(function ($rtn, $value) {
+		return $this->toJson((new Resources\UserCollection(Models\User::whereIn('id', GAuth::ids())->where('id', '!=', GAuth::id())->get()))->withCallback(function ($rtn, $value) {
 			$rtn->account($value->account);
 		}));
 	}
@@ -209,6 +208,7 @@ class AuthController extends Controller {
 		}
 		if (is_array($uids)) {
 			Models\UserLink::where('fm_user_id', GAuth::id())->whereIn('to_user_id', $uids)->delete();
+			Models\UserLink::where('to_user_id', GAuth::id())->whereIn('fm_user_id', $uids)->delete();
 		}
 		return $this->toJson(true);
 	}
