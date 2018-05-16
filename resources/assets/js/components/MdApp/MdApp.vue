@@ -157,7 +157,7 @@ export default {
     }
   }
   &.md-permanent-clipped {
-    box-shadow: 0 0 4px rgba(0, 0, 0, .28);
+    // box-shadow: 0 0 4px rgba(0, 0, 0, .28);
   }
 }
 
