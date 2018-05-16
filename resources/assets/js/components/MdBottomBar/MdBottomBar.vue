@@ -7,6 +7,9 @@
 </template>
 
 <script>
+  import MdComponent from 'gmf/core/MdComponent'
+  import MdPropValidator from 'gmf/core/utils/MdPropValidator'
+  import MdRipple from 'gmf/components/MdRipple/MdRipple'
 
   export default new MdComponent({
     name: 'MdBottomBar',
@@ -125,9 +128,12 @@
       })
 
     }
+  });
 </script>
 
 <style lang="scss">
+  @import "~gmf/components/MdAnimation/variables";
+  @import "~gmf/components/MdElevation/mixins";
 
   .md-bottom-bar {
     @include md-elevation(8);
