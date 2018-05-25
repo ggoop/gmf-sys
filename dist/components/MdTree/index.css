@@ -1,6 +1,0 @@
-/*!
- * gmf v1.0.0
- * Made with <3 by ggoop 2018
- * Released under the MIT License.
- */
-.md-tree-view{overflow:auto;flex:1;max-height:100%;min-height:100%}.md-tree-view ul{list-style-type:none}.md-tree-view ul li,.md-tree-view ul li+li{margin:0}.md-tree-view>ul{margin:0;padding:0}.md-tree-view ul>li>ul{padding-left:22px}.md-tree-view .md-tree-node{cursor:context-menu;line-height:30px;padding:0 8px}.md-tree-view .md-tree-node+ul{overflow:hidden;height:0}.md-tree-view .md-tree-node:hover{background-color:rgba(0,0,0,.05)}.md-tree-view .md-tree-node.is-active{background-color:rgba(0,0,0,.05);font-weight:700}.md-tree-view .md-tree-node.is-opened .md-expand-indicator{transform:rotate(180deg) translate3D(0,0,0)}.md-tree-view .md-tree-node.is-opened+ul{height:inherit}.md-tree-view .md-tree-node .md-checkbox{margin:4px 8px 4px 0}

@@ -1,6 +1,0 @@
-/*!
- * gmf v1.0.0
- * Made with <3 by ggoop 2018
- * Released under the MIT License.
- */
-.md-popover.md-rendering{opacity:0;transition:none!important}.md-tooltip{height:22px;padding:0 8px;position:fixed;z-index:1;pointer-events:none;border-radius:2px;transition:.15s cubic-bezier(0,0,.2,1);transition-property:opacity,transform;will-change:opacity,transform,top,left!important;font-size:10px;line-height:22px;text-transform:none;white-space:nowrap}.md-tooltip.md-tooltip-leave-active{transition-timing-function:cubic-bezier(.4,0,1,1)}.md-tooltip.md-tooltip-enter,.md-tooltip.md-tooltip-leave-active{opacity:0}.md-tooltip.md-tooltip-enter.md-tooltip-top,.md-tooltip.md-tooltip-leave-active.md-tooltip-top{transform:translate3d(0,4px,0) scale(.95)}.md-tooltip.md-tooltip-enter.md-tooltip-right,.md-tooltip.md-tooltip-leave-active.md-tooltip-right{transform:translate3d(-4px,0,0) scale(.95)}.md-tooltip.md-tooltip-enter.md-tooltip-bottom,.md-tooltip.md-tooltip-leave-active.md-tooltip-bottom{transform:translate3d(0,-4px,0) scale(.95)}.md-tooltip.md-tooltip-enter.md-tooltip-left,.md-tooltip.md-tooltip-leave-active.md-tooltip-left{transform:translate3d(4px,0,0) scale(.95)}@media (max-width:944px){.md-tooltip{height:32px;font-size:14px;line-height:32px}}
