@@ -76,10 +76,7 @@ class ServiceProvider extends BaseServiceProvider {
 			], $publishes);
 
 			$this->publishes([
-				__DIR__ . '/../resources/assets/js' => resource_path('assets/js/vendor/gmf-sys'),
-			], $publishes);
-
-			$this->publishes([
+				base_path('node_modules/gmf-ui/src') => resource_path('assets/js/vendor/gmf-sys'),
 				__DIR__ . '/../resources/public' => public_path('assets/vendor/gmf-sys'),
 			], $publishes);
 		}
