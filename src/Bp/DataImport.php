@@ -4,6 +4,7 @@ namespace Gmf\Sys\Bp;
 use Gmf\Sys\Models\File;
 use Illuminate\Http\Request;
 use Log;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use Storage;
 
 class DataImport {
@@ -34,14 +35,16 @@ class DataImport {
 					foreach ($spreadsheet as $sheet) {
 						$cells = $sheet->getCellCollection();
 						$maxColName = $sheet->getHighestDataColumn();
+						$maxCInd = Coordinate::columnIndexFromString($maxColName);
 						$maxRowName = $sheet->getHighestDataRow();
 						$cols = [];
-						for ($i = 'A'; $i <= $maxColName; $i++) {
-							$col = $cells->get($i . '1');
-							if (empty($col) || empty($col->getValue())) {
+						for ($i = 1; $i <= $maxCInd; $i++) {
+							$cName = Coordinate::stringFromColumnIndex($i);
+							$col = $cells->get($cName . '1');
+							if (empty($col) || empty($col->getCalculatedValue())) {
 								break;
 							}
-							$cols[$i] = $col->getValue();
+							$cols[$cName] = $col->getCalculatedValue();
 						}
 						for ($i = 3; $i <= $maxRowName; $i++) {
 							$rowsData = [];
@@ -49,7 +52,7 @@ class DataImport {
 							foreach ($cols as $ck => $cv) {
 								$col = $cells->get($ck . $i);
 								if (!empty($col)) {
-									$rowsData[$cv] = $col->getValue();
+									$rowsData[$cv] = $col->getCalculatedValue();
 								}
 								if (!empty($rowsData[$cv])) {
 									$empty = false;
