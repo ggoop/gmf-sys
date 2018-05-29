@@ -4,8 +4,29 @@ namespace Gmf\Sys\Database\Concerns;
 use DB;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
+use Log;
 use Uuid;
+
 trait BatchImport {
+	public function exists() {
+		if (method_exists(static::class, 'uniqueQuery')) {
+			$query = static::query();
+			$d = $this->uniqueQuery($query);
+			if (is_bool($d)) {
+				return $d;
+			}
+			if ($d && $d instanceof Model) {
+				$this->exists = true;
+				$this->{$this->getKeyName()} = $d->{$d->getKeyName()};
+			} else if (is_null($d) && $query->exists()) {
+				$this->exists = true;
+				$this->{$this->getKeyName()} = $query->value($this->getKeyName());
+			}
+			Log::error(static::class . ' is exists:' . $this->{$this->getKeyName()});
+			return $this->exists;
+		}
+		return false;
+	}
 	/**
 	$datas:array[array|model],collect([array|model])
 	 */
@@ -39,6 +60,10 @@ trait BatchImport {
 			}
 			if (method_exists($instance, 'validate')) {
 				$instance->validate();
+			}
+			if ($instance->exists()) {
+				$instance->save();
+				return false;
 			}
 			$item = $instance->toArray();
 			unset($instance);

@@ -24,7 +24,7 @@ class Entity extends Model {
 			->select('el.name', 'el.comment', 'el.default_value')
 			->where('e.name', $type)
 			->where(function ($query) use ($name) {
-				$query->where('el.name', $name)->orWhere('el.default_value', $name);
+				$query->where('el.name', $name)->orWhere('el.default_value', $name)->orWhere('el.comment', $name);
 			});
 		return $query->value('el.name');
 	}
