@@ -12,8 +12,8 @@ class App extends Model {
 	protected $table = 'gmf_sys_apps';
 	public $incrementing = false;
 	protected $keyType = 'string';
-	protected $fillable = ['id', 'code', 'name', 'memo', 'discover', 'gateway', 'revoked'];
-
+	protected $fillable = ['id', 'openid', 'code', 'name', 'memo', 'discover', 'gateway', 'revoked'];
+	protected $hidden = ['token'];
 	public static function build(Closure $callback) {
 		//id,root,parent,code,name,memo,uri,sequence
 		tap(new Builder, function ($builder) use ($callback) {

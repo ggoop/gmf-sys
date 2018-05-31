@@ -13,8 +13,9 @@ class Ent extends Model {
 	public $incrementing = false;
 	protected $keyType = 'string';
 	protected $fillable = [
-		'id', 'code', 'name', 'discover', 'gateway', 'memo', 'short_name', 'avatar', 'secret',
+		'id', 'openid', 'code', 'name', 'discover', 'gateway', 'memo', 'short_name', 'avatar',
 		'industry', 'area', 'revoked'];
+	protected $hidden = ['token'];
 
 	public static function addUser($entId, $userId, $type = 'member') {
 		$m = EntUser::where('ent_id', $entId)->where('user_id', $userId)->first();

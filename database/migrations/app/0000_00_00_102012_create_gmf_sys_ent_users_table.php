@@ -16,6 +16,8 @@ class CreateGmfSysEntUsersTable extends Migration {
 		$md->bigIncrements('id');
 		$md->entity('ent', 'gmf.sys.ent')->comment('企业');
 		$md->entity('user', config('gmf.user.entity'));
+		$md->string('token')->nullable()->comment('token');
+
 		$md->integer('is_default')->nullable()->comment('是否默认');
 		$md->enum('type', 'gmf.sys.user.owner.type.enum');
 		$md->boolean('revoked')->default(0)->comment('注销');

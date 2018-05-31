@@ -21,7 +21,7 @@ class User extends Authenticatable {
 	 * @var array
 	 */
 	protected $fillable = [
-		'id', 'account', 'mobile', 'email', 'password', 'secret',
+		'id', 'openid', 'account', 'mobile', 'email', 'password',
 		'name', 'nick_name', 'gender',
 		'type', 'cover', 'avatar', 'titles', 'memo', 'status_enum',
 		'client_id', 'client_type', 'client_name', 'src_id', 'src_url', 'info',
@@ -33,7 +33,7 @@ class User extends Authenticatable {
 	 * @var array
 	 */
 	protected $hidden = [
-		'password', 'remember_token', 'secret',
+		'password', 'remember_token', 'token',
 	];
 
 	public function findForPassport($username) {
@@ -147,7 +147,7 @@ class User extends Authenticatable {
 		$user = $query->orderBy('created_at', 'desc')->first();
 
 		$data = array_only($opts, [
-			'id', 'account', 'mobile', 'email', 'password', 'secret',
+			'id', 'account', 'mobile', 'email', 'password',
 			'name', 'nick_name', 'gender',
 			'type', 'cover', 'avatar', 'titles', 'memo',
 			'client_id', 'client_type', 'client_name', 'src_id', 'src_url', 'info',
@@ -174,10 +174,8 @@ class User extends Authenticatable {
 			}
 		} else {
 			if (!empty($data['password']) && in_array($type, ['sys', 'web'])) {
-				$data['secret'] = base64_encode($data['password']);
 				$data['password'] = bcrypt($data['password']);
 			} else {
-				unset($data['secret']);
 				unset($data['password']);
 			}
 			$user = User::create($data);

@@ -14,12 +14,13 @@ class CreateGmfSysUsersTable extends Migration {
 		$md = Metadata::create($this->mdID);
 		$md->mdEntity('gmf.sys.user')->comment('用户')->tableName('gmf_sys_users');
 		$md->string('id', 100)->primary();
-
+		$md->string('openid')->nullable()->comment('开放ID');
 		$md->string('mobile', 20)->nullable();
 		$md->string('email')->nullable();
 		$md->string('account')->nullable();
 		$md->string('password')->nullable();
 		$md->string('secret')->nullable();
+		$md->string('token')->nullable()->comment('token');
 
 		$md->string('gender')->nullable();
 		$md->string('name')->nullable();

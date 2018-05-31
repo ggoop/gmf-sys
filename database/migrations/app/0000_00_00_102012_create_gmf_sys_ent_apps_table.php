@@ -17,7 +17,7 @@ class CreateGmfSysEntAppsTable extends Migration {
 		$md->bigIncrements('id');
 		$md->entity('ent', 'gmf.sys.ent')->comment('企业');
 		$md->entity('app', 'gmf.sys.app')->comment('应用');
-		$md->string('secret')->nullable()->comment('secret');
+		$md->string('token')->nullable()->comment('token');
 		$md->string('discover')->nullable()->comment('发现地址');
 		$md->string('gateway')->nullable()->comment('注册网关');
 		$md->integer('is_default')->nullable()->comment('是否默认');

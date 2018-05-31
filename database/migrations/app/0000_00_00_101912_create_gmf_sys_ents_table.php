@@ -14,12 +14,18 @@ class CreateGmfSysEntsTable extends Migration {
 		$md = Metadata::create($this->mdID);
 		$md->mdEntity('gmf.sys.ent')->comment('企业')->tableName('gmf_sys_ents');
 		$md->string('id', 100)->primary();
+		$md->string('openid')->nullable()->comment('开放ID');
 		$md->string('code')->nullable()->comment('编码');
 		$md->string('name')->nullable()->comment('名称');
-		$md->text('memo')->nullable()->comment('备注');
+		$md->string('token')->nullable()->comment('token');
+
 		$md->string('short_name')->nullable()->comment('简称');
 		$md->string('avatar')->nullable()->comment('图标');
-		$md->string('secret')->nullable()->comment('企业秘钥');
+		$md->text('memo')->nullable()->comment('备注');
+
+		$md->string('discover')->nullable()->comment('发现地址');
+		$md->string('gateway')->nullable()->comment('注册网关');
+
 		$md->string('industry')->nullable()->comment('行业');
 		$md->string('area')->nullable()->comment('地区');
 		$md->enum('status', 'gmf.sys.ent.status.enum')->nullable()->comment('状态');
