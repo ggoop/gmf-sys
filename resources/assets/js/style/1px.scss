@@ -1,0 +1,48 @@
+@import './mixins';
+.md-1px,
+.md-1px-t,
+.md-1px-b,
+.md-1px-tb,
+.md-1px-l,
+.md-1px-r {
+  position: relative;
+}
+
+.md-1px {
+  &:before {
+    @include setLine()
+  }
+}
+
+.md-1px-t {
+  &:before {
+    @include setTopLine()
+  }
+}
+
+.md-1px-b {
+  &:after {
+    @include setBottomLine()
+  }
+}
+
+.md-1px-tb {
+  &:before {
+    @include setTopLine()
+  }
+  &:after {
+    @include setBottomLine()
+  }
+}
+
+.md-1px-l {
+  &:before {
+    @include setLeftLine()
+  }
+}
+
+.md-1px-r {
+  &:after {
+    @include setRightLine()
+  }
+}

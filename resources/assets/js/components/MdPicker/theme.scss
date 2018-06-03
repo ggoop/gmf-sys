@@ -1,0 +1,11 @@
+.md-picker {
+    @include md-theme-component() {
+       .md-picker-cancel{
+        @include md-theme-property(color, primary);
+       }
+       .md-picker-confirm{
+        @include md-theme-property(color, primary);
+       }
+    }
+  }
+  
