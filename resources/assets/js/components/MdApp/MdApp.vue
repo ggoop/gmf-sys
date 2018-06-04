@@ -7,6 +7,7 @@ const componentTypes = [
   'md-app-drawer',
   'md-app-content',
   'md-app-background',
+  'md-app-bottom-bar',
 ]
 
 function buildSlots(children, context, functionalContext, options) {

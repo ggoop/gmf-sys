@@ -4,6 +4,7 @@ import MdAppToolbar from './MdAppToolbar'
 import MdAppContent from './MdAppContent'
 import MdAppDrawer from './MdAppDrawer'
 import MdAppBackground from './MdAppBackground'
+import MdAppBottomBar from './MdAppBottomBar'
 export default Vue => {
   material(Vue)
   Vue.component(MdApp.name, MdApp)
@@ -11,4 +12,5 @@ export default Vue => {
   Vue.component(MdAppContent.name, MdAppContent)
   Vue.component(MdAppDrawer.name, MdAppDrawer)
   Vue.component(MdAppBackground.name, MdAppBackground)
+  Vue.component(MdAppBottomBar.name, MdAppBottomBar)
 }
