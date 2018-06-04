@@ -68,6 +68,7 @@ export default {
   padding: 20px 10px;
   width: 33.33333333%;
   box-sizing: border-box;
+  text-decoration: none !important;
 
   &.md-layout-grid-item-no-border {
     &:before {
