@@ -21,8 +21,13 @@ class VisitorMiddleware {
 		$inData['url'] = $request->url();
 		$inData['method'] = $request->method();
 
-		$inData['user_id'] = GAuth::id();
+		$inData['ent_id'] = GAuth::entId();
 
+		$inData['user_id'] = GAuth::id();
+		
+		if (!empty($params['user_name'])) {
+			$inData['user_name'] = str_limit($params['user_name'], 250);
+		}
 		if ($request->hasHeader('Ent')) {
 			$inData['ent_id'] = $request->header('Ent');
 		}
@@ -41,9 +46,17 @@ class VisitorMiddleware {
 		}
 		$inData['created_at'] = Carbon::now();
 
+		if (!empty($params['app_id'])) {
+			$inData['app_id'] = str_limit($params['app_id'], 250);
+		}
+		if (!empty($params['app_name'])) {
+			$inData['app_name'] = str_limit($params['app_name'], 250);
+		}		
+
 		if (!empty($params['client_name'])) {
 			$inData['client_name'] = str_limit($params['client_name'], 250);
-		}
+		}	
+
 		if (!empty($params['client_sn'])) {
 			$inData['client_sn'] = str_limit($params['client_sn'], 250);
 		}

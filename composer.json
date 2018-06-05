@@ -26,13 +26,12 @@
     "elasticsearch/elasticsearch": "~5.0",
     "maatwebsite/excel": "^3.0",
     "symfony/psr-http-message-bridge": "~1.0",
-    "zendframework/zend-diactoros": "~1.0"
-  },
-  "require-dev":
-  {
+    "zendframework/zend-diactoros": "~1.0",
     "doctrine/dbal": "^2.5",
     "fzaninotto/faker": "~1.4"
   },
+  "require-dev":
+  {},
   "autoload":
   {
     "psr-4":

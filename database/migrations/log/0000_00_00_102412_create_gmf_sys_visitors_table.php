@@ -16,6 +16,8 @@ class CreateGmfSysVisitorsTable extends Migration {
 
 		$md->bigIncrements('id');
 		$md->entity('user', config('gmf.user.entity'))->nullable();
+		$md->string('user_name')->nullable();
+
 		$md->entity('ent', 'gmf.sys.ent')->nullable();
 		$md->text('path')->nullable();
 		$md->text('url')->nullable();
@@ -28,6 +30,11 @@ class CreateGmfSysVisitorsTable extends Migration {
 		$md->text('agent')->nullable();
 		$md->text('referer')->nullable();
 		$md->text('content_type')->nullable();
+		$md->longText('trace')->nullable();
+
+		//应用名称
+		$md->string('app_name')->nullable();
+		$md->string('app_id')->nullable();
 
 		//客户名称
 		$md->text('client_name')->nullable();

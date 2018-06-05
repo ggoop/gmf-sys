@@ -52,6 +52,13 @@ import MdPicker from './MdPicker'
 import MdPopup from './MdPopup'
 import MdSwipeout from './MdSwipeout'
 import MdVChart from './MdVChart'
+
+import MdPullRefresh from './MdPullRefresh'
+import MdScrollLoad from './MdScrollLoad'
+import MdSticky from './MdSticky'
+
+import MdScroller from './MdScroller'
+
 export {
   MdApp,
   MdAutocomplete,
@@ -104,5 +111,10 @@ export {
   MdPicker,
   MdPopup,
   MdSwipeout,
-  MdVChart
+  MdVChart,
+  MdScroller,
+
+  MdPullRefresh,
+  MdScrollLoad,
+  MdSticky,
 }
