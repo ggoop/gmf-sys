@@ -10,11 +10,9 @@
 </template>
 
 <script>
-import create from '../utils/create-basic';
-
-export default create({
-  name: 'loading',
-
+import mdBem from 'gmf/core/mixins/MdBem/MdBem';
+export default {
+  name: 'MdLoading2',
   props: {
     size: String,
     type: {
@@ -26,7 +24,7 @@ export default create({
       default: 'black'
     }
   },
-
+  mixins:[mdBem],
   computed: {
     style() {
       return this.size ? {
@@ -35,12 +33,10 @@ export default create({
       } : {};
     }
   }
-});
+};
 </script>
 <style lang="scss">
-@import './common/var.css';
-
-.van-loading {
+.md-loading2 {
   width: 30px;
   height: 30px;
   z-index: 0;

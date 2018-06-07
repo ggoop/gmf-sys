@@ -21,9 +21,7 @@ class VisitorMiddleware {
 		$inData['url'] = $request->url();
 		$inData['method'] = $request->method();
 
-		$inData['ent_id'] = GAuth::entId();
-
-		$inData['user_id'] = GAuth::id();
+		
 		
 		if (!empty($params['user_name'])) {
 			$inData['user_name'] = str_limit($params['user_name'], 250);
@@ -70,8 +68,7 @@ class VisitorMiddleware {
 		}
 
 		$fromTime = microtime(true);
-
-		try {
+		try {			
 			$response = $next($request);
 			return $response;
 		} catch (\Exception $e) {
@@ -81,6 +78,8 @@ class VisitorMiddleware {
 			$inData['times'] = ($endTime - $server->get('REQUEST_TIME_FLOAT')) * 1000;
 			$inData['actimes'] = ($endTime - $fromTime) * 1000;
 			try {
+				$inData['ent_id'] = GAuth::entId();
+				$inData['user_id'] = GAuth::id();
 				Visitor::create($inData);
 			} catch (\Exception $e) {
 				Log::error('Visitor create error:');
