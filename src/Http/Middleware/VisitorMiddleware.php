@@ -36,7 +36,9 @@ class VisitorMiddleware {
 		$inData['header'] = json_encode($headers->all());
 		$inData['body'] = $request->getContent();
 		$inData['content_type'] = $request->getContentType();
-
+		if (!empty($params['trace'])&&$v=$params['trace']) {
+			$inData['trace'] = $v;
+		}
 		$inData['input'] = json_encode($request->input());
 
 		$inData['agent'] = $request->userAgent();
