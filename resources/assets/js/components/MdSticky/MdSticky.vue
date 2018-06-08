@@ -9,7 +9,7 @@ import sticky from './sticky'
 
 export default {
   name: 'MdSticky',
-  props: ['scrollBox', 'offset', 'checkStickySupport', 'disabled'],
+  props: ['mdScrollBox', 'mdOffset', 'mdCheckStickySupport', 'disabled'],
   data () {
     return {
       initTimes: 0
@@ -39,9 +39,9 @@ export default {
       }
       this.$nextTick(() => {
         sticky(this.$el, {
-          scrollBox: this.scrollBox,
-          offset: this.offset,
-          checkStickySupport: typeof this.checkStickySupport === 'undefined' ? true : this.checkStickySupport
+          scrollBox: this.mdScrollBox,
+          offset: this.mdOffset,
+          checkStickySupport: typeof this.mdCheckStickySupport === 'undefined' ? true : this.mdCheckStickySupport
         })
       })
     }

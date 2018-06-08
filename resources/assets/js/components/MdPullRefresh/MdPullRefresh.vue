@@ -10,15 +10,15 @@
       <div class="md-pull-refresh-header">
         <slot v-if="status === 'normal'" name="normal" />
         <slot v-if="status === 'pulling'" name="pulling">
-          <span class="text">{{ pullingText || $t('pulling') }}</span>
+          <span class="text">{{ mdPullingText || $t('pulling') }}</span>
         </slot>
         <slot v-if="status === 'loosing'" name="loosing">
-          <span class="text">{{ loosingText || $t('loosing') }}</span>
+          <span class="text">{{ mdLoosingText || $t('loosing') }}</span>
         </slot>
         <slot v-if="status === 'loading'" name="loading">
           <div class="md-pull-refresh-loading">
             <md-loading />
-            <span class="text">{{ loadingText || $t('loadingTip') }}</span>
+            <span class="text">{{ mdLoadingText || $t('loadingTip') }}</span>
           </div>
         </slot>
       </div>
@@ -35,14 +35,14 @@ export default {
   name: "MdPullRefresh",
   mixins: [Touch],
   props: {
-    pullingText: String,
-    loosingText: String,
-    loadingText: String,
-    animationDuration: {
+    mdPullingText: String,
+    mdLoosingText: String,
+    mdLoadingText: String,
+    mdAnimationDuration: {
       type: Number,
       default: 300
     },
-    headHeight: {
+    mdHeadHeight: {
       type: Number,
       default: 50
     },
@@ -74,8 +74,8 @@ export default {
 
   watch: {
     value(val) {
-      this.duration = this.animationDuration;
-      this.getStatus(val ? this.headHeight : 0, val);
+      this.duration = this.mdAnimationDuration;
+      this.getStatus(val ? this.mdHeadHeight : 0, val);
     }
   },
   methods: {
@@ -116,9 +116,9 @@ export default {
       }
 
       if (this.ceiling && this.deltaY) {
-        this.duration = this.animationDuration;
+        this.duration = this.mdAnimationDuration;
         if (this.status === "loosing") {
-          this.getStatus(this.headHeight, true);
+          this.getStatus(this.mdHeadHeight, true);
           this.$emit("input", true);
           this.$emit("refresh");
         } else {
@@ -133,12 +133,12 @@ export default {
     },
 
     ease(height) {
-      const { headHeight } = this;
-      return height < headHeight
+      const { mdHeadHeight } = this;
+      return height < mdHeadHeight
         ? height
-        : height < headHeight * 2
-          ? Math.round(headHeight + (height - headHeight) / 2)
-          : Math.round(headHeight * 1.5 + (height - headHeight * 2) / 4);
+        : height < mdHeadHeight * 2
+          ? Math.round(mdHeadHeight + (height - mdHeadHeight) / 2)
+          : Math.round(mdHeadHeight * 1.5 + (height - mdHeadHeight * 2) / 4);
     },
     getStatus(height, isLoading) {
       this.height = height;
@@ -147,7 +147,7 @@ export default {
         ? "loading"
         : height === 0
           ? "normal"
-          : height < this.headHeight ? "pulling" : "loosing";
+          : height < this.mdHeadHeight ? "pulling" : "loosing";
 
       if (status !== this.status) {
         this.status = status;

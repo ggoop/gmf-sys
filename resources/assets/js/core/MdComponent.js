@@ -2,26 +2,38 @@ import MdTheme from 'gmf/core/MdTheme'
 import deepmerge from 'deepmerge'
 import mdBem from 'gmf/core/mixins/MdBem/MdBem';
 
-export default function (newComponent) {
-  newComponent.mixins = newComponent.mixins || [];
-  newComponent.methods = newComponent.methods || {};
-  newComponent.mixins.push(mdBem);
+function isDef(value) {
+    return value !== undefined && value !== null;
+}
 
-  const defaults = {
-    props: {
-      mdTheme: null
-    },
-    computed: {
-      $mdActiveTheme() {
-        const { enabled, getThemeName, getAncestorTheme } = MdTheme
+function isObj(x) {
+    const type = typeof x;
+    return x !== null && (type === 'object' || type === 'function');
+}
+export default function(newComponent) {
+    newComponent.mixins = newComponent.mixins || [];
+    newComponent.methods = newComponent.methods || {};
+    newComponent.mixins.push(mdBem);
 
-        if (enabled && this.mdTheme !== false) {
-          return getThemeName(this.mdTheme || getAncestorTheme(this))
+    const defaults = {
+        props: {
+            mdTheme: null
+        },
+        computed: {
+            $mdActiveTheme() {
+                const { enabled, getThemeName, getAncestorTheme } = MdTheme
+
+                if (enabled && this.mdTheme !== false) {
+                    return getThemeName(this.mdTheme || getAncestorTheme(this))
+                }
+                return null
+            }
+        },
+        methods: {
+            isDef,
+            isObj
         }
-        return null
-      }
     }
-  }
 
-  return deepmerge(defaults, newComponent)
+    return deepmerge(defaults, newComponent)
 }

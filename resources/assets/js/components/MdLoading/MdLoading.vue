@@ -6,6 +6,7 @@
 
 <script>
   export default {
+    name: 'MdLoading',
     props: {
       loading: Number,
     },

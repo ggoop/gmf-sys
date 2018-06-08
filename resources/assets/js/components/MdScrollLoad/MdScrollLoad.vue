@@ -4,7 +4,7 @@
     <div v-show="value" class="loading">
       <slot name="loading">
         <md-loading class="icon"/>
-        <span class="text">{{ loadingText || $t('loadingTip') }}</span>
+        <span class="text">{{ mdLoadingText || $t('loadingTip') }}</span>
       </slot>
     </div>
   </div>
@@ -22,23 +22,23 @@ export default {
     value: {
       type: Boolean
     },
-    finished: Boolean,
-    immediateCheck: {
+    mdFinished: Boolean,
+    mdImmediateCheck: {
       type: Boolean,
       default: true
     },
-    offset: {
+    mdOffset: {
       type: Number,
       default: 300
     },
-    loadingText: String
+    mdLoadingText: String
   },
 
   mounted() {
     this.scroller = scrollUtils.getScrollEventTarget(this.$el);
     this.handler(true);
 
-    if (this.immediateCheck) {
+    if (this.mdImmediateCheck) {
       this.$nextTick(this.onScroll);
     }
   },
@@ -60,14 +60,14 @@ export default {
       this.$nextTick(this.onScroll);
     },
 
-    finished() {
+    mdFinished() {
       this.$nextTick(this.onScroll);
     }
   },
 
   methods: {
     onScroll() {
-      if (this.value || this.finished) {
+      if (this.value || this.mdFinished) {
         return;
       }
 
@@ -87,13 +87,13 @@ export default {
 
       /* istanbul ignore next */
       if (el === scroller) {
-        reachBottom = scroller.scrollHeight - targetBottom < this.offset;
+        reachBottom = scroller.scrollHeight - targetBottom < this.mdOffset;
       } else {
         const elBottom =
           scrollUtils.getElementTop(el) -
           scrollUtils.getElementTop(scroller) +
           scrollUtils.getVisibleHeight(el);
-        reachBottom = elBottom - scrollerHeight < this.offset;
+        reachBottom = elBottom - scrollerHeight < this.mdOffset;
       }
 
       /* istanbul ignore else */
