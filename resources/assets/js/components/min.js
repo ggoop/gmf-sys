@@ -57,7 +57,6 @@ import MdPullRefresh from './MdPullRefresh'
 import MdScrollLoad from './MdScrollLoad'
 import MdSticky from './MdSticky'
 
-import MdScroller from './MdScroller'
 
 export {
   MdApp,
@@ -112,7 +111,6 @@ export {
   MdPopup,
   MdSwipeout,
   MdVChart,
-  MdScroller,
 
   MdPullRefresh,
   MdScrollLoad,

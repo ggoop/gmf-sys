@@ -1,7 +1,7 @@
 <template>
   <div class="md-scroll-load">
     <slot />
-    <div v-show="loading" class="loading">
+    <div v-show="value" class="loading">
       <slot name="loading">
         <md-loading class="icon"/>
         <span class="text">{{ loadingText || $t('loadingTip') }}</span>
@@ -18,11 +18,10 @@ import { on, off } from 'gmf/core/utils/MdInteractionEvents';
 
 export default {
   name: 'MdScrollLoad',
-  model: {
-    prop: 'loading'
-  },
   props: {
-    loading: Boolean,
+    value: {
+      type: Boolean
+    },
     finished: Boolean,
     immediateCheck: {
       type: Boolean,
@@ -57,7 +56,7 @@ export default {
   },
 
   watch: {
-    loading() {
+    value() {
       this.$nextTick(this.onScroll);
     },
 
@@ -68,7 +67,7 @@ export default {
 
   methods: {
     onScroll() {
-      if (this.loading || this.finished) {
+      if (this.value || this.finished) {
         return;
       }
 

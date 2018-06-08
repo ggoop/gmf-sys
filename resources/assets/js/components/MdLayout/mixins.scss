@@ -6,31 +6,31 @@
  */
 
 @mixin md-layout-xsmall {
-  @media (max-width: #{$md-breakpoint-xsmall}) {
+  @media (max-width: #{$layout-breakpoint-xs}) {
     @content;
   }
 }
 
 @mixin md-layout-small {
-  @media (max-width: #{$md-breakpoint-small - 16px}) {
+  @media (max-width: #{$layout-breakpoint-sm - 16px}) {
     @content;
   }
 }
 
 @mixin md-layout-medium {
-  @media (max-width: #{$md-breakpoint-medium - 16px}) {
+  @media (max-width: #{$layout-breakpoint-md - 16px}) {
     @content;
   }
 }
 
 @mixin md-layout-large {
-  @media (max-width: #{$md-breakpoint-large - 17px}) {
+  @media (max-width: #{$layout-breakpoint-lg - 17px}) {
     @content;
   }
 }
 
 @mixin md-layout-xlarge {
-  @media (min-width: #{$md-breakpoint-large - 16px}) {
+  @media (min-width: #{$layout-breakpoint-lg - 16px}) {
     @content;
   }
 }
@@ -42,19 +42,19 @@
 }
 
 @mixin md-layout-small-and-up {
-  @media (min-width: #{$md-breakpoint-xsmall}) {
+  @media (min-width: #{$layout-breakpoint-xs}) {
     @content;
   }
 }
 
 @mixin md-layout-medium-and-up {
-  @media (min-width: #{$md-breakpoint-small}) {
+  @media (min-width: #{$layout-breakpoint-sm}) {
     @content;
   }
 }
 
 @mixin md-layout-large-and-up {
-  @media (min-width: #{$md-breakpoint-medium}) {
+  @media (min-width: #{$layout-breakpoint-md}) {
     @content;
   }
 }

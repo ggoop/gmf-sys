@@ -23,18 +23,18 @@
  */
 
 .md-layout {
-  @include md-layout-gutter($md-gutter-large);
+  @include md-layout-gutter($layout-gutter-lg);
 
   @include md-layout-medium {
-    @include md-layout-gutter($md-gutter-medium);
+    @include md-layout-gutter($layout-gutter-md);
   }
 
   @include md-layout-small {
-    @include md-layout-gutter($md-gutter-small);
+    @include md-layout-gutter($layout-gutter-sm);
   }
 
   @include md-layout-xsmall {
-    @include md-layout-gutter($md-gutter-xsmall);
+    @include md-layout-gutter($layout-gutter-xs);
   }
 }
 

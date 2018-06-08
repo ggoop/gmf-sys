@@ -1,11 +1,4 @@
-$baseline-grid: 8px !default;
-$layout-gutter-width: ($baseline-grid * 2) !default;
-$layout-breakpoint-xs: 600px !default;
-$layout-breakpoint-sm: 960px !default;
-$layout-breakpoint-md: 1280px !default;
-$layout-breakpoint-lg: 1920px !default;
-
-
+@import './variables';
 
 
 @mixin rtl($prop, $ltr-value, $rtl-value) {
@@ -425,83 +418,9 @@ $layout-breakpoint-lg: 1920px !default;
     align-content: stretch;
   }
 }
-
-@mixin layout-padding-margin() {
-
-  // NOTE: these`> *` selectors should only be applied for layout="row" or layout="column" children !!
-  .layout-padding-sm>*,
-  .layout-padding>.flex-sm {
-    padding: $layout-gutter-width / 4;
-  }
-
-  .layout-padding,
-  .layout-padding-gt-sm,
-  .layout-padding-md, // NOTE: these`> *` selectors should only be applied for layout="row" or layout="column" children !!
-  .layout-padding>*,
-  .layout-padding-gt-sm>*,
-  .layout-padding-md>*,
-
-  .layout-padding>.flex,
-  .layout-padding>.flex-gt-sm,
-  .layout-padding>.flex-md {
-    padding: $layout-gutter-width / 2;
-  } // NOTE: these`> *` selectors should only be applied for layout="row" or layout="column" children !!
-  .layout-padding-gt-md>*,
-  .layout-padding-lg>*,
-  .layout-padding-gt-lg>*,
-
-  .layout-padding>.flex-gt-md,
-  .layout-padding>.flex-lg,
-  .layout-padding>.flex-lg,
-  .layout-padding>.flex-gt-lg {
-    padding: $layout-gutter-width / 1;
-  } // Margin enhancements
-  .layout-margin-sm>*,
-  .layout-margin>.flex-sm {
-    margin: $layout-gutter-width / 4;
-  }
-
-  .layout-margin,
-  .layout-margin-gt-sm,
-  .layout-margin-md, // NOTE: these`> *` selectors should only be applied for layout="row" or layout="column" children !!
-  .layout-margin>*,
-  .layout-margin-gt-sm>*,
-  .layout-margin-md>*,
-
-  .layout-margin>.flex,
-  .layout-margin>.flex-gt-sm,
-  .layout-margin>.flex-md {
-    margin: $layout-gutter-width / 2;
-  } // NOTE: these`> *` selectors should only be applied for layout="row" or layout="column" children !!
-  .layout-margin-gt-md>*,
-  .layout-margin-lg>*,
-  .layout-margin-gt-lg>*,
-
-  .layout-margin>.flex-gt-md,
-  .layout-margin>.flex-lg,
-  .layout-margin>.flex-gt-lg {
-    margin: $layout-gutter-width / 1;
-  }
-
-  .layout-wrap {
-    flex-wrap: wrap;
-  }
-
-  .layout-nowrap {
-    flex-wrap: nowrap;
-  }
-
-  .layout-fill {
-    margin: 0;
-    width: 100%;
-    min-height: 100%;
-    height: 100%;
-  }
-}
-
 @mixin layouts_for_breakpoint($name:null) {
   @include flex-order-for-name($name);
-  @include offset-for-name($name);
+  
   @include layout-align-for-name($name);
 
   @include flex-properties-for-name($name);
@@ -526,8 +445,8 @@ $layout-breakpoint-lg: 1920px !default;
 }
 
 @include layouts_for_breakpoint();
-@include layout-padding-margin();
-@include layouts_for_gutter($baseline-grid * 2);
+@include offset-for-name();
+@include layouts_for_gutter($layout-gutter-md);
 
 @media (max-width: $layout-breakpoint-xs - 1) {
   // Xtra-SMALL  SCREEN
@@ -538,13 +457,13 @@ $layout-breakpoint-lg: 1920px !default;
     }
   }
   @include layouts_for_breakpoint(xs);
-  @include layouts_for_gutter($baseline-grid);
+  @include layouts_for_gutter($layout-gutter-xs);
 }
 
 @media (min-width: $layout-breakpoint-xs) {
   // BIGGER THAN Xtra-SMALL SCREEN
   @include layouts_for_breakpoint(gt-xs);
-  @include layouts_for_gutter($baseline-grid * 2);
+  @include layouts_for_gutter($layout-gutter-md);
 }
 
 @media (min-width: $layout-breakpoint-xs) and (max-width: $layout-breakpoint-sm - 1) {
@@ -606,7 +525,7 @@ $layout-breakpoint-lg: 1920px !default;
 @media (min-width: $layout-breakpoint-lg) {
   @include layouts_for_breakpoint(gt-lg);
   @include layouts_for_breakpoint(xl); // BIGGER THAN LARGE SCREEN
-  @include layouts_for_gutter($baseline-grid * 3);
+  @include layouts_for_gutter($layout-gutter-sm);
   .hide,
   .hide-gt-xs,
   .hide-gt-sm,

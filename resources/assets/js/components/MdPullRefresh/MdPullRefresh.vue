@@ -34,9 +34,6 @@ import { on, off } from 'gmf/core/utils/MdInteractionEvents';
 export default {
   name: "MdPullRefresh",
   mixins: [Touch],
-  model: {
-    prop: "loading"
-  },
   props: {
     pullingText: String,
     loosingText: String,
@@ -49,8 +46,8 @@ export default {
       type: Number,
       default: 50
     },
-    loading: {
-      type:Boolean,
+    value: {
+      type: Boolean,
       required: true
     }
   },
@@ -76,7 +73,7 @@ export default {
   },
 
   watch: {
-    loading(val) {
+    value(val) {
       this.duration = this.animationDuration;
       this.getStatus(val ? this.headHeight : 0, val);
     }
