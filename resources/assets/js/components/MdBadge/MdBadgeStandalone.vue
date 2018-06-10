@@ -36,6 +36,9 @@
       bottom: 0;
       right: 0;
     }
+    .md-list-item-text & {
+      display: inline-flex;
+    }
     &.md-dense {
       width: 18px;
       height: 18px;

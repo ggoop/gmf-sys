@@ -1,7 +1,10 @@
 <?php
 $ns = 'Gmf\Sys\Http\Controllers';
-Route::prefix('api/sys/jsapi')->middleware(['api'])->namespace($ns)->group(function () {
-	Route::post('config', 'JsApiController@config');
+Route::prefix('api/sys/apps')->middleware(['api', 'auth:api'])->namespace($ns)->group(function () {
+	Route::post('discover', 'App\DiscoverController@discover');
+	Route::post('register', 'App\RegisterController@register');
+	Route::post('gateway', 'App\GatewayController@gateway');
+	Route::any('config', 'App\ConfigController@config');
 });
 Route::prefix('api/sys/auth')->middleware(['web'])->namespace($ns)->group(function () {
 	Route::post('checker', 'AuthController@checker');

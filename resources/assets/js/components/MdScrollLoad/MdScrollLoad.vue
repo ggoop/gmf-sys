@@ -115,6 +115,9 @@ export default {
 </script>
 <style lang="scss">
 .md-scroll-load {
+  max-height: 100%;
+  max-width: 100%;
+  overflow: auto;
   >.loading {
     text-align: center;
     .text {

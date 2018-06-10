@@ -111,7 +111,7 @@
   @import "~gmf/components/MdElevation/mixins";
   @import "~gmf/components/MdElevation/variables";
 
-  $md-button-min-width: 88px;
+  $md-button-min-width: 36px;
   $md-button-height: 36px;
   $md-button-radius: 2px;
   $md-button-font-size: 14px;

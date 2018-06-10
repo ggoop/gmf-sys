@@ -1,5 +1,5 @@
 <template>
-  <div class="md-image" :class="[$mdActiveTheme]">
+  <div class="md-image" :class="[$mdActiveTheme]" v-on="$listeners">
     <slot>
       <img :src="mdSrc">
     </slot>

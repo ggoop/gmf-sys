@@ -45,17 +45,13 @@ export default {
     mdHeadHeight: {
       type: Number,
       default: 50
-    },
-    value: {
-      type: Boolean,
-      required: true
     }
   },
-
   data() {
     return {
       status: "normal",
       height: 0,
+      value:true,
       duration: 0
     };
   },
@@ -88,7 +84,6 @@ export default {
         this.touchStart(event);
       }
     },
-
     onTouchMove(event) {
       if (this.status === "loading") {
         return;
@@ -114,19 +109,20 @@ export default {
       if (this.status === "loading") {
         return;
       }
-
       if (this.ceiling && this.deltaY) {
         this.duration = this.mdAnimationDuration;
         if (this.status === "loosing") {
           this.getStatus(this.mdHeadHeight, true);
-          this.$emit("input", true);
-          this.$emit("refresh");
+          this.value=true;
+          this.$emit("refresh",this.refreshFinish);
         } else {
           this.getStatus(0);
         }
       }
     },
-
+    refreshFinish(){
+      this.value=false;
+    },
     getCeiling() {
       this.ceiling = scrollUtils.getScrollTop(this.scrollEl) === 0;
       return this.ceiling;

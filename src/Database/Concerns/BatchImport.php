@@ -22,15 +22,29 @@ trait BatchImport {
 				$this->exists = true;
 				$this->{$this->getKeyName()} = $query->value($this->getKeyName());
 			}
-			Log::error(static::class . ' is exists:' . $this->{$this->getKeyName()});
+			if($this->exists){
+				Log::error(static::class . ' is exists:' . $this->{$this->getKeyName()});
+			}	
 			return $this->exists;
 		}
 		return false;
 	}
+	public static function createFromFill($data){
+		$instance = new static();
+		$instance->fillData($data);
+		return $instance;
+	}
+	public  function fillData($data){
+		$this->fill($data);
+		if (method_exists($this, 'formatDefaultValue')) {
+			$this->formatDefaultValue($data);
+		}
+		return $this;
+	}
 	/**
-	$datas:array[array|model],collect([array|model])
+	*$datas:array[array|model],collect([array|model])
 	 */
-	public static function BatchImport($datas) {
+	public static function BatchImport($datas,$canReplace=true) {
 		if (is_array($datas)) {
 			$datas = collect($datas);
 		}
@@ -41,7 +55,8 @@ trait BatchImport {
 
 		$fill = $m->getFillable();
 		$needId = !$m->getIncrementing();
-		$datas = $datas->map(function ($item) use ($m, $needId, $fill) {
+		$resultIds=[];
+		$datas = $datas->map(function ($item) use ($m, $needId, $fill,&$resultIds,$canReplace) {
 			$arrs = [];
 			if ($item instanceof Model) {
 				$arrs = $item->toArray();
@@ -62,7 +77,11 @@ trait BatchImport {
 				$instance->validate();
 			}
 			if ($instance->exists()) {
+				if(!$canReplace){
+					throw new \Exception('已存在!');
+				}
 				$instance->save();
+				$resultIds[]=$instance->id;
 				return false;
 			}
 			$item = $instance->toArray();
@@ -74,6 +93,7 @@ trait BatchImport {
 			if ($needId && empty($data[$m->getKeyName()])) {
 				$data[$m->getKeyName()] = Uuid::generate();
 			}
+			$resultIds[]=$data[$m->getKeyName()];
 			return $data;
 		})->reject(function ($name) {
 			return empty($name);
@@ -83,6 +103,6 @@ trait BatchImport {
 		foreach ($chunks as $key => $value) {
 			DB::table($m->getTable())->insert($value);
 		}
-		return true;
+		return count($resultIds)?$resultIds:false;
 	}
 }

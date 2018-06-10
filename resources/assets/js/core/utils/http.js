@@ -1,6 +1,6 @@
 import axios from 'axios';
 import utils from './common';
-
+import combineURLs from 'gmf/core/utils/MdCombineURLs';
 const defaults = {
     headers: {
         common: {
@@ -15,7 +15,7 @@ const defaults = {
 };
 
 function Http(instanceConfig) {
-    this.defaults = instanceConfig;
+    this.defaults = instanceConfig || {};
     this.Cancel = axios.Cancel;
     this.CancelToken = axios.CancelToken;
     this.isCancel = axios.isCancel;
@@ -53,17 +53,72 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
         }));
     };
 });
-
-function createInstance(defaultConfig) {
-    var instance = new Http(defaultConfig);
-    return instance;
-}
-
-var instancedefaults = {}
-const instance = createInstance(instancedefaults);
-
-instance.create = function create(instanceConfig) {
-    return createInstance(instanceConfig);
+Http.prototype.create = function(config) {
+    return new Http(config);
 };
 
-export default instance;
+let queue = {};
+const defaultName = 'default';
+
+function createGHTTPInstance(name, config) {
+    name = name || defaultName;
+    if (!queue[name]) {
+        config = config || {};
+        queue[name] = new Http(config);
+    }
+    return queue[name];
+};
+
+function GHTTP(name, config) {
+    return createGHTTPInstance(name, config);
+};
+/**
+ * {name,appId,entId,gateway,timestamp,apiList}
+ * @param {object} config 
+ */
+GHTTP.config = function(config) {
+    if (!config.name) {
+        alert('[assert]: name is required');
+    }
+    if (!config.appId) {
+        alert('[assert]: appId is required');
+    }
+    var chttp = createGHTTPInstance();
+    var instance = createGHTTPInstance(config.name);
+
+    return new Promise((resolved, rejected) => {
+        chttp.post('sys/apps/config', config).then(res => {
+            var d = res.data.data;
+            instance.defaults.baseURL = d.host;
+            instance.defaults.headers = { common: {} };
+            if (d.ent) {
+                instance.defaults.headers.common.Ent = utils.isObject(d.ent) ? d.ent.id : d.ent;
+            }
+            if (d.token) {
+                instance.defaults.headers.common.Authorization = utils.isObject(d.token) ? (d.token.token_type ? d.token.token_type : "Bearer") + " " + d.token.access_token : d.token;
+            }
+            resolved(true);
+        }, err => {
+            rejected(false);
+        });
+    });
+};
+['delete', 'get', 'head', 'options'].forEach(method => {
+    GHTTP[method] = function(url, config) {
+        return createGHTTPInstance().request(utils.merge(config || {}, {
+            method: method,
+            url: url
+        }));
+    };
+});
+['post', 'put', 'patch'].forEach(method => {
+    GHTTP[method] = function(url, data, config) {
+        return createGHTTPInstance().request(utils.merge(config || {}, {
+            method: method,
+            url: url,
+            data: data
+        }));
+    };
+});
+GHTTP.defaults = createGHTTPInstance().defaults;
+export default GHTTP;

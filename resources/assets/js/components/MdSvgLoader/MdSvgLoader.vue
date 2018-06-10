@@ -1,5 +1,5 @@
 <template>
-  <i class="md-svg-loader" v-html="html"></i>
+  <i class="md-svg-loader" v-html="html" v-on="$listeners"></i>
 </template>
 
 <script>

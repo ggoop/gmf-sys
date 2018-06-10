@@ -63,7 +63,14 @@ const createMethod = type => options => Tip({
     type,
     ...parseOptions(options)
 });
-
+Tip.waiting = function(options) {
+    options = {
+        ...parseOptions(options),
+        mask: true,
+        type: 'loading'
+    };
+    Tip(options);
+};
 ['loading', 'success', 'fail'].forEach(method => {
     Tip[method] = createMethod(method);
 });
