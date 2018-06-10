@@ -21,6 +21,7 @@ class APIResult {
 				->total($data->total())
 				->lastPage($data->lastPage());
 			$data = $data->items();
+			$pager->items(count($data));
 		} else if ($data instanceof Paginator) {
 			$pager = new Builder;
 			$pager->page($data->currentPage())
@@ -28,6 +29,7 @@ class APIResult {
 				->from($data->firstItem())
 				->to($data->lastItem());
 			$data = $data->items();
+			$pager->items(count($data));
 		} else if ($data instanceof ResourceCollection) {
 			$pager = new Builder;
 			if ($data->resource instanceof AbstractPaginator) {
@@ -40,6 +42,7 @@ class APIResult {
 			if (isset($res['data'])) {
 				$data = $res['data'];
 			}
+			$pager->items(count($data));
 		} else if ($data instanceof Resource) {
 			$data = $data->toArray(Container::getInstance()->make('request'));
 		}

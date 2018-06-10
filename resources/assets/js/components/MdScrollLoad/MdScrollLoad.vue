@@ -19,9 +19,6 @@ import { on, off } from 'gmf/core/utils/MdInteractionEvents';
 export default {
   name: 'MdScrollLoad',
   props: {
-    value: {
-      type: Boolean
-    },
     mdFinished: Boolean,
     mdImmediateCheck: {
       type: Boolean,
@@ -33,7 +30,11 @@ export default {
     },
     mdLoadingText: String
   },
-
+  data() {
+    return {
+      value:false
+    };
+  },
   mounted() {
     this.scroller = scrollUtils.getScrollEventTarget(this.$el);
     this.handler(true);
@@ -66,6 +67,9 @@ export default {
   },
 
   methods: {
+    loadFinish(){
+      this.value=false;
+    },
     onScroll() {
       if (this.value || this.mdFinished) {
         return;
@@ -98,8 +102,8 @@ export default {
 
       /* istanbul ignore else */
       if (reachBottom) {
-        this.$emit('input', true);
-        this.$emit('load');
+        this.value=true;
+        this.$emit('load',this.loadFinish);
       }
     },
 
@@ -117,6 +121,7 @@ export default {
 .md-scroll-load {
   max-height: 100%;
   max-width: 100%;
+  min-height: 100%;
   overflow: auto;
   >.loading {
     text-align: center;
