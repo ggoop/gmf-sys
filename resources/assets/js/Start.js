@@ -34,8 +34,7 @@ export default class Start {
     run(options, mixin) {
         options = options || {};
         const elID = options.elID || '#gmfApp';
-        http.defaults.baseURL = combineURL(options.host, '/api');
-        http.defaults.headers = { common: { Ent: false } };
+        http.config({host:combineURL(options.host, '/api')});
         initVue(options);
 
         const appConfig = getAppConfig();
@@ -57,7 +56,7 @@ export default class Start {
         document.addEventListener('DOMContentLoaded', () => {
             initConfigs().then(res => {
                 extend(appConfig.data.configs, res);
-                initHttp(http, res);
+                http.config(res);
                 if (res && res.loadEnums) {
                     return loadEnums();
                 }
@@ -132,15 +131,6 @@ function initI18n(appConfig, options) {
     appConfig.i18n = i18n;
 }
 
-function initHttp(http, config) {
-    http.defaults.headers.common.Ent = config.ent ? config.ent.id : false;
-    if (config.token) {
-        http.defaults.headers.common.Authorization = (config.token.token_type ? config.token.token_type : "Bearer") + " " + config.token.access_token;
-    } else {
-        http.defaults.headers.common.Authorization = false;
-    }
-}
-
 function getAppConfig() {
     return {
         data: {
@@ -156,7 +146,7 @@ function getAppConfig() {
             },
             changedConfig() {
                 extend(window.gmfConfig, this.configs);
-                initHttp(this.$http, this.configs);
+                this.$http.config(this.configs);
             },
             setCacheEnum(item) {
                 enumCache.set(item);
