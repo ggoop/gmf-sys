@@ -45,6 +45,9 @@ class ModelObserver {
 	 * @return void
 	 */
 	public function saving(Model $model) {
+		if (method_exists($model, 'formatDefaultValue') && is_callable(array($model, 'formatDefaultValue'))) {
+			return $model->formatDefaultValue([]);
+		}
 		if (method_exists($model, 'validate') && is_callable(array($model, 'validate'))) {
 			return $model->validate();
 		}

@@ -1,13 +1,15 @@
 <?php
 $ns = 'Gmf\Sys\Http\Controllers';
 Route::prefix('api/sys/apps')->middleware(['api', 'auth:api'])->namespace($ns)->group(function () {
-	Route::post('discover', 'App\DiscoverController@discover');
-	Route::post('register', 'App\RegisterController@register');
+	Route::post('discover', 'App\DiscoverController@discover');	
 	Route::post('gateway', 'App\GatewayController@gateway');
 	Route::post('config', 'App\ConfigController@config');
+	Route::post('publish', 'App\PublishController@publish');
 });
 Route::prefix('api/sys/apps')->middleware(['api'])->namespace($ns)->group(function () {
 	Route::post('token', 'App\TokenController@token');
+	Route::post('register-ent', 'App\RegisterController@registerEnt');
+	Route::post('register-app', 'App\RegisterController@registerApp');
 });
 
 Route::prefix('api/sys/auth')->middleware(['web'])->namespace($ns)->group(function () {
