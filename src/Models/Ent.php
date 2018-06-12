@@ -29,6 +29,10 @@ class Ent extends Model
             $this->revoked = 0;
         }
     }
+    public function createToken(){
+        $this->token = Uuid::generate();
+        $this->save();
+    }
     public function validate()
     {
         Validator::make($this->toArray(), [

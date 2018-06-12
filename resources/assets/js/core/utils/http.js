@@ -35,7 +35,7 @@ Http.prototype.request = function request(config) {
 // Provide aliases for supported request methods
 utils.forEach(['delete', 'get', 'head', 'options'], function forEachMethodNoData(method) {
     /*eslint func-names:0*/
-    Http.prototype[method] = function (url, config) {
+    Http.prototype[method] = function(url, config) {
         return this.request(utils.merge(config || {}, {
             method: method,
             url: url
@@ -45,7 +45,7 @@ utils.forEach(['delete', 'get', 'head', 'options'], function forEachMethodNoData
 
 utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
     /*eslint func-names:0*/
-    Http.prototype[method] = function (url, data, config) {
+    Http.prototype[method] = function(url, data, config) {
         return this.request(utils.merge(config || {}, {
             method: method,
             url: url,
@@ -53,19 +53,20 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
         }));
     };
 });
-Http.prototype.create = function (config) {
+Http.prototype.create = function(config) {
     return new Http(config);
 };
-Http.prototype.config = function (config) {
-    if(utils.isDefined(config.host)){
+Http.prototype.config = function(config) {
+    if (!config) return;
+    if (utils.isDefined(config.host)) {
         this.defaults.baseURL = config.host;
     }
-    this.defaults.headers=this.defaults.headers||{};
-    this.defaults.headers.common=this.defaults.headers.common||{};
-    if(utils.isDefined(config.ent)) {
+    this.defaults.headers = this.defaults.headers || {};
+    this.defaults.headers.common = this.defaults.headers.common || {};
+    if (utils.isDefined(config.ent)) {
         this.defaults.headers.common.Ent = utils.isObject(config.ent) ? config.ent.id : config.ent;
     }
-    if(utils.isDefined(config.token)) {
+    if (utils.isDefined(config.token)) {
         this.defaults.headers.common.Authorization = utils.isObject(config.token) ? (config.token.token_type ? config.token.token_type : "Bearer") + " " + config.token.access_token : config.token;
     }
 };
@@ -88,10 +89,10 @@ function GHTTP(name, config) {
  * {name,appId,entId,gateway,timestamp,apiList}
  * @param {object} config 
  */
-GHTTP.config=function(config){
+GHTTP.config = function(config) {
     createGHTTPInstance().config(config);
 }
-GHTTP.app = function (config) {
+GHTTP.appConfig = function(config) {
     if (!config.name) {
         alert('[assert]: name is required');
     }
@@ -111,7 +112,7 @@ GHTTP.app = function (config) {
     });
 };
 ['delete', 'get', 'head', 'options'].forEach(method => {
-    GHTTP[method] = function (url, config) {
+    GHTTP[method] = function(url, config) {
         return createGHTTPInstance().request(utils.merge(config || {}, {
             method: method,
             url: url
@@ -119,7 +120,7 @@ GHTTP.app = function (config) {
     };
 });
 ['post', 'put', 'patch'].forEach(method => {
-    GHTTP[method] = function (url, data, config) {
+    GHTTP[method] = function(url, data, config) {
         return createGHTTPInstance().request(utils.merge(config || {}, {
             method: method,
             url: url,

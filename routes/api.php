@@ -78,6 +78,8 @@ Route::prefix('api/sys')->middleware(['api', 'auth:api'])->namespace($ns)->group
 	Route::resource('files', 'FileController', ['only' => ['store', 'show']]);
 
 	Route::get('/ents/my', 'EntController@getMyEnts');
+	Route::get('/ents/token', 'EntController@getToken');
+	Route::post('/ents/token', 'EntController@createToken');
 	Route::any('/ents/seed/{id}', 'EntController@seedDatas');
 	Route::resource('ents', 'EntController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 

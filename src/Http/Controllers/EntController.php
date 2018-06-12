@@ -64,6 +64,17 @@ class EntController extends Controller {
 		Models\Ent::where('id', $id)->update($input);
 		return $this->show($request, $id);
 	}
+	public function getToken(Request $request) {
+		$ent = Models\Ent::find(GAuth::entId());
+		if(empty($ent)){throw new \Exception('找不到企业！');}
+		return $this->toJson($ent->token);
+	}
+	public function createToken(Request $request) {
+		$ent = Models\Ent::find(GAuth::entId());
+		if(empty($ent)){throw new \Exception('找不到企业！');}
+		$ent->createToken();
+		return $this->toJson($ent->token);
+	}
 	public function destroy(Request $request, $id) {
 		$ids = explode(",", $id);
 		Models\Ent::destroy($ids);

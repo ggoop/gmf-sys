@@ -15,7 +15,7 @@ class AppToken {
 			'user_openid' => 'required',
 			'ent_openid' => 'required',
 			'app_openid' => 'required',
-			'ent_app_token'=>'required'
+			'token'=>'required'
         ])->validate();
         $user=Models\User::where('openid',$input['user_openid'])->first();
         if(empty($user)){
@@ -25,15 +25,7 @@ class AppToken {
         if(empty($ent)){
             throw new \Exception('没有此企业.');
         }
-        $app=Models\App\App::where('openid',$input['app_openid'])->first();
-        if(empty($app)){
-            throw new \Exception('没有此应用.');
-		}
-		$entApp=Models\App\EntApp::where('ent_id',$ent->id)->where('app_id',$app->id)->first();
-		if(empty($entApp)){
-			throw new \Exception('企业没有配置应用!');
-		}
-		if($entApp->token!=$input['ent_app_token']){
+		if($ent->token!=$input['token']){
 			throw new \Exception('token 授权失败!');
 		}
 		return app('Gmf\Sys\Bp\UserAuth')->issueToken($user, 'app_token');

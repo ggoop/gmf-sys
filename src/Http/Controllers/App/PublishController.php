@@ -21,8 +21,8 @@ class PublishController extends Controller
             'token' => 'required',
             'account' => 'required',
             'discover' => 'required',
-				])->validate();
-				$input['gateway']=$request->getSchemeAndHttpHost();
+        ])->validate();
+        $input['gateway'] = $request->getSchemeAndHttpHost();
 
         $entId = GAuth::entId();
         if (empty($entId)) {
@@ -32,13 +32,12 @@ class PublishController extends Controller
         if (empty($ent)) {
             throw new \Exception('没有企业信息，不能发布!');
         }
+        //注册企业
         $params = [
-            "token" =>$input['token'],
+            "token" => $input['token'],
             "account" => $input['account'],
-            "gateway" =>$input['gateway'],
-            'datas' => ['openid' => $ent->openid, 'name' => $ent->name,'token'=>$ent->token],
+            'datas' => ['openid' => $ent->openid, 'name' => $ent->name, 'token' => $ent->token, 'gateway' => $input['gateway']],
         ];
-        //远程服务授权
         $client = new GuzzleHttp\Client(['base_uri' => $input['discover']]);
         $res = $client->post('api/sys/apps/register-ent', ['json' => $params]);
         $body = (String) $res->getBody();
