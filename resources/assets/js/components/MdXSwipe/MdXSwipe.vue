@@ -27,7 +27,7 @@
 import create from 'gmf/core/MdComponent';
 import Touch from 'gmf/core/mixins/MdTouch/MdTouch';
 
-export default create({
+export default new create({
   name: 'MdXSwipe',
 
   mixins: [Touch],

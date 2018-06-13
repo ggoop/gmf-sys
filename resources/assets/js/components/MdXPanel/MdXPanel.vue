@@ -6,37 +6,36 @@
     <div :class="b('content')">
       <slot />
     </div>
-    <div v-if="$slots.footer" :class="b('footer')" class="van-hairline--top">
+    <div v-if="$slots.footer" :class="b('footer')" class="md-1px-t">
       <slot name="footer" />
     </div>
   </md-x-cell-group>
 </template>
 
 <script>
-import create from 'gmf/core/MdComponent';
+  import create from "gmf/core/MdComponent";
 
-export default create({
-  name: 'MdXPanel',
-  props: {
-    desc: String,
-    title: String,
-    status: String
-  }
-});
+  export default new create({
+    name: "MdXPanel",
+    props: {
+      desc: String,
+      title: String,
+      status: String
+    }
+  });
 </script>
 <style lang="scss">
-.md-x-panel {
-  background: #fff;
+  .md-x-panel {
+    background: #fff;
 
-  &__header {
-    .md-x-cell__value {
-      color: #f44;
+    &__header {
+      .md-x-cell__value {
+        color: #f44;
+      }
+    }
+
+    &__footer {
+      padding: 10px 15px;
     }
   }
-
-  &__footer {
-    padding: 10px 15px;
-  }
-}
-
 </style>

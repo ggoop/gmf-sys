@@ -1,48 +1,27 @@
 @import './mixins';
-.md-1px,
-.md-1px-t,
-.md-1px-b,
-.md-1px-tb,
-.md-1px-l,
-.md-1px-r {
+[class*='md-1px'] {
   position: relative;
+  &::after {
+    @include hairline()
+  }
 }
-
 .md-1px {
-  &:before {
-    @include setLine()
+  &-t::after {
+    border-top-width: 1px;
   }
-}
-
-.md-1px-t {
-  &:before {
-    @include setTopLine()
+  &-l::after {
+    border-left-width: 1px;
   }
-}
-
-.md-1px-b {
-  &:after {
-    @include setBottomLine()
+  &-r::after {
+    border-right-width: 1px;
   }
-}
-
-.md-1px-tb {
-  &:before {
-    @include setTopLine()
+  &-b::after {
+    border-bottom-width: 1px;
   }
-  &:after {
-    @include setBottomLine()
+  &-tb::after {
+    border-width: 1px 0;
   }
-}
-
-.md-1px-l {
-  &:before {
-    @include setLeftLine()
-  }
-}
-
-.md-1px-r {
-  &:after {
-    @include setRightLine()
+  &-all::after {
+    border-width: 1px;
   }
 }

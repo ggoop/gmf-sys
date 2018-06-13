@@ -101,6 +101,10 @@ import MdXSearch from './MdXSearch'
 import MdXPanel from './MdXPanel'
 import MdXSwipe from './MdXSwipe'
 
+import MdXButton from './MdXButton'
+import MdXLoading from './MdXLoading'
+
+
 export {
     MdApp,
     MdAutocomplete,
@@ -201,5 +205,8 @@ export {
     MdXField,
     MdXSearch,
     MdXPanel,
-    MdXSwipe
+    MdXSwipe,
+
+    MdXButton,
+    MdXLoading
 }
