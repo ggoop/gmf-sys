@@ -239,9 +239,10 @@
         opacity: .2;
       }
     }
-
-    &.md-button-full{
+    &.md-full{
       width:100%;
+      margin: 0px;
+      min-height: 48px;
     }
 
     + .md-button {

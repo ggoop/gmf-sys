@@ -6,7 +6,6 @@ import VueRouter from 'vue-router';
 import extend from 'lodash/extend'
 import merge from 'lodash/merge'
 import isString from 'lodash/isString'
-import values from 'lodash/values'
 import lang from './utils/lang';
 import gmfConfig from './config';
 import enumCache from './core/utils/MdEnumCache';

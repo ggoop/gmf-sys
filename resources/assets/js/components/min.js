@@ -58,6 +58,14 @@ import MdScrollLoad from './MdScrollLoad'
 import MdSticky from './MdSticky'
 import MdTip from './MdTip'
 
+import MdXIcon from './MdXIcon'
+import MdXCell from './MdXCell'
+import MdXCellGroup from './MdXCellGroup'
+import MdXCellSwipe from './MdXCellSwipe'
+import MdXField from './MdXField'
+import MdXSearch from './MdXSearch'
+import MdXPanel from './MdXPanel'
+import MdXSwipe from './MdXSwipe'
 export {
     MdApp,
     MdAutocomplete,
@@ -115,5 +123,14 @@ export {
     MdPullRefresh,
     MdScrollLoad,
     MdSticky,
-    MdTip
+    MdTip,
+
+    MdXIcon,
+    MdXCell,
+    MdXCellGroup,
+    MdXCellSwipe,
+    MdXField,
+    MdXSearch,
+    MdXPanel,
+    MdXSwipe
 }

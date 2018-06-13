@@ -10,14 +10,13 @@ use Validator;
 
 class EntController extends Controller {
 	public function index(Request $request) {
+    $size=$request->input('size',10);
 		$userID = GAuth::userId();
 		$query = DB::table('gmf_sys_ents as l')->join('gmf_sys_ent_users as u', 'l.id', '=', 'u.ent_id');
 		$query->addSelect('l.id', 'l.name', 'l.avatar', 'u.is_default', 'u.type_enum as type');
 		$query->where('u.user_id', $userID);
 		$query->orderBy('u.is_default', 'desc')->orderBy('l.name');
-
-		$datas = $query->get();
-		return $this->toJson($datas);
+		return $this->toJson($query->paginate($size));
 	}
 	public function show(Request $request, string $id) {
 		$query = Models\Ent::where('id', $id)->orWhere('code', $id);
@@ -81,14 +80,13 @@ class EntController extends Controller {
 		return $this->toJson(true);
 	}
 	public function getMyEnts(Request $request) {
+    $size=$request->input('size',10);
 		$userID = GAuth::userId();
 		$query = DB::table('gmf_sys_ents as l')->join('gmf_sys_ent_users as u', 'l.id', '=', 'u.ent_id');
 		$query->addSelect('l.id', 'l.name', 'l.avatar', 'u.is_default', 'u.type_enum as type');
 		$query->where('u.user_id', $userID);
 		$query->orderBy('u.is_default', 'desc')->orderBy('l.name');
-
-		$datas = $query->get();
-		return $this->toJson($datas);
+		return $this->toJson($query->paginate($size));
 	}
 	public function seedDatas(Request $request, $id) {
 		if (empty($id)) {
