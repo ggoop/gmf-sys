@@ -12,7 +12,7 @@ class RegisterController extends Controller
      * 提供企业应用注册服务
      * 注册企业
      */
-    public function registerEnt(Request $request)
+    public function register(Request $request)
     {
         $input = $request->all();
         Validator::make($input, [
@@ -35,38 +35,6 @@ class RegisterController extends Controller
             Models\Ent::addUser($ent->id, $user->id, 'creator');
         }
         return $this->toJson(true);
-    }
-    /**
-     * 提供企业应用注册服务
-     * 注册应用
-     * datas:['openid'=>true,'token'=>false]
-     */
-    public function registerApp(Request $request)
-    {
-        $input = $request->all();
-        Validator::make($input, [
-            'token' => 'required',
-            'account' => 'required',
-            'ent_openid' => 'required',
-            'datas.*.openid' => 'required',
-            'datas.*.token' => 'required',
-        ])->validate();
-        $user = $this->userCheck($input);
-        $ent = Models\Ent::where('openid', $input['ent_openid'])->first();
-        if (empty($ent)) {
-            throw new \Exception('企业不存在！');
-        }
-        if ($ent) {
-            if (!Models\EntUser::where('ent_id', $ent->id)->where('user_id', $user->id)->exists()) {
-                throw new \Exception('企业还没有发布！需要先发布企业，再进行此操作!');
-            }
-        }
-        $datas = $input['datas'];
-        foreach ($datas as $item) {
-            $app = Models\App\App::where('openid', $item['openid'])->orWhere('id', $item['openid'])->first();
-            Models\App\EntApp::updateOrCreate(['ent_id' => $ent->id, 'app_id' => $app->id], array_only($item, ['token', 'gateway']));
-        }
-        return $this->toJson($data);
     }
     private function userCheck($input)
     {

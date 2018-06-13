@@ -36,10 +36,11 @@ class PublishController extends Controller
         $params = [
             "token" => $input['token'],
             "account" => $input['account'],
+            "type" => 'ent',
             'datas' => ['openid' => $ent->openid, 'name' => $ent->name, 'token' => $ent->token, 'gateway' => $input['gateway']],
         ];
         $client = new GuzzleHttp\Client(['base_uri' => $input['discover']]);
-        $res = $client->post('api/sys/apps/register-ent', ['json' => $params]);
+        $res = $client->post('api/sys/apps/register', ['json' => $params]);
         $body = (String) $res->getBody();
         if ($body) {
             $body = json_decode($body);

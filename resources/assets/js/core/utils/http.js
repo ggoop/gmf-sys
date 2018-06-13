@@ -105,7 +105,7 @@ GHTTP.appConfig = function(config) {
     return new Promise((resolved, rejected) => {
         chttp.post('sys/apps/config', config).then(res => {
             instance.config(res.data.data);
-            resolved(true);
+            resolved(res.data.data);
         }, err => {
             rejected(false);
         });
