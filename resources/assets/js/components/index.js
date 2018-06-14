@@ -104,6 +104,10 @@ import MdXSwipe from './MdXSwipe'
 import MdXButton from './MdXButton'
 import MdXLoading from './MdXLoading'
 
+import MdXNavBar from './MdXNavBar'
+import MdXTag from './MdXTag'
+
+import MdXDialog from './MdXDialog'
 
 export {
     MdApp,
@@ -208,5 +212,8 @@ export {
     MdXSwipe,
 
     MdXButton,
-    MdXLoading
+    MdXLoading,
+    MdXNavBar,
+    MdXTag,
+    MdXDialog
 }

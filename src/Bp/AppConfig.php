@@ -42,19 +42,18 @@ class AppConfig
         // }
     $gateway = ($entApp && $entApp->gateway) ? $entApp->gateway : $ent->gateway;
 
-
     $token = false;
     if (empty($gateway)) {
-            //没有网关时，用本地服务
+      //没有网关时，用本地服务
       $params = [
         "userId" => $user->id,
         "entId" => $ent->id,
         "appId" => $app->id,
         'token' => $ent->token,
       ];
-      $token = app('Gmf\Sys\Bp\AppToken')->issueToken($params);
+      $token = (new AppToken())->issueToken($params);
     } else {
-            //远程服务授权
+      //远程服务授权
       $params = [
         "user_openid" => $user->openid,
         "ent_openid" => $ent->openid,

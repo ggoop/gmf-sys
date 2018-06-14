@@ -1,0 +1,80 @@
+<template>
+  <span
+    class="md-1px-all"
+    :class="b({
+      mark,
+      plain,
+      [type]: type
+    })"
+  >
+    <slot />
+  </span>
+</template>
+
+<script>
+import create from "gmf/core/MdComponent";
+
+export default new create({
+  name: 'MdXTag',
+  props: {
+    type: String,
+    mark: Boolean,
+    plain: Boolean
+  }
+});
+</script>
+<style lang="scss">
+@import '~gmf/style/variables';
+.md-x-tag {
+  display: inline-block;
+  padding: 2px 5px;
+  line-height: normal;
+  border-radius: 3px;
+  font-size: 10px;
+  background: $gray;
+  color: $white;
+
+  &::after {
+    border-color: currentColor;
+    border-radius: 4px;
+  }
+
+  &--mark {
+    padding-right: 7px;
+    border-radius: 0 8px 8px 0;
+
+    &::after {
+      border-radius: 0 16px 16px 0;
+    }
+  }
+
+  &--success {
+    background: $green;
+
+    &.md-x-tag--plain {
+      color: $green;
+    }
+  }
+
+  &--danger {
+    background: $button-danger-background-color;
+
+    &.md-x-tag--plain {
+      color: $button-danger-background-color;
+    }
+  }
+
+  &--primary {
+    background: $blue;
+
+    &.md-x-tag--plain {
+      color: $blue;
+    }
+  }
+
+  &--plain {
+    background: $white;
+    color: $gray;
+  }
+}
+</style>

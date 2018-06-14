@@ -19,7 +19,8 @@ class CreateGmfSysEntUsersTable extends Migration {
 		$md->string('token')->nullable()->comment('token');
 
 		$md->integer('is_default')->nullable()->comment('是否默认');
-		$md->enum('type', 'gmf.sys.user.owner.type.enum');
+    $md->enum('type', 'gmf.sys.user.owner.type.enum');
+    $md->integer('is_effective')->default(0)->comment('是否生效');
 		$md->boolean('revoked')->default(0)->comment('注销');
 		$md->timestamps();
 

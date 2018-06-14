@@ -76,8 +76,9 @@ Route::prefix('api/sys')->middleware(['api', 'auth:api'])->namespace($ns)->group
 
 	Route::get('/ents/my', 'EntController@getMyEnts');
 	Route::get('/ents/token', 'EntController@getToken');
-	Route::post('/ents/token', 'EntController@createToken');
-	Route::any('/ents/seed/{id}', 'EntController@seedDatas');
+  Route::post('/ents/token', 'EntController@createToken');
+  Route::post('/ents/join', 'EntController@join');
+  Route::post('/ents/default', 'EntController@setDefault');
 	Route::resource('ents', 'EntController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 
 	Route::resource('dtis', 'DtiController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);

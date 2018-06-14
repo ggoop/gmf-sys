@@ -15,12 +15,14 @@ class AppToken
    */
   public function issueToken($input)
   {
+    // return [];
     Validator::make($input, [
       'userId' => 'required',
       'entId' => 'required',
       'appId' => 'required',
       'token' => 'required'
     ])->validate();
+    
     $user = Models\User::find($input['userId'])->first();
     if (empty($user)) {
       throw new \Exception('没有此用户.');
@@ -32,7 +34,7 @@ class AppToken
     if ($ent->token != $input['token']) {
       throw new \Exception('token 授权失败!');
     }
-    return app('Gmf\Sys\Bp\UserAuth')->issueToken($user, 'app_token');
+    return (new UserAuth)->issueToken($user, 'app_token');
   }
   public function parse($id)
   {
