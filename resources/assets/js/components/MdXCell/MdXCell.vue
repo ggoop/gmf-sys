@@ -15,8 +15,8 @@
     </slot>
     <div v-if="isDef(title) || $slots.title" :class="b('title')">
       <slot name="title">
-        <span v-text="title" />
-        <div v-if="label" v-text="label" :class="b('label')" />
+        <h3 v-text="title" />
+        <p v-if="label" v-text="label"/>
       </slot>
     </div>
     <div
@@ -35,12 +35,11 @@
 </template>
 
 <script>
-
-import RouterLink from 'gmf/core/mixins/MdRouterLink';
-import create from 'gmf/core/MdComponent';
+import RouterLink from "gmf/core/mixins/MdRouterLink";
+import create from "gmf/core/MdComponent";
 
 export default new create({
-  name: 'MdXCell',
+  name: "MdXCell",
   mixins: [RouterLink],
   props: {
     icon: String,
@@ -59,7 +58,7 @@ export default new create({
 
   methods: {
     onClick() {
-      this.$emit('click');
+      this.$emit("click");
       this.routerLink();
     }
   }
@@ -73,7 +72,7 @@ export default new create({
   box-sizing: border-box;
   line-height: 24px;
   position: relative;
-  background-color:#fff;
+  background-color: #fff;
   color: #333;
   font-size: 14px;
   overflow: hidden;
@@ -82,18 +81,30 @@ export default new create({
     left: 15px;
     right: 0;
     width: auto;
-    transform: scale(1, .5);
+    transform: scale(1, 0.5);
     border-bottom-width: 1px;
   }
 
   &-group {
-    background-color:#fff;
+    background-color: #fff;
   }
-
-  &__label {
-    font-size: 12px;
-    line-height: 1.2;
-    color: #666;
+  &__title {
+    h2,
+    h3,
+    h4,
+    h5 {
+      margin: 0px;
+      font-weight: normal;
+      font-size: 14px;
+      display: inline-block;
+    }
+    p {
+      font-size: 12px;
+      line-height: 1.2;
+      color: #666;
+      padding: 0px;
+      margin: 0px;
+    }
   }
 
   &__title,
@@ -110,7 +121,7 @@ export default new create({
       text-align: left;
     }
   }
-  
+
   &__left-icon {
     font-size: 16px;
     line-height: 24px;
@@ -126,7 +137,7 @@ export default new create({
 
   &--clickable {
     &:active {
-      background-color:  #e8e8e8;
+      background-color: #e8e8e8;
     }
   }
 
@@ -134,11 +145,11 @@ export default new create({
     overflow: visible;
 
     &::before {
-      content: '*';
+      content: "*";
       position: absolute;
       left: 7px;
       font-size: 14px;
-      color:#f44;
+      color: #f44;
     }
   }
 

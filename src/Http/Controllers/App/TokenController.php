@@ -5,7 +5,7 @@ use Gmf\Sys\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use GAuth;
 use Validator;
-
+use Gmf\Sys\Models;
 class TokenController extends Controller
 {
   /**
@@ -35,7 +35,8 @@ class TokenController extends Controller
     if (!empty($user)) {
       $params['userId'] = $user->id;
     }
+    $params['token']=$input['token'];
     $token = app('Gmf\Sys\Bp\AppToken')->issueToken($params);
-    return $this->toJson(['token' => $token]);
+    return $this->toJson($token);
   }
 }

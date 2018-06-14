@@ -4,7 +4,7 @@ namespace Gmf\Sys\GAuth;
 
 use Gmf\Sys\Models;
 use Illuminate\Http\Request;
-
+use Auth;
 class GAuthManager
 {
 
@@ -44,6 +44,10 @@ class GAuthManager
 	}
 	private function resolveEntUsing()
 	{
+		$user= Auth::user();
+		if($user){
+			$this->guard()->setUser($user);
+		}
 		if ($this->request->hasHeader('Ent') && $entId = $this->request->header('Ent')) {
 			$this->guard()->setEnt(Models\Ent::where('id', $entId)->orWhere('openid', $entId)->first());
 		}

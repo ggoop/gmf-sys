@@ -130,9 +130,6 @@ class GAuthGuard {
 		if ($this->m_user) {
 			return $this->m_user;
 		}
-		if (!$this->forged()) {
-			return Auth::user();
-		}
 		return null;
 	}
 	public function userId() {
