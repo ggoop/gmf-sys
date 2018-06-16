@@ -2,7 +2,7 @@
 import { camelAttrs } from './util'
 
 export default {
-  name:'MdVtooltip',
+  name:'MdXTooltip',
   props: {
     disabled: {
       type: Boolean,

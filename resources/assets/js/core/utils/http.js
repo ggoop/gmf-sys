@@ -20,12 +20,17 @@ function Http(instanceConfig) {
   this.CancelToken = axios.CancelToken;
   this.isCancel = axios.isCancel;
   this.spread = axios.spread;
+  this.configed = false;
 }
 Http.prototype.request = function request(config) {
   if (typeof config === 'string') {
-    config = utils.merge({ url: arguments[0] }, arguments[1]);
+    config = utils.merge({
+      url: arguments[0]
+    }, arguments[1]);
   }
-  config = utils.merge({}, defaults, this.defaults, { method: 'get' }, config);
+  config = utils.merge({}, defaults, this.defaults, {
+    method: 'get'
+  }, config);
   if (utils.isAbsoluteURL(config.url) || /^\//g.test(config.url)) {
     config.baseURL = '';
   }
@@ -57,7 +62,9 @@ Http.prototype.create = function (config) {
   return new Http(config);
 };
 Http.prototype.config = function (config) {
-  if (!config) return;
+  if (!config) {
+    this.configed = false;
+  };
   if (utils.isDefined(config.host)) {
     this.defaults.baseURL = config.host;
   }
@@ -69,6 +76,7 @@ Http.prototype.config = function (config) {
   if (utils.isDefined(config.token)) {
     this.defaults.headers.common.Authorization = utils.isObject(config.token) ? (config.token.token_type ? config.token.token_type : "Bearer") + " " + config.token.access_token : config.token;
   }
+  this.configed = true;
 };
 let queue = {};
 const defaultName = 'default';
@@ -98,7 +106,11 @@ GHTTP.config = function (config, isAll) {
     createGHTTPInstance().config(config);
   }
 }
-GHTTP.appConfig = function (config) {
+GHTTP.appConfig = function (config, replace) {
+  config = utils.isObject(config) ? config : {
+    name: config,
+    appId: config
+  };
   if (!config.name) {
     alert('[assert]: name is required');
   }
@@ -109,12 +121,16 @@ GHTTP.appConfig = function (config) {
   var instance = createGHTTPInstance(config.name);
 
   return new Promise((resolved, rejected) => {
-    chttp.post('sys/apps/config', config).then(res => {
-      instance.config(res.data.data);
-      resolved(res.data.data);
-    }, err => {
-      rejected(false);
-    });
+    if (instance.configed && !replace) {
+      resolved(true);
+    } else {
+      chttp.post('sys/apps/config', config).then(res => {
+        instance.config(res.data.data);
+        resolved(true);
+      }, err => {
+        rejected(false);
+      });
+    }
   });
 };
 ['delete', 'get', 'head', 'options'].forEach(method => {

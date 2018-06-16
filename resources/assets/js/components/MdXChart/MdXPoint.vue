@@ -1,6 +1,6 @@
 <script>
 export default {
-  name:'MdVpoint',
+  name:'MdXPoint',
   props: {
     styles: {
       type: Object

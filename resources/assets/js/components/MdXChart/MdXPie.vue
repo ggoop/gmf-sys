@@ -13,7 +13,7 @@ const camelBatch = function (attrs) {
   return attrs
 }
 export default {
-  name:'MdVpie',
+  name:'MdXPie',
   props: {
     coord: {
       type: String,

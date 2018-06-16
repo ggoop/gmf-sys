@@ -25,7 +25,7 @@
 import F2 from '@antv/f2'
 
 export default {
-  name:'MdVchart',
+  name:'MdXChart',
   props: {
     width: Number,
     height: Number,

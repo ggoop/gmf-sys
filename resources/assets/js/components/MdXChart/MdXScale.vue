@@ -2,7 +2,7 @@
 import { camelAttrs } from './util'
 
 export default {
-  name:'MdVscale',
+  name:'MdXScale',
   props: {
     x: Boolean,
     y: Boolean,

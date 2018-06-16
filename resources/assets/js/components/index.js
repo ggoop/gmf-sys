@@ -85,7 +85,7 @@ import MdIconDelete from './MdIcon/Parts/MdIconDelete'
 import MdPicker from './MdPicker'
 import MdPopup from './MdPopup'
 import MdSwipeout from './MdSwipeout'
-import MdVChart from './MdVChart'
+import MdXChart from './MdXChart'
 
 import MdPullRefresh from './MdPullRefresh'
 import MdScrollLoad from './MdScrollLoad'
@@ -108,6 +108,8 @@ import MdXNavBar from './MdXNavBar'
 import MdXTag from './MdXTag'
 
 import MdXDialog from './MdXDialog'
+import MdXPopup from './MdXPopup'
+import MdXTab from './MdXTab'
 
 export {
     MdApp,
@@ -195,7 +197,7 @@ export {
     MdPicker,
     MdPopup,
     MdSwipeout,
-    MdVChart,
+    MdXChart,
 
     MdPullRefresh,
     MdScrollLoad,
@@ -215,5 +217,7 @@ export {
     MdXLoading,
     MdXNavBar,
     MdXTag,
-    MdXDialog
+    MdXDialog,
+    MdXPopup,
+    MdXTab
 }

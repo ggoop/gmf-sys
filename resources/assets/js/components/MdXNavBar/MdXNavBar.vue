@@ -6,7 +6,7 @@
   >
     <div :class="b('left')" @click="$emit('click-left')">
       <slot name="left">
-        <icon v-if="leftArrow" :class="b('arrow')" name="arrow" />
+        <md-x-icon v-if="leftArrow" :class="b('arrow')" name="arrow" />
         <span v-if="leftText" v-text="leftText" :class="b('text')" />
       </slot>
     </div>
@@ -26,7 +26,6 @@ import create from "gmf/core/MdComponent";
 
 export default new create({
   name: 'MdXNavBar',
-
   props: {
     title: String,
     leftText: String,

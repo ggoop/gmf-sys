@@ -2,11 +2,11 @@
 import base from './mixin'
 
 export default {
-  name:'MdVline',
+  name:'MdXBar',
   mixins: [base],
   data () {
     return {
-      chartName: 'line'
+      chartName: 'bar'
     }
   }
 }

@@ -4,7 +4,7 @@ import { camelAttrs } from './util'
 const types = ['line', 'text', 'tag', 'rect', 'html', 'arc']
 
 export default {
-  name:'MdVguide',
+  name:'MdXGuide',
   props: {
     type: {
       type: String,

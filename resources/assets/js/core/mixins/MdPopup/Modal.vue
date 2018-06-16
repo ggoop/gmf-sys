@@ -2,7 +2,7 @@
   <transition name="md-fade">
     <div
       v-show="visible"
-      class="md-modal"
+      class="md-x-modal"
       :class="className"
       :style="style"
       @touchmove.prevent.stop
@@ -14,7 +14,6 @@
 <script>
 export default {
   name: 'modal',
-
   props: {
     visible: Boolean,
     zIndex: Number,
@@ -33,7 +32,7 @@ export default {
 };
 </script>
 <style lang="scss">
-.md-modal {
+.md-x-modal {
     position: fixed;
     width: 100%;
     height: 100%;

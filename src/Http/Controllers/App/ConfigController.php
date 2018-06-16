@@ -19,7 +19,7 @@ class ConfigController extends Controller
     Validator::make($input, [
       'appId' => 'required',
     ])->validate();
-    $app = Models\App\App::where('id',$input['appId'])->orWhere('openid',$input['appId']);
+    $app = Models\App\App::where('id',$input['appId'])->orWhere('openid',$input['appId'])->first();
     if (empty($app)) {
       throw new \Exception('没有此应用.');
     }

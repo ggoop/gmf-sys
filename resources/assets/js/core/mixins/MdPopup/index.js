@@ -91,7 +91,7 @@ export default {
                 on(document, 'touchstart', this.touchStart);
                 on(document, 'touchmove', this.onTouchMove);
                 if (!context.lockCount) {
-                    document.body.classList.add('md-overflow-hidden');
+                    document.body.classList.add('md-x-overflow-hidden');
                 }
                 context.lockCount++;
             }
@@ -107,7 +107,7 @@ export default {
                 off(document, 'touchstart', this.touchStart);
                 off(document, 'touchmove', this.onTouchMove);
                 if (!context.lockCount) {
-                    document.body.classList.remove('md-overflow-hidden');
+                    document.body.classList.remove('md-x-overflow-hidden');
                 }
             }
 

@@ -2,7 +2,7 @@
 import { camelAttrs } from './util'
 
 export default {
-  name:'MdVlegend',
+  name:'MdXLegend',
   props: {
     options: {
       type: Object,

@@ -2,7 +2,7 @@
 import { camelAttrs } from './util'
 
 export default {
-  name:'MdVaxis',
+  name:'MdXAxis',
   props: {
     x: Boolean,
     y: Boolean,
