@@ -7,6 +7,9 @@
         <div :class="b('confirm')" @click="onConfirm">{{ mdConfirmText }}</div>
       </slot>
     </div>
+    <div v-if="loading" :class="b('loading')">
+      <md-x-loading />
+    </div>
     <md-flexbox :gutter="0">
       <md-flexbox-item :span="mdColumnWidth && mdColumnWidth[index]" v-for="(one, index) in currentData" :key="index" style="margin-left:0;">
         <div class="md-picker-item" :id="`md-picker-${uuid}-${index}`"></div>
@@ -31,9 +34,10 @@
       MdFlexboxItem
     },
     created() {
+      this.mapDataToRows();
       if (this.mdColumns !== 0) {
         const length = this.mdColumns
-        this.store = new Manager(this.mdData, length, this.mdFixedColumns || this.mdColumns)
+        this.store = new Manager(this.currentData, length, this.mdFixedColumns || this.mdColumns)
         this.currentData = this.store.getColumns(this.value)
       }
     },
@@ -44,7 +48,10 @@
       })
     },
     props: {
-      mdData: [Array, Function],
+      mdData: {
+        default: () => [],
+        type: [Array, Function]
+      },
       mdColumns: {
         type: Number,
         default: 0
@@ -53,7 +60,10 @@
         type: Number,
         default: 0
       },
-      value: Array,
+      value: {
+        default: () => [],
+        type: [Array]
+      },
       mdItemClass: {
         type: String,
         default: 'scroller-item'
@@ -72,11 +82,17 @@
     },
     data() {
       return {
+        loading: false,
         scroller: [],
         count: 0,
         uuid: '',
-        currentData: this.mdData,
+        currentData: [],
         currentValue: this.value
+      }
+    },
+    computed: {
+      usesLocalData() {
+        return isArray(this.mdData);
       }
     },
     watch: {
@@ -110,8 +126,8 @@
         }
       },
       mdData(val) {
-        if (JSON.stringify(val) !== JSON.stringify(this.currentData)) {
-          this.currentData = val
+        if (this.usesLocalData) {
+          this.mapDataToRows();
         }
       },
       currentData(newData) {
@@ -148,8 +164,26 @@
       onCancel() {
         this.$emit('md-cancel');
       },
+      fetchLocalData() {
+        return this.mdData.filter(r => r);
+      },
+      async fetchServerData() {
+        this.loading = true;
+        const response = await this.mdData();
+        this.loading = false;
+        if (isArray(response)) {
+          return response;
+        }
+        return response.data.data;
+      },
+      async mapDataToRows() {
+        const val = this.usesLocalData ? this.fetchLocalData() : await this.fetchServerData();
+        if (JSON.stringify(val) !== JSON.stringify(this.currentData)) {
+          this.currentData = val
+        }
+      },
       getNameValues() {
-        return value2name(this.currentValue, this.mdData)
+        return value2name(this.currentValue, this.currentData)
       },
       getId(i) {
         return `#md-picker-${this.uuid}-${i}`
@@ -166,9 +200,9 @@
           for (let i = 0; i < count; i++) {
             if (process.env.NODE_ENV === 'development' &&
               typeof data[i][0] === 'undefined' &&
-              isArray(this.mdData) &&
-              this.mdData[0] &&
-              typeof this.mdData[0].value !== 'undefined' &&
+              isArray(this.currentData) &&
+              this.currentData[0] &&
+              typeof this.currentData[0].value !== 'undefined' &&
               !this.mdColumns) {
               console.error('[VUX error] 渲染出错，如果为联动模式，需要指定 mdColumns(列数)')
             }
@@ -286,6 +320,29 @@
         background-color: $active-color;
       }
     }
+    &__loading {
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 2;
+      position: absolute;
+      background-color: rgba(255, 255, 255, .9);
+
+      .md-x-loading {
+        top: 50%;
+        left: 0;
+        width: 100%;
+        z-index: 1;
+        position: absolute;
+        pointer-events: none;
+        transform: translateY(-50%);
+        circle {
+          stroke: $blue;
+        }
+      }
+    }
+
 
     &__title {
       max-width: 50%;

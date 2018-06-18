@@ -110,7 +110,7 @@ import MdXTag from './MdXTag'
 import MdXDialog from './MdXDialog'
 import MdXPopup from './MdXPopup'
 import MdXTab from './MdXTab'
-
+import MdXDropdown from './MdXDropdown'
 export {
     MdApp,
     MdAutocomplete,
@@ -219,5 +219,6 @@ export {
     MdXTag,
     MdXDialog,
     MdXPopup,
-    MdXTab
+    MdXTab,
+    MdXDropdown
 }

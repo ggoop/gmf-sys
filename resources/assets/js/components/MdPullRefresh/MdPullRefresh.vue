@@ -162,6 +162,7 @@ export default {
   .md-pull-refresh-track {
     position: relative;
     height: 100%;
+    overflow: auto;
   }
 
   .md-pull-refresh-header {
