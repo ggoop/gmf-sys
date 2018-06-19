@@ -42,10 +42,20 @@ class Ent extends Model
       'openid' => ['required'],
     ])->validate();
   }
-  public function hasUser($userId){
+  public function hasUser($userId)
+  {
     return EntUser::where('ent_id', $this->id)->where('user_id', $userId)->exists();
   }
-
+  public static function setEffective($entId, $userId, $is_effective)
+  {
+    $m = EntUser::where('ent_id', $entId)->where('user_id', $userId)->first();
+    if (empty($m)) {
+      throw new \Exception('用户或者企业不存在!');
+    }
+    $m->is_effective = $is_effective ? 1 : 0;
+    $m->save();
+    return $m;
+  }
   public static function addUser($entId, $userId, $type = 'member')
   {
     $options = [];
