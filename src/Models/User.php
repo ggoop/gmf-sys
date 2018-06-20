@@ -42,9 +42,6 @@ class User extends Authenticatable
         if (empty($this->openid)) {
             $this->openid = Uuid::generate();
         }
-        if (empty($this->token)) {
-            $this->token = Uuid::generate();
-        }
     }
     public function validate()
     {
