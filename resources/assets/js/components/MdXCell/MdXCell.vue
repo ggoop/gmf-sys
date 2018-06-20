@@ -18,7 +18,7 @@
     </div>
     <div v-if="isDef(value) || $slots.default" :class="b('value', { alone: !$slots.title && !title })">
       <slot>
-        <span v-text="value.constructor === Object?value.name:value " />
+        <span v-text="value&&value.constructor === Object?value.name:value " />
       </slot>
     </div>
     <slot name="right-icon">

@@ -15,6 +15,7 @@ class CreateGmfSysUsersStatusEnum extends Migration {
 		$md->mdEnum('gmf.sys.user.status.enum')->comment('用户状态');
 		$md->string('normal')->comment('正常')->default(0);
 		$md->string('locked')->comment('锁定')->default(1);
+		$md->string('auditing')->comment('审核中')->default(1);
 		$md->build();
 
 	}

@@ -169,10 +169,10 @@ class User extends Authenticatable
         $user = $query->orderBy('created_at', 'desc')->first();
 
         $data = array_only($opts, [
-            'id', 'account', 'mobile', 'email', 'password',
+            'id','openid', 'account', 'mobile', 'email', 'password',
             'name', 'nick_name', 'gender',
             'type', 'cover', 'avatar', 'titles', 'memo',
-            'client_id', 'client_type', 'client_name', 'src_id', 'src_url', 'info',
+            'client_id', 'client_type', 'client_name', 'src_id', 'src_url', 'info','status_enum'
         ]);
         if ($user) {
             $updates = [];
