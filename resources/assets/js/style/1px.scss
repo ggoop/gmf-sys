@@ -15,6 +15,9 @@
   &-r::after {
     border-right-width: 1px;
   }
+  &-lr::after {
+    border-width: 0px 1px;
+  }
   &-b::after {
     border-bottom-width: 1px;
   }

@@ -128,7 +128,7 @@ GHTTP.appConfig = function (config, replace) {
         instance.config(res.data.data);
         resolved(true);
       }, err => {
-        rejected(false);
+        rejected(err);
       });
     }
   });
