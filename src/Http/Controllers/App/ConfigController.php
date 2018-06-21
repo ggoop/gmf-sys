@@ -19,14 +19,15 @@ class ConfigController extends Controller
     Validator::make($input, [
       'appId' => 'required',
     ])->validate();
-    $app = Models\App\App::where('id',$input['appId'])->orWhere('openid',$input['appId'])->first();
+    $app = Models\App\App::where('id', $input['appId'])->orWhere('openid', $input['appId'])->first();
     if (empty($app)) {
       throw new \Exception('没有此应用.');
     }
+    $entId = $request->input('entId', GAuth::entId());
     $token = app('Gmf\Sys\Bp\AppConfig')->config([
       'appId' => $app->id,
       'userId' => GAuth::id(),
-      'entId' => GAuth::entId(),
+      'entId' => $entId,
     ]);
     if (empty($token['host'])) {
       $token['host'] = $request->getSchemeAndHttpHost();

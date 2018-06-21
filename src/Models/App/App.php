@@ -11,40 +11,43 @@ use Validator;
 
 class App extends Model
 {
-    use Snapshotable, HasGuard, BatchImport;
-    protected $table = 'gmf_sys_apps';
-    public $incrementing = false;
-    protected $keyType = 'string';
-    protected $fillable = ['id', 'openid', 'code', 'name', 'memo', 'discover', 'gateway', 'revoked'];
-    protected $hidden = ['token'];
-    public function formatDefaultValue($attrs)
-    {
-        if (empty($this->openid)) {
-            $this->openid = Uuid::generate();
-        }
-        if (empty($this->revoked)) {
-            $this->revoked = 0;
-        }
+  use Snapshotable, HasGuard, BatchImport;
+  protected $table = 'gmf_sys_apps';
+  public $incrementing = false;
+  protected $keyType = 'string';
+  protected $fillable = ['id', 'openid','token', 'code', 'name', 'memo', 'discover', 'gateway', 'revoked'];
+  protected $hidden = ['token'];
+  public function formatDefaultValue($attrs)
+  {
+    if (empty($this->openid)) {
+      $this->openid = Uuid::generate();
     }
-    public function validate()
-    {
-        Validator::make($this->toArray(), [
-            'openid' => ['required'],
-            'code' => ['required'],
-            'name' => ['required'],
-        ])->validate();
+    if (empty($this->token)) {
+      $this->token = Uuid::generate();
     }
-    public function uniqueQuery($query)
-    {
-        $query->where(function ($query) {
-            $query->where('openid', $this->openid)->orWhere('code', $this->code);
-        });
+    if (empty($this->revoked)) {
+      $this->revoked = 0;
     }
-    public static function fromImport($datas)
-    {
-        $datas = $datas->map(function ($row) {
-            return $row;
-        });
-        static::BatchImport($datas);
-    }
+  }
+  public function validate()
+  {
+    Validator::make($this->toArray(), [
+      'openid' => ['required'],
+      'code' => ['required'],
+      'name' => ['required'],
+    ])->validate();
+  }
+  public function uniqueQuery($query)
+  {
+    $query->where(function ($query) {
+      $query->where('openid', $this->openid)->orWhere('code', $this->code);
+    });
+  }
+  public static function fromImport($datas)
+  {
+    $datas = $datas->map(function ($row) {
+      return $row;
+    });
+    static::BatchImport($datas);
+  }
 }

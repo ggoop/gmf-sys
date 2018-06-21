@@ -23,11 +23,11 @@ class AppToken
       'token' => 'required'
     ])->validate();
     
-    $user = Models\User::find($input['userId'])->first();
+    $user = Models\User::find($input['userId']);
     if (empty($user)) {
       throw new \Exception('没有此用户.');
     }
-    $ent = Models\Ent::find($input['entId'])->first();
+    $ent = Models\Ent::find($input['entId']);
     if (empty($ent)) {
       throw new \Exception('没有此企业.');
     }
