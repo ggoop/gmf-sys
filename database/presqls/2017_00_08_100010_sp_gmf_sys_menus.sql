@@ -41,11 +41,7 @@ GROUP BY rm.menu_id,rm.opinion_enum;
 INSERT INTO temp_menus_data(root_id,parent_id,id,CODE,NAME)
 SELECT m.root_id,m.parent_id,m.id,m.code,m.name
 FROM gmf_sys_menus AS m
-WHERE (p_tag IS NULL OR m.tag=p_tag) AND m.is_leaf=1
-AND (
-  m.id IN (SELECT menu_id FROM temp_opinion_data AS d WHERE d.opinion_enum='permit')  
-  OR NOT EXISTS(SELECT menu_id FROM temp_opinion_data)
-);
+WHERE (p_tag IS NULL OR m.tag=p_tag) AND m.is_leaf=1;
 
 DELETE FROM temp_menus_data WHERE id IN (SELECT menu_id FROM temp_opinion_data AS d WHERE d.opinion_enum!='permit');
 
