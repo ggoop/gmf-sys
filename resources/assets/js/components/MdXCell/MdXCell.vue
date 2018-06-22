@@ -13,6 +13,7 @@
     <div v-if="isDef(title) || $slots.title" :class="b('title')">
       <slot name="title">
         <h3 v-text="title" />
+        <md-x-tag v-if="tag">{{tag}}</md-x-tag>
         <p v-if="label" v-text="label" />
       </slot>
     </div>
@@ -37,6 +38,7 @@
     mixins: [RouterLink],
     props: {
       icon: String,
+      tag:String,
       label: String,
       center: Boolean,
       isLink: Boolean,

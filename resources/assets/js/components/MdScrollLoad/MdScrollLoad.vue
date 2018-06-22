@@ -4,7 +4,7 @@
     <div v-show="value" class="loading">
       <slot name="loading">
         <md-loading class="icon" />
-        <span class="text">{{ mdLoadingText || $t('loadingTip') }}</span>
+        <span class="text">{{ mdLoadingText}}</span>
       </slot>
     </div>
   </div>
@@ -31,7 +31,10 @@
         type: Number,
         default: 300
       },
-      mdLoadingText: String,
+      mdLoadingText: {
+        type:String,
+        default:'加载中...'
+      },
       configed: {
         type: Boolean,
         default: true
@@ -130,10 +133,7 @@
 </script>
 <style lang="scss">
   .md-scroll-load {
-    max-height: 100%;
     max-width: 100%;
-    min-height: 100%;
-    overflow: auto;
     >.loading {
       text-align: center;
       .text {

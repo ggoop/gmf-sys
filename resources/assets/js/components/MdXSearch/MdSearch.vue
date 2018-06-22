@@ -12,7 +12,7 @@
     />
     <div v-if="showAction" :class="b('action')" >
       <slot name="action">
-        <div :class="b('cancel')" @click="onBack">{{ $t('cancel') }}</div>
+        <div :class="b('cancel')" @click="onBack">取消</div>
       </slot>
     </div>
   </div>

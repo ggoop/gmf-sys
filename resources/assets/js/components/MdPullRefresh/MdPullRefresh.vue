@@ -10,15 +10,15 @@
       <div class="md-pull-refresh-header">
         <slot v-if="status === 'normal'" name="normal" />
         <slot v-if="status === 'pulling'" name="pulling">
-          <span class="text">{{ mdPullingText || $t('pulling') }}</span>
+          <span class="text">{{ mdPullingText}}</span>
         </slot>
         <slot v-if="status === 'loosing'" name="loosing">
-          <span class="text">{{ mdLoosingText || $t('loosing') }}</span>
+          <span class="text">{{ mdLoosingText}}</span>
         </slot>
         <slot v-if="status === 'loading'" name="loading">
           <div class="md-pull-refresh-loading">
             <md-loading />
-            <span class="text">{{ mdLoadingText || $t('loadingTip') }}</span>
+            <span class="text">{{ mdLoadingText}}</span>
           </div>
         </slot>
       </div>
@@ -29,15 +29,24 @@
 <script>
 import scrollUtils from "gmf/core/utils/MdScroll";
 import Touch from "gmf/core/mixins/MdTouch/MdTouch";
-import { on, off } from 'gmf/core/utils/MdInteractionEvents';
+import { on, off } from "gmf/core/utils/MdInteractionEvents";
 
 export default {
   name: "MdPullRefresh",
   mixins: [Touch],
   props: {
-    mdPullingText: String,
-    mdLoosingText: String,
-    mdLoadingText: String,
+    mdPullingText: {
+      type: String,
+      default: "下拉即可刷新.."
+    },
+    mdLoosingText: {
+      type: String,
+      default: "释放即可刷新..."
+    },
+    mdLoadingText: {
+      type: String,
+      default: "加载中..."
+    },
     mdAnimationDuration: {
       type: Number,
       default: 300
@@ -51,7 +60,7 @@ export default {
     return {
       status: "normal",
       height: 0,
-      value:true,
+      value: true,
       duration: 0
     };
   },
@@ -113,15 +122,15 @@ export default {
         this.duration = this.mdAnimationDuration;
         if (this.status === "loosing") {
           this.getStatus(this.mdHeadHeight, true);
-          this.value=true;
-          this.$emit("refresh",this.refreshFinish);
+          this.value = true;
+          this.$emit("refresh", this.refreshFinish);
         } else {
           this.getStatus(0);
         }
       }
     },
-    refreshFinish(){
-      this.value=false;
+    refreshFinish() {
+      this.value = false;
     },
     getCeiling() {
       this.ceiling = scrollUtils.getScrollTop(this.scrollEl) === 0;
@@ -158,11 +167,8 @@ export default {
 .md-pull-refresh {
   user-select: none;
   overflow: hidden;
-  height: 100%;
   .md-pull-refresh-track {
     position: relative;
-    height: 100%;
-    overflow: auto;
   }
 
   .md-pull-refresh-header {
