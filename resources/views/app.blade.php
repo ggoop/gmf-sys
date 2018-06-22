@@ -14,7 +14,7 @@
       </script>
   @endif
 </head>
-<body>
+<body ontouchstart>
   <div id="gmfApp" class="layout-fill">
     <router-view></router-view>
     <md-toast ref="rootToast"></md-toast>
