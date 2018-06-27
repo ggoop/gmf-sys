@@ -38,7 +38,7 @@
     mixins: [RouterLink],
     props: {
       icon: String,
-      tag:String,
+      tag: String,
       label: String,
       center: Boolean,
       isLink: Boolean,
@@ -72,6 +72,13 @@
     color: #333;
     font-size: 14px;
     overflow: hidden;
+    >.md-avatar {
+      margin: 4px 0;
+      margin-right: 16px;
+    }
+    >.md-button:last-child {
+      margin: 0 -10px 0 16px;
+    }
 
     &:not(:last-child)::after {
       left: 15px;
