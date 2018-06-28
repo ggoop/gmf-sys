@@ -12,7 +12,7 @@ use Gmf\Sys\Database\Concerns\BatchImport;
 use Validator;
 use Uuid;
 
-class Serve extends Model
+class Pack extends Model
 {
   use Snapshotable, HasGuard, BatchImport;
   protected $table = 'gmf_sys_sv_packs';

@@ -29,7 +29,7 @@ class Config
       throw new \Exception('没有此企业.');
     }
     $pack = Models\Sv\Pack::find($input['packId']);
-    if (empty($app)) {
+    if (empty($pack)) {
       throw new \Exception('没有此服务包.');
     }
     $gateway =$ent->gateway;
