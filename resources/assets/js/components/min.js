@@ -78,6 +78,7 @@ import MdXDialog from './MdXDialog'
 import MdXPopup from './MdXPopup'
 import MdXTab from './MdXTab'
 import MdXDropdown from './MdXDropdown'
+import MdXSubmitBar from './MdXSubmitBar'
 export {
     MdApp,
     MdAutocomplete,
@@ -153,5 +154,6 @@ export {
     MdXDialog,
     MdXPopup,
     MdXTab,
-    MdXDropdown
+    MdXDropdown,
+    MdXSubmitBar
 }

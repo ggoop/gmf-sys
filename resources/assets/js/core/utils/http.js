@@ -94,7 +94,7 @@ function GHTTP(name, config) {
   return createGHTTPInstance(name, config);
 };
 /**
- * {name,appId,entId,gateway,timestamp,apiList}
+ * {name,packId,entId,gateway,timestamp,apiList}
  * @param {object} config 
  */
 GHTTP.config = function (config, isAll) {
@@ -106,16 +106,16 @@ GHTTP.config = function (config, isAll) {
     createGHTTPInstance().config(config);
   }
 }
-GHTTP.appConfig = function (config, replace) {
+GHTTP.packConfig = function (config, replace) {
   config = utils.isObject(config) ? config : {
     name: config,
-    appId: config
+    packId: config
   };
   if (!config.name) {
     alert('[assert]: name is required');
   }
-  if (!config.appId) {
-    alert('[assert]: appId is required');
+  if (!config.packId) {
+    alert('[assert]: packId is required');
   }
   var chttp = createGHTTPInstance();
   var instance = createGHTTPInstance(config.name);
@@ -124,7 +124,7 @@ GHTTP.appConfig = function (config, replace) {
     if (instance.configed && !replace) {
       resolved(true);
     } else {
-      chttp.post('sys/apps/config', config).then(res => {
+      chttp.post('sys/sv/config', config).then(res => {
         instance.config(res.data.data);
         resolved(true);
       }, err => {
