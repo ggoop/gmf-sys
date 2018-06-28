@@ -85,15 +85,6 @@ class UserAuth {
 		Auth::loginUsingId($user->id);
 		return $user;
 	}
-
-	public function issueToken($user, $type = 'web') {
-		$token = $user->createToken($type);
-		$rtn = new Builder;
-		$rtn->access_token($token->accessToken);
-		$rtn->expires_in(strtotime($token->token->expires_at));
-		$rtn->token_type('Bearer');
-		return $rtn;
-	}
 	public function resetPassword(BPListener $observer, $input) {
 		Validator::make($input, [
 			'id' => 'required',

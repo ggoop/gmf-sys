@@ -1,13 +1,13 @@
 <?php
 
-namespace Gmf\Sys\Bp;
+namespace Gmf\Sys\Bp\Sv;
 
 use GAuth;
 use Gmf\Sys\Models;
 use GuzzleHttp;
 use Validator;
-
-class AppConfig
+use Gmf\Sys\Bp\Auth\Token;
+class Config
 {
   /**
    * 通过 用户 openid+ 应用 openid+ 企业 openid+ 企业应用 token 获取token
@@ -16,7 +16,7 @@ class AppConfig
   public function config($input)
   {
     Validator::make($input, [
-      'appId' => 'required',
+      'packId' => 'required',
       'entId' => 'required',
       'userId' => 'required',
     ])->validate();
@@ -28,19 +28,11 @@ class AppConfig
     if (empty($ent)) {
       throw new \Exception('没有此企业.');
     }
-    $app = Models\App\App::find($input['appId']);
+    $pack = Models\Sv\Pack::find($input['packId']);
     if (empty($app)) {
-      throw new \Exception('没有此应用.');
+      throw new \Exception('没有此服务包.');
     }
-    $entApp = Models\App\EntApp::where('ent_id', $ent->id)->where('app_id', $app->id)->first();
-        // if (empty($entApp)) {
-        //     throw new \Exception('企业没有配置应用!');
-        // }
-        // $entUser = Models\EntUser::where('ent_id', $ent->id)->where('user_id', $app->id)->first();
-        // if (empty($entApp)) {
-        //     throw new \Exception('企业没有配置用户!');
-        // }
-    $gateway = ($entApp && $entApp->gateway) ? $entApp->gateway : $ent->gateway;
+    $gateway =$ent->gateway;
 
     $token = false;
     if (empty($gateway)) {
@@ -48,20 +40,19 @@ class AppConfig
       $params = [
         "userId" => $user->id,
         "entId" => $ent->id,
-        "appId" => $app->id,
         'token' => $ent->token,
       ];
-      $token = (new AppToken())->issueToken($params);
+      $token = (new Token())->issueTokenByOpenid($params);
     } else {
       //远程服务授权
       $params = [
         "user_openid" => $user->openid,
         "ent_openid" => $ent->openid,
-        "app_openid" => $app->openid,
         'token' => $ent->token,
+        'type' => 'ent',
       ];
       $client = new GuzzleHttp\Client(['base_uri' => $gateway]);
-      $res = $client->post('api/sys/apps/token', ['json' => $params]);
+      $res = $client->post('api/sys/auth/token', ['json' => $params]);
       $body = (String)$res->getBody();
       if ($body) {
         $body = json_decode($body);

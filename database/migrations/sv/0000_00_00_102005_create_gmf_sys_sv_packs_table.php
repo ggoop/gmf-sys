@@ -14,6 +14,7 @@ class CreateGmfSysSvPacksTable extends Migration {
 		$md = Metadata::create($this->mdID);
 		$md->mdEntity('gmf.sys.sv.pack')->comment('服务包')->tableName('gmf_sys_sv_packs');
     $md->string('id', 100)->primary();
+    $md->string('openid')->nullable()->comment('开放ID');
     $md->string('type',100)->nullable()->comment('类型');//公有服务：public,私有服务：private,应用服务：app
 		$md->string('code')->nullable()->comment('编码');
     $md->string('name')->nullable()->comment('名称');

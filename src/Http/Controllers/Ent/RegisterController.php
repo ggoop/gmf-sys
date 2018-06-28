@@ -1,5 +1,5 @@
 <?php
-namespace Gmf\Sys\Http\Controllers\App;
+namespace Gmf\Sys\Http\Controllers\Ent;
 
 use Gmf\Sys\Http\Controllers\Controller;
 use Gmf\Sys\Models;
@@ -26,7 +26,7 @@ class RegisterController extends Controller
         $data = array_except($input['datas'], ['id', 'code']);
         $ent = Models\Ent\Ent::where('openid', $data['openid'])->first();
         if ($ent) {
-            if (!Models\EntUser::where('ent_id', $ent->id)->where('user_id', $user->id)->exists()) {
+            if (!Models\Ent\EntUser::where('ent_id', $ent->id)->where('user_id', $user->id)->exists()) {
                 throw new \Exception('企业已经发布过，请使用原有账号发布!');
             }
             Models\Ent\Ent::where('id', $ent->id)->update(array_only($data, ['name', 'token','gateway']));

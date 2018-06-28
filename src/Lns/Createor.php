@@ -95,7 +95,7 @@ class Createor {
 		$data = Models\Lns::updateOrCreate(['request_code' => $input['request_code']], $input);
 
 		if ($data && $request && GAuth::entId()) {
-			Models\EntLns::updateOrCreate(
+			Models\Ent\EntLns::updateOrCreate(
 				['ent_id' => GAuth::entId()],
 				['revoked' => '0', 'lns_id' => $data->id]);
 		}

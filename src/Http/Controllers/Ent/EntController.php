@@ -1,5 +1,5 @@
 <?php
-namespace Gmf\Sys\Http\Controllers;
+namespace Gmf\Sys\Http\Controllers\Ent;
 
 use Artisan;
 use DB;
@@ -8,6 +8,7 @@ use Gmf\Sys\Models;
 use Illuminate\Http\Request;
 use Validator;
 use Gmf\Sys\Http\Resources;
+use Gmf\Sys\Http\Controllers\Controller;
 
 class EntController extends Controller
 {
@@ -24,7 +25,7 @@ class EntController extends Controller
 
     $meJoins = [];
     if (GAuth::ids()) {
-      $meJoins = Models\EntUser::whereIn('user_id', GAuth::ids())->pluck('ent_id')->all();
+      $meJoins = Models\Ent\EntUser::whereIn('user_id', GAuth::ids())->pluck('ent_id')->all();
     }
     return $this->toJson(Resources\Ent::collection($query->paginate($size))->withItemCallback(function ($sb, $send) use ($meJoins) {
       $sb->is_joined(in_array($sb->id, $meJoins));
@@ -135,8 +136,8 @@ class EntController extends Controller
     }
     $userId = GAuth::id();
 
-    Models\EntUser::where('user_id', $userId)->where('ent_id', '!=', $ent->id)->update(['is_default' => 0]);
-    Models\EntUser::where('user_id', $userId)->where('ent_id', $ent->id)->update(['is_default' => 1]);
+    Models\Ent\EntUser::where('user_id', $userId)->where('ent_id', '!=', $ent->id)->update(['is_default' => 0]);
+    Models\Ent\EntUser::where('user_id', $userId)->where('ent_id', $ent->id)->update(['is_default' => 1]);
     return $this->toJson(true);
   }
 }

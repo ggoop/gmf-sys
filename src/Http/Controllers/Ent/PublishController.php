@@ -1,5 +1,5 @@
 <?php
-namespace Gmf\Sys\Http\Controllers\App;
+namespace Gmf\Sys\Http\Controllers\Ent;
 
 use GAuth;
 use Gmf\Sys\Http\Controllers\Controller;
@@ -40,7 +40,7 @@ class PublishController extends Controller
             'datas' => ['openid' => $ent->openid, 'name' => $ent->name, 'token' => $ent->token, 'gateway' => $input['gateway']],
         ];
         $client = new GuzzleHttp\Client(['base_uri' => $input['discover']]);
-        $res = $client->post('api/sys/apps/register', ['json' => $params]);
+        $res = $client->post('api/sys/ents/register', ['json' => $params]);
         $body = (String) $res->getBody();
         if ($body) {
             $body = json_decode($body);

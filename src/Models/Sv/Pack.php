@@ -9,8 +9,8 @@ use Gmf\Sys\Traits\Snapshotable;
 use Illuminate\Database\Eloquent\Model;
 use GAuth;
 use Gmf\Sys\Database\Concerns\BatchImport;
-use Gmf\Sys\Models\App\App;
 use Validator;
+use Uuid;
 
 class Serve extends Model
 {
@@ -18,10 +18,13 @@ class Serve extends Model
   protected $table = 'gmf_sys_sv_packs';
   public $incrementing = false;
   protected $keyType = 'string';
-  protected $fillable = ['id', 'type', 'code', 'name', 'avatar', 'discover', 'gateway', 'memo', 'content', 'released', 'revoked'];
+  protected $fillable = ['id','openid', 'type', 'code', 'name', 'avatar', 'discover', 'gateway', 'memo', 'content', 'released', 'revoked'];
 
   public function formatDefaultValue($attrs)
   {
+    if (empty($this->openid)) {
+      $this->openid = Uuid::generate();
+    }
     if (empty($this->path)) {
       $this->path = '';
     }

@@ -21,7 +21,7 @@ class AuthController extends Controller
     $user = GAuth::user();
     return $this->toJson(new Resources\User($user), function ($b) use ($user) {
       if ($user) {
-        $token = app('Gmf\Sys\Bp\UserAuth')->issueToken($user);
+        $token = app('Gmf\Sys\Bp\Auth\Token')->issueToken($user);
         $b->token($token);
       }
     });
@@ -37,7 +37,7 @@ class AuthController extends Controller
       if ($c->user_id) {
         $user = Models\User::find($c->user_id);
         if ($user && Auth::loginUsingId($user->id)) {
-          $token = app('Gmf\Sys\Bp\UserAuth')->issueToken($user);
+          $token = app('Gmf\Sys\Bp\Auth\Token')->issueToken($user);
           return $this->toJson(new Resources\User($user), function ($b) use ($token) {
             $b->token($token);
           });
@@ -55,7 +55,7 @@ class AuthController extends Controller
       $user = app('Gmf\Sys\Bp\UserAuth')->login($this, $input);
       $token = false;
       if ($user) {
-        $token = app('Gmf\Sys\Bp\UserAuth')->issueToken($user);
+        $token = app('Gmf\Sys\Bp\Auth\Token')->issueToken($user);
       } else {
         throw new \Exception("登录失败!");
       }
@@ -83,7 +83,7 @@ class AuthController extends Controller
       $user = app('Gmf\Sys\Bp\UserAuth')->register($this, $input);
       $token = false;
       if ($user) {
-        $token = app('Gmf\Sys\Bp\UserAuth')->issueToken($user);
+        $token = app('Gmf\Sys\Bp\Auth\Token')->issueToken($user);
       } else {
         throw new \Exception("注册失败!");
       }
@@ -95,26 +95,6 @@ class AuthController extends Controller
       DB::rollBack();
       throw $e;
     }
-  }
-  public function issueToken(Request $request)
-  {
-    $token = false;
-    $input = array_only($request->all(), ['id', 'account', 'password']);
-    $validator = Validator::make($input, [
-      'account' => [
-        'required',
-      ],
-      'password' => [
-        'required',
-      ],
-    ]);
-    if ($validator->fails()) {
-      return $this->toError($validator->errors());
-    }
-    $user = app('Gmf\Sys\Bp\UserAuth')->login($this, $input);
-
-    $token = app('Gmf\Sys\Bp\UserAuth')->issueToken($user);
-    return $this->toJson($token);
   }
   public function logout(Request $request)
   {
@@ -165,7 +145,7 @@ class AuthController extends Controller
     ]);
     $user = app('Gmf\Sys\Bp\UserAuth')->resetPassword($this, $input);
 
-    $token = app('Gmf\Sys\Bp\UserAuth')->issueToken($user);
+    $token = app('Gmf\Sys\Bp\Auth\Token')->issueToken($user);
 
     return $this->toJson(new Resources\User($user), function ($b) use ($token) {
       $b->token($token);

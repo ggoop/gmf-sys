@@ -1,5 +1,5 @@
 <?php
-namespace Gmf\Sys\Http\Controllers\App;
+namespace Gmf\Sys\Http\Controllers\Sv;
 
 use GAuth;
 use Gmf\Sys\Http\Controllers\Controller;
@@ -10,22 +10,22 @@ use Gmf\Sys\Models;
 class ConfigController extends Controller
 {
   /**
-   * 应用服务配置，授权
+   * 服务配置，授权
    * [{appId}]
    */
   public function config(Request $request)
   {
     $input = $request->all();
     Validator::make($input, [
-      'appId' => 'required',
+      'packId' => 'required',
     ])->validate();
-    $app = Models\App\App::where('id', $input['appId'])->orWhere('openid', $input['appId'])->first();
-    if (empty($app)) {
-      throw new \Exception('没有此应用.');
+    $pack = Models\Sv\Pack::where('id', $input['packId'])->orWhere('openid', $input['packId'])->first();
+    if (empty($pack)) {
+      throw new \Exception('没有提供此项服务包.');
     }
     $entId = $request->input('entId', GAuth::entId());
-    $token = app('Gmf\Sys\Bp\AppConfig')->config([
-      'appId' => $app->id,
+    $token = app('Gmf\Sys\Bp\Sv\Config')->config([
+      'packId' => $pack->id,
       'userId' => GAuth::id(),
       'entId' => $entId,
     ]);

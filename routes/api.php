@@ -1,19 +1,30 @@
 <?php
 $ns = 'Gmf\Sys\Http\Controllers';
-Route::prefix('api/sys/apps')->middleware(['api', 'auth:api'])->namespace($ns)->group(function () {
-	Route::post('config', 'App\ConfigController@config');
-	Route::post('publish', 'App\PublishController@publish');
-});
-Route::prefix('api/sys/apps')->middleware(['api'])->namespace($ns)->group(function () {
-	Route::post('token', 'App\TokenController@token');
-	Route::post('register', 'App\RegisterController@register');
+Route::prefix('api/sys/sv')->middleware(['api', 'auth:api'])->namespace($ns)->group(function () {
+	Route::post('config', 'Sv\ConfigController@config');	
 });
 
+//ents
+Route::prefix('api/sys/ents')->middleware(['api'])->namespace($ns)->group(function () {
+	Route::post('register', 'Ent\RegisterController@register');
+});
+Route::prefix('api/sys')->middleware(['api', 'auth:api'])->namespace($ns)->group(function () {
+  Route::post('ents/publish', 'Ent\PublishController@publish');
+  Route::get('/ents/my', 'Ent\EntController@getMyEnts');
+	Route::get('/ents/token', 'Ent\EntController@getToken');
+  Route::post('/ents/token', 'Ent\EntController@createToken');
+  Route::post('/ents/join', 'Ent\EntController@join');
+  Route::post('/ents/default', 'Ent\EntController@setDefault');
+  Route::resource('ents', 'Ent\EntController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
+});
+//auth
+Route::prefix('api/sys/auth')->middleware(['api'])->namespace($ns)->group(function () {
+  Route::post('token', 'Auth\TokenController@issueToken');
+});
 Route::prefix('api/sys/auth')->middleware(['web'])->namespace($ns)->group(function () {
 	Route::post('checker', 'AuthController@checker');
 	Route::any('show', 'AuthController@getUser');
 	Route::get('logged', 'AuthController@getLogged');
-	Route::post('token', 'AuthController@issueToken');
 	Route::post('register', 'AuthController@register');
 	Route::post('login', 'AuthController@login');
 	Route::post('vcode-checker', 'AuthController@checkVCode');
@@ -31,6 +42,8 @@ Route::prefix('api/sys/auth')->middleware(['api', 'auth:api'])->namespace($ns)->
 	Route::get('joins', 'AuthController@getJoins');
 	Route::delete('joins', 'AuthController@removeJoins');
 });
+//editor
+
 Route::prefix('api/sys')->middleware(['api'])->namespace($ns)->group(function () {
 	Route::get('editor/templates', 'EditorController@templates');
 });
@@ -73,13 +86,6 @@ Route::prefix('api/sys')->middleware(['api', 'auth:api'])->namespace($ns)->group
 	Route::resource('profiles', 'ProfileController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 
 	Route::resource('files', 'FileController', ['only' => ['store', 'show']]);
-
-	Route::get('/ents/my', 'EntController@getMyEnts');
-	Route::get('/ents/token', 'EntController@getToken');
-  Route::post('/ents/token', 'EntController@createToken');
-  Route::post('/ents/join', 'EntController@join');
-  Route::post('/ents/default', 'EntController@setDefault');
-	Route::resource('ents', 'EntController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 
 	Route::resource('dtis', 'DtiController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
 	Route::resource('dti-categories', 'DtiCategoryController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);
