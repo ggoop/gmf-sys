@@ -17,7 +17,7 @@ class CreateGmfSysAppUsersTable extends Migration {
 		$md->entity('app', 'gmf.sys.app')->comment('应用');
 		$md->entity('user', config('gmf.user.entity'));
 		$md->integer('is_default')->nullable()->comment('是否默认');
-		$md->enum('type', 'gmf.sys.user.owner.type.enum');
+		$md->enum('type', 'gmf.sys.user.owner.type.enum')->nullable()->comment('拥有类型');
 		$md->boolean('revoked')->default(0)->comment('注销');
 		$md->timestamps();
 

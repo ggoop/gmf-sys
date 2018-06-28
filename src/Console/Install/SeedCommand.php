@@ -68,7 +68,7 @@ class SeedCommand extends Command {
 
 		$entId = $this->option('ent') ?: false;
 		if ($entId) {
-			if (empty(Models\Ent::find($entId))) {
+			if (empty(Models\Ent\Ent::find($entId))) {
 				$this->line("entid is null, returned. \t{$name}");
 				throw new Exception("the entid is null", 1);
 				return;

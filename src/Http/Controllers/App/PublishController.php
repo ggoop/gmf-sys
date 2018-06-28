@@ -28,7 +28,7 @@ class PublishController extends Controller
         if (empty($entId)) {
             throw new \Exception('需要进入企业环境，才能发布！');
         }
-        $ent = Models\Ent::find($entId);
+        $ent = Models\Ent\Ent::find($entId);
         if (empty($ent)) {
             throw new \Exception('没有企业信息，不能发布!');
         }

@@ -3,8 +3,8 @@
 use Gmf\Sys\Database\Metadata;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGmfSysEntAppsTable extends Migration {
-	public $mdID = "ab3063c04f6f11e8bfb0d9000adcab84";
+class CreateGmfSysEntSvPacksTable extends Migration {
+	public $mdID = "01e87a76b35e19c0b2c0c1027e5e7655";
 	/**
 	 * Run the migrations.
 	 *
@@ -12,11 +12,12 @@ class CreateGmfSysEntAppsTable extends Migration {
 	 */
 	public function up() {
 		$md = Metadata::create($this->mdID);
-		$md->mdEntity('gmf.sys.ent.app')->comment('企业应用')->tableName('gmf_sys_ent_apps');
+		$md->mdEntity('gmf.sys.ent.sv.pack')->comment('企业服务包')->tableName('gmf_sys_ent_sv_packs');
 
 		$md->bigIncrements('id');
 		$md->entity('ent', 'gmf.sys.ent')->comment('企业');
-		$md->entity('app', 'gmf.sys.app')->comment('应用');
+    $md->entity('pack', 'gmf.sys.sv.pack')->comment('服务包');
+    $md->enum('type', 'gmf.sys.user.owner.type.enum')->nullable()->comment('拥有类型');
 		$md->string('token')->nullable()->comment('token');
 		$md->string('discover')->nullable()->comment('发现地址');
 		$md->string('gateway')->nullable()->comment('注册网关');

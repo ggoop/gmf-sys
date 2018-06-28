@@ -18,7 +18,8 @@ class CreateGmfSysUserOwnerTypeEnum extends Migration {
 		$md->string('owner')->comment('拥有者')->default(1);
 		$md->string('manager')->comment('管理者')->default(2);
 		$md->string('member')->comment('成员')->default(3);
-		$md->string('used')->comment('使用者')->default(4);
+    $md->string('used')->comment('使用者')->default(4);
+    $md->string('test')->comment('测试者')->default(5);
 		$md->build();
 
 	}

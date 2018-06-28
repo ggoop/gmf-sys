@@ -27,7 +27,7 @@ class TokenController extends Controller
     if (!empty($app)) {
       $params['appId'] = $app->id;
     }
-    $ent = Models\Ent::where('openid', $input['ent_openid'])->first();
+    $ent = Models\Ent\Ent::where('openid', $input['ent_openid'])->first();
     if (!empty($ent)) {
       $params['entId'] = $ent->id;
     }

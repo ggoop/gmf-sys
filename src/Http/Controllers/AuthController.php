@@ -131,7 +131,7 @@ class AuthController extends Controller
   public function entryEnt(Request $request, $id)
   {
     $kv = [];
-    $ent = Models\Ent::find($id);
+    $ent = Models\Ent\Ent::find($id);
     if (empty($ent)){
       throw new \Exception('找不到企业！');
     }

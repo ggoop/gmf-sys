@@ -1,6 +1,6 @@
 <?php
 
-namespace Gmf\Sys\Models;
+namespace Gmf\Sys\Models\Ent;
 
 use Closure;
 use Gmf\Sys\Builder;
@@ -9,7 +9,7 @@ use Gmf\Sys\Traits\Snapshotable;
 use Illuminate\Database\Eloquent\Model;
 use Uuid;
 use Validator;
-
+use Gmf\Sys\Models\User;
 class Ent extends Model
 {
   use Snapshotable, HasGuard;

@@ -49,7 +49,7 @@ class GAuthManager
 			$this->guard()->setUser($user);
 		}
 		if ($this->request->hasHeader('Ent') && $entId = $this->request->header('Ent')) {
-			$this->guard()->setEnt(Models\Ent::where('id', $entId)->orWhere('openid', $entId)->first());
+			$this->guard()->setEnt(Models\Ent\Ent::where('id', $entId)->orWhere('openid', $entId)->first());
 		}
 	}
 	/**

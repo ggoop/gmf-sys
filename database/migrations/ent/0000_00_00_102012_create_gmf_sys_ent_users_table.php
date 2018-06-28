@@ -3,8 +3,8 @@
 use Gmf\Sys\Database\Metadata;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGmfSysEntAppUsersTable extends Migration {
-	public $mdID = "4737b5404f7011e885bf951ff1497a46";
+class CreateGmfSysEntUsersTable extends Migration {
+	public $mdID = "c8e8495009cb11e793acff00e76e4941";
 	/**
 	 * Run the migrations.
 	 *
@@ -12,14 +12,15 @@ class CreateGmfSysEntAppUsersTable extends Migration {
 	 */
 	public function up() {
 		$md = Metadata::create($this->mdID);
-		$md->mdEntity('gmf.sys.ent.app.user')->comment('企业应用用户')->tableName('gmf_sys_ent_app_users');
-
+		$md->mdEntity('gmf.sys.ent.user')->comment('企业用户')->tableName('gmf_sys_ent_users');
 		$md->bigIncrements('id');
 		$md->entity('ent', 'gmf.sys.ent')->comment('企业');
-		$md->entity('app', 'gmf.sys.app')->comment('应用');
 		$md->entity('user', config('gmf.user.entity'));
+		$md->string('token')->nullable()->comment('token');
+
 		$md->integer('is_default')->nullable()->comment('是否默认');
-		$md->enum('type', 'gmf.sys.user.owner.type.enum')->nullable()->comment('拥有类型');
+    $md->enum('type', 'gmf.sys.user.owner.type.enum')->nullable()->comment('拥有类型');
+    $md->integer('is_effective')->default(0)->comment('是否生效');
 		$md->boolean('revoked')->default(0)->comment('注销');
 		$md->timestamps();
 

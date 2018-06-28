@@ -14,10 +14,14 @@ class CreateGmfSysAppsTable extends Migration {
 		$md = Metadata::create($this->mdID);
 		$md->mdEntity('gmf.sys.app')->comment('应用')->tableName('gmf_sys_apps');
 		$md->string('id', 100)->primary();
-		$md->string('openid')->nullable()->comment('开放ID');
+    $md->string('openid')->nullable()->comment('开放ID');
+    $md->string('secret')->nullable()->comment('应用秘钥');
+    $md->string('type',100)->nullable()->comment('类型');//ios,android,h5,e
 		$md->string('code')->nullable()->comment('编码');
 		$md->string('name')->nullable()->comment('名称');
-		$md->string('token')->nullable()->comment('token');
+    $md->string('token')->nullable()->comment('令牌');
+    $md->string('aeskey')->nullable()->comment('数据加密秘钥');
+    $md->string('callback_url')->nullable()->comment('回调地址');
 
 		$md->string('short_name')->nullable()->comment('简称');
 		$md->string('group_name')->nullable()->comment('分组名称');

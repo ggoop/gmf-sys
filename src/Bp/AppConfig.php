@@ -24,7 +24,7 @@ class AppConfig
     if (empty($user)) {
       throw new \Exception('没有此用户.');
     }
-    $ent = Models\Ent::find($input['entId']);
+    $ent = Models\Ent\Ent::find($input['entId']);
     if (empty($ent)) {
       throw new \Exception('没有此企业.');
     }

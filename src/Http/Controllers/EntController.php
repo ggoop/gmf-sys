@@ -14,7 +14,7 @@ class EntController extends Controller
   public function index(Request $request)
   {
     $size = $request->input('size', 10);
-    $query = Models\Ent::where('revoked', '0');
+    $query = Models\Ent\Ent::where('revoked', '0');
     if ($v = $request->input('q')) {
       $query->where(function ($query) use ($v) {
         $query->where('name', 'like', '%' . $v . '%')->orWhere('code', 'like', '%' . $v . '%');
@@ -32,7 +32,7 @@ class EntController extends Controller
   }
   public function show(Request $request, string $id)
   {
-    $query = Models\Ent::where('id', $id)->orWhere('code', $id);
+    $query = Models\Ent\Ent::where('id', $id)->orWhere('code', $id);
     $data = $query->first();
     return $this->toJson($data);
   }
@@ -50,9 +50,9 @@ class EntController extends Controller
     if ($validator->fails()) {
       return $this->toError($validator->errors());
     }
-    $data = Models\Ent::create($input);
+    $data = Models\Ent\Ent::create($input);
 
-    Models\Ent::addUser($data->id, GAuth::userId(), 'create');
+    Models\Ent\Ent::addUser($data->id, GAuth::userId(), 'create');
     return $this->show($request, $data->id);
   }
   /**
@@ -75,12 +75,12 @@ class EntController extends Controller
     if ($validator->fails()) {
       return $this->toError($validator->errors());
     }
-    Models\Ent::where('id', $id)->update($input);
+    Models\Ent\Ent::where('id', $id)->update($input);
     return $this->show($request, $id);
   }
   public function getToken(Request $request)
   {
-    $ent = Models\Ent::find(GAuth::entId());
+    $ent = Models\Ent\Ent::find(GAuth::entId());
     if (empty($ent)) {
       throw new \Exception('找不到企业！');
     }
@@ -88,7 +88,7 @@ class EntController extends Controller
   }
   public function createToken(Request $request)
   {
-    $ent = Models\Ent::find(GAuth::entId());
+    $ent = Models\Ent\Ent::find(GAuth::entId());
     if (empty($ent)) {
       throw new \Exception('找不到企业！');
     }
@@ -98,7 +98,7 @@ class EntController extends Controller
   public function destroy(Request $request, $id)
   {
     $ids = explode(",", $id);
-    Models\Ent::destroy($ids);
+    Models\Ent\Ent::destroy($ids);
     return $this->toJson(true);
   }
   public function getMyEnts(Request $request)
@@ -114,13 +114,13 @@ class EntController extends Controller
   public function join(Request $request)
   {
     $entId = $request->input('entId');
-    $ent = Models\Ent::find($entId);
+    $ent = Models\Ent\Ent::find($entId);
     if (empty($ent)) {
       throw new \Exception('找不到企业！');
     }
     $userId = GAuth::id();
     if (!$ent->hasUser($userId)) {
-      Models\Ent::addUser($ent->id, $userId, ['is_effective' => 0, 'type_enum' => 'member']);
+      Models\Ent\Ent::addUser($ent->id, $userId, ['is_effective' => 0, 'type_enum' => 'member']);
     } else {
       return $this->toJson(false);
     }
@@ -129,7 +129,7 @@ class EntController extends Controller
   public function setDefault(Request $request)
   {
     $entId = $request->input('entId');
-    $ent = Models\Ent::find($entId);
+    $ent = Models\Ent\Ent::find($entId);
     if (empty($ent)) {
       throw new \Exception('找不到企业！');
     }
