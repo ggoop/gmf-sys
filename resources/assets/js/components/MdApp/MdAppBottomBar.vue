@@ -12,7 +12,7 @@ export default {
 </script>
 <style lang="scss">
 .md-app-bottom-bar {
-  
+
 }
 
 </style>
