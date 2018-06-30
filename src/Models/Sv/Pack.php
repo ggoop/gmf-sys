@@ -25,9 +25,6 @@ class Pack extends Model
     if (empty($this->openid)) {
       $this->openid = Uuid::generate();
     }
-    if (empty($this->path)) {
-      $this->path = '';
-    }
     if (empty($this->revoked)) {
       $this->revoked = 0;
     }
