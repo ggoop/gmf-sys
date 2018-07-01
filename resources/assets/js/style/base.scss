@@ -186,6 +186,11 @@ iframe {
 .md-text-right {
     text-align: right;
 }
+.md-ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
 
 @mixin md-indent-mixin($ind) {
     .md-indent-#{$ind} {
