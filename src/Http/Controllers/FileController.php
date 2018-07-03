@@ -15,7 +15,7 @@ class FileController extends Controller {
 	}
 	public function store(Request $request) {
 		GAuth::check('user');
-		$files = File::storage($request, $request->input('name', 'files'), 'file');
+		$files = File::storage($request, $request->input('name', 'files'),$request->input('path', 'file'));
 		if ($files) {
 			return $this->toJson(Resources\File::collection($files));
 		} else {
