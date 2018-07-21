@@ -1,5 +1,7 @@
 import debounce from 'lodash/debounce'
 import pick from 'lodash/pick'
+import isString from 'lodash/isString'
+
 export default {
   props: {
     value: {
@@ -25,7 +27,9 @@ export default {
       }
     },
     mdActive: Boolean,
-    mdInit: { type: Function },
+    mdInit: {
+      type: Function
+    },
   },
   data() {
     return {
@@ -53,7 +57,7 @@ export default {
     }
   },
   methods: {
-    onDoSearch: debounce(function() {
+    onDoSearch: debounce(function () {
       if (!this.mdActive) return;
       if (this.loadData) {
         this.loadData(this.mdQ);
@@ -70,13 +74,22 @@ export default {
       }
     },
     getReturnValue() {
-      return this.selectedRows.map(row => pick(row, Object.keys(row).filter(f => f !== 'vueRowId')));
+      return this.selectedRows.map(
+        row => {
+          if (isString(row)) return row;
+          return pick(row, Object.keys(row).filter(f => f !== 'vueRowId'));
+        }
+      );
+    },
+    setData(datas) {
+      this.selectedRows = datas;
+      this.$emit('md-select', this.getReturnValue());
     },
     onCancel() {
       this.$emit('md-cancel', false);
     },
     onConfirm() {
-      this.$emit('md-confirm', this.getReturnValue());
+      this.$emit('md-confirm');
     },
   },
 }
