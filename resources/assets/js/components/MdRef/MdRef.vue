@@ -15,9 +15,13 @@
     </md-toolbar>
     <md-dialog-content class="no-padding layout flex">
       <template v-if="componentName">
-        <md-wrap :name="componentName" :md-active.sync="isRefLoaded" :md-init="mdInit" :multiple="multiple" :md-q="currentQ" :value="value" :md-ref-id="mdRefId" :md-ref-type="mdRefType" :options="options" @md-cancel="onCancel" @md-confirm="onConfirm"></md-wrap>
+        <md-wrap :name="componentName" :md-active.sync="isRefLoaded" :md-init="mdInit" :multiple="multiple" :md-q="currentQ" :value="value" :md-ref-id="mdRefId" :md-ref-type="mdRefType" :options="options" @md-confirm="onConfirm" @md-select="setData"></md-wrap>
       </template>
     </md-dialog-content>
+    <md-dialog-actions>
+        <md-button class="md-accent md-raised" @click="onConfirm">确定</md-button>
+        <md-button class="md-warn md-raised" @click="onCancel">取消</md-button>
+      </md-dialog-actions>
     <md-loading :loading="loading"></md-loading>
   </md-dialog>
 </template>
@@ -58,6 +62,7 @@ export default {
       currentQ: '',
       refInfo: {},
       loading: 0,
+      datas:null
     };
   },
   watch: {
@@ -108,9 +113,12 @@ export default {
       this.$emit('cancel', false);
       this.closeDialog();
     },
-    onConfirm(datas) {
+    setData(datas){
+      this.datas=datas;
+    },
+    onConfirm() {
       if (!this.canFireEvents) return;
-      this.$emit('confirm', datas);
+      this.$emit('confirm', this.datas);
       this.closeDialog();
     },
     closeDialog() {
