@@ -36,7 +36,9 @@ return [
 		//企业缓存KEY
 		'session' => env('GMF_ENT_SESSION', 'GMFENTSESSIONNAME'),
 		//企业模型
-		'model' => env('GMF_ENT_MODEL', Gmf\Sys\Models\Ent\Ent::class),
+    'model' => env('GMF_ENT_MODEL', Gmf\Sys\Models\Ent\Ent::class),
+    //用户实体编码
+		'entity' => env('GMF_ENT_ENTITY', 'gmf.sys.ent'),
 		//企业编码，
 		'id' => env('GMF_ENT_ID', ''),
 		//企业名称，默认为应用名称

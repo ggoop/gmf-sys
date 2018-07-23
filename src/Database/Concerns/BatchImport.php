@@ -51,13 +51,15 @@ trait BatchImport {
 		if (empty($datas) || $datas->count() <= 0) {
 			return false;
 		}
-		$m = new static();
-
-		$fill = $m->getFillable();
+    $m = new static();
+    //获取可填充字段
+    $fill = $m->getFillable();
+    //是否需要自动生成ID
 		$needId = !$m->getIncrementing();
 		$resultIds=[];
 		$datas = $datas->map(function ($item) use ($m, $needId, $fill,&$resultIds,$canReplace) {
-			$arrs = [];
+      $arrs = [];
+      //动态创建模型
 			if ($item instanceof Model) {
 				$arrs = $item->toArray();
 				$instance = $item;
@@ -69,13 +71,16 @@ trait BatchImport {
 				$instance = new static($arrs);
 			} else {
 				return false;
-			}
+      }
+      //调用默认值处理
 			if (method_exists($instance, 'formatDefaultValue')) {
 				$instance->formatDefaultValue($arrs);
-			}
+      }
+      //模型校验
 			if (method_exists($instance, 'validate')) {
 				$instance->validate();
-			}
+      }
+      //校验是否存在
 			if ($instance->exists()) {
 				if(!$canReplace){
 					throw new \Exception('已存在!');
@@ -83,7 +88,8 @@ trait BatchImport {
 				$instance->save();
 				$resultIds[]=$instance->id;
 				return false;
-			}
+      }
+      //生成实例数据
 			$item = $instance->toArray();
 			unset($instance);
 			$data = [];
@@ -97,8 +103,8 @@ trait BatchImport {
 			return $data;
 		})->reject(function ($name) {
 			return empty($name);
-		});
-
+    });
+    //分批批量创建
 		$chunks = $datas->chunk(500)->toArray();
 		foreach ($chunks as $key => $value) {
 			DB::table($m->getTable())->insert($value);
