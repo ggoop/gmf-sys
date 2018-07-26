@@ -23,6 +23,10 @@
       @include md-theme-property(color, accent, background);
       @include md-icon-on-buttons(accent, background);
     }
+    &.md-warn {
+      @include md-theme-property(color, warn, background);
+      @include md-icon-on-buttons(warn, background);
+    }
 
     &.md-raised {
       &[disabled] {
@@ -44,6 +48,11 @@
           @include md-theme-property(color, text-primary, accent);
           @include md-theme-property(background-color, accent);
           @include md-icon-on-buttons(text-primary, accent);
+        }
+        &.md-warn {
+          @include md-theme-property(color, text-primary, warn);
+          @include md-theme-property(background-color, warn);
+          @include md-icon-on-buttons(text-primary, warn);
         }
       }
     }
