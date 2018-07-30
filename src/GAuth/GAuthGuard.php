@@ -12,6 +12,7 @@ class GAuthGuard {
 
 	protected $m_forged = false;
 	protected $user_links = [];
+  protected $user_ents = [];
 
 	public function SESSION_ENT_KEY() {
 		return config('gmf.ent.session');
@@ -107,6 +108,9 @@ class GAuthGuard {
 			return $this->ent()->id;
 		}
 		return '';
+  }
+  public function entIds() {
+		return $this->user_ents;
 	}
 	public function setEnt($ent) {
 		$this->m_ent = $ent;
@@ -141,12 +145,19 @@ class GAuthGuard {
 	public function setUser($user) {
 		$this->user_links = [];
 		$this->m_user = $user;
-		$this->user_links = $this->getLinkIds($user);
+    $this->user_links = $this->getLinkIds($user);
+    $this->user_ents=$this->getEntIds($user);
 		return $this;
 	}
 	private function getLinkIds($user) {
 		if ($user) {
 			return $user->findLinkUserIds('all');
+		}
+		return [];
+  }
+  private function getEntIds($user) {
+		if ($user) {
+			return $user->findEntIds('all');
 		}
 		return [];
 	}

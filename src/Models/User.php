@@ -58,9 +58,16 @@ class User extends Authenticatable
   {
     return User::where('account', $username)->first();
   }
+  public function findEntIds($type = ['sys', 'web'])
+  {
+    $query = Ent\EntUser::whereIn('user_id', $this->findLinkUserIds());
+    $query->where('revoked', 0);
+
+    $query = Ent\Ent::whereIn('id', $query->pluck('ent_id')->all())->where('revoked', 0);
+    return $query->pluck('id')->all();
+  }
   public function findLinkUserIds($type = ['sys', 'web'])
   {
-
     $links = collect([$this->id]);
     $links = $links->merge(UserLink::where('fm_user_id', $this->id)->pluck('to_user_id')->all());
 
