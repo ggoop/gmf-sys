@@ -29,6 +29,9 @@ class Ent extends Model
     if (empty($this->token)) {
       $this->token = Uuid::generate();
     }
+    if (empty($this->code)) {
+      $this->code = Uuid::generate();
+    }
     if (empty($this->revoked)) {
       $this->revoked = 0;
     }
