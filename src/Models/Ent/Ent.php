@@ -32,6 +32,9 @@ class Ent extends Model
     if (empty($this->code)) {
       $this->code = Uuid::generate();
     }
+    if (empty($this->avatar)) {
+      $this->avatar = '/assets/vendor/gmf-sys/avatar/'.mt_rand(1, 50).'.jpg';
+    }
     if (empty($this->revoked)) {
       $this->revoked = 0;
     }
