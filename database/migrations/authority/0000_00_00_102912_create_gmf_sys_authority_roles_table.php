@@ -20,6 +20,7 @@ class CreateGmfSysAuthorityRolesTable extends Migration {
 		$md->string('name')->nullable()->comment('名称');
 		$md->text('memo')->nullable()->comment('备注');
 		$md->enum('type', 'gmf.sys.authority.role.type.enum')->nullable()->comment('类型');
+		$md->boolean('is_system')->default(0)->comment('系统');
 		$md->boolean('revoked')->default(0)->comment('注销');
 		$md->timestamps();
 

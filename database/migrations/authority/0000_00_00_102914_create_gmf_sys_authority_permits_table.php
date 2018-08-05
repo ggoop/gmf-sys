@@ -19,6 +19,7 @@ class CreateGmfSysAuthorityPermitsTable extends Migration {
 		$md->string('code')->index()->comment('编码');
 		$md->string('name')->nullable()->comment('名称');
 		$md->text('memo')->nullable()->comment('备注');
+		$md->boolean('is_system')->default(0)->comment('系统');
 		$md->boolean('revoked')->default(0)->comment('注销');
 		$md->timestamps();
 
