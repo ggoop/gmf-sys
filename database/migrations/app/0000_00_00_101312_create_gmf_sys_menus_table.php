@@ -12,7 +12,7 @@ class CreateGmfSysMenusTable extends Migration {
 	 */
 	public function up() {
 		$md = Metadata::create($this->mdID);
-		$md->mdEntity('gmf.sys.menu')->comment('菜单')->tableName('gmf_sys_menus');
+		$md->mdEntity('gmf.sys.menu')->comment('菜单')->tableName('gmf_sys_menus')->model('Gmf\\Sys\\Menu');
 
 		$md->string('id', 100)->primary();
 		$md->entity('app', 'gmf.sys.app')->nullable()->comment('应用');

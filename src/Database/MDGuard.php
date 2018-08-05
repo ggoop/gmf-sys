@@ -67,7 +67,7 @@ class MDGuard {
 	public function getMDEntity() {
 		$item = new Builder;
 		$item->setAttributes(array_only(
-			$this->entity->toArray(), ['id', 'name', 'comment', 'type', 'connection']
+			$this->entity->toArray(), ['id', 'name', 'comment', 'type', 'connection','model']
 		));
 		$item->table_name($this->entity->tableName);
 		return $item;

@@ -31,33 +31,29 @@ class RoleEntityController extends Controller {
 		if ($validator->fails()) {
 			return $this->toError($validator->errors());
 		}
-		$entId = GAuth::entId();
 		$lines = $request->input('datas');
-
-		$fillable = ['operation_enum', 'filter'];
-		$entityable = [
-			'role' => ['type' => Role::class, 'matchs' => ['code', 'ent_id' => '${ent_id}']],
-			'entity' => ['type' => Entity::class, 'matchs' => ['code']],
-		];
+		$datas=[];
+		$deleteIds=[];
 
 		foreach ($lines as $key => $value) {
+			$value['ent_id']= GAuth::entId();
 			if (!empty($value['sys_state']) && $value['sys_state'] == 'c') {
-				$data = array_only($value, $fillable);
-				$data = InputHelper::fillEntity($data, $value, $entityable, ['ent_id' => $entId]);
-
-				$data['ent_id'] = $entId;
-				RoleEntity::create($data);
+				$datas[]=$value;
 				continue;
 			}
 			if (!empty($value['sys_state']) && $value['sys_state'] == 'u' && $value['id']) {
-				$data = array_only($value, $fillable);
-				$data = InputHelper::fillEntity($data, $value, $entityable, ['ent_id' => $entId]);
-				RoleEntity::where('id', $value['id'])->update($data);
+				$datas[]=$value;
 			}
 			if (!empty($value['sys_state']) && $value['sys_state'] == 'd' && !empty($value['id'])) {
-				RoleEntity::destroy($value['id']);
+				$deleteIds[]=$value['id'];
 				continue;
 			}
+		}
+		if(count($deleteIds)){
+			RoleEntity::destroy($deleteIds);
+		}
+		if(count($datas)){
+			RoleEntity::BatchImport($datas);
 		}
 		return $this->toJson(true);
 	}

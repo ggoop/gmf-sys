@@ -2,6 +2,7 @@
 
 namespace Gmf\Sys\Models;
 use Gmf\Sys\Database\Concerns\BatchImport;
+use Gmf\Sys\Libs\InputHelper;
 use Gmf\Sys\Traits\HasGuard;
 use Gmf\Sys\Traits\Snapshotable;
 use Illuminate\Database\Eloquent\Model;
@@ -39,8 +40,9 @@ class GroupCategory extends Model {
       $this->revoked = 0;
     }
     if (empty($this->group_id) && !empty($attrs['group']) && $v = $attrs['group']) {
-      $v = !empty($v['code']) ? $v['code'] : !empty($v->code) ? $v = $v->code : is_string($v) ? $v : false;
-      $this->group_id = GroupItem::where('code', $v)->where('ent_id', $this->ent_id)->value('id');
+      if ($v = InputHelper::tryGetObjectValue($v, 'code')) {
+        $this->group_id = GroupItem::where('code', $v)->where('ent_id', $this->ent_id)->value('id');
+      }
     }
   }
   public function validate() {

@@ -7,6 +7,19 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 class InputHelper {
+	public static function tryGetObjectValue($data, $name) {
+		$v=false;
+		if(is_array($data)){
+			$v=empty($data[$name])?false: $data[$name];
+		}else if(is_object($data)){
+			$v = empty($data->{$name})?false:$data->{$name};
+		}else if(is_string($vdata)){
+			$v=$data;
+		}else{
+			$v=$data;
+		}
+		return $v;
+	}
 	/**
 
 	$names ['org','dept']

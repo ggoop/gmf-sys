@@ -13,8 +13,9 @@ class CreateGmfSysAuthorityDataOperationTypeEnum extends Migration {
 	public function up() {
 		$md = Metadata::create($this->mdID);
 		$md->mdEnum('gmf.sys.authority.data.operation.type.enum')->comment('数据操作类型');
-		$md->string('r')->comment('读取')->default(0);
-		$md->string('cud')->comment('增、删、改')->default(1);
+		$md->string('all')->comment('全部')->default(0);
+		$md->string('r')->comment('读取')->default(1);
+		$md->string('cud')->comment('增、删、改')->default(2);
 		$md->build();
 
 	}

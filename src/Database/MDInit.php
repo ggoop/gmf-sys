@@ -102,6 +102,7 @@ class MDInit {
 		$this->ECols[] = (new Builder)->type('string')->id('2bb9a8f009b711e79da5a3c6c31086ee')->name('id')->length('100')->comment('id')->primary();
 		$this->ECols[] = (new Builder)->type('string')->id('2bb9ab4009b711e78586895885fcac14')->name('name')->comment('名称')->index();
 		$this->ECols[] = (new Builder)->type('string')->id('2bb9aba009b711e7b848e54ec581b1ca')->name('comment')->comment('描述')->nullable();
+		$this->ECols[] = (new Builder)->type('string')->id('01e8987fd1cd15c0b797656b9d36c331')->name('model')->comment('模型')->nullable();
 		$this->ECols[] = (new Builder)->type('string')->id('2bb9abf009b711e78a0799e6922803b9')->name('table_name')->comment('描述')->nullable();
 		$this->ECols[] = (new Builder)->type('string')->id('2bb9ac4009b711e7bfb959b13d8e317f')->name('type')->comment('类型')->nullable();
 		$this->ECols[] = (new Builder)->type('string')->id('50a905003c1011e881a74d88f918661d')->name('connection')->comment('连接')->nullable();
