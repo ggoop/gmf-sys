@@ -1,5 +1,5 @@
 <template>
-  <input
+  <input autocomplete="off"
     class="md-input"
     v-model="model"
     v-bind="attributes"
