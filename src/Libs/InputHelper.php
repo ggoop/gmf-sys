@@ -13,7 +13,7 @@ class InputHelper {
 			$v=empty($data[$name])?false: $data[$name];
 		}else if(is_object($data)){
 			$v = empty($data->{$name})?false:$data->{$name};
-		}else if(is_string($vdata)){
+		}else if(is_string($data)){
 			$v=$data;
 		}else{
 			$v=$data;

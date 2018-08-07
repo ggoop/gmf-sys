@@ -74,7 +74,7 @@ class SeedCommand extends Command {
 				return;
 			}
 		}
-		Model::unguarded(function () use ($migration, $entId, $name) {
+		//Model::unguarded(function () use ($migration, $entId, $name) {
 			if ($entId && !array_has(get_object_vars($migration), 'entId')) {
 				$this->line("entId property is not exists, returned. \t{$name}");
 				return;
@@ -85,7 +85,7 @@ class SeedCommand extends Command {
 			if (method_exists($migration, 'run')) {
 				$migration->run();
 			}
-		});
+		//});
 		$this->line("{$tag} seeded:\t{$name}");
 	}
 	public function resolve($file) {
