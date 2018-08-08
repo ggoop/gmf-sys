@@ -1,81 +1,92 @@
 <script>
-import MdAppSideDrawer from './MdAppSideDrawer'
-import MdAppInternalDrawer from './MdAppInternalDrawer'
+import MdAppSideDrawer from "./MdAppSideDrawer";
+import MdAppInternalDrawer from "./MdAppInternalDrawer";
 
 const componentTypes = [
-  'md-app-toolbar',
-  'md-app-drawer',
-  'md-app-content',
-  'md-app-background',
-  'md-app-bottom-bar',
-]
+  "md-app-toolbar",
+  "md-app-drawer",
+  "md-drawer",
+  "md-app-content",
+  "md-app-background",
+  "md-app-bottom-bar"
+];
 
 function buildSlots(children, context, functionalContext, options) {
-  let slots = []
+  let slots = [];
 
   if (children) {
     children.forEach(child => {
-      const opts = child.componentOptions
+      const opts = child.componentOptions;
 
       if (opts && componentTypes.includes(opts.tag)) {
-        child.data.slot = opts.tag
-        child.data.provide = options.Ctor.options.provide
-        child.context = context
-        child.functionalContext = functionalContext
+        child.data.slot = opts.tag;
+        child.data.provide = options.Ctor.options.provide;
+        child.context = context;
+        child.functionalContext = functionalContext;
 
-        slots.push(child)
+        slots.push(child);
       }
-    })
+    });
   }
 
-  return slots
+  return slots;
 }
 
 function getDrawers(children) {
   const drawerVnodes = children.filter(child => {
-    return child.componentOptions.tag === 'md-app-drawer'
-  })
+    return child.componentOptions.tag === "md-app-drawer";
+  });
 
-  return drawerVnodes.length ? drawerVnodes : []
+  return drawerVnodes.length ? drawerVnodes : [];
 }
 
 function hasInternalDrawer(attrs) {
-  const mdPermanent = attrs && attrs['md-permanent']
+  const mdPermanent = attrs && attrs["md-permanent"];
 
-  return mdPermanent && (mdPermanent === 'clipped' || mdPermanent === 'card')
+  return mdPermanent && (mdPermanent === "clipped" || mdPermanent === "card");
 }
 
 export default {
-  name: 'MdApp',
+  name: "MdApp",
   functional: true,
   render(createElement, { children, props, data }) {
-    let appComponent = MdAppSideDrawer
-    const { context, functionalContext, componentOptions } = createElement(appComponent)
-    const slots = buildSlots(children, context, functionalContext, componentOptions)
-    const drawers = getDrawers(slots)
+    let appComponent = MdAppSideDrawer;
+    const { context, functionalContext, componentOptions } = createElement(
+      appComponent
+    );
+    const slots = buildSlots(
+      children,
+      context,
+      functionalContext,
+      componentOptions
+    );
+    const drawers = getDrawers(slots);
 
     drawers.forEach(drawer => {
       if (drawer && hasInternalDrawer(drawer.data.attrs)) {
-        appComponent = MdAppInternalDrawer
+        appComponent = MdAppInternalDrawer;
       }
-    })
+    });
 
-    const staticClass = {}
+    const staticClass = {};
     if (data.staticClass) {
       data.staticClass.split(/\s+/).forEach(name => {
-        if (name.length === 0) return
-        staticClass[name] = true
-      })
+        if (name.length === 0) return;
+        staticClass[name] = true;
+      });
     }
 
-    return createElement(appComponent, {
-      attrs: props,
-      class: { ...staticClass, ...data.class },
-      style: { ...data.staticStyle, ...data.style },
-    }, slots)
+    return createElement(
+      appComponent,
+      {
+        attrs: props,
+        class: { ...staticClass, ...data.class },
+        style: { ...data.staticStyle, ...data.style }
+      },
+      slots
+    );
   }
-}
-
+};
 </script>
 <style lang="scss">
 @import "~gmf/components/MdAnimation/variables";
@@ -151,7 +162,7 @@ export default {
 }
 
 .md-app-drawer {
-  &.md-permanent-card+.md-app-scroller .md-content {
+  &.md-permanent-card + .md-app-scroller .md-content {
     @include md-layout-small-and-up {
       padding-left: 0;
       border-left: none;
@@ -169,7 +180,7 @@ export default {
     border-left: 1px solid transparent;
   }
 
-  >p {
+  > p {
     &:first-child {
       margin-top: 0;
     }
@@ -185,12 +196,11 @@ export default {
   display: flex;
   overflow: auto;
   transform: translate3D(0, 0, 0);
-  transition: padding-left .4s $md-transition-default-timing;
+  transition: padding-left 0.4s $md-transition-default-timing;
   will-change: padding-left;
 }
 
 .md-app-scroller {
   flex: 1;
 }
-
 </style>

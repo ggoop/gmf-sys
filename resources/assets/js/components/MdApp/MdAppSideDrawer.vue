@@ -8,6 +8,7 @@
       </div>
       <slot name="md-app-bottom-bar"></slot>
     </main>
+    <slot name="md-drawer"></slot>
   </div>
 </template>
 
