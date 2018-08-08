@@ -1,6 +1,38 @@
 @import "./variables.scss";
 
-
+/**
+*
+*/
+@mixin md-layout-xs {
+  @media (max-width: $layout-breakpoint-xs - 1) {
+    @content;
+  }
+}
+@mixin md-layout-sm {
+  @media (min-width: $layout-breakpoint-xs) and (max-width: $layout-breakpoint-sm - 1){
+    @content;
+  }
+}
+@mixin md-layout-md {
+  @media (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md - 1){
+    @content;
+  }
+}
+@mixin md-layout-xm {
+  @media (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-xm - 1){
+    @content;
+  }
+}
+@mixin md-layout-lg {
+  @media (min-width: $layout-breakpoint-xm) and (max-width: $layout-breakpoint-lg - 1){
+    @content;
+  }
+}
+@mixin md-layout-xlg {
+  @media (min-width: $layout-breakpoint-lg){
+    @content;
+  }
+}
 /**
  * Breakpoint
  */
