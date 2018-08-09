@@ -18,13 +18,8 @@
     @content;
   }
 }
-@mixin md-layout-xm {
-  @media (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-xm - 1){
-    @content;
-  }
-}
 @mixin md-layout-lg {
-  @media (min-width: $layout-breakpoint-xm) and (max-width: $layout-breakpoint-lg - 1){
+  @media (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg - 1){
     @content;
   }
 }
