@@ -7,9 +7,27 @@ use Gmf\Sys\Builder;
 use Gmf\Sys\Models;
 use Validator;
 use Gmf\Sys\Bp\UserAuth;
+use Zend\Diactoros\Response as Psr7Response;
+use Zend\Diactoros\ServerRequest as Psr7ServerRequest;
+use League\OAuth2\Server\AuthorizationServer;
 
 class Token
 {
+  public function issueClientToken($input = [])
+  {
+    Validator::make($input, [
+      'client_id' => 'required',
+      'client_secret' => 'required',
+    ])->validate();
+    $input['grant_type'] = 'client_credentials';
+    $token = app(AuthorizationServer::class)->respondToAccessTokenRequest(app(Psr7ServerRequest::class)->withParsedBody($input), new Psr7Response);
+    $token = \json_decode($token->getBody()->__toString());
+    $rtn = new Builder;
+    $rtn->access_token($token->access_token);
+    $rtn->expires_in($token->expires_in);
+    $rtn->token_type($token->token_type);
+    return $rtn;
+  }
   public function issueToken($user, $type = 'web')
   {
     $token = $user->createToken($type);
