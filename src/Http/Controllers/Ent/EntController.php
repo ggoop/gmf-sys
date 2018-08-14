@@ -1,19 +1,16 @@
 <?php
 namespace Gmf\Sys\Http\Controllers\Ent;
 
-use Artisan;
 use DB;
 use GAuth;
+use Gmf\Sys\Http\Controllers\Controller;
+use Gmf\Sys\Http\Resources;
 use Gmf\Sys\Models;
 use Illuminate\Http\Request;
 use Validator;
-use Gmf\Sys\Http\Resources;
-use Gmf\Sys\Http\Controllers\Controller;
 
-class EntController extends Controller
-{
-  public function index(Request $request)
-  {
+class EntController extends Controller {
+  public function index(Request $request) {
     $size = $request->input('size', 10);
     $query = Models\Ent\Ent::where('revoked', '0');
     if ($v = $request->input('q')) {
@@ -31,14 +28,12 @@ class EntController extends Controller
       $sb->is_joined(in_array($sb->id, $meJoins));
     }));
   }
-  public function show(Request $request, string $id)
-  {
+  public function show(Request $request, string $id) {
     $query = Models\Ent\Ent::where('id', $id)->orWhere('code', $id);
     $data = $query->first();
     return $this->toJson($data);
   }
-  public function store(Request $request)
-  {
+  public function store(Request $request) {
     $input = array_only($request->all(), ['code', 'name', 'memo', 'short_name', 'avatar', 'industry', 'area']);
     $validator = Validator::make($input, [
       'code' => [
@@ -62,8 +57,7 @@ class EntController extends Controller
    * @param  [type]  $id      [description]
    * @return [type]           [description]
    */
-  public function update(Request $request, $id)
-  {
+  public function update(Request $request, $id) {
     $input = $request->only(['code', 'name', 'memo', 'short_name', 'avatar', 'industry', 'area']);
     $validator = Validator::make($input, [
       'code' => [
@@ -79,16 +73,14 @@ class EntController extends Controller
     Models\Ent\Ent::where('id', $id)->update($input);
     return $this->show($request, $id);
   }
-  public function getToken(Request $request)
-  {
+  public function getToken(Request $request) {
     $ent = Models\Ent\Ent::find(GAuth::entId());
     if (empty($ent)) {
       throw new \Exception('找不到企业！');
     }
     return $this->toJson($ent->token);
   }
-  public function createToken(Request $request)
-  {
+  public function createToken(Request $request) {
     $ent = Models\Ent\Ent::find(GAuth::entId());
     if (empty($ent)) {
       throw new \Exception('找不到企业！');
@@ -96,14 +88,12 @@ class EntController extends Controller
     $ent->createToken();
     return $this->toJson($ent->token);
   }
-  public function destroy(Request $request, $id)
-  {
+  public function destroy(Request $request, $id) {
     $ids = explode(",", $id);
     Models\Ent\Ent::destroy($ids);
     return $this->toJson(true);
   }
-  public function getMyEnts(Request $request)
-  {
+  public function getMyEnts(Request $request) {
     $size = $request->input('size', 10);
     $userID = GAuth::userId();
     $query = DB::table('gmf_sys_ents as l')->join('gmf_sys_ent_users as u', 'l.id', '=', 'u.ent_id');
@@ -112,8 +102,7 @@ class EntController extends Controller
     $query->orderBy('u.is_default', 'desc')->orderBy('l.name');
     return $this->toJson($query->paginate($size));
   }
-  public function join(Request $request)
-  {
+  public function join(Request $request) {
     $entId = $request->input('entId');
     $ent = Models\Ent\Ent::find($entId);
     if (empty($ent)) {
@@ -127,8 +116,7 @@ class EntController extends Controller
     }
     return $this->toJson(true);
   }
-  public function setDefault(Request $request)
-  {
+  public function setDefault(Request $request) {
     $entId = $request->input('entId');
     $ent = Models\Ent\Ent::find($entId);
     if (empty($ent)) {

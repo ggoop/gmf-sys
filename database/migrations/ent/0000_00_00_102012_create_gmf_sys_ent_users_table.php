@@ -20,7 +20,7 @@ class CreateGmfSysEntUsersTable extends Migration {
 
 		$md->integer('is_default')->nullable()->comment('是否默认');
     $md->enum('type', 'gmf.sys.user.owner.type.enum')->nullable()->comment('拥有类型');
-    $md->integer('is_effective')->default(0)->comment('是否生效');
+    $md->integer('is_effective')->default(1)->comment('是否生效');
 		$md->boolean('revoked')->default(0)->comment('注销');
 		$md->timestamps();
 
