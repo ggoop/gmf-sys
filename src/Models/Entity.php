@@ -27,6 +27,16 @@ class Entity extends Model {
 				$query->where('el.name', $name)->orWhere('el.default_value', $name)->orWhere('el.comment', $name);
 			});
 		return $query->value('el.name');
+  }
+  public static function getEnumName($type, $value) {
+		$query = DB::table('gmf_sys_entities as e')
+			->join('gmf_sys_entity_fields as el', 'e.id', '=', 'el.entity_id')
+			->select('el.comment')
+			->where('e.name', $type)
+			->where(function ($query) use ($value) {
+				$query->where('el.name', $value)->orWhere('el.default_value', $value);
+			});
+		return $query->value('el.comment');
 	}
 	public static function getEnumItem($type, $name, $opts = []) {
 		$query = DB::table('gmf_sys_entities as e')
