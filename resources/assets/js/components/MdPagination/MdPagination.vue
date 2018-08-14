@@ -156,6 +156,7 @@ export default {
   margin: 0px;
   display: flex;
   list-style: none;
+  min-height: 40px;
   .md-button {
     min-width: 15px;
     margin: 0px;
