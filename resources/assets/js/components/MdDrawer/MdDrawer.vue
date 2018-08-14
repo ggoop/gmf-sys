@@ -18,6 +18,10 @@ export default new MdComponent({
   props: {
     mdLeft: Boolean,
     mdRight: Boolean,
+    mdClickOutsideToClose:{
+      type:Boolean,
+      default:true
+    },
     mdPermanent: {
       type: String,
       ...MdPropValidator('md-permanent', [
@@ -93,7 +97,7 @@ export default new MdComponent({
   },
   methods: {
     closeDrawer() {
-      this.$emit('update:mdActive', false)
+      this.mdClickOutsideToClose&&this.$emit('update:mdActive', false)
     }
   }
 })

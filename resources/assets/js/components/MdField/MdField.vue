@@ -213,7 +213,7 @@
       max-height: 230px;
       padding: 5px 0;
       resize: none;
-      line-height: 1.3em;
+      line-height: 1.5em;
     }
 
     .md-helper-text,
