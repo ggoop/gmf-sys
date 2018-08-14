@@ -10,8 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Uuid;
 use Validator;
 
-class User extends Authenticatable
-{
+class User extends Authenticatable {
   use Snapshotable, HasGuard, HasApiTokens, Notifiable;
 
   protected $table = 'gmf_sys_users';
@@ -37,8 +36,7 @@ class User extends Authenticatable
   protected $hidden = [
     'password', 'remember_token', 'token',
   ];
-  public function formatDefaultValue($attrs)
-  {
+  public function formatDefaultValue($attrs) {
     if (empty($this->openid)) {
       $this->openid = Uuid::generate();
     }
@@ -46,28 +44,24 @@ class User extends Authenticatable
       $this->token = Uuid::generate();
     }
   }
-  public function validate()
-  {
+  public function validate() {
     Validator::make($this->toArray(), [
       'type' => ['required'],
       'openid' => ['required'],
     ])->validate();
   }
 
-  public function findForPassport($username)
-  {
+  public function findForPassport($username) {
     return User::where('account', $username)->first();
   }
-  public function findEntIds($type = ['sys', 'web'])
-  {
-    $query = Ent\EntUser::whereIn('user_id', $this->findLinkUserIds());
+  public function findEntIds($type = ['sys', 'web']) {
+    $query = Ent\EntUser::whereIn('user_id', $this->findLinkUserIds())->where('is_effective', '1');
     $query->where('revoked', 0);
 
     $query = Ent\Ent::whereIn('id', $query->pluck('ent_id')->all())->where('revoked', 0);
     return $query->pluck('id')->all();
   }
-  public function findLinkUserIds($type = ['sys', 'web'])
-  {
+  public function findLinkUserIds($type = ['sys', 'web']) {
     $links = collect([$this->id]);
     $links = $links->merge(UserLink::where('fm_user_id', $this->id)->pluck('to_user_id')->all());
 
@@ -84,21 +78,17 @@ class User extends Authenticatable
     }
     return $query->pluck('id')->all();
   }
-  public function routeNotificationForNexmo()
-  {
+  public function routeNotificationForNexmo() {
     return $this->mobile;
   }
-  public function routeNotificationForMail()
-  {
+  public function routeNotificationForMail() {
     return $this->email;
   }
-  public function validateForPassportPasswordGrant($password)
-  {
-        //var_dump($password);
+  public function validateForPassportPasswordGrant($password) {
+    //var_dump($password);
     return true;
   }
-  public static function findByAccount($account, $type, array $opts = [])
-  {
+  public static function findByAccount($account, $type, array $opts = []) {
     if (empty($account) || empty($type)) {
       return false;
     }
@@ -111,8 +101,7 @@ class User extends Authenticatable
     $opts['type'] = $type;
     return static::where($opts)->first();
   }
-  public static function registerByAccount($type, array $opts = [])
-  {
+  public static function registerByAccount($type, array $opts = []) {
     $user = false;
     $opts['type'] = $type;
 
@@ -187,7 +176,7 @@ class User extends Authenticatable
       'id', 'openid', 'account', 'mobile', 'email', 'password', 'token',
       'name', 'nick_name', 'gender',
       'type', 'cover', 'avatar', 'titles', 'memo',
-      'client_id', 'client_type', 'client_name', 'src_id', 'src_url', 'info', 'status_enum'
+      'client_id', 'client_type', 'client_name', 'src_id', 'src_url', 'info', 'status_enum',
     ]);
     if ($user) {
       $updates = [];
@@ -219,8 +208,7 @@ class User extends Authenticatable
     }
     return $user;
   }
-  public function linkUser($user)
-  {
+  public function linkUser($user) {
     if ($this->account == $user->account) {
       return false;
     }

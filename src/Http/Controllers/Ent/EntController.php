@@ -99,6 +99,7 @@ class EntController extends Controller {
     $query = DB::table('gmf_sys_ents as l')->join('gmf_sys_ent_users as u', 'l.id', '=', 'u.ent_id');
     $query->addSelect('l.id', 'l.name', 'l.avatar', 'u.is_default', 'u.type_enum as type');
     $query->where('u.user_id', $userID);
+    $query->where('u.is_effective', '1');
     $query->orderBy('u.is_default', 'desc')->orderBy('l.name');
     return $this->toJson($query->paginate($size));
   }
