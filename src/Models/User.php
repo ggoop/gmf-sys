@@ -208,6 +208,10 @@ class User extends Authenticatable {
     }
     return $user;
   }
+  public function resetPassword($pw) {
+    $this->password = bcrypt($pw);
+    $this->save();
+  }
   public function linkUser($user) {
     if ($this->account == $user->account) {
       return false;
