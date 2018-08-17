@@ -184,9 +184,7 @@ function initVue(options) {
     Vue.prototype.$http = http;
     Vue.prototype._ = common;
     Vue.prototype.$devicePixelRatio = 1;
-    Vue.prototype.$toast = function(toast) {
-        this.$root.$refs.rootToast && this.$root.$refs.rootToast.toast(toast);
-    }
+    
     Vue.prototype.$setConfigs = function(configs) {
         extend(this.$root.configs, configs);
         this.$root.changedConfig();
