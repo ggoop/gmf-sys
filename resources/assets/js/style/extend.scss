@@ -19,7 +19,6 @@
   }
 }
 
-
 .md-app {
   .md-app-container {
     overflow-x: hidden;
@@ -43,19 +42,18 @@
 }
 
 .md-dialog {
-  overflow: inherit!important;
+  overflow: inherit !important;
   .md-dialog-button-close {
     position: absolute;
     left: 100%;
     color: #fff;
-    margin-left: 30px!important;
+    margin-left: 30px !important;
     top: 6px;
     .md-icon {
-      color: rgba(255, 255, 255, 0.83)!important;
+      color: rgba(255, 255, 255, 0.83) !important;
       font-size: 30px;
     }
   }
-
   .md-toolbar {
     @include md-layout-xsmall {
       .md-dialog-button-close {
@@ -66,7 +64,6 @@
       }
     }
   }
-
   .md-dialog-content .md-tabs {
     .md-tabs-content {
       display: flex;
@@ -88,11 +85,9 @@
   }
 }
 
-
 .md-select-menu.md-menu-content {
   z-index: 131;
 }
-
 
 .md-list-item.md-active {
   >.md-list-item-expand .md-list-expand {
@@ -101,7 +96,6 @@
     transform: translate3D(0, 0, 0);
   }
 }
-
 
 .md-card {
   .md-card-header {
@@ -117,11 +111,9 @@
   }
 }
 
-
 .md-checkbox .md-checkbox-label {
   font-size: 16px;
 }
-
 
 .md-field.md-theme-default.md-disabled:after {
   background-color: transparent;

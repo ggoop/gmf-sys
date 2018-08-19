@@ -74,15 +74,15 @@ class File extends Resource {
 			$url = $path;
 		}
 		if ($url && !starts_with(strtolower($url), 'http')) {
-			return config('app.url') . $url;
+			return url($url);
 		}
 		return $url;
 	}
-	private function getImagePathURL() {
+	public function getImagePathURL() {
 		if (!empty($this->path)) {
 			return $this->getFullPath($this->disk, $this->path);
 		}
-		return config('app.url') . '/api/sys/images/' . $this->id;
+		return url('/api/sys/images/' . $this->id);
 	}
 	private function getPdfPathURL() {
 		if (!empty($this->pdf_path)) {

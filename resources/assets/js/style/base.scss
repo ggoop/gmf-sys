@@ -1,6 +1,5 @@
 @import "~gmf/components/MdAnimation/variables";
 $materialIcon-font-path: "../fonts/materialIcon/";
-
 /**
  * Structure - The main styles for html and body tags
  */
@@ -41,7 +40,6 @@ body {
     @extend .md-body-1;
 }
 
-
 /*material-icons*/
 
 @font-face {
@@ -80,7 +78,6 @@ body {
     font-feature-settings: 'liga';
 }
 
-
 /**
  * Overrides - Default buttons
  */
@@ -98,7 +95,6 @@ input[type="search"]::-webkit-search-cancel-button {
     display: none;
     -webkit-appearance: none;
 }
-
 
 /**
  * Overrides - Apply fluid media styles
@@ -119,13 +115,11 @@ iframe {
     }
 }
 
-
 /**
  * Suppress the focus outline on links that cannot be accessed via keyboard.
  * This prevents an unwanted focus outline from appearing around elements that
  * might still respond to pointer events.
  */
-
 
 /*
    ========================================================================== */
@@ -164,7 +158,8 @@ iframe {
 .no-scroll {
     overflow: hidden !important;
 }
-.scroll{
+
+.scroll {
     overflow: auto;
 }
 
@@ -186,6 +181,7 @@ iframe {
 .md-text-right {
     text-align: right;
 }
+
 .md-ellipsis {
     overflow: hidden;
     white-space: nowrap;
