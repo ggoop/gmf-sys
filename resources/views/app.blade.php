@@ -17,7 +17,6 @@
 <body ontouchstart>
   <div id="gmfApp" class="layout-fill">
     <router-view></router-view>
-    <md-toast ref="rootToast"></md-toast>
   </div>
   <script src="{{ mix('/js/manifest.js')}}"></script>
   <script src="{{ mix('/js/vendor.js')}}"></script>
