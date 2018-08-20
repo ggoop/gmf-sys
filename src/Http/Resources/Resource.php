@@ -2,7 +2,7 @@
 namespace Gmf\Sys\Http\Resources;
 
 use Closure;
-
+use Gmf\Sys\Builder;
 use Illuminate\Http\Resources\Json\Resource as BaseResource;
 
 class Resource extends BaseResource
@@ -30,10 +30,10 @@ class Resource extends BaseResource
   }
   public function toResult($request)
   {
-    $rtn = $this->toArray($request);
+    $rtn = new Builder($this->toArray($request));
     if (!is_null($this->itemCallback)) {
       $flag = call_user_func($this->itemCallback, $rtn, $this);
-      if ($flag === 0||$flag === false) {
+      if ($flag === 0 || $flag === false) {
         return false;
       }
     }
