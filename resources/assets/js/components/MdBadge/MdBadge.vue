@@ -1,13 +1,13 @@
 <template>
   <div class="md-badge-content" v-if="hasDefaultSlot">
     <slot />
-    <md-badge-standalone :class="badgeClasses">
+    <md-badge-standalone :class="badgeClasses"  v-on="$listeners">
       <div>
         {{ mdContent }}
       </div>
     </md-badge-standalone>
   </div>
-  <md-badge-standalone :class="badgeClasses" v-else>
+  <md-badge-standalone :class="badgeClasses"  v-on="$listeners" v-else>
     {{ mdContent }}
   </md-badge-standalone>
 </template>

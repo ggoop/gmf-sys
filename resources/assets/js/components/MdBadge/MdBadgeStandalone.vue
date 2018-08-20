@@ -1,5 +1,5 @@
 <template>
-  <div class="md-badge" :class="[$mdActiveTheme]">
+  <div class="md-badge" :class="[$mdActiveTheme]" v-on="$listeners">
     <slot />
   </div>
 </template>
@@ -28,7 +28,6 @@
     height: 22px;
     border-radius: 50%;
     color: #fff;
-    pointer-events: none;
     z-index: 11;
     .md-list-item-content & {
       position: relative;
