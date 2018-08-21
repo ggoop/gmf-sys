@@ -44,6 +44,14 @@ class GroupCategory extends Model {
         $this->group_id = GroupItem::where('code', $v)->where('ent_id', $this->ent_id)->value('id');
       }
     }
+    if (empty($this->parent_id) && !empty($attrs['parent']) && $v = $attrs['parent']) {
+      if ($v = InputHelper::tryGetObjectValue($v, 'code')) {
+        $p = static::where('code', $v)->where('ent_id', $this->ent_id)->where('group_id', $this->group_id)->first();
+        if ($p) {
+          $this->parent_id = $p->id;
+        }
+      }
+    }
   }
   public function validate() {
     Validator::make($this->toArray(), [

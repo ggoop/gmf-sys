@@ -4,7 +4,6 @@ namespace Gmf\Sys\Database\Concerns;
 use DB;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
-use Log;
 use Uuid;
 
 trait BatchImport {
@@ -121,7 +120,7 @@ trait BatchImport {
       if ($needId && empty($data[$m->getKeyName()])) {
         $data[$m->getKeyName()] = Uuid::generate();
       }
-      $resultIds[] =empty($data[$m->getKeyName()])?'': $data[$m->getKeyName()];
+      $resultIds[] = empty($data[$m->getKeyName()]) ? '' : $data[$m->getKeyName()];
       return $data;
     })->reject(function ($name) {
       return empty($name);
