@@ -18,7 +18,7 @@ class GroupCategory extends Model {
    *
    * @var array
    */
-  protected $fillable = ['id', 'user_id', 'ent_id', 'group_id', 'root_id', 'parent_id', 'code', 'name', 'memo', 'is_system', 'revoked'];
+  protected $fillable = ['id', 'user_id', 'ent_id', 'group_id', 'root_id', 'parent_id', 'code', 'name', 'tag', 'memo', 'is_system', 'revoked'];
   public function group() {
     return $this->belongsTo('Gmf\Sys\Models\GroupItem');
   }

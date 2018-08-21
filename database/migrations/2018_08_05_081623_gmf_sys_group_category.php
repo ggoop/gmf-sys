@@ -24,6 +24,7 @@ class GmfSysGroupCategory extends Migration {
 
         $md->string('code')->nullable()->comment('编码');
         $md->string('name')->nullable()->comment('名称');
+        $md->string('tag')->nullable()->comment('标签');
         $md->text('memo')->nullable()->comment('备注');
         $md->boolean('is_system')->default(0)->comment('系统');
         $md->boolean('revoked')->default(0)->comment('注销');
