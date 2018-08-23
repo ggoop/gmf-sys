@@ -8,7 +8,7 @@ CREATE PROCEDURE `sp_gmf_sys_menus`(IN p_ent CHAR(200),IN p_user CHAR(200),IN p_
 BEGIN
 
 DECLARE v_level INT DEFAULT 0;
-
+DECLARE v_is_super INT DEFAULT 0;
 DROP TEMPORARY TABLE IF EXISTS temp_mid_data;
 CREATE TEMPORARY TABLE IF NOT EXISTS temp_mid_data(
 `id` NVARCHAR(100)
@@ -29,7 +29,14 @@ CREATE TEMPORARY TABLE IF NOT EXISTS temp_opinion_data(
   `menu_id` NVARCHAR(100),
   `opinion_enum` NVARCHAR(100)
 );
+IF EXISTS(
+	SELECT r.id FROM `gmf_sys_authority_role_users` AS ru INNER JOIN `gmf_sys_authority_roles` AS r ON ru.role_id=r.id
+	WHERE ru.user_id=p_user AND ru.ent_id=p_ent AND ru.`revoked`=0 
+) THEN
+SET v_is_super=1;
+END IF;
 
+IF v_is_super=0 THEN
 INSERT INTO temp_opinion_data(menu_id,opinion_enum)
 SELECT rm.menu_id,rm.opinion_enum FROM `gmf_sys_authority_role_users` AS ru
 INNER JOIN `gmf_sys_authority_roles` AS r ON ru.role_id=r.id
@@ -37,14 +44,18 @@ INNER JOIN `gmf_sys_authority_role_menus` AS rm ON ru.role_id=rm.role_id
 WHERE ru.user_id=p_user AND ru.ent_id=p_ent AND rm.ent_id=p_ent 
  AND ru.`revoked`=0 AND rm.`revoked`=0 AND r.`revoked`=0
 GROUP BY rm.menu_id,rm.opinion_enum;
+END IF;
+
 
 INSERT INTO temp_menus_data(root_id,parent_id,id,CODE,NAME)
 SELECT m.root_id,m.parent_id,m.id,m.code,m.name
 FROM gmf_sys_menus AS m
 WHERE (p_tag IS NULL OR m.tag=p_tag) AND m.is_leaf=1;
 
-DELETE FROM temp_menus_data WHERE id IN (SELECT menu_id FROM temp_opinion_data AS d WHERE d.opinion_enum!='permit');
-
+/*如果没有设置权限，则删除*/
+IF v_is_super=0 THEN
+DELETE FROM temp_menus_data WHERE id NOT IN (SELECT menu_id FROM temp_opinion_data AS d WHERE d.opinion_enum='permit');
+END IF;
 /*上1级*/
 WHILE v_level>=0 DO 
 	DELETE FROM temp_mid_data;
