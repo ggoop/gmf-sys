@@ -30,8 +30,10 @@ CREATE TEMPORARY TABLE IF NOT EXISTS temp_opinion_data(
   `opinion_enum` NVARCHAR(100)
 );
 IF EXISTS(
-	SELECT r.id FROM `gmf_sys_authority_role_users` AS ru INNER JOIN `gmf_sys_authority_roles` AS r ON ru.role_id=r.id
+	SELECT r.id FROM `gmf_sys_authority_role_users` AS ru 
+	INNER JOIN `gmf_sys_authority_roles` AS r ON ru.role_id=r.id
 	WHERE ru.user_id=p_user AND ru.ent_id=p_ent AND ru.`revoked`=0 
+	AND r.code='gmf.role.sys.super'
 ) THEN
 SET v_is_super=1;
 END IF;
@@ -54,7 +56,7 @@ WHERE (p_tag IS NULL OR m.tag=p_tag) AND m.is_leaf=1;
 
 /*如果没有设置权限，则删除*/
 IF v_is_super=0 THEN
-DELETE FROM temp_menus_data WHERE id NOT IN (SELECT menu_id FROM temp_opinion_data AS d WHERE d.opinion_enum='permit');
+DELETE l FROM temp_menus_data AS l WHERE id NOT IN (SELECT menu_id FROM temp_opinion_data AS d WHERE d.opinion_enum='permit' AND l.id=d.menu_id);
 END IF;
 /*上1级*/
 WHILE v_level>=0 DO 
