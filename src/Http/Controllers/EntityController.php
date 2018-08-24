@@ -89,7 +89,7 @@ class EntityController extends Controller {
 	}
 	private function pager_build_query(Request $request, $entity) {
 		$query = DB::table($entity->table_name);
-		if (!empty($request->wheres) && count($request->wheres) && is_array($request->wheres)) {
+		if (!empty($request->wheres)&& is_array($request->wheres)&& count($request->wheres)) {
 			foreach ($request->wheres as $key => $value) {
 				$query->where($key, $value);
 			}
