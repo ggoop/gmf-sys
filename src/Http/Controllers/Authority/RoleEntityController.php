@@ -10,7 +10,7 @@ use Validator;
 use GAuth;
 class RoleEntityController extends Controller {
 	public function index(Request $request) {
-		$query = RoleEntity::with('role', 'entity')->where('ent_id', GAuth::entId());
+		$query = RoleEntity::with('role', 'entity','field')->where('ent_id', GAuth::entId());
 		$matchs = array_only($request->all(), ['role_id', 'entity_id', 'operation_enum']);
 		if ($matchs && count($matchs)) {
 			$query->where($matchs);

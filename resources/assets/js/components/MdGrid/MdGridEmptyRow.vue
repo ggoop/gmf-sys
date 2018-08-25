@@ -1,7 +1,7 @@
 <template>
   <tr class="md-grid-empty-row">
     <td v-if="multiple" :selection="true" :style="{'overflow':'hidden'}"></td>
-    <td v-for="(column,index) in visibleColumns" :style="{'overflow':'hidden','width':column.width}">
+    <td v-for="(column,i) in visibleColumns" :key="i" :style="{'overflow':'hidden','width':column.width}">
     </td>
   </tr>
 </template>

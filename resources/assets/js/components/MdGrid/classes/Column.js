@@ -13,7 +13,6 @@ export default class Column {
       'filterOn', 'hidden', 'formatter', 'cellClass', 'headerClass',
       'width', 'isTool', 'refType', 'refId', 'refInit', 'multiple'
     ]);
-
     for (const property in properties) {
       this[property] = mixins[property];
     }

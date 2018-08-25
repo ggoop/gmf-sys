@@ -8,7 +8,7 @@
         <tr>
           <md-grid-cell v-if="multiple" :selection="true"  container-class="layout layout-align-center-center">
           </md-grid-cell>
-          <md-grid-cell v-for="column in visibleColumns" :key="column.field">
+          <md-grid-cell v-for="(column,i) in visibleColumns" :key="i">
           </md-grid-cell>
         </tr>
       </tbody>

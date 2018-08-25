@@ -240,6 +240,7 @@ class QueryCase {
 			$column = $caseWhere->name;
 		}
 		$value = $caseWhere->value;
+		$caseWhere->boolean=$caseWhere->boolean?:'and';
 		if (in_array($caseWhere->operator, ['missing', 'null'])) {
 			$query->whereNull($column, $caseWhere->boolean);
 		}

@@ -9,7 +9,7 @@
           <md-grid-cell v-if="multiple" :selection="true" container-class="layout layout-align-center-center">
             <md-checkbox class="md-primary" v-model="selected" @change="handleSelected"></md-checkbox>
           </md-grid-cell>
-          <md-grid-head-cell v-for="column in visibleColumns" :key="column.field" :column="column">
+          <md-grid-head-cell v-for="(column,i) in visibleColumns" :key="i" :column="column">
             {{ column.label||column.field }}
           </md-grid-head-cell>
         </tr>

@@ -5,7 +5,7 @@
         <slot name="editor"></slot>
       </template>
       <template v-else-if="column&&column.dataType=='entity'">
-        <md-ref-input :md-ref-id="column.refId" :md-init="on_init_ref" v-model="row.data[column.field]"></md-ref-input>
+        <md-ref-input :md-ref-id="getCellRefId" :md-init="on_init_ref" v-model="row.data[column.field]"></md-ref-input>
       </template>
       <template v-else-if="column&&column.dataType=='enum'">
         <md-field>
@@ -16,7 +16,7 @@
         <md-datepicker v-model="row.data[column.field]"></md-datepicker>
       </template>
       <template v-else-if="column&&column.refId">
-        <md-ref-input :md-ref-id="column.refId" :md-ref-type="column.refType" :md-init="on_init_ref" v-model="row.data[column.field]"></md-ref-input>
+        <md-ref-input :md-ref-id="getCellRefId" :md-ref-type="column.refType" :md-init="on_init_ref" v-model="row.data[column.field]"></md-ref-input>
       </template>
       <template v-else>
         <md-field>
@@ -30,108 +30,126 @@
   </td>
 </template>
 <script>
-import getClosestVueParent from 'gmf/core/utils/MdGetClosestVueParent';
-import mdGridCellShow from './MdGridCellShow';
-import mdGridCellEdit from './MdGridCellEdit';
-export default {
-  components: {
-    mdGridCellShow,
-    mdGridCellEdit
-  },
-  props: {
-    column: { type: Object },
-    containerClass: String,
-    row: { type: Object },
-    selection: { default: false, type: Boolean },
-    type: { default: 'td', type: String },
-  },
-  computed: {
-    objClass() {
+  import getClosestVueParent from 'gmf/core/utils/MdGetClosestVueParent';
+  import mdGridCellShow from './MdGridCellShow';
+  import mdGridCellEdit from './MdGridCellEdit';
+  import common from 'gmf/core/utils/common';
+  export default {
+    components: {
+      mdGridCellShow,
+      mdGridCellEdit
+    },
+    props: {
+      column: {
+        type: Object
+      },
+      containerClass: String,
+      row: {
+        type: Object
+      },
+      selection: {
+        default: false,
+        type: Boolean
+      },
+      type: {
+        default: 'td',
+        type: String
+      },
+    },
+    computed: {
+      objClass() {
+        return {
+          'is-tool': this.column && this.column.isTool,
+          'md-grid-selection': this.selection,
+          'cell-focused': this.focused,
+          'multiple': this.column && this.column.multiple
+        };
+      },
+      editable() {
+        return (this.row && this.row.data) &&
+          (!this.selection) &&
+          this.column &&
+          (this.column.templateEditor || this.column.editable) &&
+          this.parentTable && !this.parentTable.readonly;
+      }
+    },
+    data() {
       return {
-        'is-tool': this.column && this.column.isTool,
-        'md-grid-selection': this.selection,
-        'cell-focused': this.focused,
-        'multiple': this.column && this.column.multiple
+        parentTable: {},
+        status: 'display',
+        focused: false,
+        oldValue: {}
       };
     },
-    editable() {
-      return (this.row && this.row.data) &&
-        (!this.selection) &&
-        this.column &&
-        (this.column.templateEditor || this.column.editable) &&
-        this.parentTable && !this.parentTable.readonly;
-    }
-  },
-  data() {
-    return {
-      parentTable: {},
-      status: 'display',
-      focused: false,
-      oldValue: {}
-    };
-  },
-  methods: {
-    handleFocused() {
-      if (this.parentTable && this.parentTable.focusCell) {
-        this.parentTable.focusCell.focused = false;
-      }
-      this.focused = true;
-    },
-    handleClick(event) {
-      if (!this.canFireEvents) return;
-      this.handleFocused();
-      this.$emit('click', event);
-      this.beginEdit();
-    },
-    beginEdit() {
-      if (!this.editable) {
-        if (this.parentTable.focusCell) {
-          this.parentTable.focusCell.endEdit();
+    methods: {
+      handleFocused() {
+        if (this.parentTable && this.parentTable.focusCell) {
+          this.parentTable.focusCell.focused = false;
         }
-        this.parentTable.focusCell = this;
-        return;
-      }
-      if (this.status == 'display' && !this.parentTable.readonly) {
-        if (this.parentTable.focusCell) {
-          this.parentTable.focusCell.endEdit();
+        this.focused = true;
+      },
+      handleClick(event) {
+        if (!this.canFireEvents) return;
+        this.handleFocused();
+        this.$emit('click', event);
+        this.beginEdit();
+      },
+      beginEdit() {
+        if (!this.editable) {
+          if (this.parentTable.focusCell) {
+            this.parentTable.focusCell.endEdit();
+          }
+          this.parentTable.focusCell = this;
+          return;
         }
-        if (!this.row.data.sys_updated) {
-          this.oldValue = this.row.getValueKey(this.column.field);
+        if (this.status == 'display' && !this.parentTable.readonly) {
+          if (this.parentTable.focusCell) {
+            this.parentTable.focusCell.endEdit();
+          }
+          if (!this.row.data.sys_updated) {
+            this.oldValue = this.row.getValueKey(this.column.field);
+          }
+          this.parentTable.focusCell = this;
+          this.status = 'editor';
         }
-        this.parentTable.focusCell = this;
-        this.status = 'editor';
-      }
-    },
-    setValue(data) {
-      this.row.setData(this.column.field, data);
-      const newValue = this.row.getValueKey(this.column.field);
-      if (newValue != this.oldValue) {
-        this.row.data.sys_updated = true;
-      }
-    },
-    getValue() {
-      this.endEdit();
-      return this.row.getData(this.column.field);
-    },
-    endEdit() {
-      if (this.status == 'editor') {
+      },
+      setValue(data) {
+        this.row.setData(this.column.field, data);
         const newValue = this.row.getValueKey(this.column.field);
         if (newValue != this.oldValue) {
           this.row.data.sys_updated = true;
         }
-      }
-      this.status = 'display'
-    },
-    on_init_ref(options, event) {
-      this.column && this.row && this.column.refInit && this.column.refInit(options, this.row.data, event);
-    },
-  },
-  mounted() {
-    this.parentTable = getClosestVueParent(this.$parent, 'md-grid');
-    this.$nextTick(() => {
-      this.canFireEvents = true;
-    });
-  },
-};
+      },
+      getValue() {
+        this.endEdit();
+        return this.row.getData(this.column.field);
+      },
+      endEdit() {
+        if (this.status == 'editor') {
+          const newValue = this.row.getValueKey(this.column.field);
+          if (newValue != this.oldValue) {
+            this.row.data.sys_updated = true;
+          }
+        }
+        this.status = 'display'
+      },
+      getCellRefId() {
+        if (this.column.refId && common.isString(this.column.refId))
+          return this.column.refId;
+        else if (this.column.refId && common.isFunction(this.column.refId))
+          return this.column.refId(this.row.data);
+        else return '';
 
+      },
+      on_init_ref(options, event) {
+        this.column && this.row && this.column.refInit && this.column.refInit(options, this.row.data, event);
+      },
+    },
+    mounted() {
+      this.parentTable = getClosestVueParent(this.$parent, 'md-grid');
+      this.$nextTick(() => {
+        this.canFireEvents = true;
+      });
+    },
+  };
 </script>

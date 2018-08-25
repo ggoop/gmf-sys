@@ -11,7 +11,7 @@
     <md-button v-if="!disabled" class="md-dense md-icon-button md-ref-filter" @click.native="openRef()">
       <md-icon>search</md-icon>
     </md-button>
-    <md-ref v-if="mdRefId" :multiple="multiple" :md-init="mdInit" :md-active.sync="showRefDia" @confirm="onRefConfirm" :md-ref-type="mdRefType" :md-ref-id="mdRefId" :options="options"></md-ref>
+    <md-ref v-if="mdRefId" :multiple="multiple" :md-init="mdInit" :md-active.sync="showRefDia" @confirm="onRefConfirm" :md-ref-type="mdRefType" :md-ref-id="refId" :options="options"></md-ref>
   </md-field>
 </template>
 <script>
@@ -35,7 +35,7 @@ export default new MdComponent({
     value: [Array, String, Object],
     disabled: Boolean,
     multiple: Boolean,
-    mdRefId: String,
+    mdRefId: [String,Function],
     id: {
       type: [String, Number],
       default: () => 'md-chips-' + MdUuid()
@@ -55,6 +55,7 @@ export default new MdComponent({
     mdInit: { type: Function },
   },
   data: () => ({
+    refId:'',
     inputValue: '',
     selectedValues: [],
     options: { wheres: {}, orders: [] },
@@ -162,8 +163,18 @@ export default new MdComponent({
     openRef() {
       if (this.disabled) return;
       this.$emit('mdPick', this.options);
-      if (this.mdRefId) {
-        this.showRefDia = true;
+      if (this.mdRefId) {        
+        if(isString(this.mdRefId)){
+          this.refId=this.mdRefId;
+        }
+        else if(common.isFunction(this.mdRefId)){
+          this.refId=this.mdRefId();
+        }else{
+          this.refId='';
+        }
+        if(this.refId){
+          this.showRefDia = true;
+        }
       }
     },
     onRefConfirm(data) {
