@@ -38,26 +38,26 @@
       width: null
     }),
     computed: {
-      hasSort () {
+      hasSort() {
         return this.MdTable.sort && this.sortBy
       },
-      isSorted () {
+      isSorted() {
         if (this.MdTable.sort) {
           return this.MdTable.sort === this.sortBy
         }
       },
-      isDescSorted () {
+      isDescSorted() {
         return this.isSorted && this.MdTable.sortOrder === 'desc'
       },
-      isAscSorted () {
+      isAscSorted() {
         return this.isSorted && this.MdTable.sortOrder === 'asc'
       },
-      headStyles () {
+      headStyles() {
         return {
           width: this.width + 'px'
         }
       },
-      headClasses () {
+      headClasses() {
         return {
           'md-numeric': this.numeric || this.mdNumeric,
           'md-sortable': this.hasSort,
@@ -67,7 +67,7 @@
       }
     },
     methods: {
-      changeSort () {
+      changeSort() {
         if (this.hasSort) {
           if (this.isAscSorted) {
             this.MdTable.sortOrder = 'desc'
@@ -82,13 +82,15 @@
           this.MdTable.sortTable()
         }
       },
-      getChildNodesBySelector (el, selector) {
-        return Array.from(el.childNodes).filter(({ classList }) => classList && classList.contains(selector))
+      getChildNodesBySelector(el, selector) {
+        return Array.from(el.childNodes).filter(({
+          classList
+        }) => classList && classList.contains(selector))
       },
-      getNodeIndex (nodes, el) {
+      getNodeIndex(nodes, el) {
         return [].indexOf.call(nodes, el)
       },
-      setWidth () {
+      setWidth() {
         if (this.MdTable.fixedHeader) {
           const cellSelector = 'md-table-cell'
           const thEls = this.getChildNodesBySelector(this.$el.parentNode, 'md-table-head')
@@ -99,10 +101,10 @@
         }
       }
     },
-    updated () {
+    updated() {
       this.$nextTick().then(this.setWidth)
     },
-    mounted () {
+    mounted() {
       this.$nextTick().then(this.setWidth)
     }
   }
@@ -127,7 +129,7 @@
     }
 
     &.md-sortable:first-of-type,
-    &.md-table-cell-selection + .md-sortable {
+    &.md-table-cell-selection+.md-sortable {
       .md-table-sortable-icon {
         right: 8px;
         left: auto;
@@ -199,5 +201,16 @@
     transform: translateY(-50%);
     opacity: 0;
     color: rgba(#000, .38);
+  }
+
+  .md-table.md-dense {
+    .md-table-head-container {
+      height: 38px;
+      padding: 6px 0;
+    }
+    .md-table-head-label {
+      padding-right: 16px;
+      padding-left: 8px;
+    }
   }
 </style>

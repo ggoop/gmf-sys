@@ -5,7 +5,7 @@ export default {
     /* istanbul ignore next */
     if (!context.stack.some(item => item.vm._popupId === vm._popupId)) {
       if (context.stack.length) {
-        context.top.vm.isActived = false;
+        context.top.vm.close();
       };
       context.stack.push({
         vm

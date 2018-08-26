@@ -21,28 +21,28 @@
       parentNode: null
     }),
     computed: {
-      cellClasses () {
+      cellClasses() {
         return {
           'md-numeric': this.mdNumeric
         }
       }
     },
     watch: {
-      mdSortBy () {
+      mdSortBy() {
         this.setCellData()
       },
-      mdNumeric () {
+      mdNumeric() {
         this.setCellData()
       },
-      mdLabel () {
+      mdLabel() {
         this.setCellData()
       },
-      mdTooltip () {
+      mdTooltip() {
         this.setCellData()
       }
     },
     methods: {
-      setCellData ($vm = this) {
+      setCellData($vm = this) {
         this.$set(this.MdTable.items, $vm.index, {
           label: $vm.mdLabel,
           numeric: $vm.mdNumeric,
@@ -50,10 +50,13 @@
           sortBy: $vm.mdSortBy
         })
       },
-      updateAllCellData () {
+      updateAllCellData() {
         this.MdTable.items = {}
 
-        const cells = Array.from(this.parentNode.childNodes).filter(({ tagName, classList }) => {
+        const cells = Array.from(this.parentNode.childNodes).filter(({
+          tagName,
+          classList
+        }) => {
           const isSelection = classList && classList.contains('md-table-cell-selection')
           const isTd = tagName && tagName.toLowerCase() === 'td'
 
@@ -69,11 +72,11 @@
         })
       }
     },
-    mounted () {
+    mounted() {
       this.parentNode = this.$el.parentNode
       this.updateAllCellData()
     },
-    destroyed () {
+    destroyed() {
       const rowRemoved = this.$el.parentNode !== null
 
       if (rowRemoved) {
@@ -106,5 +109,17 @@
 
   .md-table-cell-container {
     padding: 6px 32px 6px 24px;
+  }
+
+  .md-table.md-dense {
+    .md-table-cell {
+      height: 36px;
+      .md-table-cell-container {
+        padding: 8px;
+      }
+      &:last-child .md-table-cell-container {
+        padding-right: 0px;
+      }
+    }
   }
 </style>

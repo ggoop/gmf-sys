@@ -1,5 +1,5 @@
 <template>
-  <div class="md-picker" :class="[$mdActiveTheme]">
+  <div class="md-picker layout-column" :class="[$mdActiveTheme,'md-toolbar-position-'+mdToolbarPosition]">
     <div :class="b('toolbar')" class="md-1px-tb" v-if="mdShowToolbar">
       <slot>
         <div :class="b('cancel')" @click="onCancel">{{ mdCancelText }}</div>
@@ -10,7 +10,7 @@
     <div v-if="loading" :class="b('loading')">
       <md-x-loading />
     </div>
-    <md-flexbox :gutter="0">
+    <md-flexbox :gutter="0" :class="b('container')">
       <md-flexbox-item :span="mdColumnWidth && mdColumnWidth[index]" v-for="(one, index) in currentData" :key="index" style="margin-left:0;">
         <div class="md-picker-item" :id="`md-picker-${uuid}-${index}`"></div>
       </md-flexbox-item>
@@ -52,6 +52,10 @@
         default: () => [],
         type: [Array, Function]
       },
+      mdToolbarPosition: {
+        type: String,
+        default: 'top'
+      },
       mdColumns: {
         type: Number,
         default: 0
@@ -72,11 +76,11 @@
       mdShowToolbar: Boolean,
       mdConfirmText: {
         type: String,
-        default: 'Ok'
+        default: '确定'
       },
       mdCancelText: {
         type: String,
-        default: 'Cancel'
+        default: '取消'
       },
       mdTitle: String
     },
@@ -303,6 +307,7 @@
 <style lang="scss">
   @import "~gmf/components/MdAnimation/variables";
   @import '~gmf/style/variables';
+
   .md-picker {
     &__toolbar {
       display: flex;
@@ -310,6 +315,7 @@
       line-height: 40px;
       justify-content: space-between;
     }
+    &__container {}
 
     &__cancel,
     &__confirm {
@@ -411,6 +417,12 @@
       -webkit-line-clamp: 1;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    &.md-toolbar-position-bottom {
+      .md-picker__toolbar {
+        order: 1;
+      }
     }
   }
 </style>
