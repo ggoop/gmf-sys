@@ -62,6 +62,12 @@ class EntityQuery {
     $uids = GAuth::ids();
     $entID = GAuth::entId();
     if (!empty($uids) && !empty($entID)) {
+      if (DB::table('gmf_sys_authority_roles as r')
+        ->join('gmf_sys_authority_role_users as u', 'r.id', '=', 'u.role_id')
+        ->where('r.code', 'gmf.role.sys.super')
+        ->whereIn('u.user_id', GAuth::ids())->exists()) {
+        return;
+      }
       $items = DB::table('gmf_sys_authority_role_users as u')
         ->join('gmf_sys_authority_role_entities as e', 'u.role_id', '=', 'e.role_id')
         ->select('e.field_name', 'e.data_id')
