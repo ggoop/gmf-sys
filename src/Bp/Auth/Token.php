@@ -10,6 +10,7 @@ use Gmf\Sys\Bp\UserAuth;
 use Zend\Diactoros\Response as Psr7Response;
 use Zend\Diactoros\ServerRequest as Psr7ServerRequest;
 use League\OAuth2\Server\AuthorizationServer;
+use DB;
 
 class Token
 {
@@ -28,6 +29,32 @@ class Token
     $rtn->token_type($token->token_type);
     return $rtn;
   }
+  public function issueCodeToken($input = [])
+  {
+    Validator::make($input, [
+      'client_id' => 'required',
+      'code' => 'required',
+      'client_secret' => 'required',
+    ])->validate();
+    $code = $input['code'];
+    $client_id = $input['client_id'];
+    $client_secret = $input['client_secret'];
+    if ($c = app('Gmf\Sys\Bp\VCode')->checker($code, 'oauth.authorize')) {
+      if (!DB::table('gmf_oauth_clients')->where('id', $client_id)->where('secret', $client_secret)->exists()) {
+        throw new \Exception('应用无效!');
+      }
+      if ($c->client_id != $client_id) {
+        throw new \Exception('授权码被篡改!');
+      }
+      app('Gmf\Sys\Bp\VCode')->delete($c->id);
+      $user = Models\User::find($c->user_id);
+      if (empty($user)) {
+        throw new \Exception('没有此用户.');
+      }
+      return $this->issueToken($user, 'authorize.token');
+    }
+    throw new \Exception('授权码无效!');
+  }
   public function issueToken($user, $type = 'web')
   {
     $token = $user->createToken($type);
@@ -35,6 +62,7 @@ class Token
     $rtn->access_token($token->accessToken);
     $rtn->expires_in(strtotime($token->token->expires_at));
     $rtn->token_type('Bearer');
+    $rtn->openid($user->openid ? : $user->id);
     return $rtn;
   }
   /**

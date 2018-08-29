@@ -22,6 +22,9 @@ class TokenController extends Controller
       case 'client_credentials':
         $token = app('Gmf\Sys\Bp\Auth\Token')->issueClientToken($request->all());
         break;
+      case 'authorization_code':
+        $token = app('Gmf\Sys\Bp\Auth\Token')->issueCodeToken($request->all());
+        break;
     }
     return $this->toJson($token);
   }
