@@ -10,18 +10,6 @@ use Uuid;
 
 class DataController extends Controller {
   public function index(Request $request) {
-    $b = new TreeBuilder([
-      new Builder(['id' => 'A']),
-      new Builder(['id' => 'B', 'parent_id' => 'A']),
-      new Builder(['id' => 'C', 'parent_id' => 'B']),
-      new Builder(['id' => 'D']),
-      new Builder(['id' => 'E', 'parent_id' => 'A']),
-      new Builder(['id' => 'F']),
-      new Builder(['id' => 'G']),
-      new Builder(['id' => 'H']),
-    ]);
-    return $this->toJson($b->build());
-
     $datas = [];
     for ($i = 0; $i < 20; $i++) {
       $datas[] = Uuid::generate();
