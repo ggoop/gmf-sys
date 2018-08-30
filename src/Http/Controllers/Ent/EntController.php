@@ -24,8 +24,10 @@ class EntController extends Controller {
     if (GAuth::ids()) {
       $meJoins = Models\Ent\EntUser::whereIn('user_id', GAuth::ids())->pluck('ent_id')->all();
     }
+    return $this->toJson(Resources\Ent::collection($query->paginate($size)));
     return $this->toJson(Resources\Ent::collection($query->paginate($size))->withItemCallback(function ($sb, $send) use ($meJoins) {
-      $sb->is_joined(in_array($sb->id, $meJoins));
+      //$sb->is_joined(in_array($sb->id, $meJoins));
+      //return $sb;
     }));
   }
   public function show(Request $request, string $id) {

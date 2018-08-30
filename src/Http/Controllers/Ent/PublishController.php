@@ -32,6 +32,8 @@ class PublishController extends Controller
         if (empty($ent)) {
             throw new \Exception('没有企业信息，不能发布!');
         }
+        $ent->discover= $input['discover'];
+        $ent->save();
         //注册企业
         $params = [
             "token" => $input['token'],
