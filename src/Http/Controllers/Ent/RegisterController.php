@@ -29,7 +29,7 @@ class RegisterController extends Controller
             if (!Models\Ent\EntUser::where('ent_id', $ent->id)->where('user_id', $user->id)->exists()) {
                 throw new \Exception('企业已经发布过，请使用原有账号发布!');
             }
-            Models\Ent\Ent::where('id', $ent->id)->update(array_only($data, ['name', 'token','gateway']));
+            Models\Ent\Ent::where('id', $ent->id)->update(array_only($data, ['name', 'token','gateway','scope']));
         } else {
             $ent = Models\Ent\Ent::create($data);
             Models\Ent\Ent::addUser($ent->id, $user->id, 'creator');
