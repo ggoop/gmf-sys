@@ -1,6 +1,7 @@
 <?php
 namespace Gmf\Sys\Http\Controllers\Ent;
 
+use DB;
 use GAuth;
 use Gmf\Sys\Http\Controllers\Controller;
 use Gmf\Sys\Models;
@@ -31,23 +32,40 @@ class PublishController extends Controller {
     if (empty($ent)) {
       throw new \Exception('没有企业信息，不能发布!');
     }
-    $ent->discover = $input['discover'];
-    $ent->gateway = $input['gateway'];
-    $ent->published = 1;
-    $ent->save();
-    //注册企业
-    $params = [
-      "token" => $input['token'],
-      "account" => $input['account'],
-      "type" => 'ent',
-      'datas' => ['openid' => $ent->openid, 'name' => $ent->name, 'token' => $ent->token, 'gateway' => $input['gateway'], 'scope' => $ent->scope],
-    ];
-    $client = new GuzzleHttp\Client(['base_uri' => $input['discover']]);
-    $res = $client->post('api/sys/ents/register', ['json' => $params]);
-    $body = (String) $res->getBody();
-    if ($body) {
-      $body = json_decode($body);
-      $token = $body && $body->data ? $body->data : false;
+    try {
+      DB::beginTransaction();
+      $ent->discover = $input['discover'];
+      $ent->gateway = $input['gateway'];
+      $ent->published = 1;
+      $ent->save();
+      //注册企业
+      $params = [
+        "token" => $input['token'],
+        "account" => $input['account'],
+        "type" => 'ent',
+        'datas' => ['openid' => $ent->openid, 'name' => $ent->name, 'token' => $ent->token, 'gateway' => $input['gateway'], 'scope' => $ent->scope],
+      ];
+      $client = new GuzzleHttp\Client(['base_uri' => $input['discover']]);
+      $res = $client->post('api/sys/ents/register', [
+        'json' => $params,
+        'headers' => array(
+          'Content-Type' => 'application/json',
+          'Accept' => 'application/json',
+        ),
+      ]);
+      $body = (String) $res->getBody();
+      if ($body) {
+        $body = json_decode($body);
+        $token = $body && $body->data ? $body->data : false;
+      }
+      DB::commit();
+    } catch (\GuzzleHttp\Exception\ClientException $exception) {
+      DB::rollBack();
+      $error = $exception->getResponse()->getBody()->getContents();
+      throw new \Exception(json_decode($error)->msg);
+    } catch (\Exception $e) {
+      DB::rollBack();
+      throw $e;
     }
     return $this->toJson(true);
   }
