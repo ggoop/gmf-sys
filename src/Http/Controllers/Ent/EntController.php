@@ -36,7 +36,7 @@ class EntController extends Controller {
     return $this->toJson($data);
   }
   public function store(Request $request) {
-    $input = array_only($request->all(), ['code', 'name', 'memo', 'short_name', 'avatar', 'industry', 'area']);
+    $input = array_only($request->all(), ['code', 'name', 'memo', 'short_name', 'avatar', 'avatar_id', 'industry', 'area']);
     $validator = Validator::make($input, [
       'code' => [
         'required',
@@ -60,7 +60,7 @@ class EntController extends Controller {
    * @return [type]           [description]
    */
   public function update(Request $request, $id) {
-    $input = $request->only(['code', 'name', 'memo', 'short_name', 'avatar', 'industry', 'area']);
+    $input = $request->only(['code', 'name', 'memo', 'short_name', 'avatar', 'avatar_id', 'industry', 'area']);
     $validator = Validator::make($input, [
       'code' => [
         'required',
@@ -97,13 +97,23 @@ class EntController extends Controller {
   }
   public function getMyEnts(Request $request) {
     $size = $request->input('size', 10);
-    $userID = GAuth::userId();
     $query = DB::table('gmf_sys_ents as l')->join('gmf_sys_ent_users as u', 'l.id', '=', 'u.ent_id');
-    $query->addSelect('l.id', 'l.name', 'l.avatar', 'u.is_default', 'u.type_enum as type');
-    $query->where('u.user_id', $userID);
+    $query->addSelect('l.id', 'l.name', 'l.avatar', 'l.avatar_id', 'u.is_default', 'u.type_enum as type');
+    $query->whereIn('u.user_id', GAuth::ids());
     $query->where('u.is_effective', '1');
     $query->orderBy('u.is_default', 'desc')->orderBy('l.name');
-    return $this->toJson($query->paginate($size));
+
+    $datas = $query->paginate($size);
+    $items = $datas->getCollection();
+    $items->each(function ($item) {
+      if (!empty($item->avatar_id)) {
+        $item->avatar_url = url('/api/sys/images/' . $item->avatar_id);
+      } else if (!empty($item->avatar)) {
+        $item->avatar_url = $item->avatar;
+      }
+    });
+    $datas->setCollection($items);
+    return $this->toJson($datas);
   }
   public function join(Request $request) {
     $entId = $request->input('entId');

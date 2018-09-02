@@ -113,7 +113,7 @@ export default new MdComponent({
   position: fixed;
   top: 50%;
   left: 50%;
-  z-index: 110;
+  z-index: 60;
   border-radius: 2px;
   backface-visibility: hidden;
   pointer-events: auto;

@@ -28,7 +28,9 @@ class CreateGmfSysUsersTable extends Migration {
 
 		$md->string('type')->nullable()->comment('类型');
 		$md->string('avatar', 500)->nullable();
+		$md->string('avatar_id')->nullable()->comment('图标ID');
 		$md->string('cover', 500)->nullable();
+		$md->string('cover_id')->nullable()->comment('图标ID');
 		$md->string('titles', 500)->nullable()->comment('职称');
 		$md->string('memo', 500)->nullable()->comment('备注');
 

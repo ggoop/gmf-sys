@@ -17,7 +17,7 @@ class Ent extends Model
   public $incrementing = false;
   protected $keyType = 'string';
   protected $fillable = [
-    'id', 'openid', 'code', 'name', 'discover', 'gateway', 'memo', 'short_name', 'avatar',
+    'id', 'openid', 'code', 'name', 'discover', 'gateway', 'memo', 'short_name', 'avatar','avatar_id',
     'industry', 'area', 'revoked'
   ];
   protected $hidden = ['token'];

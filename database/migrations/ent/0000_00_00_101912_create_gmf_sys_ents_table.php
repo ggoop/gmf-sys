@@ -22,6 +22,7 @@ class CreateGmfSysEntsTable extends Migration {
 		$md->integer('scope')->nullable()->comment('可见范围');
 		$md->string('short_name')->nullable()->comment('简称');
 		$md->string('avatar')->nullable()->comment('图标');
+		$md->string('avatar_id')->nullable()->comment('图标ID');
 		$md->text('memo')->nullable()->comment('备注');
 
 		$md->string('discover')->nullable()->comment('发现地址');

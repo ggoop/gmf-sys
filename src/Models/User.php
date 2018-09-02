@@ -24,7 +24,7 @@ class User extends Authenticatable {
   protected $fillable = [
     'id', 'openid', 'account', 'mobile', 'email', 'password', 'token',
     'name', 'nick_name', 'gender',
-    'type', 'cover', 'avatar', 'titles', 'memo', 'status_enum',
+    'type', 'cover', 'cover_id', 'avatar', 'avatar_id', 'titles', 'memo', 'status_enum',
     'client_id', 'client_type', 'client_name', 'src_id', 'src_url', 'info',
   ];
 
@@ -175,7 +175,7 @@ class User extends Authenticatable {
     $data = array_only($opts, [
       'id', 'openid', 'account', 'mobile', 'email', 'password', 'token',
       'name', 'nick_name', 'gender',
-      'type', 'cover', 'avatar', 'titles', 'memo',
+      'type', 'cover', 'cover_id', 'avatar', 'avatar_id', 'titles', 'memo',
       'client_id', 'client_type', 'client_name', 'src_id', 'src_url', 'info', 'status_enum',
     ]);
     if ($user) {

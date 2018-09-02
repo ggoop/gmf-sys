@@ -26,6 +26,7 @@ class CreateGmfSysAppsTable extends Migration {
 		$md->string('short_name')->nullable()->comment('简称');
 		$md->string('group_name')->nullable()->comment('分组名称');
 		$md->string('avatar', 500)->nullable();
+		
 		$md->integer('is_public')->default(0)->comment('是否公共');
 
 		$md->string('discover')->nullable()->comment('发现地址');
