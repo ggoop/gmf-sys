@@ -143,7 +143,7 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.select_page = this.currentPage;
-      this.select_size = this.select_size;
+      this.select_size = this.currentSize;
       this.canFireEvents = true;
     });
   }
