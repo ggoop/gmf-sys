@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Uuid;
 use Validator;
 use Gmf\Sys\Models\User;
+
 class Ent extends Model
 {
   use Snapshotable, HasGuard;
@@ -17,7 +18,7 @@ class Ent extends Model
   public $incrementing = false;
   protected $keyType = 'string';
   protected $fillable = [
-    'id', 'openid', 'code', 'name', 'discover', 'gateway', 'memo', 'short_name', 'avatar','avatar_id',
+    'id', 'openid', 'code', 'name', 'discover', 'gateway', 'memo', 'short_name', 'avatar', 'avatar_id',
     'industry', 'area', 'revoked'
   ];
   protected $hidden = ['token'];
@@ -33,7 +34,7 @@ class Ent extends Model
       $this->code = Uuid::generate();
     }
     if (empty($this->avatar)) {
-      $this->avatar = '/assets/vendor/gmf-sys/avatar/'.mt_rand(1, 50).'.jpg';
+      $this->avatar = '/assets/vendor/gmf-sys/avatar/' . mt_rand(1, 50) . '.jpg';
     }
     if (empty($this->revoked)) {
       $this->revoked = 0;
@@ -76,6 +77,10 @@ class Ent extends Model
     $m = EntUser::where('ent_id', $entId)->where('user_id', $userId)->first();
     if (!$m) {
       $m = EntUser::updateOrCreate(['ent_id' => $entId, 'user_id' => $userId], $options);
+    } else {
+      $m->fill($options);
+      $m->revoked = 0;
+      $m->save();
     }
     return $m;
   }

@@ -53,7 +53,7 @@ export default class Start {
       appConfig.mixins = [mixin];
     }
     document.addEventListener('DOMContentLoaded', () => {
-      initConfigs().then(res => {
+      initConfigs(appConfig).then(res => {
         extend(appConfig.data.configs, res);
         http.config(res);
         if (res && res.loadEnums) {
@@ -68,9 +68,9 @@ export default class Start {
   }
 }
 
-function initConfigs() {
+function initConfigs(appConfig) {
   return new Promise((resolved, rejected) => {
-    return Promise.all([gmfConfig.configs.length > 0 ? gmfConfig.configs[0]() : false]).then(res => {
+    return Promise.all([gmfConfig.configs.length > 0 ? gmfConfig.configs[0](appConfig) : false]).then(res => {
       resolved(res[0]);
     }, err => {
       rejected(err);

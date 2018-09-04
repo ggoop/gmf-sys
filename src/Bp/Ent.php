@@ -25,7 +25,7 @@ class Ent
   }
   public function update($id, $input = [])
   {
-    $input = array_only($array, ['name', 'short_name', 'avatar', 'memo', 'discover', 'gateway', 'industry', 'area']);
+    $input = array_only($input, ['name', 'short_name', 'avatar', 'memo', 'discover', 'gateway', 'industry', 'area']);
     $ent = config('gmf.ent.model')::find($id);
     if ($ent) {
       $ent->fill($input);
