@@ -4,7 +4,7 @@
 
 export default {
   props: {
-    // url: String,
+    url: String,
     to: [String, Object],
     replace: Boolean,
     append: Boolean,
