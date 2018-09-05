@@ -14,13 +14,21 @@ class Menu extends Model
   protected $table = 'gmf_sys_menus';
   public $incrementing = false;
   protected $fillable = [
-    'id', 'root_id', 'parent_id', 'is_leaf',
+    'id', 'root_id', 'parent_id', 'is_leaf', 'hide',
     'code', 'name', 'memo', 'uri', 'icon', 'style', 'tag', 'params',
     'sequence'
   ];
   public function menus()
   {
     return $this->hasMany('Gmf\Sys\Models\Menu', 'parent_id', 'id');
+  }
+  public function root()
+  {
+    return $this->belongsTo('Gmf\Sys\Models\Menu');
+  }
+  public function parent()
+  {
+    return $this->belongsTo('Gmf\Sys\Models\Menu');
   }
   /**
    * add new model data
@@ -33,7 +41,7 @@ class Menu extends Model
     tap(new Builder, function ($builder) use ($callback) {
       $callback($builder);
 
-      $data = array_only($builder->toArray(), ['id', 'code', 'name', 'memo', 'uri', 'icon', 'style', 'tag', 'params', 'sequence']);
+      $data = array_only($builder->toArray(), ['id', 'scope', 'code', 'name', 'memo', 'uri', 'icon', 'hide', 'style', 'tag', 'params', 'sequence']);
       $parent = false;
       if (!empty($builder->parent)) {
         $parent = static::where(function ($query) use ($builder) {

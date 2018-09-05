@@ -152,8 +152,15 @@ export default new MdComponent({
           const item = items[key];
           const toProp = item.props.to;
 
-          if (toProp && toProp === this.$route.path) {
-            tabIndex = index;
+          if (toProp) {
+            if (toProp === this.$route.path) {
+              tabIndex = index;
+            } else if (
+              typeof toProp === "object" &&
+              toProp.name == this.$route.name
+            ) {
+              tabIndex = index;
+            }
           }
         });
       }

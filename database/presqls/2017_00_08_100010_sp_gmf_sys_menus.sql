@@ -21,6 +21,7 @@ CREATE TEMPORARY TABLE IF NOT EXISTS temp_menus_data(
   `id` NVARCHAR(100),
   `code` NVARCHAR(100),
   `name` NVARCHAR(100),
+  `scope` NVARCHAR(100),
   `level` INT DEFAULT 0
 );
 
@@ -39,25 +40,26 @@ SET v_is_super=1;
 END IF;
 
 IF v_is_super=0 THEN
-INSERT INTO temp_opinion_data(menu_id,opinion_enum)
-SELECT rm.menu_id,rm.opinion_enum FROM `gmf_sys_authority_role_users` AS ru
-INNER JOIN `gmf_sys_authority_roles` AS r ON ru.role_id=r.id
-INNER JOIN `gmf_sys_authority_role_menus` AS rm ON ru.role_id=rm.role_id
-WHERE ru.user_id=p_user AND ru.ent_id=p_ent AND rm.ent_id=p_ent 
- AND ru.`revoked`=0 AND rm.`revoked`=0 AND r.`revoked`=0
-GROUP BY rm.menu_id,rm.opinion_enum;
+	INSERT INTO temp_opinion_data(menu_id,opinion_enum)
+	SELECT rm.menu_id,rm.opinion_enum FROM `gmf_sys_authority_role_users` AS ru
+	INNER JOIN `gmf_sys_authority_roles` AS r ON ru.role_id=r.id
+	INNER JOIN `gmf_sys_authority_role_menus` AS rm ON ru.role_id=rm.role_id
+	WHERE ru.user_id=p_user AND ru.ent_id=p_ent AND rm.ent_id=p_ent 
+	 AND ru.`revoked`=0 AND rm.`revoked`=0 AND r.`revoked`=0
+	GROUP BY rm.menu_id,rm.opinion_enum;
 END IF;
 
 
-INSERT INTO temp_menus_data(root_id,parent_id,id,CODE,NAME)
-SELECT m.root_id,m.parent_id,m.id,m.code,m.name
+INSERT INTO temp_menus_data(root_id,parent_id,id,CODE,NAME,scope)
+SELECT m.root_id,m.parent_id,m.id,m.code,m.name,m.scope
 FROM gmf_sys_menus AS m
-WHERE (p_tag IS NULL OR m.tag=p_tag) AND m.is_leaf=1;
+WHERE (p_tag IS NULL OR m.tag=p_tag) AND m.id NOT IN (SELECT DISTINCT parent_id FROM gmf_sys_menus WHERE parent_id  IS NOT NULL AND `hide`=0) AND `hide`=0;
 
 /*如果没有设置权限，则删除*/
 IF v_is_super=0 THEN
-DELETE l FROM temp_menus_data AS l WHERE id NOT IN (SELECT menu_id FROM temp_opinion_data AS d WHERE d.opinion_enum='permit' AND l.id=d.menu_id);
+  DELETE l FROM temp_menus_data AS l WHERE id NOT IN (SELECT menu_id FROM temp_opinion_data AS d WHERE d.opinion_enum='permit' AND l.id=d.menu_id) AND l.scope!='public';
 END IF;
+
 /*上1级*/
 WHILE v_level>=0 DO 
 	DELETE FROM temp_mid_data;

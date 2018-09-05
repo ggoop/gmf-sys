@@ -84,6 +84,7 @@ class gmfConfig {
     this.routes = [];
     this.stores=[];
     this.configs=[];
+    this.beforeEachs=[];
     this.i18ns={messages:{}};
     this.defaultRoutes = defaultRoutes;
   }
@@ -110,6 +111,9 @@ class gmfConfig {
   store(store){
     if(!store.name)return;
     this.stores.push(store);
+  }
+  beforeEach(fn){
+    this.beforeEachs.push(fn);
   }
 }
 

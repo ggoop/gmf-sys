@@ -4,9 +4,14 @@
 
 export default {
   props: {
-    url: String,
+    // url: String,
+    to: [String, Object],
     replace: Boolean,
-    to: [String, Object]
+    append: Boolean,
+    activeClass: String,
+    exact: Boolean,
+    event: [String, Array],
+    exactActiveClass: String
   },
 
   methods: {

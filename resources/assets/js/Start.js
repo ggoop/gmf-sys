@@ -14,7 +14,9 @@ import Vuei18n from 'vue-i18n'
 import combineURL from './core/utils/MdCombineURLs'
 
 export default class Start {
-  constructor(columnComponent) { }
+  constructor() { 
+    this.appConfig=getAppConfig();
+  }
   use(component) {
     Vue.use(component);
   }
@@ -30,39 +32,42 @@ export default class Start {
   i18n(locale, name, i18n) {
     gmfConfig.i18n(locale, name, i18n);
   }
+  beforeEach(fn) {
+    gmfConfig.beforeEach(fn);
+  }
   run(options, mixin) {
     options = options || {};
     const elID = options.elID || '#gmfApp';
     http.config({ host: combineURL(options.host, '/api') });
     initVue(options);
 
-    const appConfig = getAppConfig();
+    //const appConfig = getAppConfig();
     /*routes*/
-    initRoute(appConfig, options);
+    initRoute(this.appConfig, options);
 
     /*store*/
-    initStore(appConfig, options);
+    initStore(this.appConfig, options);
 
     //Vuei18n
-    initI18n(appConfig, options);
+    initI18n(this.appConfig, options);
 
     if (options.app) {
-      appConfig.render = (mount) => mount(options.app);
+      this.appConfig.render = (mount) => mount(options.app);
     }
     if (mixin) {
-      appConfig.mixins = [mixin];
+      this.appConfig.mixins = [mixin];
     }
     document.addEventListener('DOMContentLoaded', () => {
-      initConfigs(appConfig).then(res => {
-        extend(appConfig.data.configs, res);
+      initConfigs(this.appConfig).then(res => {
+        extend(this.appConfig.data.configs, res);
         http.config(res);
         if (res && res.loadEnums) {
           return loadEnums();
         }
         return true;
       }).then(res => {
-        const app = new Vue(appConfig);
-        appConfig.router.onReady(() => { app.$mount(elID); });
+        const app = new Vue(this.appConfig);
+        this.appConfig.router.onReady(() => { app.$mount(elID); });
       });
     });
   }
@@ -98,7 +103,7 @@ function initRoute(appConfig, options) {
   vueRouter.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth && !appConfig.data.configs.user) {
       if (isString(appConfig.data.configs.auth.route)) {
-        window.location.href=appConfig.data.configs.auth.route + "?continue=" + to.fullPath;
+        window.location.href = appConfig.data.configs.auth.route + "?continue=" + to.fullPath;
         //next();
       } else {
         next(extend({}, appConfig.data.configs.auth.route, { query: { continue: to.fullPath } }));
@@ -107,6 +112,11 @@ function initRoute(appConfig, options) {
       next();
     }
   });
+  if (gmfConfig.beforeEachs && gmfConfig.beforeEachs.length > 0) {
+    gmfConfig.beforeEachs.forEach(item => {
+      vueRouter.beforeEach(item);
+    });
+  }
   appConfig.router = vueRouter;
 }
 
