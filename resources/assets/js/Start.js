@@ -14,8 +14,8 @@ import Vuei18n from 'vue-i18n'
 import combineURL from './core/utils/MdCombineURLs'
 
 export default class Start {
-  constructor() { 
-    this.appConfig=getAppConfig();
+  constructor() {
+    this.appConfig = getAppConfig();
   }
   use(component) {
     Vue.use(component);
@@ -61,7 +61,7 @@ export default class Start {
       initConfigs(this.appConfig).then(res => {
         extend(this.appConfig.data.configs, res);
         http.config(res);
-        if (res && res.loadEnums) {
+        if (res && res.loadEnums && res.user && res.token) {
           return loadEnums();
         }
         return true;
