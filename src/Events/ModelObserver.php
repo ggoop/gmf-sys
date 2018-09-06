@@ -1,10 +1,12 @@
 <?php
 
 namespace Gmf\Sys\Events;
+
 use Uuid;
 use Illuminate\Database\Eloquent\Model;
 
-class ModelObserver {
+class ModelObserver
+{
 	/*
 			Eloquent 模型会触发许多事件，让你可以借助以下的方法在模型的生命周期的多个时间点进行监控：
 			creating, created, updating, updated, saving, saved, deleting, deleted, restoring, restored.
@@ -14,61 +16,78 @@ class ModelObserver {
 
 		让我们在 服务提供者 中定义一个 Eloquent 事件监听器来作为示例。在我们的事件监听器中，我们会在指定的模型上调用 isValid 方法，并在模型无效时返回 false。从 Eloquent 事件监听器中返回 false 的话会取消 save 和 update 的操作
 
-	*/
-	/**
-	 * 监听创建的事件。
-	 *
-	 * @param  Model  $model
-	 * @return void
-	 */
-	public function creating($model) {
+   */
+  /**
+   * 监听创建的事件。
+   *
+   * @param  Model  $model
+   * @return void
+   */
+  public function creating($model)
+  {
 		//自动生成ID
-		if (!$model->incrementing) {
-			if (empty($model->{$model->getKeyName()})) {
-				$model->{$model->getKeyName()} = Uuid::generate();
-			}
-		}
-	}
-	/**
-	 * 监听创建的事件。
-	 *
-	 * @param  Model  $model
-	 * @return void
-	 */
-	public function created(Model $model) {
+    if (!$model->incrementing) {
+      if (empty($model->{$model->getKeyName()})) {
+        $model->{$model->getKeyName()} = Uuid::generate();
+      }
+    }
+  }
+  /**
+   * 监听创建的事件。
+   *
+   * @param  Model  $model
+   * @return void
+   */
+  public function created(Model $model)
+  {
 		//
-	}
-	/**
-	 * 监听saving的事件。
-	 *
-	 * @param  Model  $model
-	 * @return void
-	 */
-	public function saving(Model $model) {
-		if (method_exists($model, 'formatDefaultValue') && is_callable(array($model, 'formatDefaultValue'))) {
-			return $model->formatDefaultValue([]);
-		}
-		if (method_exists($model, 'validate') && is_callable(array($model, 'validate'))) {
-			return $model->validate();
-		}
-	}
-
-	/**
-	 * 监听删除事件。
-	 *
-	 * @param  Model  $model
-	 * @return void
-	 */
-	public function deleting(Model $model) {
-		//
-	}
-	/**
-	 * 监听删除事件。
-	 *
-	 * @param  Model  $model
-	 * @return void
-	 */
-	public function deleted(Model $model) {
-		//
-	}
+  }
+  /**
+   * 监听saving的事件。
+   *
+   * @param  Model  $model
+   * @return void
+   */
+  public function saving(Model $model)
+  {
+    if (method_exists($model, 'formatDefaultValue') && is_callable(array($model, 'formatDefaultValue'))) {
+      return $model->formatDefaultValue([]);
+    }
+    if (method_exists($model, 'validate') && is_callable(array($model, 'validate'))) {
+      return $model->validate();
+    }
+    if (method_exists($model, 'savingExtend') && is_callable(array($model, 'savingExtend'))) {
+      $model->savingExtend();
+    }
+  }
+  public function saved(Model $model)
+  {
+    if (method_exists($model, 'savedExtend') && is_callable(array($model, 'savedExtend'))) {
+      $model->savedExtend();
+    }
+  }
+  /**
+   * 监听删除事件。
+   *
+   * @param  Model  $model
+   * @return void
+   */
+  public function deleting(Model $model)
+  {
+    if (method_exists($model, 'deletingExtend') && is_callable(array($model, 'deletingExtend'))) {
+      $model->deletingExtend();
+    }
+  }
+  /**
+   * 监听删除事件。
+   *
+   * @param  Model  $model
+   * @return void
+   */
+  public function deleted(Model $model)
+  {
+    if (method_exists($model, 'deletedExtend') && is_callable(array($model, 'deletedExtend'))) {
+      $model->deletedExtend();
+    }
+  }
 }

@@ -36,6 +36,10 @@ class User extends Authenticatable {
   protected $hidden = [
     'password', 'remember_token', 'token',
   ];
+  public function avatar2()
+  {
+    return $this->belongsTo('Gmf\Sys\Models\File', 'avatar_id');
+  }
   public function formatDefaultValue($attrs) {
     if (empty($this->openid)) {
       $this->openid = Uuid::generate();

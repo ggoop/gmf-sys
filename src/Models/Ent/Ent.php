@@ -22,6 +22,10 @@ class Ent extends Model
     'industry', 'area', 'revoked'
   ];
   protected $hidden = ['token'];
+  public function avatar2()
+  {
+    return $this->belongsTo('Gmf\Sys\Models\File', 'avatar_id');
+  }
   public function formatDefaultValue($attrs)
   {
     if (empty($this->openid)) {
