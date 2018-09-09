@@ -167,6 +167,11 @@
 
             if (toProp && toProp === this.$route.path) {
               stepperIndex = index
+            }else if (
+              typeof toProp === "object" &&
+              toProp.path == this.$route.path
+            ) {
+              stepperIndex = index;
             }
           })
         }
