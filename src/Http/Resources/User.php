@@ -1,15 +1,18 @@
 <?php
 
 namespace Gmf\Sys\Http\Resources;
+
 use Closure;
 use GAuth;
 use Gmf\Sys\Builder;
 use Illuminate\Http\Resources\Json\Resource;
 
-class User extends Resource {
+class User extends Resource
+{
   private $callback;
 
-  public function withCallback(Closure $callback = null) {
+  public function withCallback(Closure $callback = null)
+  {
     $this->callback = $callback;
     return $this;
   }
@@ -19,17 +22,17 @@ class User extends Resource {
    * @param  \Illuminate\Http\Request
    * @return array
    */
-  public function toArray($request) {
+  public function toArray($request)
+  {
     if (empty($this->id)) {
       return false;
     }
     $rtn = new Builder;
-    Common::toField($this, $rtn, ['id', 'name', 'nick_name', 'avatar', 'cover', 'type', 'titles', 'memo']);
+    Common::toField($this, $rtn, ['id', 'openid', 'name', 'nick_name', 'avatar', 'cover', 'type', 'titles', 'memo']);
 
     Common::toBooleanField($this, $rtn, ['email_verified', 'mobile_verified']);
     if ($this->id == GAuth::id()) {
       $rtn['is_me'] = true;
-
       Common::toField($this, $rtn, ['mobile', 'email', 'account']);
     } else {
       $rtn['is_me'] = false;
@@ -67,7 +70,8 @@ class User extends Resource {
     }
     return $rtn;
   }
-  private function hideEmail($input) {
+  private function hideEmail($input)
+  {
     if (!$input || !$this->isEmail($input)) {
       return $input;
     }
@@ -84,7 +88,8 @@ class User extends Resource {
     }
     return implode('@', $array);
   }
-  private function hideAccount($input) {
+  private function hideAccount($input)
+  {
     if ($this->isEMail($input)) {
       return $this->hideEmail($input);
     } else if ($this->isPhone($input)) {
@@ -96,19 +101,23 @@ class User extends Resource {
       return str_pad('', strlen($input), '*');
     }
   }
-  private function hidePhone($input) {
+  private function hidePhone($input)
+  {
     if (!$input || !$this->isPhone($input)) {
       return $input;
     }
     return substr($input, 0, 3) . '****' . substr($input, 7);
   }
-  private function isPhone($number) {
+  private function isPhone($number)
+  {
     return preg_match("/^1[34578]{1}\d{9}$/", $number);
   }
-  private function isEmail($number) {
+  private function isEmail($number)
+  {
     return filter_var($number, FILTER_VALIDATE_EMAIL);
   }
-  public static function anony() {
+  public static function anony()
+  {
     return [
       'id' => '',
       'name' => '匿名',
