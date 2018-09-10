@@ -28,7 +28,7 @@ class User extends Resource
       return false;
     }
     $rtn = new Builder;
-    Common::toField($this, $rtn, ['id', 'openid', 'name', 'nick_name', 'avatar', 'cover', 'type', 'titles', 'memo']);
+    Common::toField($this, $rtn, ['id', 'openid', 'name', 'nick_name', 'gender', 'avatar', 'cover', 'type', 'titles', 'memo']);
 
     Common::toBooleanField($this, $rtn, ['email_verified', 'mobile_verified']);
     if ($this->id == GAuth::id()) {
