@@ -10,7 +10,8 @@ use Illuminate\Notifications\Notifiable;
 use Uuid;
 use Validator;
 
-class User extends Authenticatable {
+class User extends Authenticatable
+{
   use Snapshotable, HasGuard, HasApiTokens, Notifiable;
 
   protected $table = 'gmf_sys_users';
@@ -40,7 +41,8 @@ class User extends Authenticatable {
   {
     return $this->belongsTo('Gmf\Sys\Models\File', 'avatar_id');
   }
-  public function formatDefaultValue($attrs) {
+  public function formatDefaultValue($attrs)
+  {
     if (empty($this->openid)) {
       $this->openid = Uuid::generate();
     }
@@ -48,24 +50,28 @@ class User extends Authenticatable {
       $this->token = Uuid::generate();
     }
   }
-  public function validate() {
+  public function validate()
+  {
     Validator::make($this->toArray(), [
       'type' => ['required'],
       'openid' => ['required'],
     ])->validate();
   }
 
-  public function findForPassport($username) {
+  public function findForPassport($username)
+  {
     return User::where('account', $username)->first();
   }
-  public function findEntIds($type = ['sys', 'web']) {
+  public function findEntIds($type = ['sys', 'web'])
+  {
     $query = Ent\EntUser::whereIn('user_id', $this->findLinkUserIds())->where('is_effective', '1');
     $query->where('revoked', 0);
 
     $query = Ent\Ent::whereIn('id', $query->pluck('ent_id')->all())->where('revoked', 0);
     return $query->pluck('id')->all();
   }
-  public function findLinkUserIds($type = ['sys', 'web']) {
+  public function findLinkUserIds($type = ['sys', 'web'])
+  {
     $links = collect([$this->id]);
     $links = $links->merge(UserLink::where('fm_user_id', $this->id)->pluck('to_user_id')->all());
 
@@ -82,17 +88,21 @@ class User extends Authenticatable {
     }
     return $query->pluck('id')->all();
   }
-  public function routeNotificationForNexmo() {
+  public function routeNotificationForNexmo()
+  {
     return $this->mobile;
   }
-  public function routeNotificationForMail() {
+  public function routeNotificationForMail()
+  {
     return $this->email;
   }
-  public function validateForPassportPasswordGrant($password) {
+  public function validateForPassportPasswordGrant($password)
+  {
     //var_dump($password);
     return true;
   }
-  public static function findByAccount($account, $type, array $opts = []) {
+  public static function findByAccount($account, $type, array $opts = [])
+  {
     if (empty($account) || empty($type)) {
       return false;
     }
@@ -105,7 +115,8 @@ class User extends Authenticatable {
     $opts['type'] = $type;
     return static::where($opts)->first();
   }
-  public static function registerByAccount($type, array $opts = []) {
+  public static function registerByAccount($type, array $opts = [])
+  {
     $user = false;
     $opts['type'] = $type;
 
@@ -150,30 +161,33 @@ class User extends Authenticatable {
     if (!in_array($opts['type'], ['sys', 'web'])) {
       $query->where('client_id', $opts['client_id']);
     }
-    $query->where(function ($query) use ($opts) {
-      $f = false;
-      if (!empty($opts['account'])) {
-        $f = true;
-        $query->orWhere('mobile', $opts['account'])
-          ->orWhere('email', $opts['account'])
-          ->orWhere('account', $opts['account']);
-      }
-      if (!empty($opts['mobile'])) {
-        $f = true;
-        $query->orWhere('mobile', $opts['mobile']);
-      }
-      if (!empty($opts['email'])) {
-        $f = true;
-        $query->orWhere('email', $opts['email']);
-      }
-      if (!empty($opts['src_id']) && !in_array($opts['type'], ['sys', 'web'])) {
-        $f = true;
-        $query->orWhere('src_id', $opts['src_id']);
-      }
-      if (!$f) {
-        $query->where('id', 'xx==xx');
-      }
-    });
+    if (!empty($opts['openid'])) {
+      $query->where('openid', $opts['openid']);
+    } else if (!empty($opts['src_id']) && !in_array($opts['type'], ['sys', 'web'])) {
+      $query->where('src_id', $opts['src_id']);
+    } else {
+      $query->where(function ($query) use ($opts) {
+        $f = false;
+        if (!empty($opts['account'])) {
+          $f = true;
+          $query->orWhere('mobile', $opts['account'])
+            ->orWhere('email', $opts['account'])
+            ->orWhere('account', $opts['account']);
+        }
+        if (!empty($opts['mobile'])) {
+          $f = true;
+          $query->orWhere('mobile', $opts['mobile']);
+        }
+        if (!empty($opts['email'])) {
+          $f = true;
+          $query->orWhere('email', $opts['email']);
+        }
+        if (!$f) {
+          $query->where('id', 'xx==xx');
+        }
+      });
+    }
+
     $user = $query->orderBy('created_at', 'desc')->first();
 
     $data = array_only($opts, [
@@ -212,11 +226,13 @@ class User extends Authenticatable {
     }
     return $user;
   }
-  public function resetPassword($pw) {
+  public function resetPassword($pw)
+  {
     $this->password = bcrypt($pw);
     $this->save();
   }
-  public function linkUser($user) {
+  public function linkUser($user)
+  {
     if ($this->account == $user->account) {
       return false;
     }
