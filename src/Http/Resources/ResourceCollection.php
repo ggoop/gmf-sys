@@ -5,6 +5,7 @@ namespace Gmf\Sys\Http\Resources;
 use Closure;
 use Illuminate\Http\Resources\Json\ResourceCollection as BaseResourceCollection;
 use Gmf\Sys\Builder;
+
 class ResourceCollection extends BaseResourceCollection
 {
   private $itemCallback;
@@ -28,7 +29,7 @@ class ResourceCollection extends BaseResourceCollection
   public function toResult($request)
   {
     $rtn = $this->toArray($request);
-    if (!is_null($this->itemCallback)) {
+    if ($rtn && !is_null($this->itemCallback)) {
       $rtn = collect($rtn)->map(function ($v) {
         $v = new Builder($v);
         $flag = call_user_func($this->itemCallback, $v, $this);

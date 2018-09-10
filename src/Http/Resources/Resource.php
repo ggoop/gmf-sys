@@ -30,11 +30,13 @@ class Resource extends BaseResource
   }
   public function toResult($request)
   {
-    $rtn = new Builder($this->toArray($request));
-    if (!is_null($this->itemCallback)) {
-      $flag = call_user_func($this->itemCallback, $rtn, $this);
-      if ($flag === 0 || $flag === false) {
-        return false;
+    if ($rtn = $this->toArray($request)) {
+      $rtn = new Builder($rtn);
+      if (!is_null($this->itemCallback)) {
+        $flag = call_user_func($this->itemCallback, $rtn, $this);
+        if ($flag === 0 || $flag === false) {
+          return false;
+        }
       }
     }
     return $rtn;
