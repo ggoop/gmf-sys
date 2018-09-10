@@ -202,7 +202,7 @@ function initVue(options) {
   }
   Vue.prototype.$lang = lang;
   Vue.prototype.$go = function (options, isReplace) {
-    if (isString(options) && options.indexOf('//')) {
+    if (isString(options) && (options.indexOf('http://') == 0 || options.indexOf('https://') == 0 || options.indexOf('//') == 0)) {
       window.location.href = options;
       return;
     }
