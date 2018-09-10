@@ -36,7 +36,7 @@ class AuthorizeController extends Controller
       return '应用未授权！';
     }
     if (!Auth::id()) {
-      return redirect('/auth/login?continue=' . urldecode($request->fullUrl()));
+      return redirect('/auth/login?continue=' . urlencode($request->fullUrl()));
     }
     $datas = [
       'user_id' => Auth::id(),
