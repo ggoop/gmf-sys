@@ -30,6 +30,7 @@ class Resource extends BaseResource
   }
   public function toResult($request)
   {
+    $rtn = false;
     if ($rtn = $this->toArray($request)) {
       $rtn = new Builder($rtn);
       if (!is_null($this->itemCallback)) {
