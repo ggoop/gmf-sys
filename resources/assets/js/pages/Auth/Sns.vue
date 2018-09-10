@@ -16,25 +16,26 @@
 </template>
 <script>
 export default {
-  name: 'GmfPagesAuthSns',
+  name: "GmfPagesAuthSns",
   props: {
     title: {
       type: String,
-      default: '使用合作账号登录'
+      default: "使用合作账号登录"
     },
     type: {
       type: String,
-      default: 'login'
+      default: "login"
     }
   },
   data() {
     return {
-      sending: false,
+      sending: false
     };
   },
   computed: {
     canSns() {
-      if (!this.$root.configs.auth || !this.$root.configs.auth.sns) return false;
+      if (!this.$root.configs.auth || !this.$root.configs.auth.sns)
+        return false;
       return this.$root.configs.auth.sns;
     },
     snsQQ() {
@@ -51,27 +52,31 @@ export default {
     }
   },
   methods: {
-    fetchData() {
-
-    },
+    fetchData() {},
     makeUrl(old) {
       var url = false;
       if (old && this.type) {
-        url = old.indexOf('?') > 0 ? old + '&type=' + this.type : old + '?type=' + this.type;
+        url =
+          old.indexOf("?") > 0
+            ? old + "&type=" + this.type
+            : old + "?type=" + this.type;
       } else if (old) {
         url = old;
       }
       if (url && this.$route.query.continue) {
-        url = url.indexOf('?') > 0 ? url + '&continue=' + this.$route.query.continue : url + '?continue=' + this.$route.query.continue;
+        if (url.indexOf("?") > 0) {
+          url = url + "&continue=" + encodeURIComponent(this.$route.query.continue);
+        } else {
+          url = url + "?continue=" + encodeURIComponent(this.$route.query.continue);
+        }
       }
       return url;
-    },
+    }
   },
   mounted() {
     this.fetchData();
-  },
+  }
 };
-
 </script>
 <style lang="scss" scoped>
 @import "~gmf/components/MdAnimation/variables";
@@ -85,7 +90,7 @@ export default {
     width: 50px;
     height: 50px;
     .md-icon {
-      transition: all .345s;
+      transition: all 0.345s;
       width: 30px;
       height: 30px;
       font-size: 30px;
@@ -97,5 +102,4 @@ export default {
     }
   }
 }
-
 </style>
