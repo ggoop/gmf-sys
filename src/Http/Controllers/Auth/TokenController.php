@@ -5,13 +5,19 @@ use Gmf\Sys\Http\Controllers\Controller;
 use Gmf\Sys\Models;
 use Validator;
 use Illuminate\Http\Request;
+use Auth;
+use GuzzleHttp;
+use GAuth;
 
 class TokenController extends Controller
 {
   public function issueToken(Request $request)
   {
     $token = false;
-    $type = $request->input('type', 'password');
+    $type = $request->input('grant_type');
+    if (empty($type)) {
+      $type = $request->input('type', 'password');
+    }
     switch ($type) {
       case 'password':
         $token = $this->issueTokenByPassword($request->all());
