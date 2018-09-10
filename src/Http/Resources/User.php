@@ -63,7 +63,7 @@ class User extends Resource {
     if (!empty($this->avatar_id)) {
       $rtn['avatar_url'] = url('/api/sys/images/' . $this->avatar_id);
     } else if (!empty($this->avatar)) {
-      $rtn['avatar_url'] = $this->avatar;
+      $rtn['avatar_url'] = url($this->avatar);
     }
     return $rtn;
   }
