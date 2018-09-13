@@ -74,7 +74,7 @@ export default {
         styles['margin-top'] = this.MdApp.toolbar.initialHeight + 'px'
       }
 
-      if (drawer.mode === 'persistent' && drawer.submode === 'mini') {
+      if (drawer.mode === 'persistent' && drawer.submode !== 'mini') {
         styles['margin-'+drawer.direction] = !drawer.active ? drawer.initialWidth + 'px' : 0
       }
 
