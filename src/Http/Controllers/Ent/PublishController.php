@@ -18,7 +18,6 @@ class PublishController extends Controller {
     $input = $request->all();
     Validator::make($input, [
       'token' => 'required',
-      'account' => 'required',
       'discover' => 'required',
     ])->validate();
     if (empty($input['gateway'])) {
@@ -38,10 +37,10 @@ class PublishController extends Controller {
       $ent->gateway = $input['gateway'];
       $ent->published = 1;
       $ent->save();
+
       //注册企业
       $params = [
         "token" => $input['token'],
-        "account" => $input['account'],
         "type" => 'ent',
         'datas' => ['openid' => $ent->openid, 'name' => $ent->name, 'token' => $ent->token, 'gateway' => $input['gateway'], 'scope' => $ent->scope],
       ];

@@ -5,8 +5,8 @@ Route::prefix('api/sys/sv')->middleware(['api', 'auth:api'])->namespace($ns)->gr
 });
 
 //ents
-Route::prefix('api/sys/ents')->middleware(['api'])->namespace($ns)->group(function () {
-	Route::post('register', 'Ent\RegisterController@register');
+Route::prefix('api/sys')->middleware(['api'])->namespace($ns)->group(function () {
+	Route::post('ents/register', 'Ent\RegisterController@register');
 });
 Route::prefix('api/sys')->middleware(['api', 'auth:api'])->namespace($ns)->group(function () {
   Route::post('ents/publish', 'Ent\PublishController@publish');
