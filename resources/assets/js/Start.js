@@ -60,6 +60,10 @@ export default class Start {
     document.addEventListener('DOMContentLoaded', () => {
       initConfigs(this.appConfig).then(res => {
         extend(this.appConfig.data.configs, res);
+        if (res) {
+          this.appConfig.data.appName = res.appName;
+          this.appConfig.data.title = res.title;
+        }
         http.config(res);
         if (res && res.loadEnums && res.user && res.token) {
           return loadEnums();
@@ -198,6 +202,8 @@ function initVue(options) {
 
   Vue.prototype.$setConfigs = function (configs) {
     extend(this.$root.configs, configs);
+    this.$root.appName = configs.appName;
+    this.$root.title = configs.title;
     this.$root.changedConfig();
   }
   Vue.prototype.$lang = lang;

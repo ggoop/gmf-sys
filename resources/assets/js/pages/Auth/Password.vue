@@ -4,6 +4,7 @@
       <md-card-header>
         <md-card-header-text>
           <div class="md-title">欢迎</div>
+          <p v-if="appName">使用您的{{appName}}帐号</p>
         </md-card-header-text>
       </md-card-header>
       <md-list>
@@ -72,6 +73,9 @@ export default {
       const q = {};
       if (this.$route.query && this.$route.query.continue) q.continue = this.$route.query.continue;
       return q;
+    },
+    appName(){
+      return this.$root.appName ? " " + this.$root.appName + " " : "";
     }
   },
   methods: {

@@ -3,7 +3,7 @@
     <form novalidate @submit.prevent="validateForm">
       <md-card-header>
         <md-card-header-text>
-          <div class="md-title">创建新帐号</div>
+          <div class="md-title">创建新{{appName}}帐号</div>
         </md-card-header-text>
       </md-card-header>
       <md-card-content>
@@ -78,6 +78,9 @@ export default {
       if (this.$route.query && this.$route.query.continue) q.continue = this.$route.query.continue;
       return q;
     },
+    appName(){
+      return this.$root.appName ? " " + this.$root.appName + " " : ""; 
+    }
   },
   methods: {
     getValidationClass(fieldName) {

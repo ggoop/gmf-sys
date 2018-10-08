@@ -4,7 +4,7 @@
       <md-card-header>
         <md-card-header-text>
           <div class="md-title">登录</div>
-          <div class="md-body-1">使用您的帐号登录</div>
+          <div class="md-body-1">使用您的{{appName}}帐号登录</div>
         </md-card-header-text>
         <md-button class="md-icon-button md-list-action" :to="{name:'auth.chooser',query:routeQuery}">
           <md-icon class="md-primary">expand_more</md-icon>
@@ -67,6 +67,9 @@ export default {
       const q = {};
       if (this.$route.query && this.$route.query.continue) q.continue = this.$route.query.continue;
       return q;
+    },
+    appName(){
+     return this.$root.appName ? " " + this.$root.appName + " " : "";
     }
   },
   methods: {

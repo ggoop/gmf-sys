@@ -2,7 +2,7 @@
   <md-card>
     <md-card-header>
       <md-card-header-text>
-        <div class="md-title">选择帐号</div>
+        <div class="md-title">选择您的{{appName}}帐号</div>
       </md-card-header-text>
     </md-card-header>
     <md-list>
@@ -20,8 +20,8 @@
           <md-icon class="md-size-2x">account_circle</md-icon>
         </md-avatar>
         <div class="md-list-item-text">
-          <span>使用其他帐号</span>
-          <span>使用新的账号登录</span>
+          <span>使用其他{{appName}}帐号</span>
+          <span>使用新的{{appName}}账号登录</span>
         </div>
       </md-list-item>
     </md-list>
@@ -39,51 +39,59 @@
   </md-card>
 </template>
 <script>
-import AuthSns from './Sns';
-import authCache from './AuthCache';
+import AuthSns from "./Sns";
+import authCache from "./AuthCache";
 
 export default {
-  name: 'AppAuthChooser',
+  name: "AppAuthChooser",
   components: {
     AuthSns
   },
   data() {
     return {
       mainDatas: [],
-      sending: false,
+      sending: false
     };
   },
   computed: {
     routeQuery() {
       const q = {};
-      if (this.$route.query && this.$route.query.continue) q.continue = this.$route.query.continue;
+      if (this.$route.query && this.$route.query.continue)
+        q.continue = this.$route.query.continue;
       return q;
+    },
+    appName() {
+      return this.$root.appName ? " " + this.$root.appName + " " : "";
     }
   },
   methods: {
-    removeItem(item) {
-
-    },
+    removeItem(item) {},
     goItem(item) {
       this.sending = true;
-      this.$http.post('sys/auth/checker', item).then(response => {
-        this.sending = false;
-        const u = response.data.data;
-        if (u) {
-          this.$go({ name: 'auth.password', params: { id: u.id }, query: this.routeQuery });
-        }
-      }).catch(err => {
-        this.sending = false;
-        this.$toast(err);
-      });
+      this.$http
+        .post("sys/auth/checker", item)
+        .then(response => {
+          this.sending = false;
+          const u = response.data.data;
+          if (u) {
+            this.$go({
+              name: "auth.password",
+              params: { id: u.id },
+              query: this.routeQuery
+            });
+          }
+        })
+        .catch(err => {
+          this.sending = false;
+          this.$toast(err);
+        });
     },
     fetchData() {
       this.mainDatas = authCache.get() || [];
-    },
+    }
   },
   mounted() {
     this.fetchData();
-  },
+  }
 };
-
 </script>
