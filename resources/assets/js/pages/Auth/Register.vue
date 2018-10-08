@@ -3,7 +3,7 @@
     <form novalidate @submit.prevent="validateForm">
       <md-card-header>
         <md-card-header-text>
-          <div class="md-title">创建新{{appName}}帐号</div>
+          <div class="md-title">创建新的{{appName}}帐号</div>
         </md-card-header-text>
       </md-card-header>
       <md-card-content>

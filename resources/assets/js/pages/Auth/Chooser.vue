@@ -21,7 +21,7 @@
         </md-avatar>
         <div class="md-list-item-text">
           <span>使用其他{{appName}}帐号</span>
-          <span>使用新的{{appName}}账号登录</span>
+          <span>使用新的账号登录</span>
         </div>
       </md-list-item>
     </md-list>
