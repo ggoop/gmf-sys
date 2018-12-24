@@ -24,7 +24,7 @@ class FileController extends Controller
       $fname => 'mimes:jpeg,gif,bmp,png,docx,doc,txt,xlsx,ppt,pptx,pdf'
     ]);
     if ($validator->fails()) {
-      throw new \Exception('嘿，是要进行攻击吗~');
+      throw new \Exception('嘿，上传文件格式有问题，是要进行攻击吗~');
     }
     $files = File::storage($request, $request->input('name', 'files'), $request->input('path', 'file'));
     if ($files) {
