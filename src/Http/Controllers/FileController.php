@@ -6,20 +6,27 @@ use Gmf\Sys\Http\Resources;
 use Gmf\Sys\Models\File;
 use Illuminate\Http\Request;
 
-class FileController extends Controller {
-	public function show(Request $request, string $id) {
-		$file = File::select('id', 'title', 'type', 'ext', 'size', 'created_at')
-			->addSelect('disk', 'path', 'pdf_disk', 'pdf_path')
-			->find($id);
-		return $this->toJson(new Resources\File($file));
-	}
-	public function store(Request $request) {
-		GAuth::check('user');
-		$files = File::storage($request, $request->input('name', 'files'),$request->input('path', 'file'));
-		if ($files) {
-			return $this->toJson(Resources\File::collection($files));
-		} else {
-			return $this->toJson(false);
-		}
-	}
+class FileController extends Controller
+{
+  public function show(Request $request, string $id)
+  {
+    $file = File::select('id', 'title', 'type', 'ext', 'size', 'created_at')
+      ->addSelect('disk', 'path', 'pdf_disk', 'pdf_path')
+      ->find($id);
+    return $this->toJson(new Resources\File($file));
+  }
+  public function store(Request $request)
+  {
+    GAuth::check('user');
+    $fname = $request->input('name', 'files');
+    $validatedData = $request->validate([
+      $fname =>'mimes:jpeg,gif,bmp,png,docx,doc,txt,xlsx,ppt,pptx,pdf'
+      ]);
+    $files = File::storage($request, $request->input('name', 'files'), $request->input('path', 'file'));
+    if ($files) {
+      return $this->toJson(Resources\File::collection($files));
+    } else {
+      return $this->toJson(false);
+    }
+  }
 }
