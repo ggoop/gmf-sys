@@ -71,16 +71,21 @@ class MDInstaller {
 		$this->updateMD($oldMD);
 	}
 	private function createDBTable() {
-		$table = $this->guard->getDBTable();
-		if (!$table) {
+		$tableMD = $this->guard->getDBTable();
+		if (!$tableMD) {
 			return;
 		}
-		Schema::connection($table->connection)->create($table->table_name, function (Blueprint $table) {
+		Schema::connection($tableMD->connection)->create($tableMD->table_name, function (Blueprint $table) use ($tableMD) {
 			$fields = $this->guard->getDBFields();
+			$commands = $this->guard->getCommands();
 			foreach ($fields as $column) {
 				$this->buildDBColumn($table, $column);
 			}
+			foreach ($commands as $command) {				
+				$this->buildIndex($table,$tableMD->table_name, $command);
+			}
 		});
+
 	}
 	private function updateDBTable($old) {
 		$oldFields = $old->fields;
@@ -201,6 +206,14 @@ class MDInstaller {
 				}
 			});
 		}
+		$commands = $this->guard->getCommands();
+		if(\count($commands)>0){
+			Schema::connection($newTable->connection)->table($newTable->table_name, function (Blueprint $table) use($newTable,$commands) {				
+				foreach ($commands as $command) {				
+					$this->buildIndex($table,$newTable->table_name, $command);
+				}
+			});		
+		}
 	}
 	private function updateMD($old) {
 		$entity = $this->guard->getMDEntity();
@@ -251,6 +264,7 @@ class MDInstaller {
 			if ($delNames && count($delNames)) {
 				Models\EntityField::destroy($delNames);
 			}
+
 			foreach ($newFields as $column) {
 				if (!in_array($column->name, $noChanges)) {
 					Models\EntityField::build(function ($b) use ($column) {
@@ -264,6 +278,35 @@ class MDInstaller {
 					$b->setAttributes($column->toArray());
 				});
 			}
+		}
+	}
+	private function buildIndex($table,$tableName,$command){
+		$indexesFound = Schema::getConnection()->getDoctrineSchemaManager()->listTableIndexes($tableName);
+		//listTableIndexes获取的key总是转成小写，需要把传入的索引名称也小写化才能匹配
+		if(array_key_exists(strtolower($command->index), $indexesFound)){
+			//如果索引列和顺序完全相同，则不重新生成
+			if($command->columns==$indexesFound[strtolower($command->index)]->getColumns()){			
+				return;
+			}
+			if($command->name=="index"){
+				$table->dropIndex($command->index);
+			}else if($command->name=="unique"){
+				$table->dropUnique($command->index);
+			}else if($command->name=="primary"){
+				$table->dropPrimary($command->index);
+			}
+		}
+		//列为空的索引，无法重建索引
+		if(count($command->columns)==0){
+			return;
+		}
+		//重建索引
+		if($command->name=="index"){
+			$table->index($command->columns,$command->index);
+		}else if($command->name=="unique"){
+			$table->unique($command->columns,$command->index);
+		}else if($command->name=="primary"){
+			$table->dropPrimary($command->columns,$command->index);
 		}
 	}
 }
