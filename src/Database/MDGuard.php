@@ -3,21 +3,42 @@
 namespace Gmf\Sys\Database;
 use Gmf\Sys\Builder;
 use Illuminate\Support\Fluent;
-
-class MDGuard {
+use Illuminate\Console\Command;
+class MDGuard extends Command {
 	protected $entity;
 	protected $fields;
+	protected $commands;
 	public function __construct($md) {
 		if (is_array($md)) {
 			$this->entity = $md['entity'];
 			$this->fields = $md['fields'];
+			$this->commands = $md['commands'];
 		} else if ($md instanceof Fluent) {
 			$this->entity = $md->entity;
-			$this->fields = $md->fields;
+			$this->fields = $md->fields;			
+			$this->commands = $md->commands;
 		}
 	}
 	public function setEntityId($id) {
 		$this->entity->id($id);
+	}
+	public function getCommands() {
+		$rtCommands=[];
+		
+		foreach ($this->commands as $item){			
+			if(empty($item->index)){			
+				throw new \Exception("实体【".$this->entity->comment."】索引未指定名称，请检查");
+			}
+			if(empty($item->columns)){
+				$item->columns=[];
+			}else if(gettype($item->columns)=="string"){
+				$item->columns=[$item->columns];
+			}else if(!gettype($item->columns)=="array"){
+				throw new \Exception("实体【".$this->entity->comment."】索引【".$item->index."】的列只允许是字符串或数组，请检查");
+			}
+			$rtCommands[]=$item;
+		}	
+		return $rtCommands;
 	}
 	public function getDBTable() {
 		if ($this->type() !== 'entity') {
@@ -64,6 +85,7 @@ class MDGuard {
 		}
 		return false;
 	}
+	
 	public function getMDEntity() {
 		$item = new Builder;
 		$item->setAttributes(array_only(
